@@ -2,7 +2,8 @@
 > **Dành cho**: Antigravity AI Agent / Kỹ sư tiếp quản & Nhóm Nghiên cứu.  
 > **Dự án**: Nghiên cứu Khoa học Sinh viên — Hệ thống Chatbot tài liệu dựa trên Nested Learning (SA-CMS & Hybrid QA).  
 > **Thời điểm cập nhật**: 04/10/2026.  
-> **Trạng thái**: 🎉 **ĐÃ HOÀN THÀNH 100% TOÀN BỘ PHASE 4.1 BENCHMARK & TỔNG HỢP XONG BÁO CÁO MASTER!**
+> **Trạng thái**: 🎉 **ĐÃ HOÀN THÀNH 100% TOÀN BỘ PHASE 4.1 BENCHMARK & TỔNG HỢP XONG BÁO CÁO MASTER!**  
+> 🔒 **CHÍNH SÁCH ĐÓNG BĂNG HUẤN LUYỆN (TRAINING FREEZE)**: Tuyệt đối KHÔNG chạy training mới trên máy hiện tại. Mọi thực nghiệm chỉ được dùng checkpoint sẵn có. Nếu cần train bắt buộc đánh dấu `NEED_EXTERNAL_GPU` và STOP! Chi tiết: [`docs/training_freeze_protocol.md`](docs/training_freeze_protocol.md).
 
 ---
 

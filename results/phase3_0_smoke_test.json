@@ -1,0 +1,15 @@
+{
+  "timestamp": "2026-10-03 13:29:46",
+  "test1_docs": 2,
+  "test2_top_passage": "DOC001::P000",
+  "test2_top_score": 2.318,
+  "test3_evidence_count": 3,
+  "test4_refusal": "evidence_below_confidence_threshold",
+  "test6_mode": "hybrid",
+  "test6_refused": false,
+  "test7_citations_valid": true,
+  "test8_overlap": 0.0,
+  "tests_passed": 10,
+  "tests_total": 10,
+  "status": "PASS"
+}

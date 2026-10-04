@@ -1,0 +1,65 @@
+{
+  "protocol_version": "4.0.1-audit-final",
+  "audit_timestamp": "2026-10-03 20:38:00",
+  "overall_protocol_check_passed": true,
+  "faithfulness_definition": {
+    "formula": "Faithfulness = Citation-supported answer rate",
+    "evaluation_methods": [
+      "local_judge (automated claim-to-evidence overlap)",
+      "manual_verification (100 randomly sampled test QA pairs)"
+    ],
+    "hardcoded_target_threshold_removed": true,
+    "pass_fail_presetting": "STRICTLY_PROHIBITED"
+  },
+  "data_partitions": {
+    "train_samples_count": 1000,
+    "train_docs_count": 100,
+    "validation_samples_count": 50,
+    "validation_docs_count": 5,
+    "qasper_test_docs_count": 10,
+    "mkniah_test_samples_count": 100,
+    "vietnamese_test_docs_count": 5,
+    "vietnamese_test_questions_count": 40,
+    "leakage_audits": {
+      "train_vs_val_overlap_count": 0,
+      "train_vs_qasper_test_overlap_count": 0,
+      "train_vs_vietnamese_test_overlap_count": 0,
+      "phase3_1_in_training_count": 0,
+      "qasper_in_calibration_count": 0,
+      "vietnamese_in_calibration_count": 0
+    },
+    "partition_isolation_passed": true
+  },
+  "training_fairness": {
+    "b4_parameter_count": 1772736,
+    "b5_parameter_count": 5315904,
+    "p1_parameter_count": 5315904,
+    "p2_parameter_count": 5315904,
+    "identical_initialization_theta_0": true,
+    "max_initialization_diff": 0.0,
+    "p2_uses_identical_p1_memory_component": true,
+    "ingestion_budget_parity_on_sample": true,
+    "p1_events_count": 9,
+    "b5_events_count": 9,
+    "overall_training_fairness_passed": true
+  },
+  "required_ablations": {
+    "A1_random_boundary_supported": true,
+    "A2_level_count_1_2_3_supported": true,
+    "A3_budget_matched_schedules_supported": true,
+    "aggregation_chains_supported": true,
+    "all_ablations_feasible": true
+  },
+  "rag_calibration": {
+    "status": "COMPLETED_AND_FROZEN",
+    "calibration_file": "results\\phase4_0_1_rag_calibration.csv",
+    "selected_config": "CAND_07",
+    "chunk_size": 256,
+    "chunk_overlap": 32,
+    "top_k": 5,
+    "k1": 1.5,
+    "b": 0.75,
+    "score_threshold": 3.0,
+    "selection_criterion": "Maximize composite retrieval score (HitRate + MRR + Threshold Retention) within prompt budget (chunk <= 256)"
+  }
+}

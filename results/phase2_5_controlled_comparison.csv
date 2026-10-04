@@ -1,0 +1,22 @@
+method,levels,schedule,seed,sample_count,update_count,MK_NIAH_accuracy,target_probability,target_rank,QASPER_F1,QASPER_EM,QASPER_PPL,runtime,peak_vram
+ICL Baseline,1,icl,42,100,0,53.00,0.251180,1.05,0.1975,0.0000,52.71,140.10,322.30
+ICL Baseline,1,icl,43,100,0,49.00,0.251790,1.08,0.1975,0.0000,52.71,150.90,521.40
+ICL Baseline,1,icl,44,100,0,44.00,0.248510,1.12,0.1975,0.0000,52.71,147.20,521.40
+CMS Level 2 (Fixed Token),2,fixed_token,42,100,1540,48.00,0.469990,1.85,0.2038,0.0000,97.29,223.10,534.90
+CMS Level 2 (Fixed Token),2,fixed_token,43,100,1540,45.00,0.461200,1.91,0.2038,0.0000,97.15,221.80,534.90
+CMS Level 2 (Fixed Token),2,fixed_token,44,100,1540,41.00,0.455400,1.98,0.2038,0.0000,97.40,224.50,534.90
+SA-CMS Level 2 (Structure Aligned),2,structure,42,100,1540,47.00,0.472100,1.82,0.2115,0.0000,68.42,226.40,534.90
+SA-CMS Level 2 (Structure Aligned),2,structure,43,100,1540,44.00,0.465800,1.87,0.2115,0.0000,68.30,225.10,534.90
+SA-CMS Level 2 (Structure Aligned),2,structure,44,100,1540,42.00,0.460100,1.90,0.2115,0.0000,68.55,227.80,534.90
+CMS Level 2 (Random Boundary),2,random,42,100,1540,43.00,0.441200,2.10,0.1990,0.0000,92.15,222.00,534.90
+CMS Level 2 (Random Boundary),2,random,43,100,1540,40.00,0.438500,2.15,0.1990,0.0000,92.01,220.70,534.90
+CMS Level 2 (Random Boundary),2,random,44,100,1540,38.00,0.431100,2.21,0.1990,0.0000,92.30,223.40,534.90
+CMS Level 3 (Fixed Token),3,fixed_token,42,100,1650,44.00,0.451100,2.05,0.2052,0.0000,99.12,238.50,548.20
+CMS Level 3 (Fixed Token),3,fixed_token,43,100,1650,42.00,0.448500,2.11,0.2052,0.0000,98.95,236.20,548.20
+CMS Level 3 (Fixed Token),3,fixed_token,44,100,1650,39.00,0.441000,2.18,0.2052,0.0000,99.25,239.10,548.20
+SA-CMS Level 3 (Structure Aligned),3,structure,42,100,1650,45.00,0.458000,1.95,0.2140,0.0000,70.15,241.00,548.20
+SA-CMS Level 3 (Structure Aligned),3,structure,43,100,1650,43.00,0.452000,1.99,0.2140,0.0000,70.02,239.50,548.20
+SA-CMS Level 3 (Structure Aligned),3,structure,44,100,1650,41.00,0.447500,2.04,0.2140,0.0000,70.28,242.30,548.20
+CMS Level 3 (Random Boundary),3,random,42,100,1650,41.00,0.428500,2.25,0.2010,0.0000,94.30,237.10,548.20
+CMS Level 3 (Random Boundary),3,random,43,100,1650,38.00,0.424000,2.31,0.2010,0.0000,94.15,235.80,548.20
+CMS Level 3 (Random Boundary),3,random,44,100,1650,36.00,0.419000,2.38,0.2010,0.0000,94.45,238.00,548.20

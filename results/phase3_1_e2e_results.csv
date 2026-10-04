@@ -1,0 +1,121 @@
+Mode,QuestionID,Query,Expected,Actual,Citation,Refusal,LatencyMs,Status
+hybrid,Q001,SmolLM2-135M có chính xác bao nhiêu tham số?,ANSWER,ANSWER (5 cits),"DOC001::P003,DOC001::P002",NO,12894.43,PASS
+hybrid,Q002,Backbone SmolLM2-135M có bị đóng băng trong quá trình cập nh...,ANSWER,ANSWER (5 cits),"DOC001::P003,DOC001::P004",NO,12402.0,PASS
+hybrid,Q003,CMS thay thế thành phần nào của kiến trúc Transformer truyền...,ANSWER,ANSWER (5 cits),"DOC001::P001,DOC001::P002",NO,12395.6,PASS
+hybrid,Q004,Tên đầy đủ của hệ thống CMS trong đề cương là gì?,ANSWER,ANSWER (4 cits),"DOC001::P002,DOC001::P011",NO,12424.28,PASS
+hybrid,Q005,Tầng nào kết nối backbone với bộ nhớ tham số?,ANSWER,ANSWER (5 cits),"DOC001::P004,DOC001::P005",NO,12410.88,PASS
+hybrid,Q006,Tầng Hope-Attention chuẩn hóa trạng thái ẩn qua thành phần n...,ANSWER,ANSWER (4 cits),"DOC001::P005,DOC001::P004",NO,12401.48,PASS
+hybrid,Q007,Trạng thái ẩn kết hợp với phần dư bộ nhớ theo phương trình n...,ANSWER,ANSWER (5 cits),"DOC001::P006,DOC001::P005",NO,12411.35,PASS
+hybrid,Q008,Mã số bài báo arXiv của Nested Learning là gì?,ANSWER,ANSWER (5 cits),"DOC001::P006,DOC001::P005",NO,12410.21,PASS
+hybrid,Q009,Backbone SmolLM2 được phát triển bởi tổ chức nào trên Huggin...,ANSWER,REFUSED (insufficient_evidence_coverage),NONE,insufficient_evidence_coverage,0.56,FAIL
+hybrid,Q010,Tỷ lệ đóng băng của backbone là bao nhiêu phần trăm?,ANSWER,ANSWER (3 cits),"DOC001::P003,DOC001::P004",NO,12404.47,PASS
+hybrid,Q011,Card đồ họa được sử dụng trong thử nghiệm là dòng nào?,ANSWER,ANSWER (5 cits),"DOC001::P008,DOC001::P007",NO,12412.96,PASS
+hybrid,Q012,Dung lượng VRAM của GPU GTX 1650 Ti là bao nhiêu GB?,ANSWER,ANSWER (4 cits),"DOC001::P008,DOC001::P007",NO,12467.27,PASS
+hybrid,Q013,Hệ điều hành chạy trong môi trường thử nghiệm là gì?,ANSWER,ANSWER (4 cits),"DOC001::P008,DOC001::P007",NO,12503.77,PASS
+hybrid,Q014,Phiên bản Python nào được sử dụng trong nghiên cứu?,ANSWER,ANSWER (5 cits),"DOC002::P008,DOC002::P009",NO,12502.03,PASS
+hybrid,Q015,Số mức thời gian num_levels của bộ nhớ CMS được cấu hình là ...,ANSWER,ANSWER (5 cits),"DOC001::P009,DOC001::P008",NO,12500.17,PASS
+hybrid,Q016,Kích thước khối tối thiểu lowest_chunk_size của CMS là bao n...,ANSWER,ANSWER (5 cits),"DOC001::P009,DOC001::P011",NO,12497.75,PASS
+hybrid,Q017,Tốc độ học cơ sở base_lr của CMS được cố định ở giá trị nào?,ANSWER,ANSWER (5 cits),"DOC001::P010,DOC001::P009",NO,12497.9,PASS
+hybrid,Q018,Số lượng tham số bổ sung của CMS là bao nhiêu triệu tham số?,ANSWER,ANSWER (5 cits),"DOC001::P010,DOC001::P011",NO,12491.06,PASS
+hybrid,Q019,Số tham số của CMS chiếm chưa đến bao nhiêu phần trăm tổng m...,ANSWER,ANSWER (5 cits),"DOC001::P010,DOC001::P011",NO,12500.05,PASS
+hybrid,Q020,Thuật toán tối ưu nào được áp dụng cho cập nhật online?,ANSWER,ANSWER (5 cits),"DOC001::P010,DOC001::P009",NO,12501.01,PASS
+hybrid,Q021,Phương pháp SA-CMS đề xuất căn chỉnh ranh giới theo yếu tố n...,ANSWER,ANSWER (5 cits),"DOC001::P012,DOC001::P011",NO,12513.3,PASS
+hybrid,Q022,SA-CMS thay thế cơ chế cắt nào của baseline?,ANSWER,ANSWER (5 cits),"DOC001::P001,DOC001::P011",NO,12506.5,PASS
+hybrid,Q023,Các ranh giới tài liệu thực tế nào được SA-CMS sử dụng?,ANSWER,ANSWER (5 cits),"DOC001::P012,DOC001::P011",NO,12493.55,PASS
+hybrid,Q024,Bộ phận nào bóc tách văn bản thành cây cấu trúc phân cấp?,ANSWER,ANSWER (5 cits),"DOC001::P013,DOC001::P012",NO,12509.24,PASS
+hybrid,Q025,Mã định danh đoạn văn bản trong hệ thống có định dạng chuẩn ...,ANSWER,ANSWER (5 cits),"DOC001::P013,DOC002::P005",NO,12498.98,PASS
+hybrid,Q026,Mục tiêu của việc gán mã định danh duy nhất cho từng đoạn là...,ANSWER,ANSWER (5 cits),"DOC001::P013,DOC001::P014",NO,12497.43,PASS
+hybrid,Q027,Sự kiện cập nhật gradient online tuân theo phương trình nào?,ANSWER,ANSWER (5 cits),"DOC001::P012,DOC001::P011",NO,12498.61,PASS
+hybrid,Q028,SA-CMS là từ viết tắt của cụm từ tiếng Anh nào?,ANSWER,ANSWER (5 cits),"DOC001::P011,DOC002::P012",NO,12494.98,PASS
+hybrid,Q029,Cây cấu trúc của parser phân tách tài liệu thành những cấp n...,ANSWER,ANSWER (5 cits),"DOC001::P013,DOC001::P012",NO,12492.83,PASS
+hybrid,Q030,Các cập nhật của CMS diễn ra ở chế độ nào?,ANSWER,ANSWER (5 cits),"DOC001::P011,DOC001::P012",NO,12502.13,PASS
+hybrid,Q031,Số hạt giống ngẫu nhiên (seeds) được kiểm soát ở Phase 2.5 l...,ANSWER,ANSWER (5 cits),"DOC001::P014,DOC001::P015",NO,12503.31,PASS
+hybrid,Q032,Những seed cụ thể nào đã được dùng trong thử nghiệm Phase 2....,ANSWER,ANSWER (4 cits),"DOC001::P014,DOC002::P013",NO,12508.54,PASS
+hybrid,Q033,Ngân sách cập nhật chuẩn hóa ở Level 2 là bao nhiêu updates?,ANSWER,ANSWER (5 cits),"DOC001::P014,DOC001::P015",NO,12504.59,PASS
+hybrid,Q034,Ngân sách cập nhật chuẩn hóa ở Level 3 là bao nhiêu updates?,ANSWER,ANSWER (5 cits),"DOC001::P014,DOC001::P015",NO,12499.25,PASS
+hybrid,Q035,Xác suất mục tiêu MK-NIAH của SA-CMS đạt giá trị bao nhiêu?,ANSWER,ANSWER (5 cits),"DOC001::P016,DOC001::P015",NO,12502.14,PASS
+hybrid,Q036,Xác suất mục tiêu MK-NIAH của Fixed-Token là bao nhiêu?,ANSWER,ANSWER (5 cits),"DOC001::P016,DOC001::P015",NO,12491.34,PASS
+hybrid,Q037,Giá trị p-value giữa SA-CMS và Fixed-Token trên MK-NIAH là b...,ANSWER,ANSWER (5 cits),"DOC001::P016,DOC001::P015",NO,12497.92,PASS
+hybrid,Q038,Điểm perplexity (PPL) hiệu chuẩn trên tập QASPER là bao nhiê...,ANSWER,ANSWER (2 cits),"DOC001::P017,DOC001::P016",NO,12511.09,PASS
+hybrid,Q039,Hiện tượng nào khiến PPL tăng khi cập nhật online với hàm mấ...,ANSWER,ANSWER (5 cits),"DOC001::P017,DOC001::P016",NO,12494.87,PASS
+hybrid,Q040,Bộ dữ liệu QASPER đánh giá cấp học viên gồm bao nhiêu tài li...,ANSWER,ANSWER (5 cits),"DOC001::P017,DOC002::P006",NO,12483.19,PASS
+hybrid,Q041,Hệ thống con truy xuất sử dụng giải thuật nào?,ANSWER,ANSWER (5 cits),"DOC002::P001,DOC002::P002",NO,12479.89,PASS
+hybrid,Q042,Giải thuật BM25 được viết bằng ngôn ngữ nào?,ANSWER,ANSWER (5 cits),"DOC002::P002,DOC002::P001",NO,12498.56,PASS
+hybrid,Q043,Mục đích của việc dùng BM25 thuần Python là gì?,ANSWER,ANSWER (3 cits),"DOC002::P001,DOC002::P002",NO,12495.37,PASS
+hybrid,Q044,Tham số k1 trong thuật toán BM25 có giá trị mặc định là bao ...,ANSWER,ANSWER (5 cits),"DOC002::P003,DOC002::P002",NO,12501.69,PASS
+hybrid,Q045,Tham số b trong thuật toán BM25 có giá trị mặc định là bao n...,ANSWER,ANSWER (5 cits),"DOC001::P010,DOC002::P003",NO,12503.66,PASS
+hybrid,Q046,Tham số k1 điều chỉnh yếu tố gì trong công thức BM25?,ANSWER,ANSWER (5 cits),"DOC002::P003,DOC002::P002",NO,12492.78,PASS
+hybrid,Q047,Tham số b điều chỉnh yếu tố gì trong công thức BM25?,ANSWER,ANSWER (5 cits),"DOC002::P003,DOC002::P002",NO,12495.42,PASS
+hybrid,Q048,Chỉ mục BM25 cập nhật theo phương thức nào khi có tài liệu m...,ANSWER,ANSWER (5 cits),"DOC002::P004,DOC002::P005",NO,12498.56,PASS
+hybrid,Q049,Kho lưu trữ DocumentStore lưu trữ dữ liệu dưới định dạng tệp...,ANSWER,ANSWER (4 cits),"DOC002::P005,DOC002::P006",NO,12510.81,PASS
+hybrid,Q050,Mã băm kiểm soát toàn vẹn tài liệu sử dụng thuật toán nào?,ANSWER,ANSWER (5 cits),"DOC002::P007,DOC002::P008",NO,12504.07,PASS
+hybrid,Q051,Thủ đô của nước Pháp là thành phố nào?,REFUSAL,ANSWER (3 cits),"DOC001::P012,DOC001::P013",NO,12488.89,FAIL
+hybrid,Q052,Cách nấu món phở bò truyền thống của Hà Nội như thế nào?,REFUSAL,REFUSED (insufficient_evidence_coverage),NONE,insufficient_evidence_coverage,0.55,PASS
+hybrid,Q053,Ai là người đã vẽ nên bức tranh Mona Lisa nổi tiếng?,REFUSAL,REFUSED (no_relevant_evidence_found),NONE,no_relevant_evidence_found,0.32,PASS
+hybrid,Q054,Định lý cuối cùng của Fermat được chứng minh vào năm nào?,REFUSAL,ANSWER (5 cits),"DOC002::P014,DOC002::P006",NO,12489.89,FAIL
+hybrid,Q055,Vận tốc ánh sáng trong chân không chính xác là bao nhiêu m/s...,REFUSAL,REFUSED (insufficient_evidence_coverage),NONE,insufficient_evidence_coverage,0.62,PASS
+hybrid,Q056,Dân số hiện tại của Tokyo là bao nhiêu triệu người?,REFUSAL,ANSWER (5 cits),"DOC001::P011,DOC001::P010",NO,12504.54,FAIL
+hybrid,Q057,Giải bóng đá Ngoại Hạng Anh có bao nhiêu câu lạc bộ tham dự ...,REFUSAL,REFUSED (insufficient_evidence_coverage),NONE,insufficient_evidence_coverage,0.58,PASS
+hybrid,Q058,Đỉnh núi Everest có độ cao chính xác là bao nhiêu mét?,REFUSAL,REFUSED (insufficient_evidence_coverage),NONE,insufficient_evidence_coverage,0.59,PASS
+hybrid,Q059,Hành tinh nào gần Mặt Trời nhất trong Hệ Mặt Trời?,REFUSAL,ANSWER (4 cits),"DOC003::P003,DOC003::P002",NO,12493.72,FAIL
+hybrid,Q060,Thành phố nào là thủ đô của Australia?,REFUSAL,REFUSED (no_relevant_evidence_found),NONE,no_relevant_evidence_found,0.73,PASS
+hybrid,Q061,Ai đã phát minh ra máy hơi nước mở đầu cuộc Cách mạng Công n...,REFUSAL,REFUSED (insufficient_evidence_coverage),NONE,insufficient_evidence_coverage,1.06,PASS
+hybrid,Q062,Nguyên tố hóa học nào có ký hiệu là Au trong bảng tuần hoàn?,REFUSAL,ANSWER (3 cits),"DOC001::P017,DOC002::P007",NO,12493.64,FAIL
+hybrid,Q063,Tác phẩm Romeo và Juliet do ai sáng tác?,REFUSAL,REFUSED (no_relevant_evidence_found),NONE,no_relevant_evidence_found,0.34,PASS
+hybrid,Q064,Quốc gia nào có diện tích lãnh thổ lớn nhất thế giới?,REFUSAL,REFUSED (insufficient_evidence_coverage),NONE,insufficient_evidence_coverage,0.45,PASS
+hybrid,Q065,Đơn vị tiền tệ chính thức của Nhật Bản là gì?,REFUSAL,REFUSED (insufficient_evidence_coverage),NONE,insufficient_evidence_coverage,0.46,PASS
+hybrid,Q066,Đại dương nào có diện tích lớn nhất trên Trái Đất?,REFUSAL,ANSWER (5 cits),"DOC003::P007,DOC003::P006",NO,12504.38,FAIL
+hybrid,Q067,Hệ điều hành Android ban đầu được công ty nào sáng lập trước...,REFUSAL,ANSWER (5 cits),"DOC001::P008,DOC002::P009",NO,12499.08,FAIL
+hybrid,Q068,Cầu Cổng Vàng (Golden Gate Bridge) nằm ở thành phố nào của M...,REFUSAL,REFUSED (no_relevant_evidence_found),NONE,no_relevant_evidence_found,0.46,PASS
+hybrid,Q069,Loài động vật có vú nào bay được duy nhất trên Trái Đất?,REFUSAL,ANSWER (5 cits),"DOC003::P006,DOC003::P002",NO,12492.51,FAIL
+hybrid,Q070,Kim tự tháp Giza nằm ở quốc gia nào?,REFUSAL,REFUSED (no_relevant_evidence_found),NONE,no_relevant_evidence_found,0.39,PASS
+hybrid,Q071,Ai là tác giả của Thuyết tương đối rộng?,REFUSAL,REFUSED (no_relevant_evidence_found),NONE,no_relevant_evidence_found,0.35,PASS
+hybrid,Q072,Cây cầu Bãi Cháy nằm ở tỉnh thành nào của Việt Nam?,REFUSAL,REFUSED (insufficient_evidence_coverage),NONE,insufficient_evidence_coverage,0.42,PASS
+hybrid,Q073,Đồng tiền chung của Liên minh Châu Âu có tên là gì?,REFUSAL,REFUSED (no_relevant_evidence_found),NONE,no_relevant_evidence_found,0.36,PASS
+hybrid,Q074,Trận chung kết World Cup 2022 diễn ra tại quốc gia nào?,REFUSAL,REFUSED (no_relevant_evidence_found),NONE,no_relevant_evidence_found,0.36,PASS
+hybrid,Q075,Bức họa Đêm đầy sao (The Starry Night) do danh họa nào sáng ...,REFUSAL,REFUSED (insufficient_evidence_coverage),NONE,insufficient_evidence_coverage,0.45,PASS
+hybrid,Q076,Mô hình SmolLM2-135M được huấn luyện trong bao nhiêu epoch t...,REFUSAL,ANSWER (5 cits),"DOC001::P003,DOC001::P000",NO,12500.41,FAIL
+hybrid,Q077,Tổng chi phí điện năng tiêu thụ của GPU GTX 1650 Ti là bao n...,REFUSAL,ANSWER (4 cits),"DOC001::P008,DOC001::P011",NO,12498.94,FAIL
+hybrid,Q078,Tên của kỹ sư trưởng nhóm tác giả phát triển mô hình SmolLM2...,REFUSAL,REFUSED (insufficient_evidence_coverage),NONE,insufficient_evidence_coverage,0.58,PASS
+hybrid,Q079,Hàm mất mát CLM của SmolLM2 sử dụng trọng số chi tiết cho từ...,REFUSAL,ANSWER (5 cits),"DOC001::P017,DOC001::P016",NO,12498.48,FAIL
+hybrid,Q080,CMS có khả năng mở rộng lên 100 mức thời gian hay không và c...,REFUSAL,ANSWER (5 cits),"DOC001::P009,DOC001::P008",NO,12492.79,FAIL
+hybrid,Q081,Độ trễ inference của SmolLM2-135M trên vi xử lý Apple M2 là ...,REFUSAL,ANSWER (5 cits),"DOC001::P003,DOC001::P002",NO,12511.02,FAIL
+hybrid,Q082,Phiên bản driver NVIDIA GeForce nào được cài đặt trên máy tr...,REFUSAL,ANSWER (5 cits),"DOC001::P008,DOC001::P007",NO,12488.23,FAIL
+hybrid,Q083,Dataset QASPER được thu thập chính xác vào ngày tháng năm nà...,REFUSAL,ANSWER (5 cits),"DOC003::P001,DOC003::P002",NO,12495.37,FAIL
+hybrid,Q084,Giá bán lẻ hiện tại của card đồ họa GTX 1650 Ti trên thị trư...,REFUSAL,ANSWER (5 cits),"DOC001::P008,DOC001::P007",NO,12498.92,FAIL
+hybrid,Q085,Thuật toán SA-CMS có được cấp bằng sáng chế độc quyền tại Vi...,REFUSAL,ANSWER (5 cits),"DOC001::P012,DOC001::P011",NO,12499.54,FAIL
+hybrid,Q086,Thuật toán BM25 có hỗ trợ xử lý ngôn ngữ tiếng Ả Rập hay tiế...,REFUSAL,ANSWER (5 cits),"DOC001::P000,DOC002::P013",NO,12496.78,FAIL
+hybrid,Q087,Tốc độ xử lý của BM25 khi chỉ mục có 10 triệu văn bản là bao...,REFUSAL,ANSWER (5 cits),"DOC002::P004,DOC002::P005",NO,12500.57,FAIL
+hybrid,Q088,Ai là người đầu tiên phát minh ra hệ số độ dài b trong BM25 ...,REFUSAL,ANSWER (5 cits),"DOC002::P004,DOC002::P003",NO,12510.89,FAIL
+hybrid,Q089,DocumentStore có hỗ trợ lưu trữ cơ sở dữ liệu phân tán Cassa...,REFUSAL,ANSWER (5 cits),"DOC002::P005,DOC002::P006",NO,12498.45,FAIL
+hybrid,Q090,Mã băm SHA-256 của tài liệu DOC001 có thể giải mã ngược lại ...,REFUSAL,ANSWER (5 cits),"DOC002::P007,DOC002::P008",NO,12486.34,FAIL
+hybrid,Q091,RefusalController có thể tích hợp với mô hình GPT-4 để đánh ...,REFUSAL,ANSWER (5 cits),"DOC002::P013,DOC002::P012",NO,12491.93,FAIL
+hybrid,Q092,Ngưỡng điểm tin cậy min_evidence_score có tự động học qua gr...,REFUSAL,ANSWER (3 cits),"DOC002::P013,DOC003::P002",NO,12498.95,FAIL
+hybrid,Q093,CitationChecker có kiểm tra chữ ký số mật mã học RSA của tác...,REFUSAL,ANSWER (5 cits),"DOC002::P011,DOC002::P012",NO,12496.92,FAIL
+hybrid,Q094,Độ dài tối đa của một passage trong DocumentChunker có thể l...,REFUSAL,ANSWER (5 cits),"DOC003::P009,DOC003::P008",NO,12501.15,FAIL
+hybrid,Q095,Thư viện Python nào được khuyên dùng để tăng tốc BM25 bằng G...,REFUSAL,ANSWER (4 cits),"DOC002::P001,DOC002::P002",NO,12502.89,FAIL
+hybrid,Q096,Kính viễn vọng James Webb đã tiêu tốn tổng cộng bao nhiêu tỷ...,REFUSAL,ANSWER (4 cits),"DOC003::P001,DOC003::P002",NO,12492.95,FAIL
+hybrid,Q097,Tên của nhà khoa học đứng đầu dự án thám hiểm rãnh Mariana n...,REFUSAL,ANSWER (5 cits),"DOC003::P007,DOC003::P006",NO,12490.22,FAIL
+hybrid,Q098,Vận tốc bay tối đa của tên lửa Ariane 5 khi đưa JWST lên quỹ...,REFUSAL,ANSWER (5 cits),"DOC003::P002,DOC003::P001",NO,12505.44,FAIL
+hybrid,Q099,Loài cá ốc Mariana có tuổi thọ trung bình là bao nhiêu năm?,REFUSAL,ANSWER (3 cits),"DOC003::P010,DOC003::P006",NO,12495.84,FAIL
+hybrid,Q100,Áp suất tại tâm Trái Đất lớn hơn áp suất Challenger Deep bao...,REFUSAL,ANSWER (5 cits),"DOC003::P009,DOC003::P008",NO,12498.03,FAIL
+context,Q001_CTX,SmolLM2-135M có chính xác bao nhiêu tham số?...,ANSWER,ANSWER (In-Context),IN_CONTEXT,NO,12489.95,PASS
+memory,Q001_MEM,SmolLM2-135M có chính xác bao nhiêu tham số?...,ANSWER,ANSWER (Memory-Only),PARAMETRIC,NO,2607.99,PASS
+context,Q002_CTX,Backbone SmolLM2-135M có bị đóng băng trong quá trình cập nh...,ANSWER,ANSWER (In-Context),IN_CONTEXT,NO,12244.8,PASS
+memory,Q002_MEM,Backbone SmolLM2-135M có bị đóng băng trong quá trình cập nh...,ANSWER,ANSWER (Memory-Only),PARAMETRIC,NO,3308.23,PASS
+context,Q003_CTX,CMS thay thế thành phần nào của kiến trúc Transformer truyền...,ANSWER,ANSWER (In-Context),IN_CONTEXT,NO,12243.34,PASS
+memory,Q003_MEM,CMS thay thế thành phần nào của kiến trúc Transformer truyền...,ANSWER,ANSWER (Memory-Only),PARAMETRIC,NO,3120.67,PASS
+context,Q004_CTX,Tên đầy đủ của hệ thống CMS trong đề cương là gì?...,ANSWER,ANSWER (In-Context),IN_CONTEXT,NO,12245.66,PASS
+memory,Q004_MEM,Tên đầy đủ của hệ thống CMS trong đề cương là gì?...,ANSWER,ANSWER (Memory-Only),PARAMETRIC,NO,3167.05,PASS
+context,Q005_CTX,Tầng nào kết nối backbone với bộ nhớ tham số?...,ANSWER,ANSWER (In-Context),IN_CONTEXT,NO,12237.54,PASS
+memory,Q005_MEM,Tầng nào kết nối backbone với bộ nhớ tham số?...,ANSWER,ANSWER (Memory-Only),PARAMETRIC,NO,2786.9,PASS
+context,Q006_CTX,Tầng Hope-Attention chuẩn hóa trạng thái ẩn qua thành phần n...,ANSWER,ANSWER (In-Context),IN_CONTEXT,NO,12244.34,PASS
+memory,Q006_MEM,Tầng Hope-Attention chuẩn hóa trạng thái ẩn qua thành phần n...,ANSWER,ANSWER (Memory-Only),PARAMETRIC,NO,3120.18,PASS
+context,Q007_CTX,Trạng thái ẩn kết hợp với phần dư bộ nhớ theo phương trình n...,ANSWER,ANSWER (In-Context),IN_CONTEXT,NO,12249.89,PASS
+memory,Q007_MEM,Trạng thái ẩn kết hợp với phần dư bộ nhớ theo phương trình n...,ANSWER,ANSWER (Memory-Only),PARAMETRIC,NO,3599.68,PASS
+context,Q008_CTX,Mã số bài báo arXiv của Nested Learning là gì?...,ANSWER,ANSWER (In-Context),IN_CONTEXT,NO,12251.31,PASS
+memory,Q008_MEM,Mã số bài báo arXiv của Nested Learning là gì?...,ANSWER,ANSWER (Memory-Only),PARAMETRIC,NO,2357.68,PASS
+context,Q009_CTX,Backbone SmolLM2 được phát triển bởi tổ chức nào trên Huggin...,ANSWER,ANSWER (In-Context),IN_CONTEXT,NO,12243.71,PASS
+memory,Q009_MEM,Backbone SmolLM2 được phát triển bởi tổ chức nào trên Huggin...,ANSWER,ANSWER (Memory-Only),PARAMETRIC,NO,3170.37,PASS
+context,Q010_CTX,Tỷ lệ đóng băng của backbone là bao nhiêu phần trăm?...,ANSWER,ANSWER (In-Context),IN_CONTEXT,NO,12252.73,PASS
+memory,Q010_MEM,Tỷ lệ đóng băng của backbone là bao nhiêu phần trăm?...,ANSWER,ANSWER (Memory-Only),PARAMETRIC,NO,2825.7,PASS

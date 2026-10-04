@@ -1,0 +1,55 @@
+{
+  "overall_matrix": {
+    "EXPECTED_ANSWER": {
+      "ACTUAL_ANSWER": 49,
+      "ACTUAL_REFUSAL": 1
+    },
+    "EXPECTED_REFUSAL": {
+      "ACTUAL_ANSWER": 32,
+      "ACTUAL_REFUSAL": 18
+    }
+  },
+  "category_matrices": {
+    "answerable_n50": {
+      "ACTUAL_ANSWER": 49,
+      "ACTUAL_REFUSAL": 1
+    },
+    "unanswerable_n25": {
+      "ACTUAL_ANSWER": 8,
+      "ACTUAL_REFUSAL": 17
+    },
+    "insufficient_evidence_n25": {
+      "ACTUAL_ANSWER": 24,
+      "ACTUAL_REFUSAL": 1
+    }
+  },
+  "rates": {
+    "retrieval_failure_rate_pct": 0.0,
+    "evidence_selection_failure_rate_pct": 2.0,
+    "refusal_failure_rate_pct": 64.0,
+    "false_refusal_rate_pct": 2.0,
+    "citation_support_failure_rate_pct": 39.51,
+    "unsupported_citations_count": 32,
+    "total_answers_with_citations": 81
+  },
+  "failure_types_breakdown": {
+    "F. False refusal": 1,
+    "E. Refusal failure": 32
+  },
+  "semantic_audit_summary": {
+    "total_questions": 100,
+    "retrieved_count": 92,
+    "relevant_entity_count": 75,
+    "sufficient_evidence_count": 50,
+    "cited_count": 81,
+    "semantically_supported_count": 49,
+    "refused_count": 19
+  },
+  "current_thresholds": {
+    "score_threshold": 5.0,
+    "min_evidence_score": 5.0,
+    "min_evidence_count": 1,
+    "min_query_coverage": 0.35,
+    "top_k": 5
+  }
+}

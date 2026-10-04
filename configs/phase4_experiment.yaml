@@ -1,0 +1,570 @@
+# ==============================================================================
+# PHASE 4.0.2: FINAL FAIRNESS LOCK & PROTOCOL FREEZE (FROZEN)
+# 
+# Source of Truth:
+#   1. De cuong NCKH (Oct 2, 2026)
+#   2. Nested Learning Paper (arXiv:2512.24695v1)
+#   3. Phase 2.5.2 Final Reconciled Results
+#   4. Phase 3.0 - 3.3 Backend Implementation
+#   5. Phase 4.0.1 Protocol Audit & B2 RAG Calibration Results
+#   6. Phase 4.0.2 Final Fairness Lock
+#
+# DO NOT MODIFY: This configuration is formally frozen for Phase 4 benchmarking.
+# Dynamic hyperparameter generation by runners is strictly prohibited.
+# ==============================================================================
+
+meta:
+  protocol_version: "4.0.2-final-fairness-lock"
+  freeze_date: "2026-10-03"
+  project: "Chatbot hoi dap tren tai lieu voi bo nho da thang dua tren Nested Learning"
+  status: "READY_FOR_PHASE_4_1"
+  runner_override_prohibited: true
+
+# ------------------------------------------------------------------------------
+# MANDATORY PHASE 4.0.2 LOCKED TRAINING & RETRIEVAL SPECIFICATION
+# ------------------------------------------------------------------------------
+training:
+  final_training_samples: 200
+  corpus_documents: 20
+  token_budget_per_epoch: 21905
+  total_epochs: 3
+  total_tokens: 65715
+  optimizer: "AdamW"
+  learning_rate: 0.0001
+  batch_size: 4
+  gradient_accumulation_steps: 1
+  precision: "float16"
+  seeds: [42, 43, 44]
+  status: "LOCKED_BENCHMARK_TRAINING_SIZE"
+  runner_override_prohibited: true
+
+retrieval:
+  bm25_k1: 1.5
+  bm25_b: 0.75
+  top_k: 5
+  score_threshold: 3.0
+  chunk_size: 256
+  chunk_overlap: 32
+  evidence_selector:
+    max_evidence: 5
+    min_evidence: 1
+    score_threshold: 3.0
+  refusal_controller:
+    min_evidence_score: 3.0
+    min_evidence_count: 1
+    min_query_coverage: 0.35
+  runner_override_prohibited: true
+
+shared_retrieval_for_b2_p2: true
+runner_override_prohibited: true
+
+# ------------------------------------------------------------------------------
+# TASK 1: SEVEN BENCHMARK METHODS
+# ------------------------------------------------------------------------------
+methods:
+  B1:
+    name: "ICL Full-Document Context"
+    category: "baseline"
+    description: "In-context learning with the full document concatenated into the prompt context window. Original paper reference baseline."
+    mode: "context"
+    requires_online_update: false
+    context_eviction: false
+    retrieval_augmented: false
+    memory_levels: 0
+
+  B2:
+    name: "Standard BM25 RAG"
+    category: "baseline"
+    description: "Industry-standard Retrieval-Augmented Generation using BM25 passage retrieval. Top-k passages placed in prompt context."
+    mode: "hybrid" # uses retrieval without parametric memory updates
+    requires_online_update: false
+    context_eviction: true # raw document evicted, only retrieved passages present
+    retrieval_augmented: true
+    memory_levels: 0
+
+  B3:
+    name: "Cartridges / Context Compression"
+    category: "baseline"
+    description: "Self-study lightweight representation via offline prompt generation and adapter baking (Eyuboglu et al., arXiv:2506.06266)."
+    reproducible_in_budget: false
+    status_note: "not reproducible within controlled budget (4GB VRAM / single GPU constraint; requires heavy offline distillation and large teacher compute)"
+    requires_substitute: false # Strictly prohibited from substituting
+
+  B4:
+    name: "Single-Level Adapter"
+    category: "baseline"
+    description: "Non-multi-timescale parametric memory. Single-level MLP adapter updated via Equation 71 upon reading document. Context evicted."
+    mode: "memory"
+    requires_online_update: true
+    context_eviction: true
+    retrieval_augmented: false
+    memory_levels: 1
+
+  B5:
+    name: "Fixed-Token CMS (Hope-Attention Scaled)"
+    category: "baseline"
+    description: "Fixed-token Continuum Memory System from Nested Learning (arXiv:2512.24695v1, Eq 70-71). k=3 levels updated at fixed token chunk intervals. Context evicted."
+    mode: "memory"
+    schedule_mode: "fixed_token"
+    requires_online_update: true
+    context_eviction: true
+    retrieval_augmented: false
+    memory_levels: 3
+
+  P1:
+    name: "SA-CMS Memory-Only (Proposed)"
+    category: "proposed"
+    description: "Structure-Aligned CMS across 3 hierarchy levels (Paragraph, Section, Document). Context evicted during QA. Parametric memory only."
+    mode: "memory"
+    schedule_mode: "structure"
+    requires_online_update: true
+    context_eviction: true
+    retrieval_augmented: false
+    memory_levels: 3
+
+  P2:
+    name: "SA-CMS + Retrieval Hybrid (Proposed)"
+    category: "proposed"
+    description: "Proposed hybrid architecture: SA-CMS 3-level parametric memory + BM25 passage retrieval + EvidenceSelector + RefusalController + Citation grounding."
+    mode: "hybrid"
+    schedule_mode: "structure"
+    requires_online_update: true
+    context_eviction: true # full text evicted; retrieved evidence passages provided in prompt
+    retrieval_augmented: true
+    memory_levels: 3
+
+ablations:
+  A1_random_boundary:
+    name: "CMS Level 3 Random Boundary"
+    description: "Control experiment isolating syntactic boundary value from variable chunk length effect. Same total update count as P1."
+    schedule_mode: "random"
+    memory_levels: 3
+  A2_two_levels:
+    name: "SA-CMS Level 2 (Paragraph + Section)"
+    description: "Evaluates depth effect by disabling Level 3 (Document Memory)."
+    memory_levels: 2
+  A3_no_gating:
+    name: "SA-CMS Additive (No Learned Gates)"
+    description: "Evaluates learned gate aggregation vs simple addition in Equation 74."
+    aggregation: "additive"
+  A4_self_study_toggle:
+    name: "Self-Study Question-Answer Memory Toggle"
+    description: "Evaluates impact of self-generated QA updates on Level 2/3 adapters."
+    self_study_enabled: false
+  A5_adapter_rank:
+    name: "Adapter Rank Exploration"
+    description: "Evaluates rank variants r in [8, 16, 32]."
+    candidate_ranks: [8, 16, 32]
+  A6_top_k_layers:
+    name: "Top-K Updated Layers Exploration"
+    description: "Evaluates updating top-K transformer blocks vs output continuum blocks."
+    candidate_k_layers: [2, 4, "all"]
+
+# ------------------------------------------------------------------------------
+# TASK 2: HARDWARE & MODEL FAIRNESS PROTOCOL
+# ------------------------------------------------------------------------------
+hardware_fairness:
+  backbone_model: "HuggingFaceTB/SmolLM2-135M"
+  tokenizer: "HuggingFaceTB/SmolLM2-135M"
+  frozen_backbone: true
+  total_backbone_parameters: 134515008
+  max_context_window: 512
+  precision_gpu: "float16"
+  precision_cpu: "float32"
+  primary_device: "cuda"
+  fallback_device: "cpu"
+  target_gpu_hardware: "NVIDIA GeForce GTX 1650 Ti (4GB VRAM)"
+  max_vram_budget_mb: 3500
+  document_preprocessor: "DocumentStructureParser"
+  text_normalizer: "NFKC_clean_whitespace"
+  evaluation_question_matching: "strict_identical_items"
+
+# Mandatory Differences Matrix:
+mandatory_differences:
+  B1:
+    prompt_contains: "full_document_text"
+    parametric_updates: 0
+    test_context_tokens: "up_to_512"
+  B2:
+    prompt_contains: "top_k_retrieved_passages"
+    parametric_updates: 0
+    test_context_tokens: "passage_budget (~256 tokens)"
+  B4:
+    prompt_contains: "query_only (context evicted)"
+    parametric_updates: "online gradient updates (level 1 only)"
+    test_context_tokens: "query_tokens (<64)"
+  B5:
+    prompt_contains: "query_only (context evicted)"
+    parametric_updates: "online gradient updates (3 fixed token levels)"
+    test_context_tokens: "query_tokens (<64)"
+  P1:
+    prompt_contains: "query_only (context evicted)"
+    parametric_updates: "online gradient updates (3 structure-aligned levels)"
+    test_context_tokens: "query_tokens (<64)"
+  P2:
+    prompt_contains: "top_k_retrieved_passages + query"
+    parametric_updates: "online gradient updates (3 structure-aligned levels)"
+    test_context_tokens: "passage_budget + query (~300 tokens)"
+
+# ------------------------------------------------------------------------------
+# TASK 3: PRIMARY RESEARCH QUESTIONS (FROZEN)
+# ------------------------------------------------------------------------------
+research_questions:
+  RQ1:
+    title: "Multi-level CMS Reproduction at Student Scale"
+    text: "CMS nhiều mức có tái hiện được xu hướng trên QASPER/MK-NIAH ở quy mô nhỏ không?"
+    hypothesis: "Nhiều mức hơn cho kết quả tốt hơn một mức trên LongHealth/QASPER/MK-NIAH."
+    key_comparison: "B5 vs B4 vs B1"
+  RQ2:
+    title: "Structure-Aligned vs Fixed-Token Budget-Controlled Comparison"
+    text: "P1 SA-CMS có khác B5 Fixed Token khi cùng update budget không?"
+    hypothesis: "Lịch căn theo cấu trúc đạt kết quả tốt hơn lịch token cố định ở cùng số lần cập nhật."
+    key_comparison: "P1 vs B5 (paired statistical test)"
+  RQ3:
+    title: "Post-Eviction Retention & Faithfulness"
+    text: "Sau khi document rời context: memory-only và hybrid retrieval hoạt động thế nào? P2 có cải thiện faithfulness so với B2 không?"
+    hypothesis: "Bản lai P2 đạt độ trung thực cao nhất, khắc phục hiện tượng hallucination của memory-only P1."
+    key_comparison: "P2 vs B2 vs P1"
+  RQ4:
+    title: "Continual Ingestion Catastrophic Forgetting"
+    text: "Sequential document ingestion gây forgetting bao nhiêu?"
+    hypothesis: "SA-CMS đa mức duy trì biểu diễn bền vững hơn adapter một mức B4 sau khi nạp thêm 5, 10, 20 tài liệu."
+    key_comparison: "P1 vs B4 across sequential document intervals"
+  RQ5:
+    title: "Computational and Memory Cost Profile"
+    text: "Cost của memory-based methods so với RAG/context dài?"
+    hypothesis: "Nạp tài liệu tốn thời gian hơn RAG, nhưng mỗi câu trả lời tiết kiệm token và có độ trễ suy luận ổn định."
+    key_comparison: "Ingest cost, answer tokens, latency, VRAM across all methods"
+
+# ------------------------------------------------------------------------------
+# TASK 4: PRIMARY METRICS SPECIFICATION
+# ------------------------------------------------------------------------------
+metrics:
+  answer_quality:
+    - name: "token_f1"
+      definition: "Token-level harmonic mean of precision and recall against ground truth answers."
+      benchmark: "QASPER / Vietnamese QA"
+    - name: "exact_match"
+      definition: "Binary indicator (1.0 or 0.0) of exact string identity after normalization."
+      benchmark: "QASPER / Vietnamese QA"
+    - name: "mkniah_accuracy"
+      definition: "Multi-key retrieval accuracy on needle codes embedded across haystack."
+      benchmark: "MK-NIAH"
+    - name: "target_token_probability"
+      definition: "Softmax probability assigned to correct target token under greedy evaluation."
+      benchmark: "MK-NIAH / QASPER"
+
+  faithfulness:
+    - name: "citation_support_rate"
+      definition: "Proportion of generated claims with citations where cited passage directly contains the supporting fact."
+      target: null # NO PRESET PASS/FAIL THRESHOLD (AUDIT TASK 1)
+    - name: "local_judge_score"
+      definition: "Lexical & semantic NLI overlap score between answer and retrieved evidence passages."
+    - name: "manual_verification_sample_size"
+      definition: "Blind human audit sample size across randomly selected test outputs."
+      value: 100
+
+  refusal:
+    - name: "correct_refusal_rate"
+      definition: "Percentage of Unanswerable and Insufficient Evidence queries correctly refused."
+      target_corpus: "Unanswerable (10) + Insufficient Evidence (10)"
+    - name: "false_refusal_rate"
+      definition: "Percentage of Answerable queries erroneously refused."
+      target_corpus: "Answerable (20)"
+
+  forgetting:
+    - name: "retention_accuracy_intervals"
+      definition: "Accuracy on initial document D_0 evaluated after sequentially ingesting +N documents."
+      evaluation_points: [5, 10, 20]
+
+  cost:
+    - name: "ingest_time_per_1k_tokens_sec"
+      definition: "Wall-clock seconds required to perform forward-backward ingestion per 1000 tokens."
+    - name: "answer_tokens_generated"
+      definition: "Average output token count per question."
+    - name: "latency_ms_per_query"
+      definition: "Total end-to-end response time in milliseconds per query."
+    - name: "peak_vram_mb"
+      definition: "Maximum GPU memory allocated during ingestion and query execution."
+    - name: "checkpoint_size_mb"
+      definition: "Disk storage footprint of saved memory snapshot state_dict."
+
+# ------------------------------------------------------------------------------
+# AUDIT SECTION 1: FAITHFULNESS DEFINITION (AUDIT TASK 1)
+# ------------------------------------------------------------------------------
+faithfulness_definition:
+  formula: "Faithfulness = Citation-supported answer rate"
+  description: "Tỷ lệ câu trả lời có trích dẫn được chứng minh là có dữ kiện hỗ trợ trong đoạn trích nguồn."
+  preset_pass_fail_threshold: null # Khong dat nguong pass/fail truoc khi co ket qua thuc nghiem
+  evaluation_protocol:
+    automated_judge:
+      tool: "local_judge"
+      method: "Kiem tra do bao phu tu khoa va entailing overlap giua cau tra loi va doan trich dan"
+    human_audit:
+      sample_size: 100
+      method: "Kiem tra mu thu cong (blind manual verification) tren 100 mau kiem thu ngau nhien"
+
+# ------------------------------------------------------------------------------
+# AUDIT SECTION 2: TRAINING FAIRNESS & INITIALIZATION (AUDIT TASKS 2 & 3)
+# ------------------------------------------------------------------------------
+training_fairness:
+  backbone_state: "SmolLM2-135M pretrained (134,515,008 params, 100% frozen)"
+  initialization_protocol:
+    method: "seed-based parameter generation (theta_0)"
+    seeds: [42, 43, 44]
+    theta_0_fidelity: "Exact bit-level match between B5 and P1 (delta = 0.000000)"
+  models:
+    B4:
+      name: "Single-Level Adapter"
+      trainable_parameters: 1772736
+      levels: 1
+      d_model: 576
+      d_ff: 1536
+      schedule: "fixed_token"
+    B5:
+      name: "Fixed-Token CMS"
+      trainable_parameters: 5315904
+      levels: 3
+      d_model: 576
+      d_ff: 1536
+      schedule: "fixed_token"
+    P1:
+      name: "SA-CMS Memory-Only"
+      trainable_parameters: 5315904
+      levels: 3
+      d_model: 576
+      d_ff: 1536
+      schedule: "structure"
+    P2:
+      name: "SA-CMS + Retrieval Hybrid"
+      trainable_parameters: 5315904
+      levels: 3
+      memory_component: "IDENTICAL_TO_P1_SA_CMS"
+      retrieval_branch: "BM25 top-k evidence + RefusalController + Citation grounding"
+      schedule: "structure"
+  b5_vs_p1_fairness_guarantee:
+    initialization: "IDENTICAL"
+    training_data: "IDENTICAL"
+    training_budget: "IDENTICAL (Strictly matched total update events delta = 0)"
+    learning_rates: [0.01, 0.005, 0.001]
+    optimizer: "SGD (Equation 71)"
+    precision: "float16 (cuda) / float32 (cpu)"
+    differing_factor_only: "update_schedule (fixed_token vs structure_aligned)"
+  p2_fairness_guarantee:
+    memory_backbone: "IDENTICAL_TO_P1"
+    training_protocol: "Same SA-CMS memory component as P1, differing only in query-time evidence augmentation"
+
+# ------------------------------------------------------------------------------
+# AUDIT SECTION 3: B2 RAG CALIBRATION (AUDIT TASK 4)
+# ------------------------------------------------------------------------------
+rag_calibration:
+  status: "CALIBRATED_AND_FROZEN"
+  calibration_dataset: "src/training/training_corpus.py (VAL_DOC_001 to VAL_DOC_005, 50 QA pairs)"
+  candidate_pool_csv: "results/phase4_0_1_rag_calibration.csv"
+  tested_candidates_count: 10
+  selected_configuration:
+    config_id: "CAND_07"
+    chunk_size: 256
+    chunk_overlap: 32
+    top_k: 5
+    k1: 1.5
+    b: 0.75
+    score_threshold: 3.0
+  validation_performance:
+    hit_rate_pct: 60.0
+    mrr: 0.5867
+    avg_top1_score: 8.00
+    composite_calibration_score: 67.20
+    avg_latency_ms: 0.137
+  selection_criterion: "Maximize composite retrieval score (HitRate + MRR + Threshold Retention) within prompt budget (chunk <= 256 tokens)"
+  freeze_policy: "Configuration is strictly frozen for all TEST evaluations. Zero tuning on TEST."
+
+# ------------------------------------------------------------------------------
+# AUDIT SECTION 4: DATA PARTITIONS & LEAKAGE SAFEGUARDS (AUDIT TASK 5)
+# ------------------------------------------------------------------------------
+data_partitions:
+  train:
+    purpose: "Locked benchmark adapter initialization (Phase 4.0.2 Locked Rule)"
+    source: "src/training/training_corpus.py (get_scale_training_corpus(200), TR_DOC_001 to TR_DOC_020)"
+    documents_count: 20
+    qa_pairs_count: 200
+    total_tokens_per_epoch: 21905
+    total_tokens_3_epochs: 65715
+    locked_samples_size: 200
+    leakage_check: "0% overlap with all evaluation benchmarks"
+  validation_calibration:
+    purpose: "RAG parameter calibration, threshold verification, and pipeline sanity checking"
+    source: "src/training/training_corpus.py (VAL_DOC_001 to VAL_DOC_005, 50 QA pairs)"
+    supplementary_sanity: "data/test_documents/ (doc_a, doc_b, doc_c)"
+    refusal_tuning_allowed: false
+  test:
+    purpose: "Formal Phase 4 benchmark reporting"
+    longhealth:
+      name: "LongHealth Clinical Document QA Benchmark (Adams et al. 2024 / 2025)"
+      subset_label: "fixed experimental subset"
+      full_dataset_size: "20 clinical documents, 200 multiple-choice questions"
+      documents_count: 5
+      questions_count: 20
+      selection_rule: "5 representative clinical specialties (Cardiology, Pulmonology, Endocrinology, Oncology, Neurology) covering multi-section synthesis"
+      resource_constraint: "GTX 1650 Ti 4GB VRAM; full 140k tokens exceed student-scale iteration budget"
+      tuning_allowed: false
+      status: "NOT_RUN_YET (Scheduled for Phase 4.1 Benchmark)"
+    qasper:
+      name: "Curated QASPER Document QA Benchmark (Dasigi et al. 2021)"
+      subset_label: "fixed experimental subset"
+      documents_count: 10
+      tuning_allowed: false
+      status: "NOT_RUN_YET (Scheduled for Phase 4.1 Benchmark)"
+    mkniah:
+      name: "Natural MK-NIAH Benchmark (RULER scaled, Hsieh et al. 2024)"
+      subset_label: "fixed experimental subset"
+      samples_count: 100
+      tuning_allowed: false
+      status: "NOT_RUN_YET (Scheduled for Phase 4.1 Benchmark)"
+    vietnamese_qa:
+      name: "Vietnamese Layered Document QA Benchmark (Self-constructed, De cuong Section 7.1)"
+      subset_label: "proposal mandated scale"
+      documents_count: 20
+      answerable_questions_count: 300
+      questions_without_answer_count: 50
+      total_questions_count: 350
+      labeling_protocol: "300 answerable questions with evidence passages; 50 questions without answer in documents (25 out-of-domain unanswerable + 25 in-domain missing target facts from Phase 3.1 template provenance)"
+      tuning_allowed: false
+      status: "NOT_RUN_YET (Scheduled for Phase 4.1 Benchmark)"
+    continual_forgetting:
+      name: "Sequential Document Ingestion Corpus (Incremental QASPER, De cuong Section 7.1)"
+      subset_label: "sequential stream subset"
+      documents_count: 21
+      evaluation_intervals: [5, 10, 20]
+      tuning_allowed: false
+      status: "NOT_RUN_YET (Scheduled for Phase 4.1 Benchmark)"
+
+leakage_safeguards:
+  no_test_in_training: true
+  no_refusal_threshold_tuning_on_test: true
+  no_rag_tuning_on_test: true
+  no_vietnamese_final_test_in_calibration: true
+  no_qasper_test_in_calibration: true
+  no_mkniah_test_in_calibration: true
+  no_longhealth_test_in_calibration: true
+  no_phase3_1_in_training: true
+
+# ------------------------------------------------------------------------------
+# AUDIT SECTION 5: REFUSAL FAIRNESS SPECIFICATION (TASK 4)
+# ------------------------------------------------------------------------------
+refusal_fairness:
+  disentanglement_principles:
+    retrieval_relevance:
+      metric: "Raw BM25 lexical score (s_BM25)"
+      threshold: 3.0
+      description: "Measures lexical query-passage overlap, NOT factual truth or completeness."
+    evidence_sufficiency:
+      criteria:
+        - "Score threshold: s_BM25 >= 3.0"
+        - "Passage count: N_evidence >= 1"
+        - "Query coverage: coverage >= 0.35"
+        - "Flag: has_sufficient_evidence == True"
+      description: "Measures whether retrieved evidence meets information sufficiency criteria."
+    refusal_decision:
+      controller: "RefusalController"
+      rules:
+        - "If evidence is sufficient -> ANSWER"
+        - "If N_passages == 0 -> REFUSAL (reason: no_relevant_evidence_found)"
+        - "If max_score < 3.0 -> REFUSAL (reason: evidence_below_confidence_threshold)"
+        - "If coverage < 0.35 or count < 1 -> REFUSAL (reason: insufficient_evidence_coverage)"
+  evaluation_taxonomy:
+    correct_refusal: "Ground truth is Unanswerable or Insufficient Evidence, and pipeline emits REFUSAL"
+    false_refusal: "Ground truth is Answerable, but pipeline emits REFUSAL"
+    false_answer: "Ground truth is Unanswerable or Insufficient Evidence, but pipeline attempts to ANSWER; OR Answerable but generated answer is incorrect/unsupported"
+    insufficient_evidence_refusal: "Refusal specifically triggered by insufficient coverage or low confidence despite partial retrieval"
+
+# ------------------------------------------------------------------------------
+# TASK 5: STATISTICAL EVALUATION PROTOCOL
+# ------------------------------------------------------------------------------
+statistics:
+  seeds: [42, 43, 44]
+  summary_aggregations: ["mean", "std", "ci_95_bootstrap"]
+  bootstrap:
+    method: "non_parametric_percentile"
+    iterations: 1000
+    confidence_level: 0.95
+    resampling_unit: "individual_evaluation_item" # Strictly NOT over the 3 seed means!
+  hypothesis_testing:
+    p1_vs_b5_comparison:
+      paired_sample: true
+      tests:
+        - "paired_students_t_test"
+        - "wilcoxon_signed_rank_test"
+      alpha_threshold: 0.05
+      effect_size_metric: "cohens_d"
+
+# ------------------------------------------------------------------------------
+# TASK 7: CONTROLLED BUDGET CONSTRAINTS
+# ------------------------------------------------------------------------------
+controlled_budget:
+  target_event_source: "P1_SA_CMS" # B5 and Random Boundary match P1 update count exactly
+  enforce_strict_equality: true
+  tolerance_delta_updates: 0
+  log_update_events: true
+  logged_attributes:
+    - "level_index"
+    - "boundary_type"
+    - "token_position"
+    - "step_norm"
+    - "timescale"
+
+# ------------------------------------------------------------------------------
+# FROZEN HYPERPARAMETERS
+# ------------------------------------------------------------------------------
+hyperparameters:
+  sa_cms:
+    num_levels: 3
+    level_names: ["Paragraph", "Section", "Document"]
+    inner_learning_rates:
+      level_1: 0.01   # Fast timescale (Paragraph)
+      level_2: 0.005  # Medium timescale (Section)
+      level_3: 0.001  # Slow timescale (Document)
+    aggregation: "gated" # Eq 74
+    single_level_b4_lr: 0.01
+    fixed_token_b5_lrs: [0.01, 0.005, 0.001]
+    fixed_token_chunk_sizes: [64, 128, 256]
+
+  retrieval_bm25:
+    k1: 1.5
+    b: 0.75
+    passage_chunk_size: 256
+    passage_chunk_overlap: 32
+    top_k: 5
+    score_threshold: 3.0 # Calibrated via CAND_07
+
+  refusal_controller:
+    score_threshold: 3.0 # Aligned with calibrated BM25
+    min_evidence_score: 3.0
+    min_evidence_count: 1
+    min_query_coverage: 0.35
+    thresholds_frozen: true
+
+  generation:
+    max_answer_tokens: 64
+    temperature: 0.0 # Greedy decoding for determinism and reproducibility
+    repetition_penalty: 1.1
+
+# ------------------------------------------------------------------------------
+# OUTPUT & ARTIFACT PATHS
+# ------------------------------------------------------------------------------
+output_paths:
+  results_directory: "results"
+  logs_directory: "logs"
+  benchmark_summary_csv: "results/phase4_benchmark_summary.csv"
+  detailed_samples_json: "results/phase4_detailed_samples.json"
+  statistical_audit_csv: "results/phase4_statistical_audit.csv"
+  sanity_check_json: "results/phase4_0_sanity_check.json"
+  protocol_freeze_doc: "docs/phase4_0_protocol_freeze.md"
+  protocol_audit_doc: "docs/phase4_0_1_final_protocol_audit.md"
+  rag_calibration_csv: "results/phase4_0_1_rag_calibration.csv"
+  protocol_check_json: "results/phase4_0_1_protocol_check.json"
+  final_fairness_lock_doc: "docs/phase4_0_2_final_fairness_lock.md"
+  final_fairness_lock_json: "results/phase4_0_2_protocol_check.json"
+  final_scope_lock_doc: "docs/phase4_0_3_final_scope_lock.md"
+  dataset_matrix_csv: "results/phase4_0_3_dataset_matrix.csv"
+  scope_check_json: "results/phase4_0_3_scope_check.json"

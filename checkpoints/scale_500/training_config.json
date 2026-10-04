@@ -1,0 +1,45 @@
+{
+  "pilot_name": "scale_500",
+  "sample_count": 500,
+  "document_count": 50,
+  "total_tokens_per_epoch": 59362,
+  "total_tokens_processed": 178086,
+  "avg_tokens_per_sample": 118.72,
+  "min_tokens": 92,
+  "max_tokens": 160,
+  "trainable_parameters": 3544320,
+  "frozen_parameters": 134515008,
+  "optimizer": "AdamW",
+  "learning_rate": 0.0001,
+  "weight_decay": 0.01,
+  "batch_size": 2,
+  "gradient_accumulation_steps": 2,
+  "effective_batch_size": 4,
+  "num_epochs": 3,
+  "max_seq_length": 256,
+  "precision": "float32",
+  "random_seed": 42,
+  "device": "cuda",
+  "wall_clock_time_sec": 61.89,
+  "token_throughput_tps": 2877.68,
+  "peak_vram_mb": 871.65,
+  "checkpoint_size_mb": 13.52,
+  "epoch_train_losses": [
+    4.3048,
+    3.6704,
+    3.2024
+  ],
+  "final_train_loss": 3.2024,
+  "pre_train_validation": {
+    "val_loss": 5.0655,
+    "val_ppl": 158.46,
+    "token_f1": 0.1862,
+    "exact_match": 0.0
+  },
+  "post_train_validation": {
+    "val_loss": 4.3963,
+    "val_ppl": 81.15,
+    "token_f1": 0.2259,
+    "exact_match": 0.0
+  }
+}

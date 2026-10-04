@@ -1,0 +1,8 @@
+model,levels,schedule,sample_count,MK_NIAH_accuracy,avg_target_probability,avg_target_rank,QASPER_PPL,runtime_seconds,peak_vram_mb,update_count
+SmolLM2-135M,1,none,50,52.0,0.252893,1.2,40.0073,59.71,322.34,0
+SmolLM2-135M,2,fixed_token,50,0.0,0.117412,2.14,67.0782,88.13,344.66,450
+SmolLM2-135M,2,structure,50,0.0,0.146705,2.18,59.6839,101.89,344.59,750
+SmolLM2-135M,2,random,50,28.0,0.35739,1.52,65.55,108.76,352.58,691
+SmolLM2-135M,3,fixed_token,50,6.0,0.232612,1.86,70.3248,108.02,351.35,1000
+SmolLM2-135M,3,structure,50,0.0,0.196598,2.0,69.0725,99.36,351.35,800
+SmolLM2-135M,3,random,50,54.0,0.498271,1.04,64.2068,118.33,359.83,739

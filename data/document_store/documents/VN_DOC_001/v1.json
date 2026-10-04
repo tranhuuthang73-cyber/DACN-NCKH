@@ -1,0 +1,147 @@
+{
+  "document_id": "VN_DOC_001",
+  "version": 1,
+  "title": "Nghiên cứu Hệ thống Bộ nhớ Đa quy mô SA-CMS trong Mô hình Ngôn ngữ",
+  "raw_text": "## 1. Giới thiệu tổng quan\n\nĐề tài nghiên cứu sinh ra nhằm giải quyết hiện tượng suy giảm ngữ cảnh của mô hình ngôn ngữ khi xử lý văn bản dài. Khung kiến trúc Continuum Memory System (CMS) phân tách các tầng bộ nhớ thành nhiều thang thời gian khác nhau để ghi nhớ thông tin một cách bền vững.\n\nKhác với cơ chế In-Context Learning thuần túy vốn bị giới hạn bởi độ dài cửa sổ context, mô hình kết hợp bộ nhớ liên tục cho phép duy trì thông tin cốt lõi ngay cả khi đoạn văn bản gốc đã trôi khỏi bộ nhớ đệm attention.\n\n## 2. Kiến trúc 3 cấp độ SA-CMS\n\nKiến trúc SA-CMS 3 cấp độ liên kết trực tiếp với cấu trúc thứ bậc của tài liệu. Cấp độ 1 là Paragraph Memory tương ứng với thang thời gian nhanh nhất, thực hiện cập nhật cục bộ sau mỗi đoạn văn.\n\nCấp độ 2 là Section Memory hoạt động ở thang thời gian trung bình, thực hiện tích lũy và cập nhật gradient tại ranh giới kết thúc mỗi đề mục của tài liệu.\n\nCấp độ 3 là Document Memory hoạt động ở thang thời gian chậm nhất, ghi lại biểu diễn trừu tượng bất biến toàn cục của toàn bộ tài liệu khi hoàn thành lượt đọc.\n\n## 3. Quy trình Trả lời và Trích dẫn\n\nHệ thống hybrid kết hợp bộ nhớ tham số SA-CMS với công cụ truy xuất BM25 để thu thập bằng chứng ngoại biên. Bộ chọn bằng chứng lọc các đoạn trích có điểm tương đồng vượt ngưỡng quy định.\n\nBộ điều khiển từ chối (Refusal Controller) chịu trách nhiệm thẩm định độ bao phủ từ khóa và độ tin cậy của bằng chứng trước khi chuyển cho mô hình sinh câu trả lời kèm mã định danh trích dẫn.",
+  "passages": [
+    {
+      "passage_id": "VN_DOC_001::P000",
+      "document_id": "VN_DOC_001",
+      "text": "## 1. Giới thiệu tổng quan",
+      "start_char": 0,
+      "end_char": 26,
+      "start_token": 0,
+      "end_token": 6,
+      "section_title": "",
+      "metadata": {
+        "document_version": 1
+      }
+    },
+    {
+      "passage_id": "VN_DOC_001::P001",
+      "document_id": "VN_DOC_001",
+      "text": "Đề tài nghiên cứu sinh ra nhằm giải quyết hiện tượng suy giảm ngữ cảnh của mô hình ngôn ngữ khi xử lý văn bản dài. Khung kiến trúc Continuum Memory System (CMS) phân tách các tầng bộ nhớ thành nhiều thang thời gian khác nhau để ghi nhớ thông tin một cách bền vững.",
+      "start_char": 28,
+      "end_char": 292,
+      "start_token": 6,
+      "end_token": 61,
+      "section_title": "",
+      "metadata": {
+        "document_version": 1
+      }
+    },
+    {
+      "passage_id": "VN_DOC_001::P002",
+      "document_id": "VN_DOC_001",
+      "text": "Khác với cơ chế In-Context Learning thuần túy vốn bị giới hạn bởi độ dài cửa sổ context, mô hình kết hợp bộ nhớ liên tục cho phép duy trì thông tin cốt lõi ngay cả khi đoạn văn bản gốc đã trôi khỏi bộ nhớ đệm attention.",
+      "start_char": 294,
+      "end_char": 513,
+      "start_token": 61,
+      "end_token": 109,
+      "section_title": "",
+      "metadata": {
+        "document_version": 1
+      }
+    },
+    {
+      "passage_id": "VN_DOC_001::P003",
+      "document_id": "VN_DOC_001",
+      "text": "## 2. Kiến trúc 3 cấp độ SA-CMS",
+      "start_char": 515,
+      "end_char": 546,
+      "start_token": 109,
+      "end_token": 117,
+      "section_title": "",
+      "metadata": {
+        "document_version": 1
+      }
+    },
+    {
+      "passage_id": "VN_DOC_001::P004",
+      "document_id": "VN_DOC_001",
+      "text": "Kiến trúc SA-CMS 3 cấp độ liên kết trực tiếp với cấu trúc thứ bậc của tài liệu. Cấp độ 1 là Paragraph Memory tương ứng với thang thời gian nhanh nhất, thực hiện cập nhật cục bộ sau mỗi đoạn văn.",
+      "start_char": 548,
+      "end_char": 742,
+      "start_token": 117,
+      "end_token": 159,
+      "section_title": "",
+      "metadata": {
+        "document_version": 1
+      }
+    },
+    {
+      "passage_id": "VN_DOC_001::P005",
+      "document_id": "VN_DOC_001",
+      "text": "Cấp độ 2 là Section Memory hoạt động ở thang thời gian trung bình, thực hiện tích lũy và cập nhật gradient tại ranh giới kết thúc mỗi đề mục của tài liệu.",
+      "start_char": 744,
+      "end_char": 898,
+      "start_token": 159,
+      "end_token": 192,
+      "section_title": "",
+      "metadata": {
+        "document_version": 1
+      }
+    },
+    {
+      "passage_id": "VN_DOC_001::P006",
+      "document_id": "VN_DOC_001",
+      "text": "Cấp độ 3 là Document Memory hoạt động ở thang thời gian chậm nhất, ghi lại biểu diễn trừu tượng bất biến toàn cục của toàn bộ tài liệu khi hoàn thành lượt đọc.",
+      "start_char": 900,
+      "end_char": 1059,
+      "start_token": 192,
+      "end_token": 226,
+      "section_title": "",
+      "metadata": {
+        "document_version": 1
+      }
+    },
+    {
+      "passage_id": "VN_DOC_001::P007",
+      "document_id": "VN_DOC_001",
+      "text": "## 3. Quy trình Trả lời và Trích dẫn",
+      "start_char": 1061,
+      "end_char": 1097,
+      "start_token": 226,
+      "end_token": 235,
+      "section_title": "",
+      "metadata": {
+        "document_version": 1
+      }
+    },
+    {
+      "passage_id": "VN_DOC_001::P008",
+      "document_id": "VN_DOC_001",
+      "text": "Hệ thống hybrid kết hợp bộ nhớ tham số SA-CMS với công cụ truy xuất BM25 để thu thập bằng chứng ngoại biên. Bộ chọn bằng chứng lọc các đoạn trích có điểm tương đồng vượt ngưỡng quy định.",
+      "start_char": 1099,
+      "end_char": 1285,
+      "start_token": 235,
+      "end_token": 274,
+      "section_title": "",
+      "metadata": {
+        "document_version": 1
+      }
+    },
+    {
+      "passage_id": "VN_DOC_001::P009",
+      "document_id": "VN_DOC_001",
+      "text": "Bộ điều khiển từ chối (Refusal Controller) chịu trách nhiệm thẩm định độ bao phủ từ khóa và độ tin cậy của bằng chứng trước khi chuyển cho mô hình sinh câu trả lời kèm mã định danh trích dẫn.",
+      "start_char": 1287,
+      "end_char": 1478,
+      "start_token": 274,
+      "end_token": 314,
+      "section_title": "",
+      "metadata": {
+        "document_version": 1
+      }
+    }
+  ],
+  "structural_metadata": {},
+  "content_hash": "49e4b8301723084e",
+  "created_at": 1791024170.761982,
+  "metadata": {
+    "field": "Trí tuệ Nhân tạo",
+    "author": "Nhóm Nghiên cứu NCKH",
+    "language": "vi",
+    "target_levels": 3
+  }
+}

@@ -1,0 +1,32 @@
+# Configuration for Hope-Attention Baseline (Phase 1)
+# Paper: arXiv:2512.24695v1
+
+model:
+  vocab_size: 1000
+  d_model: 256
+  n_heads: 4
+  n_layers: 4
+  d_ff: 1024
+  dropout: 0.0
+  max_seq_len: 1024
+  tie_weights: true
+
+cms:
+  chain_type: "sequential"        # "sequential" (Equation 70) or "independent" (Equation 74)
+  num_levels: 3                  # k memory levels (1, 2, 3, 4)
+  lowest_chunk_size: 64          # C^(1) - slowest, most persistent memory
+  base_lr: 0.0001                # eta - CMS inner learning rate (Equation 71)
+
+training:
+  step_chunk_size: 16
+  device: "cuda"                 # "cuda" if available, else "cpu"
+
+evaluation:
+  mk_niah:
+    context_length: 256
+    num_needles: 4
+    num_samples: 20
+  doc_qa:
+    num_docs: 5
+    doc_len: 256
+    qa_len: 32

@@ -1,0 +1,133 @@
+{
+  "document_id": "VN_DOC_003",
+  "version": 1,
+  "title": "Lịch sử và Kiến trúc Di sản Cố đô Huế",
+  "raw_text": "## 1. Quần thể Di tích Kinh thành\n\nKinh thành Huế được khởi công xây dựng vào năm 1805 dưới triều vua Gia Long và hoàn thành vào năm 1832 dưới thời vua Minh Mạng, kết hợp giữa kiến trúc cung đình phương Đông và nguyên lý phòng thủ Vauban của Pháp.\n\nHoàng thành Huế có cấu trúc hình vuông với bốn cổng chính gồm Ngọ Môn ở phía Nam, cửa Hiển Nhơn ở phía Đông, cửa Chương Đức ở phía Tây và cửa Hòa Bình ở phía Bắc.\n\n## 2. Nghệ thuật Nhã nhạc Cung đình\n\nNhã nhạc Cung đình Huế đã được UNESCO chính thức vinh danh là Kiệt tác Di sản Văn hóa Phi vật thể và Truyền khẩu của Nhân loại vào năm 2003.\n\nHệ thống dàn nhạc Cung đình bao gồm nhiều thể loại nhạc khí độc đáo như đàn tỳ bà, đàn nhị, trống bản, kèn bóp và dàn chuông đá cử hành trong các đại lễ Tế Nam Giao và lễ đăng quang.\n\n## 3. Bảo tồn và Tu bổ Di sản\n\nDự án bảo tồn điện Kiến Trung được khởi động trùng tu phục hồi từ năm 2019 và chính thức mở cửa đón khách tham quan nhân dịp Tết Nguyên đán năm 2024.\n\nCác chuyên gia phục chế sử dụng kỹ thuật khảm sành sứ truyền thống cùng vôi vữa hàu để tái hiện chính xác hoa văn mỹ thuật triều Khải Định.",
+  "passages": [
+    {
+      "passage_id": "VN_DOC_003::P000",
+      "document_id": "VN_DOC_003",
+      "text": "## 1. Quần thể Di tích Kinh thành",
+      "start_char": 0,
+      "end_char": 33,
+      "start_token": 0,
+      "end_token": 8,
+      "section_title": "",
+      "metadata": {
+        "document_version": 1
+      }
+    },
+    {
+      "passage_id": "VN_DOC_003::P001",
+      "document_id": "VN_DOC_003",
+      "text": "Kinh thành Huế được khởi công xây dựng vào năm 1805 dưới triều vua Gia Long và hoàn thành vào năm 1832 dưới thời vua Minh Mạng, kết hợp giữa kiến trúc cung đình phương Đông và nguyên lý phòng thủ Vauban của Pháp.",
+      "start_char": 35,
+      "end_char": 247,
+      "start_token": 8,
+      "end_token": 52,
+      "section_title": "",
+      "metadata": {
+        "document_version": 1
+      }
+    },
+    {
+      "passage_id": "VN_DOC_003::P002",
+      "document_id": "VN_DOC_003",
+      "text": "Hoàng thành Huế có cấu trúc hình vuông với bốn cổng chính gồm Ngọ Môn ở phía Nam, cửa Hiển Nhơn ở phía Đông, cửa Chương Đức ở phía Tây và cửa Hòa Bình ở phía Bắc.",
+      "start_char": 249,
+      "end_char": 411,
+      "start_token": 52,
+      "end_token": 89,
+      "section_title": "",
+      "metadata": {
+        "document_version": 1
+      }
+    },
+    {
+      "passage_id": "VN_DOC_003::P003",
+      "document_id": "VN_DOC_003",
+      "text": "## 2. Nghệ thuật Nhã nhạc Cung đình",
+      "start_char": 413,
+      "end_char": 448,
+      "start_token": 89,
+      "end_token": 97,
+      "section_title": "",
+      "metadata": {
+        "document_version": 1
+      }
+    },
+    {
+      "passage_id": "VN_DOC_003::P004",
+      "document_id": "VN_DOC_003",
+      "text": "Nhã nhạc Cung đình Huế đã được UNESCO chính thức vinh danh là Kiệt tác Di sản Văn hóa Phi vật thể và Truyền khẩu của Nhân loại vào năm 2003.",
+      "start_char": 450,
+      "end_char": 590,
+      "start_token": 97,
+      "end_token": 128,
+      "section_title": "",
+      "metadata": {
+        "document_version": 1
+      }
+    },
+    {
+      "passage_id": "VN_DOC_003::P005",
+      "document_id": "VN_DOC_003",
+      "text": "Hệ thống dàn nhạc Cung đình bao gồm nhiều thể loại nhạc khí độc đáo như đàn tỳ bà, đàn nhị, trống bản, kèn bóp và dàn chuông đá cử hành trong các đại lễ Tế Nam Giao và lễ đăng quang.",
+      "start_char": 592,
+      "end_char": 774,
+      "start_token": 128,
+      "end_token": 170,
+      "section_title": "",
+      "metadata": {
+        "document_version": 1
+      }
+    },
+    {
+      "passage_id": "VN_DOC_003::P006",
+      "document_id": "VN_DOC_003",
+      "text": "## 3. Bảo tồn và Tu bổ Di sản",
+      "start_char": 776,
+      "end_char": 805,
+      "start_token": 170,
+      "end_token": 179,
+      "section_title": "",
+      "metadata": {
+        "document_version": 1
+      }
+    },
+    {
+      "passage_id": "VN_DOC_003::P007",
+      "document_id": "VN_DOC_003",
+      "text": "Dự án bảo tồn điện Kiến Trung được khởi động trùng tu phục hồi từ năm 2019 và chính thức mở cửa đón khách tham quan nhân dịp Tết Nguyên đán năm 2024.",
+      "start_char": 807,
+      "end_char": 956,
+      "start_token": 179,
+      "end_token": 212,
+      "section_title": "",
+      "metadata": {
+        "document_version": 1
+      }
+    },
+    {
+      "passage_id": "VN_DOC_003::P008",
+      "document_id": "VN_DOC_003",
+      "text": "Các chuyên gia phục chế sử dụng kỹ thuật khảm sành sứ truyền thống cùng vôi vữa hàu để tái hiện chính xác hoa văn mỹ thuật triều Khải Định.",
+      "start_char": 958,
+      "end_char": 1097,
+      "start_token": 212,
+      "end_token": 242,
+      "section_title": "",
+      "metadata": {
+        "document_version": 1
+      }
+    }
+  ],
+  "structural_metadata": {},
+  "content_hash": "ded8900941adb9ad",
+  "created_at": 1791024170.7669675,
+  "metadata": {
+    "field": "Lịch sử & Di sản Văn hóa",
+    "author": "Trung tâm Bảo tồn Di tích",
+    "language": "vi"
+  }
+}

@@ -1,0 +1,8 @@
+method,method_name,QASPER,LongHealth,MK-NIAH,Vietnamese,Incremental_Corpus,notes
+B1,ICL Full-Document Context,RUN,RUN,RUN,RUN,NOT APPLICABLE,Incremental corpus exceeds 512 context window
+B2,Standard BM25 RAG,RUN,RUN,RUN,RUN,NOT APPLICABLE,External index does not measure parametric forgetting
+B3,Cartridges / Compression,EXCLUDED,EXCLUDED,EXCLUDED,EXCLUDED,EXCLUDED,Not reproducible within controlled 4GB VRAM budget; formal non-reproducibility logging
+B4,Single-Level Adapter,RUN,RUN,RUN,RUN,RUN,Primary baseline for RQ4 forgetting
+B5,Fixed-Token CMS,RUN,RUN,RUN,RUN,RUN,Fixed-token multi-timescale comparison
+P1,SA-CMS Memory-Only,RUN,RUN,RUN,RUN,RUN,Proposed structure-aligned memory architecture
+P2,SA-CMS + Retrieval Hybrid,RUN,RUN,RUN,RUN,NOT APPLICABLE,RQ4 isolates parameter degradation without external retrieval

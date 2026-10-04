@@ -1,0 +1,133 @@
+{
+  "document_id": "VN_DOC_004",
+  "version": 1,
+  "title": "Nông nghiệp Thông minh và Ứng phó Biến đổi Khí hậu tại Đồng bằng Sông Cửu Long",
+  "raw_text": "## 1. Thách thức Xâm nhập Mặn\n\nBiến đổi khí hậu và việc phát triển đập thủy điện thượng nguồn sông Mê Kông đã làm giảm lưu lượng dòng chảy mùa kiệt, đẩy ranh mặn 4 gam trên lít xâm nhập sâu tới 70 km vào đất liền tại Bến Tre và Trà Vinh.\n\nHiện tượng sụt lún đất do khai thác nước ngầm quá mức ở vùng bán đảo Cà Mau với tốc độ trung bình từ 1,5 đến 2,5 cm mỗi năm đe dọa sinh kế của hơn hai triệu nông dân.\n\n## 2. Mô hình Chuyển đổi Cơ cấu Mùa vụ\n\nMô hình canh tác lúa - tôm thông minh thích ứng biến đổi khí hậu đã chứng minh hiệu quả kinh tế vượt trội, giảm 60% lượng phân bón hóa học và tăng thu nhập thêm 40% cho bà con vùng ngọt hóa ven biển.\n\nGiống lúa chịu mặn ST25 và OM18 được triển khai gieo cấy thành công trên diện tích 150.000 héc-ta, chịu được độ mặn tới 5 phần nghìn trong giai đoạn đẻ nhánh.\n\n## 3. Nền tảng IoT và Quản lý Nước\n\nMạng lưới 120 trạm quan trắc tự động IoT đo độ mặn và độ pH theo thời gian thực được lắp đặt dọc các cửa sông Tiền và sông Hậu, truyền dữ liệu cảnh báo qua ứng dụng di động cho nông dân.\n\nHệ thống đóng mở cống ngăn mặn tự động bằng năng lượng mặt trời tại cống Cái Lớn - Cái Bé giúp kiểm soát nguồn nước ngọt cho hơn 384.000 héc-ta diện tích đất sản xuất nông nghiệp.",
+  "passages": [
+    {
+      "passage_id": "VN_DOC_004::P000",
+      "document_id": "VN_DOC_004",
+      "text": "## 1. Thách thức Xâm nhập Mặn",
+      "start_char": 0,
+      "end_char": 29,
+      "start_token": 0,
+      "end_token": 7,
+      "section_title": "",
+      "metadata": {
+        "document_version": 1
+      }
+    },
+    {
+      "passage_id": "VN_DOC_004::P001",
+      "document_id": "VN_DOC_004",
+      "text": "Biến đổi khí hậu và việc phát triển đập thủy điện thượng nguồn sông Mê Kông đã làm giảm lưu lượng dòng chảy mùa kiệt, đẩy ranh mặn 4 gam trên lít xâm nhập sâu tới 70 km vào đất liền tại Bến Tre và Trà Vinh.",
+      "start_char": 31,
+      "end_char": 237,
+      "start_token": 7,
+      "end_token": 54,
+      "section_title": "",
+      "metadata": {
+        "document_version": 1
+      }
+    },
+    {
+      "passage_id": "VN_DOC_004::P002",
+      "document_id": "VN_DOC_004",
+      "text": "Hiện tượng sụt lún đất do khai thác nước ngầm quá mức ở vùng bán đảo Cà Mau với tốc độ trung bình từ 1,5 đến 2,5 cm mỗi năm đe dọa sinh kế của hơn hai triệu nông dân.",
+      "start_char": 239,
+      "end_char": 405,
+      "start_token": 54,
+      "end_token": 94,
+      "section_title": "",
+      "metadata": {
+        "document_version": 1
+      }
+    },
+    {
+      "passage_id": "VN_DOC_004::P003",
+      "document_id": "VN_DOC_004",
+      "text": "## 2. Mô hình Chuyển đổi Cơ cấu Mùa vụ",
+      "start_char": 407,
+      "end_char": 445,
+      "start_token": 94,
+      "end_token": 104,
+      "section_title": "",
+      "metadata": {
+        "document_version": 1
+      }
+    },
+    {
+      "passage_id": "VN_DOC_004::P004",
+      "document_id": "VN_DOC_004",
+      "text": "Mô hình canh tác lúa - tôm thông minh thích ứng biến đổi khí hậu đã chứng minh hiệu quả kinh tế vượt trội, giảm 60% lượng phân bón hóa học và tăng thu nhập thêm 40% cho bà con vùng ngọt hóa ven biển.",
+      "start_char": 447,
+      "end_char": 646,
+      "start_token": 104,
+      "end_token": 149,
+      "section_title": "",
+      "metadata": {
+        "document_version": 1
+      }
+    },
+    {
+      "passage_id": "VN_DOC_004::P005",
+      "document_id": "VN_DOC_004",
+      "text": "Giống lúa chịu mặn ST25 và OM18 được triển khai gieo cấy thành công trên diện tích 150.000 héc-ta, chịu được độ mặn tới 5 phần nghìn trong giai đoạn đẻ nhánh.",
+      "start_char": 648,
+      "end_char": 806,
+      "start_token": 149,
+      "end_token": 181,
+      "section_title": "",
+      "metadata": {
+        "document_version": 1
+      }
+    },
+    {
+      "passage_id": "VN_DOC_004::P006",
+      "document_id": "VN_DOC_004",
+      "text": "## 3. Nền tảng IoT và Quản lý Nước",
+      "start_char": 808,
+      "end_char": 842,
+      "start_token": 181,
+      "end_token": 190,
+      "section_title": "",
+      "metadata": {
+        "document_version": 1
+      }
+    },
+    {
+      "passage_id": "VN_DOC_004::P007",
+      "document_id": "VN_DOC_004",
+      "text": "Mạng lưới 120 trạm quan trắc tự động IoT đo độ mặn và độ pH theo thời gian thực được lắp đặt dọc các cửa sông Tiền và sông Hậu, truyền dữ liệu cảnh báo qua ứng dụng di động cho nông dân.",
+      "start_char": 844,
+      "end_char": 1030,
+      "start_token": 190,
+      "end_token": 233,
+      "section_title": "",
+      "metadata": {
+        "document_version": 1
+      }
+    },
+    {
+      "passage_id": "VN_DOC_004::P008",
+      "document_id": "VN_DOC_004",
+      "text": "Hệ thống đóng mở cống ngăn mặn tự động bằng năng lượng mặt trời tại cống Cái Lớn - Cái Bé giúp kiểm soát nguồn nước ngọt cho hơn 384.000 héc-ta diện tích đất sản xuất nông nghiệp.",
+      "start_char": 1032,
+      "end_char": 1211,
+      "start_token": 233,
+      "end_token": 271,
+      "section_title": "",
+      "metadata": {
+        "document_version": 1
+      }
+    }
+  ],
+  "structural_metadata": {},
+  "content_hash": "07b35eb6f39be703",
+  "created_at": 1791024170.7699592,
+  "metadata": {
+    "field": "Nông nghiệp & Môi trường",
+    "author": "Viện Nghiên cứu Biến đổi Khí hậu",
+    "language": "vi"
+  }
+}

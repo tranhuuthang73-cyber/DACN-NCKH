@@ -1,0 +1,59 @@
+[2026-10-02 20:51:34] [INFO] Logger initialized. File sink: D:\NCKH\logs\debug_pretrained_mkniah_20261002_205134.log
+[2026-10-02 20:51:34] [INFO] ================================================================================
+[2026-10-02 20:51:34] [INFO] STARTING TRACK 2 MK-NIAH MANUAL SAMPLE VALIDATION (TASK 8)
+[2026-10-02 20:51:34] [INFO] ================================================================================
+[2026-10-02 20:51:34] [INFO] Using compute device: cuda
+[2026-10-02 20:51:34] [INFO] 
+--- SAMPLE DETAILS ---
+[2026-10-02 20:51:34] [INFO] Queried Key: photon
+[2026-10-02 20:51:34] [INFO] Expected Answer: 46048
+[2026-10-02 20:51:34] [INFO] All Embedded Needles: {'photon': '46048', 'pulsar': '42098', 'quasar': '39256'}
+[2026-10-02 20:51:34] [INFO] Prompt Text (truncated to 200 chars):
+'In modern theoretical physics, quantum field theory describes the dynamics of subatomic particles. The secret identification code for photon is 46048. Gravitational wave observatories have detected nu...'
+[2026-10-02 20:51:34] [INFO] Prompt Tail:
+'...ance within planetary systems causes periodic gravitational perturbations over long epochs. What is the secret identification code for photon? Answer:'
+[2026-10-02 20:51:34] [INFO] 
+==================================================
+[2026-10-02 20:51:34] [INFO] 1. EVALUATING LEVEL 1 (ICL BASELINE - PURE PRETRAINED BACKBONE)
+[2026-10-02 20:51:34] [INFO] ==================================================
+[2026-10-02 20:51:38] [INFO] Model Level 1 loaded. VRAM allocated: 256.59 MB
+[2026-10-02 20:51:39] [INFO] [Sample 0] Key: photon | Expected: 46048 | Generated: '46048' | Target Prob: 0.262207 | Rank: 1/49152 | Correct: True
+[2026-10-02 20:51:39] [INFO] 
+[LEVEL 1 ICL RESULTS]
+[2026-10-02 20:51:39] [INFO] Expected Answer: 46048
+[2026-10-02 20:51:39] [INFO] Model First Pred Token: ''
+[2026-10-02 20:51:39] [INFO] Model Generated Answer: '46048'
+[2026-10-02 20:51:39] [INFO] Target Token Probability: 0.262207
+[2026-10-02 20:51:39] [INFO] Target Rank in Vocab: 1 / 49152
+[2026-10-02 20:51:39] [INFO] Top 5 Predicted Tokens: ["' '", "' The'", "' It'", "' the'", "' This'"]
+[2026-10-02 20:51:39] [INFO] Top 5 Probabilities: [0.26221, 0.20105, 0.04556, 0.02222, 0.02022]
+[2026-10-02 20:51:39] [INFO] Evaluator Exact Match: True
+[2026-10-02 20:51:39] [INFO] 
+==================================================
+[2026-10-02 20:51:39] [INFO] 2. EVALUATING LEVEL 2 (CMS MEMORY ADAPTATION - EQUATION 71)
+[2026-10-02 20:51:39] [INFO] ==================================================
+[2026-10-02 20:51:41] [INFO] Model Level 2 loaded. Trainable CMS Params: 3,544,320, VRAM: 534.89 MB
+[2026-10-02 20:51:43] [INFO] [Sample 0] Key: photon | Expected: 46048 | Generated: '46048' | Target Prob: 0.426270 | Rank: 1/49152 | Correct: True
+[2026-10-02 20:51:43] [INFO] 
+[LEVEL 2 CMS RESULTS]
+[2026-10-02 20:51:43] [INFO] Expected Answer: 46048
+[2026-10-02 20:51:43] [INFO] Model First Pred Token: ''
+[2026-10-02 20:51:43] [INFO] Model Generated Answer: '46048'
+[2026-10-02 20:51:43] [INFO] Target Token Probability: 0.426270
+[2026-10-02 20:51:43] [INFO] Target Rank in Vocab: 1 / 49152
+[2026-10-02 20:51:43] [INFO] Top 5 Predicted Tokens: ["' '", "' The'", "' It'", "' This'", "' A'"]
+[2026-10-02 20:51:43] [INFO] Top 5 Probabilities: [0.42627, 0.29297, 0.05768, 0.03784, 0.01759]
+[2026-10-02 20:51:43] [INFO] Evaluator Exact Match: True
+[2026-10-02 20:51:43] [INFO] 
+================================================================================
+[2026-10-02 20:51:43] [INFO] SINGLE SAMPLE VALIDATION COMPARISON SUMMARY
+[2026-10-02 20:51:43] [INFO] ================================================================================
+[2026-10-02 20:51:43] [INFO] Metric                         | Level 1 (ICL Baseline) | Level 2 (CMS Adaptation)
+[2026-10-02 20:51:43] [INFO] --------------------------------------------------------------------------------
+[2026-10-02 20:51:43] [INFO] Target Probability             | 0.262207               | 0.426270              
+[2026-10-02 20:51:43] [INFO] Target Rank in 49k Vocab       | 1                      | 1                     
+[2026-10-02 20:51:43] [INFO] Generated Answer               | '46048':<20 | '46048':<20
+[2026-10-02 20:51:43] [INFO] Evaluator Correct              | True                   | True                  
+[2026-10-02 20:51:43] [INFO] VRAM Allocated (MB)            | 256.59                 | 534.89                
+[2026-10-02 20:51:43] [INFO] ================================================================================
+[2026-10-02 20:51:43] [INFO] Validation completed successfully. Log: D:\NCKH\logs\debug_pretrained_mkniah_20261002_205134.log

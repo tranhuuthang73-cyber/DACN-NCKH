@@ -1,0 +1,49 @@
+[2026-10-02 20:43:13] [INFO] Logger initialized. File sink: D:\NCKH\logs\synthetic_memory_test_20261002_204313.log
+[2026-10-02 20:43:13] [INFO] ================================================================================
+[2026-10-02 20:43:13] [INFO] STARTING SYNTHETIC MEMORY & RETRIEVAL VALIDATION (TRACK 1)
+[2026-10-02 20:43:13] [INFO] [DISCLAIMER] MECHANISM VALIDATION ONLY — NOT A PAPER REPRODUCTION RESULT
+[2026-10-02 20:43:13] [INFO] ================================================================================
+[2026-10-02 20:43:13] [INFO] Using compute device: cuda
+[2026-10-02 20:43:13] [INFO] Model initialized: Total Params = 2,038,528, CMS Params = 1,580,544
+[2026-10-02 20:43:13] [INFO] Target Needle Pair: Key = 116 -> Target Value = 516
+[2026-10-02 20:43:13] [INFO] Context Length: 62 tokens
+[2026-10-02 20:43:13] [INFO] Query Prompt Length: 16 tokens (ending with key 116)
+[2026-10-02 20:43:13] [INFO] --------------------------------------------------
+[2026-10-02 20:43:13] [INFO] TEST 1: Evaluating Query BEFORE Ingestion (Initial State)...
+[2026-10-02 20:43:13] [INFO] [BEFORE_INGESTION] Target Prob: 0.001029 | Rank: 405/1000
+[2026-10-02 20:43:13] [INFO] [BEFORE_INGESTION] Top 5 Tokens: [116, 168, 716, 389, 541] with Probs: [0.00549, 0.00205, 0.00203, 0.00191, 0.00189]
+[2026-10-02 20:43:13] [INFO] [BEFORE_INGESTION] Argmax Pred: 116 | Exact Match: False
+[2026-10-02 20:43:13] [INFO] --------------------------------------------------
+[2026-10-02 20:43:13] [INFO] TEST 2: Executing CMS Memory Ingestion on Needle Pair (Equation 71)...
+[2026-10-02 20:43:14] [INFO]   Step  1/15: Cross-Entropy Loss = 6.8613
+[2026-10-02 20:43:14] [INFO]   Step  5/15: Cross-Entropy Loss = 4.6694
+[2026-10-02 20:43:14] [INFO]   Step 10/15: Cross-Entropy Loss = 4.2975
+[2026-10-02 20:43:15] [INFO]   Step 15/15: Cross-Entropy Loss = 4.3061
+[2026-10-02 20:43:15] [INFO] CMS Parameter Delta ||theta_after - theta_before||_2: 27.972914
+[2026-10-02 20:43:15] [INFO] --------------------------------------------------
+[2026-10-02 20:43:15] [INFO] TEST 3: Evaluating Query AFTER Ingestion (Information Persistence)...
+[2026-10-02 20:43:15] [INFO] [AFTER_INGESTION] Target Prob: 0.010455 | Rank: 1/1000
+[2026-10-02 20:43:15] [INFO] [AFTER_INGESTION] Top 5 Tokens: [516, 780, 116, 558, 168] with Probs: [0.01045, 0.00193, 0.00181, 0.00178, 0.00172]
+[2026-10-02 20:43:15] [INFO] [AFTER_INGESTION] Argmax Pred: 516 | Exact Match: True
+[2026-10-02 20:43:15] [INFO] => SUCCESS: Needle successfully retrieved into Top-1 prediction!
+[2026-10-02 20:43:15] [INFO] --------------------------------------------------
+[2026-10-02 20:43:15] [INFO] TEST 4: Calling model.reset_memory()...
+[2026-10-02 20:43:15] [INFO] Delta between reset parameters and original initial weights: 0.0000000000
+[2026-10-02 20:43:15] [INFO] Evaluating Query AFTER Memory Reset...
+[2026-10-02 20:43:15] [INFO] [AFTER_RESET] Target Prob: 0.001029 | Rank: 405/1000
+[2026-10-02 20:43:15] [INFO] [AFTER_RESET] Top 5 Tokens: [116, 168, 716, 389, 541] with Probs: [0.00549, 0.00205, 0.00203, 0.00191, 0.00189]
+[2026-10-02 20:43:15] [INFO] [AFTER_RESET] Argmax Pred: 116 | Exact Match: False
+[2026-10-02 20:43:15] [INFO] => SUCCESS: Memory clean reset confirmed.
+[2026-10-02 20:43:15] [INFO] ================================================================================
+[2026-10-02 20:43:15] [INFO] SYNTHETIC MEMORY TEST RESULTS SUMMARY TABLE (TRACK 1)
+[2026-10-02 20:43:15] [INFO] ================================================================================
+[2026-10-02 20:43:15] [INFO] Metric                    | Before Ingestion   | After Ingestion    | After Reset       
+[2026-10-02 20:43:15] [INFO] -------------------------------------------------------------------------------------
+[2026-10-02 20:43:15] [INFO] Target Probability        | 0.001029           | 0.010455           | 0.001029          
+[2026-10-02 20:43:15] [INFO] Target Rank (in 1000)     | 405                | 1                  | 405               
+[2026-10-02 20:43:15] [INFO] Top-1 Prediction          | 116                | 516                | 116               
+[2026-10-02 20:43:15] [INFO] Exact Match (516)         | False              | True               | False             
+[2026-10-02 20:43:15] [INFO] CMS Weights Delta         | 0.000000           | 27.972914          | 0.0000000000      
+[2026-10-02 20:43:15] [INFO] ================================================================================
+[2026-10-02 20:43:15] [INFO] All technical mechanism assertions PASSED.
+[2026-10-02 20:43:15] [INFO] Log written to: D:\NCKH\logs\synthetic_memory_test_20261002_204313.log

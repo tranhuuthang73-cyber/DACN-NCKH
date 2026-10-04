@@ -1,0 +1,88 @@
+[2026-10-02 20:52:39] [INFO] Logger initialized. File sink: D:\NCKH\logs\pretrained_experiment_20261002_205239.log
+[2026-10-02 20:52:39] [INFO] ================================================================================
+[2026-10-02 20:52:39] [INFO] STARTING TRACK 2 PRETRAINED BASELINE REPRODUCTION (SMOLLM2-135M)
+[2026-10-02 20:52:39] [INFO] Paper Reference: arXiv:2512.24695v1 (Section 9.1 & Figure 7)
+[2026-10-02 20:52:39] [INFO] Hardware: NVIDIA GeForce GTX 1650 Ti (4GB VRAM)
+[2026-10-02 20:52:39] [INFO] ================================================================================
+[2026-10-02 20:52:39] [INFO] Using compute device: cuda
+[2026-10-02 20:52:39] [INFO] 
+============================================================
+[2026-10-02 20:52:39] [INFO] RUNNING CONFIGURATION: level_1_icl_baseline (num_levels=1, chunks=[64])
+[2026-10-02 20:52:39] [INFO] Description: Pure In-Context Learning (ICL) baseline — No CMS adaptation (paper Section 9.1)
+[2026-10-02 20:52:39] [INFO] ============================================================
+[2026-10-02 20:52:43] [INFO] Model loaded: Total Params: 134,515,008 | Trainable CMS Params: 0
+[2026-10-02 20:52:43] [INFO] Initial VRAM Allocated: 256.59 MB
+[2026-10-02 20:52:43] [INFO] [level_1_icl_baseline] Running MK-NIAH Benchmark (10 samples, online_cms=False)...
+[2026-10-02 20:52:44] [INFO] [Sample 0] Key: photon | Expected: 46048 | Generated: '46048' | Target Prob: 0.262207 | Rank: 1/49152 | Correct: True
+[2026-10-02 20:52:45] [INFO] [Sample 1] Key: pulsar | Expected: 12983 | Generated: '12983' | Target Prob: 0.284912 | Rank: 1/49152 | Correct: True
+[2026-10-02 20:52:54] [INFO] [level_1_icl_baseline] MK-NIAH Accuracy: 70.00% (7/10), Avg Target Prob: 0.254578
+[2026-10-02 20:52:54] [INFO] [level_1_icl_baseline] Running QASPER Benchmark (5 documents, online_cms=False)...
+[2026-10-02 20:52:54] [INFO] [QASPER Doc 0] Loss: 3.5703 | Perplexity: 35.53
+[2026-10-02 20:52:54] [INFO] [QASPER Doc 1] Loss: 3.2578 | Perplexity: 25.99
+[2026-10-02 20:52:54] [INFO] [level_1_icl_baseline] QASPER Avg Loss: 3.6891, Perplexity: 40.0073
+[2026-10-02 20:52:54] [INFO] [level_1_icl_baseline] Saved CMS checkpoint to: D:\NCKH\checkpoints\pretrained_level_1_icl_baseline.pt
+[2026-10-02 20:52:54] [INFO] [level_1_icl_baseline] Completed in 14.85s | Peak VRAM: 322.34 MB
+[2026-10-02 20:52:54] [INFO] 
+============================================================
+[2026-10-02 20:52:54] [INFO] RUNNING CONFIGURATION: level_2_cms (num_levels=2, chunks=[64, 32])
+[2026-10-02 20:52:54] [INFO] Description: 2-level Continuum Memory System (lowest chunk size 64, higher 32)
+[2026-10-02 20:52:54] [INFO] ============================================================
+[2026-10-02 20:52:56] [INFO] Model loaded: Total Params: 138,059,328 | Trainable CMS Params: 3,544,320
+[2026-10-02 20:52:56] [INFO] Initial VRAM Allocated: 278.30 MB
+[2026-10-02 20:52:56] [INFO] [level_2_cms] Running MK-NIAH Benchmark (10 samples, online_cms=True)...
+[2026-10-02 20:52:58] [INFO] [Sample 0] Key: photon | Expected: 46048 | Generated: '46048' | Target Prob: 0.691406 | Rank: 1/49152 | Correct: True
+[2026-10-02 20:52:59] [INFO] [Sample 1] Key: pulsar | Expected: 12983 | Generated: '12983' | Target Prob: 0.707031 | Rank: 1/49152 | Correct: True
+[2026-10-02 20:53:11] [INFO] [level_2_cms] MK-NIAH Accuracy: 70.00% (7/10), Avg Target Prob: 0.689746
+[2026-10-02 20:53:11] [INFO] [level_2_cms] Running QASPER Benchmark (5 documents, online_cms=True)...
+[2026-10-02 20:53:11] [INFO] [QASPER Doc 0] Loss: 4.2734 | Perplexity: 71.77
+[2026-10-02 20:53:11] [INFO] [QASPER Doc 1] Loss: 3.8418 | Perplexity: 46.61
+[2026-10-02 20:53:12] [INFO] [level_2_cms] QASPER Avg Loss: 4.2980, Perplexity: 73.5560
+[2026-10-02 20:53:12] [INFO] [level_2_cms] Saved CMS checkpoint to: D:\NCKH\checkpoints\pretrained_level_2_cms.pt
+[2026-10-02 20:53:12] [INFO] [level_2_cms] Completed in 17.88s | Peak VRAM: 344.66 MB
+[2026-10-02 20:53:12] [INFO] 
+============================================================
+[2026-10-02 20:53:12] [INFO] RUNNING CONFIGURATION: level_3_cms (num_levels=3, chunks=[64, 32, 16])
+[2026-10-02 20:53:12] [INFO] Description: 3-level Continuum Memory System (multi-timescale [64, 32, 16])
+[2026-10-02 20:53:12] [INFO] ============================================================
+[2026-10-02 20:53:14] [INFO] Model loaded: Total Params: 139,830,912 | Trainable CMS Params: 5,315,904
+[2026-10-02 20:53:14] [INFO] Initial VRAM Allocated: 293.24 MB
+[2026-10-02 20:53:14] [INFO] [level_3_cms] Running MK-NIAH Benchmark (10 samples, online_cms=True)...
+[2026-10-02 20:53:16] [INFO] [Sample 0] Key: photon | Expected: 46048 | Generated: 'The secret identification code for photon' | Target Prob: 0.274170 | Rank: 2/49152 | Correct: False
+[2026-10-02 20:53:17] [INFO] [Sample 1] Key: pulsar | Expected: 12983 | Generated: 'The secret identification code for puls' | Target Prob: 0.311768 | Rank: 2/49152 | Correct: False
+[2026-10-02 20:53:29] [INFO] [level_3_cms] MK-NIAH Accuracy: 10.00% (1/10), Avg Target Prob: 0.302246
+[2026-10-02 20:53:29] [INFO] [level_3_cms] Running QASPER Benchmark (5 documents, online_cms=True)...
+[2026-10-02 20:53:30] [INFO] [QASPER Doc 0] Loss: 4.0625 | Perplexity: 58.12
+[2026-10-02 20:53:30] [INFO] [QASPER Doc 1] Loss: 3.7539 | Perplexity: 42.69
+[2026-10-02 20:53:31] [INFO] [level_3_cms] QASPER Avg Loss: 4.0934, Perplexity: 59.9409
+[2026-10-02 20:53:31] [INFO] [level_3_cms] Saved CMS checkpoint to: D:\NCKH\checkpoints\pretrained_level_3_cms.pt
+[2026-10-02 20:53:31] [INFO] [level_3_cms] Completed in 18.83s | Peak VRAM: 350.73 MB
+[2026-10-02 20:53:31] [INFO] 
+============================================================
+[2026-10-02 20:53:31] [INFO] RUNNING CONFIGURATION: level_4_cms (num_levels=4, chunks=[64, 32, 16, 8])
+[2026-10-02 20:53:31] [INFO] Description: 4-level Continuum Memory System (multi-timescale [64, 32, 16, 8])
+[2026-10-02 20:53:31] [INFO] ============================================================
+[2026-10-02 20:53:33] [INFO] Model loaded: Total Params: 141,602,496 | Trainable CMS Params: 7,087,488
+[2026-10-02 20:53:33] [INFO] Initial VRAM Allocated: 300.00 MB
+[2026-10-02 20:53:33] [INFO] [level_4_cms] Running MK-NIAH Benchmark (10 samples, online_cms=True)...
+[2026-10-02 20:53:35] [INFO] [Sample 0] Key: photon | Expected: 46048 | Generated: 'The secret identification code for photon' | Target Prob: 0.075684 | Rank: 2/49152 | Correct: False
+[2026-10-02 20:53:36] [INFO] [Sample 1] Key: pulsar | Expected: 12983 | Generated: 'The secret identification code for puls' | Target Prob: 0.081116 | Rank: 3/49152 | Correct: False
+[2026-10-02 20:53:49] [INFO] [level_4_cms] MK-NIAH Accuracy: 0.00% (0/10), Avg Target Prob: 0.066241
+[2026-10-02 20:53:49] [INFO] [level_4_cms] Running QASPER Benchmark (5 documents, online_cms=True)...
+[2026-10-02 20:53:49] [INFO] [QASPER Doc 0] Loss: 4.3164 | Perplexity: 74.92
+[2026-10-02 20:53:50] [INFO] [QASPER Doc 1] Loss: 3.7949 | Perplexity: 44.47
+[2026-10-02 20:53:51] [INFO] [level_4_cms] QASPER Avg Loss: 4.1727, Perplexity: 64.8876
+[2026-10-02 20:53:51] [INFO] [level_4_cms] Saved CMS checkpoint to: D:\NCKH\checkpoints\pretrained_level_4_cms.pt
+[2026-10-02 20:53:51] [INFO] [level_4_cms] Completed in 19.91s | Peak VRAM: 357.49 MB
+[2026-10-02 20:53:51] [INFO] 
+Saved complete results to: D:\NCKH\results\pretrained_experiment_results.json
+[2026-10-02 20:53:51] [INFO] 
+===============================================================================================
+[2026-10-02 20:53:51] [INFO] TRACK 2 REPRODUCTION RESULTS SUMMARY TABLE (SmolLM2-135M)
+[2026-10-02 20:53:51] [INFO] ===============================================================================================
+[2026-10-02 20:53:51] [INFO] Config Name              | Levels | Chunks             | MK-NIAH Acc (%)  | Avg Target Prob  | QASPER PPL   | Peak VRAM
+[2026-10-02 20:53:51] [INFO] --------------------------------------------------------------------------------------------------------------
+[2026-10-02 20:53:51] [INFO] level_1_icl_baseline     | 1      | [64]               | 70.00            | 0.254578         | 40.0073      | 322.3 MB
+[2026-10-02 20:53:51] [INFO] level_2_cms              | 2      | [64, 32]           | 70.00            | 0.689746         | 73.5560      | 344.7 MB
+[2026-10-02 20:53:51] [INFO] level_3_cms              | 3      | [64, 32, 16]       | 10.00            | 0.302246         | 59.9409      | 350.7 MB
+[2026-10-02 20:53:51] [INFO] level_4_cms              | 4      | [64, 32, 16, 8]    | 0.00             | 0.066241         | 64.8876      | 357.5 MB
+[2026-10-02 20:53:51] [INFO] ===============================================================================================

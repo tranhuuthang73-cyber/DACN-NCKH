@@ -202,3 +202,53 @@
 2026-10-04 07:05:23,036 [INFO] --- Running Vietnamese Benchmark for Seed 43 ---
 2026-10-04 07:05:23,037 [INFO] Loaded existing checkpoint: D:\NCKH\checkpoints\phase4_1\cms_1lvl_seed_43.pt
 2026-10-04 07:05:23,037 [INFO] Loaded existing checkpoint: D:\NCKH\checkpoints\phase4_1\cms_3lvl_seed_43.pt
+2026-10-04 11:45:47,587 [INFO] ================================================================================
+2026-10-04 11:45:47,588 [INFO] PHASE 4.1: FULL CONTROLLED BENCHMARK — OFFICIAL RESEARCH EXPERIMENT
+2026-10-04 11:45:47,588 [INFO] ================================================================================
+2026-10-04 11:45:47,588 [INFO] Backbone: HuggingFaceTB/SmolLM2-135M | Device: cuda | Precision: torch.float16
+2026-10-04 11:45:47,588 [INFO] Seeds: [42, 43, 44] | Training Samples: Exactly 200 samples
+2026-10-04 11:45:47,588 [INFO] Protocol: Locked (Phase 4.0 - 4.0.3)
+2026-10-04 11:45:47,588 [INFO] ================================================================================
+2026-10-04 11:45:47,588 [INFO] RQ1 raw results already exist at C:\laragon\laragon\www\DACN-NCKH-main\results\phase4_1\rq1\rq1_raw_results.json, skipping execution.
+2026-10-04 11:45:47,598 [INFO] RQ2 raw results already exist at C:\laragon\laragon\www\DACN-NCKH-main\results\phase4_1\rq2\rq2_raw_results.json, skipping execution.
+2026-10-04 11:45:47,607 [INFO] RQ3 raw results already exist at C:\laragon\laragon\www\DACN-NCKH-main\results\phase4_1\rq3\rq3_raw_results.json, skipping execution.
+2026-10-04 11:45:47,622 [INFO] RQ4 raw results already exist at C:\laragon\laragon\www\DACN-NCKH-main\results\phase4_1\rq4\rq4_raw_results.json, skipping execution.
+2026-10-04 11:45:47,630 [INFO] RQ5 raw results already exist at C:\laragon\laragon\www\DACN-NCKH-main\results\phase4_1\rq5\rq5_raw_results.json, skipping execution.
+2026-10-04 11:45:47,636 [INFO] Vietnamese raw results partial (6/18 runs completed), resuming remaining runs...
+2026-10-04 11:45:47,636 [INFO] ================================================================================
+2026-10-04 11:45:47,636 [INFO] STARTING PHASE 4.1F: OFFICIAL VIETNAMESE BENCHMARK (20 DOCS / 350 QS)
+2026-10-04 11:45:47,636 [INFO] ================================================================================
+2026-10-04 11:45:48,012 [INFO] Loaded existing Vietnamese benchmark progress: 6 runs found.
+2026-10-04 11:45:48,012 [INFO] --- Running Vietnamese Benchmark for Seed 42 ---
+2026-10-04 11:45:48,057 [INFO] Loaded existing checkpoint: C:\laragon\laragon\www\DACN-NCKH-main\checkpoints\phase4_1\cms_1lvl_seed_42.pt
+2026-10-04 11:45:48,058 [INFO] Loaded existing checkpoint: C:\laragon\laragon\www\DACN-NCKH-main\checkpoints\phase4_1\cms_3lvl_seed_42.pt
+2026-10-04 11:45:48,058 [INFO]   [Vietnamese] Seed 42 | Method B1 already completed, skipping.
+2026-10-04 11:45:48,058 [INFO]   [Vietnamese] Seed 42 | Method B2 already completed, skipping.
+2026-10-04 11:45:48,059 [INFO]   [Vietnamese] Seed 42 | Method B4 already completed, skipping.
+2026-10-04 11:45:48,059 [INFO]   [Vietnamese] Seed 42 | Method B5 already completed, skipping.
+2026-10-04 11:45:48,060 [INFO]   [Vietnamese] Seed 42 | Method P1 already completed, skipping.
+2026-10-04 11:45:48,060 [INFO]   [Vietnamese] Seed 42 | Method P2 already completed, skipping.
+2026-10-04 11:45:48,060 [INFO] --- Running Vietnamese Benchmark for Seed 43 ---
+2026-10-04 11:45:48,062 [INFO] Loaded existing checkpoint: C:\laragon\laragon\www\DACN-NCKH-main\checkpoints\phase4_1\cms_1lvl_seed_43.pt
+2026-10-04 11:45:48,062 [INFO] Loaded existing checkpoint: C:\laragon\laragon\www\DACN-NCKH-main\checkpoints\phase4_1\cms_3lvl_seed_43.pt
+2026-10-04 12:04:53,878 [INFO]   [Vietnamese] Seed 43 | Method B1  | F1: 0.0278 | EM: 0.0000 | CorrectRef:   0.0% | FalseRef:   0.0% | Faithfulness:   0.0% | Latency: 3260.5ms
+2026-10-04 12:23:23,449 [INFO]   [Vietnamese] Seed 43 | Method B2  | F1: 0.1543 | EM: 0.0000 | CorrectRef:  76.0% | FalseRef:   0.0% | Faithfulness: 100.0% | Latency: 3164.0ms
+2026-10-04 12:43:37,059 [INFO]   [Vietnamese] Seed 43 | Method B4  | F1: 0.0567 | EM: 0.0000 | CorrectRef:   0.0% | FalseRef:   0.0% | Faithfulness:   0.0% | Latency: 3404.8ms
+2026-10-04 12:57:19,315 [INFO]   [Vietnamese] Seed 43 | Method B5  | F1: 0.0466 | EM: 0.0000 | CorrectRef:   0.0% | FalseRef:   0.0% | Faithfulness:   0.0% | Latency: 2285.5ms
+2026-10-04 13:05:07,935 [INFO]   [Vietnamese] Seed 43 | Method P1  | F1: 0.0527 | EM: 0.0000 | CorrectRef:   0.0% | FalseRef:   0.0% | Faithfulness:   0.0% | Latency: 1305.9ms
+2026-10-04 13:12:25,551 [INFO]   [Vietnamese] Seed 43 | Method P2  | F1: 0.1543 | EM: 0.0000 | CorrectRef:  76.0% | FalseRef:   0.0% | Faithfulness: 100.0% | Latency: 1217.7ms
+2026-10-04 13:12:25,601 [INFO] --- Running Vietnamese Benchmark for Seed 44 ---
+2026-10-04 13:12:25,601 [INFO] Loaded existing checkpoint: C:\laragon\laragon\www\DACN-NCKH-main\checkpoints\phase4_1\cms_1lvl_seed_44.pt
+2026-10-04 13:12:25,601 [INFO] Loaded existing checkpoint: C:\laragon\laragon\www\DACN-NCKH-main\checkpoints\phase4_1\cms_3lvl_seed_44.pt
+2026-10-04 13:20:27,436 [INFO]   [Vietnamese] Seed 44 | Method B1  | F1: 0.0129 | EM: 0.0000 | CorrectRef:   0.0% | FalseRef:   0.0% | Faithfulness:   0.0% | Latency: 1372.1ms
+2026-10-04 13:32:06,999 [INFO]   [Vietnamese] Seed 44 | Method B2  | F1: 0.1543 | EM: 0.0000 | CorrectRef:  76.0% | FalseRef:   0.0% | Faithfulness: 100.0% | Latency: 1994.1ms
+2026-10-04 13:42:40,051 [INFO]   [Vietnamese] Seed 44 | Method B4  | F1: 0.0772 | EM: 0.0000 | CorrectRef:   0.0% | FalseRef:   0.0% | Faithfulness:   0.0% | Latency: 1782.2ms
+2026-10-04 13:58:22,694 [INFO]   [Vietnamese] Seed 44 | Method B5  | F1: 0.0661 | EM: 0.0000 | CorrectRef:   0.0% | FalseRef:   0.0% | Faithfulness:   0.0% | Latency: 2604.7ms
+2026-10-04 14:07:18,710 [INFO]   [Vietnamese] Seed 44 | Method P1  | F1: 0.0766 | EM: 0.0000 | CorrectRef:   0.0% | FalseRef:   0.0% | Faithfulness:   0.0% | Latency: 1495.7ms
+2026-10-04 14:15:07,483 [INFO]   [Vietnamese] Seed 44 | Method P2  | F1: 0.1543 | EM: 0.0000 | CorrectRef:  76.0% | FalseRef:   0.0% | Faithfulness: 100.0% | Latency: 1305.4ms
+2026-10-04 14:15:07,563 [INFO] Saved complete Vietnamese raw results to C:\laragon\laragon\www\DACN-NCKH-main\results\phase4_1\vietnamese\vietnamese_raw_results.json
+2026-10-04 14:15:07,564 [INFO] ================================================================================
+2026-10-04 14:15:07,564 [INFO] PHASE 4.1 BENCHMARK EXECUTION COMPLETE in 8959.98 seconds (149.33 mins)
+2026-10-04 14:15:07,564 [INFO] All raw outputs successfully written to results/phase4_1/
+2026-10-04 14:15:07,564 [INFO] Ready for statistical aggregation and report generation.
+2026-10-04 14:15:07,564 [INFO] ================================================================================

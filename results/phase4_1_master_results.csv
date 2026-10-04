@@ -1,0 +1,70 @@
+Research_Question,Benchmark_Dataset,Method,Metric_Name,Mean,SD,Bootstrap_95_CI_Low,Bootstrap_95_CI_High,Notes
+RQ1,QASPER,B1,Token_F1,0.259,0.0271,0.193,0.3435,QASPER 10 docs
+RQ1,QASPER,B1,Perplexity,99.16,,,,PPL secondary
+RQ1,QASPER,B4,Token_F1,0.1025,0.0136,0.07,0.1368,QASPER 10 docs
+RQ1,QASPER,B4,Perplexity,84.4833,,,,PPL secondary
+RQ1,QASPER,B5,Token_F1,0.0957,0.0083,0.0662,0.1292,QASPER 10 docs
+RQ1,QASPER,B5,Perplexity,92.92,,,,PPL secondary
+RQ1,QASPER,P1,Token_F1,0.0895,0.0064,0.0548,0.1287,QASPER 10 docs
+RQ1,QASPER,P1,Perplexity,93.25,,,,PPL secondary
+RQ1,LongHealth,B1,Accuracy_Pct,20.0,0.0,10.0,31.6667,LongHealth native accuracy
+RQ1,LongHealth,B4,Accuracy_Pct,23.3333,7.6376,13.3333,35.0,LongHealth native accuracy
+RQ1,LongHealth,B5,Accuracy_Pct,20.0,5.0,11.6667,30.0,LongHealth native accuracy
+RQ1,LongHealth,P1,Accuracy_Pct,16.6667,14.4338,6.6667,26.7083,LongHealth native accuracy
+RQ1,MK-NIAH,B1,Accuracy_Pct,40.0,32.9697,34.3333,45.0,MK-NIAH native accuracy
+RQ1,MK-NIAH,B4,Accuracy_Pct,0.0,0.0,0.0,0.0,MK-NIAH native accuracy
+RQ1,MK-NIAH,B5,Accuracy_Pct,0.0,0.0,0.0,0.0,MK-NIAH native accuracy
+RQ1,MK-NIAH,P1,Accuracy_Pct,0.0,0.0,0.0,0.0,MK-NIAH native accuracy
+RQ2,QASPER,B5,Token_F1,0.1097,0.0929,0.0767,0.1434,Budget matched events=5
+RQ2,LongHealth,B5,Accuracy_Pct,16.6667,37.5823,8.3333,26.6667,Budget matched events=5
+RQ2,QASPER,P1,Token_F1,0.1042,0.0873,0.0723,0.1365,Budget matched events=5
+RQ2,LongHealth,P1,Accuracy_Pct,18.3333,39.0205,10.0,28.3333,Budget matched events=5
+RQ2,QASPER,A1,Token_F1,0.1032,0.092,0.0683,0.1372,Budget matched events=5
+RQ2,LongHealth,A1,Accuracy_Pct,16.6667,37.5823,8.3333,26.6667,Budget matched events=5
+RQ2,QASPER,A2,Token_F1,0.097,0.0946,0.0649,0.1296,Budget matched events=4
+RQ2,LongHealth,A2,Accuracy_Pct,26.6667,44.5948,16.6667,38.3333,Budget matched events=4
+RQ3,Context_Evicted_QA,B1,Token_F1,0.0048,0.0003,,,Post-eviction answer quality
+RQ3,Context_Evicted_QA,B1,Faithfulness_Rate_Pct,0.0,,,,Citation-supported answer rate
+RQ3,Context_Evicted_QA,B1,Correct_Refusal_Pct,0.0,,,,Correct refusal rate
+RQ3,Context_Evicted_QA,B2,Token_F1,0.1596,0.0,,,Post-eviction answer quality
+RQ3,Context_Evicted_QA,B2,Faithfulness_Rate_Pct,95.7,,,,Citation-supported answer rate
+RQ3,Context_Evicted_QA,B2,Correct_Refusal_Pct,76.0,,,,Correct refusal rate
+RQ3,Context_Evicted_QA,B5,Token_F1,0.0502,0.0192,,,Post-eviction answer quality
+RQ3,Context_Evicted_QA,B5,Faithfulness_Rate_Pct,0.0,,,,Citation-supported answer rate
+RQ3,Context_Evicted_QA,B5,Correct_Refusal_Pct,0.0,,,,Correct refusal rate
+RQ3,Context_Evicted_QA,P1,Token_F1,0.0753,0.0073,,,Post-eviction answer quality
+RQ3,Context_Evicted_QA,P1,Faithfulness_Rate_Pct,0.0,,,,Citation-supported answer rate
+RQ3,Context_Evicted_QA,P1,Correct_Refusal_Pct,0.0,,,,Correct refusal rate
+RQ3,Context_Evicted_QA,P2,Token_F1,0.1596,0.0,,,Post-eviction answer quality
+RQ3,Context_Evicted_QA,P2,Faithfulness_Rate_Pct,98.9267,,,,Citation-supported answer rate
+RQ3,Context_Evicted_QA,P2,Correct_Refusal_Pct,76.0,,,,Correct refusal rate
+RQ4,Incremental_Corpus,B4,Retention_Acc_Plus20,20.0,,,,Accuracy on D0 after +20 docs
+RQ4,Incremental_Corpus,B4,Forgetting_Delta_Plus20,0.0,,,,D0 accuracy drop
+RQ4,Incremental_Corpus,B5,Retention_Acc_Plus20,20.0,,,,Accuracy on D0 after +20 docs
+RQ4,Incremental_Corpus,B5,Forgetting_Delta_Plus20,0.0,,,,D0 accuracy drop
+RQ4,Incremental_Corpus,P1,Retention_Acc_Plus20,20.0,,,,Accuracy on D0 after +20 docs
+RQ4,Incremental_Corpus,P1,Forgetting_Delta_Plus20,-6.6667,,,,D0 accuracy drop
+RQ5,Hardware_Profiling,B1,Total_Latency_ms,108.81,,,,Per-query latency
+RQ5,Hardware_Profiling,B1,Peak_VRAM_MB,294.94,,,,Peak VRAM footprint
+RQ5,Hardware_Profiling,B2,Total_Latency_ms,101.08,,,,Per-query latency
+RQ5,Hardware_Profiling,B2,Peak_VRAM_MB,296.38,,,,Peak VRAM footprint
+RQ5,Hardware_Profiling,B4,Total_Latency_ms,46.47,,,,Per-query latency
+RQ5,Hardware_Profiling,B4,Peak_VRAM_MB,328.78,,,,Peak VRAM footprint
+RQ5,Hardware_Profiling,B5,Total_Latency_ms,45.68,,,,Per-query latency
+RQ5,Hardware_Profiling,B5,Peak_VRAM_MB,345.08,,,,Peak VRAM footprint
+RQ5,Hardware_Profiling,P1,Total_Latency_ms,47.09,,,,Per-query latency
+RQ5,Hardware_Profiling,P1,Peak_VRAM_MB,357.14,,,,Peak VRAM footprint
+RQ5,Hardware_Profiling,P2,Total_Latency_ms,58.89,,,,Per-query latency
+RQ5,Hardware_Profiling,P2,Peak_VRAM_MB,357.14,,,,Peak VRAM footprint
+Vietnamese_Final,Vietnamese_20_Docs,B1,Token_F1,0.0175,0.009,0.0117,0.0278,350 questions total
+Vietnamese_Final,Vietnamese_20_Docs,B1,Faithfulness_Pct,0.0,,,,Citation-supported rate
+Vietnamese_Final,Vietnamese_20_Docs,B2,Token_F1,0.1543,0.0,0.1543,0.1543,350 questions total
+Vietnamese_Final,Vietnamese_20_Docs,B2,Faithfulness_Pct,100.0,,,,Citation-supported rate
+Vietnamese_Final,Vietnamese_20_Docs,B4,Token_F1,0.0559,0.0217,0.0339,0.0772,350 questions total
+Vietnamese_Final,Vietnamese_20_Docs,B4,Faithfulness_Pct,0.0,,,,Citation-supported rate
+Vietnamese_Final,Vietnamese_20_Docs,B5,Token_F1,0.0729,0.0303,0.0466,0.106,350 questions total
+Vietnamese_Final,Vietnamese_20_Docs,B5,Faithfulness_Pct,0.0,,,,Citation-supported rate
+Vietnamese_Final,Vietnamese_20_Docs,P1,Token_F1,0.0677,0.0131,0.0527,0.0766,350 questions total
+Vietnamese_Final,Vietnamese_20_Docs,P1,Faithfulness_Pct,0.0,,,,Citation-supported rate
+Vietnamese_Final,Vietnamese_20_Docs,P2,Token_F1,0.1543,0.0,0.1543,0.1543,350 questions total
+Vietnamese_Final,Vietnamese_20_Docs,P2,Faithfulness_Pct,100.0,,,,Citation-supported rate

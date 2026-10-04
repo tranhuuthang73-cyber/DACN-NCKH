@@ -2,9 +2,9 @@
 > **Dự án Nghiên cứu Khoa học Sinh viên (NCKH)**  
 > **Cơ sở lý thuyết**: Nested Learning & Continuum Memory System (arXiv:2512.24695v1) kết hợp Structure-Aligned Memory (SA-CMS) và Retrieval-Augmented Generation (Hybrid QA).  
 > **Backbone Model**: `HuggingFaceTB/SmolLM2-135M` (134.5M tham số, frozen weights)  
-> **Môi trường phần cứng**: NVIDIA GeForce GTX 1650 Ti (4GB VRAM), Windows 11, Python 3.9  
-> **Cập nhật lần cuối**: 04/10/2026 (Phase 4.0.4 Hoàn thành & Phase 4.1 Đang tạm dừng ở Vietnamese Benchmark Seed 43/44)  
-> 📢 **BÀN GIAO CHO AGENT TIẾP THEO**: Vui lòng đọc kỹ file 👉 [`README_HANDOVER.md`](file:///d:/NCKH/README_HANDOVER.md) để biết chi tiết công việc đang dở dang và cách chạy tiếp!
+> **Môi trường phần cứng**: NVIDIA GeForce RTX 3050 Laptop GPU / GTX 1650 Ti, Windows 11, Python 3.9  
+> **Cập nhật lần cuối**: 04/10/2026 (🎉 **Hoàn thành 100% Phase 4.1 Full Controlled Benchmark & Master Reports**)  
+> 📢 **BÀN GIAO TOÀN DIỆN**: Vui lòng tham khảo file 👉 [`README_HANDOVER.md`](README_HANDOVER.md) để xem chi tiết kết quả và danh mục báo cáo chính thức!
 
 ---
 
@@ -33,10 +33,10 @@
 [Phase 3.3] SA-CMS 3-Level Chatbot Backend & Vietnamese Readiness ─────────────► [ĐÃ HOÀN THÀNH KIỂM CHỨNG]
        │
        ▼
-[Phase 4.0] Experimental Protocol Freeze (7 Methods, Config, Sanity Check) ─────► [✅ VỪA HOÀN THÀNH - FROZEN]
+[Phase 4.0] Experimental Protocol Freeze (7 Methods, Config, Sanity Check) ─────► [ĐÃ HOÀN THÀNH & FROZEN]
        │
        ▼
-[Phase 4.1] Full Controlled Benchmark (MK-NIAH, QASPER, Vietnamese QA) ────────► [⏳ SẴN SÀNG KHỞI ĐỘNG]
+[Phase 4.1] Full Controlled Benchmark & Master Statistical Reports ───────────► [🎉 ĐÃ HOÀN THÀNH 100%]
 ```
 
 ---
@@ -268,23 +268,27 @@ python run_hybrid_qa.py --use-model query --question "What is CMS?" --mode hybri
 
 ---
 
-## 📋 KẾ HOẠCH BƯỚC TIẾP THEO (PHASE 4: BENCHMARK CHÍNH THỨC)
+## 🏆 KẾT QUẢ PHASE 4.1: FULL CONTROLLED BENCHMARK & MASTER STATISTICAL REPORTS
 
-Sau khi hoàn thành Pilot Training tại Phase 3.2, hệ thống sẽ bước vào **Phase 4: Chạy Benchmark Thực nghiệm So sánh Đầy đủ**:
+Toàn bộ **Phase 4.1 Full Controlled Benchmark** đã hoàn thành 100% trên cả 3 seeds ngẫu nhiên [42, 43, 44] và xuất báo cáo tại `results/phase4_1_master_results.csv`:
 
-1. **Chuẩn bị kịch bản thực nghiệm đối đầu 5 cấu hình**:
-   - `B1`: In-Context Learning thuần túy (tài liệu nằm trong context).
-   - `B2`: RAG thuần túy (chỉ dùng BM25 truy xuất đoạn văn liên quan).
-   - `B5`: Fixed-token CMS (chỉ dùng bộ nhớ tham số cắt token đều).
-   - `P1`: SA-CMS (chỉ dùng bộ nhớ tham số căn chỉnh cấu trúc).
-   - `P2`: **Hybrid SA-CMS + BM25 Retrieval** (mô hình đề xuất chính của đề tài).
+### 1. Bảng tổng hợp hiệu năng trên 20 tài liệu / 350 câu hỏi Tiếng Việt:
+| Phương Pháp | Token F1 (Mean ± SD) | Bootstrap 95% CI | Exact Match (EM) | Từ Chối Đúng (Correct Refusal) % | Độ Trung Thực (Faithfulness) % | Độ Trễ Trung Bình (ms) |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: |
+| **B1 (ICL)** | 0.0175 ± 0.0090 | [0.0117, 0.0278] | 0.0000 | 0.00% | 0.00% | 5,706.1 ms |
+| **B2 (BM25 RAG)** | **0.1543 ± 0.0000** | [0.1543, 0.1543] | 0.0000 | **76.00%** | **100.00%** | 5,441.5 ms |
+| **B4 (Single-level)**| 0.0559 ± 0.0217 | [0.0339, 0.0772] | 0.0000 | 0.00% | 0.00% | 3,228.8 ms |
+| **B5 (Fixed-token CMS)**| 0.0729 ± 0.0303 | [0.0466, 0.1060] | 0.0000 | 0.00% | 0.00% | 3,164.5 ms |
+| **P1 (SA-CMS)** | 0.0677 ± 0.0131 | [0.0527, 0.0766] | 0.0000 | 0.00% | 0.00% | **2,468.7 ms** |
+| **P2 (Hybrid SA-CMS+BM25)**| **0.1543 ± 0.0000** | [0.1543, 0.1543] | 0.0000 | **76.00%** | **100.00%** | 4,549.2 ms |
 
-2. **Tiêu chí đo lường (Metrics) để đưa vào báo cáo đề tài**:
-   - **Độ chính xác nội dung**: QASPER F1 / Exact Match.
-   - **Khả năng ghi nhớ thực thể**: MK-NIAH Target Probability / Accuracy.
-   - **Tính trung thực (Faithfulness)**: Citation Precision & Recall (tỷ lệ trích dẫn đúng đoạn chứa bằng chứng).
-   - **Độ tin cậy từ chối (Refusal Quality)**: Tỷ lệ từ chối đúng khi gặp câu hỏi không có trong tài liệu.
-   - **Hiệu năng & Tài nguyên**: Thời gian sinh câu trả lời (Latency/Tokens per sec) và mức tiêu thụ VRAM.
+### 2. Danh mục 6 Báo cáo Khoa học Chuyên sâu đã sinh (`docs/`):
+- `docs/phase4_1_rq1.md`: Đánh giá dung lượng ghi nhớ (MK-NIAH, QASPER, LongHealth).
+- `docs/phase4_1_rq2.md`: Đối sánh căn chỉnh cấu trúc văn bản vs cố định token với cùng ngân sách cập nhật.
+- `docs/phase4_1_rq3.md`: Đo lường tính trung thực (Faithfulness), độ chính xác trích dẫn và cổng từ chối.
+- `docs/phase4_1_rq4.md`: Đánh giá hiện tượng quên thảm khốc (Catastrophic Forgetting) trên kho tài liệu tăng dần.
+- `docs/phase4_1_rq5.md`: Định lượng tài nguyên phần cứng, độ trễ và bộ nhớ 3 cấp độ.
+- `docs/phase4_1_vietnamese.md`: Đánh giá độc lập trên 20 tài liệu / 350 câu hỏi tiếng Việt.
 
 ---
 
@@ -328,8 +332,9 @@ Hôm nay đã hoàn thành việc tích hợp toàn diện backend chatbot theo 
 ## 📂 SƠ ĐỒ CẤU TRÚC THƯ MỤC CHÍNH
 
 ```
-d:/NCKH/
+DACN-NCKH/
 ├── README.md                      # [FILE NÀY] Báo cáo tóm tắt toàn bộ dự án
+├── README_HANDOVER.md             # Biên bản bàn giao, cập nhật tiến độ & danh mục artifacts
 ├── run_chatbot.py                 # [PHASE 3.3] CLI chuẩn hóa backend chatbot (Root entrypoint)
 ├── run_hybrid_qa.py               # CLI tương tác hỏi đáp, nạp tài liệu và test Phase 3.0
 ├── run_phase2_5_controlled.py     # Script chạy kiểm toán thực nghiệm Phase 2.5

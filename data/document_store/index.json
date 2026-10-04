@@ -40,5 +40,95 @@
     "title": "Chiến lược Phát triển Năng lượng Tái tạo và Lưới điện Quốc gia",
     "content_hash": "304bcc6645bc0799",
     "created_at": 1791024170.7739487
+  },
+  "VN_DOC_006": {
+    "current_version": 1,
+    "title": "Đổi mới Giáo dục Đại học và Chuẩn Kiểm định Quốc tế AUN-QA",
+    "content_hash": "c9d3f0c8d0dc685a",
+    "created_at": 1791108549.612808
+  },
+  "VN_DOC_007": {
+    "current_version": 1,
+    "title": "Chiến lược Phát triển Công nghiệp Bán dẫn và Thiết kế Vi mạch",
+    "content_hash": "359fd7cc1a69c231",
+    "created_at": 1791108549.614297
+  },
+  "VN_DOC_008": {
+    "current_version": 1,
+    "title": "Quy hoạch Giao thông Đô thị và Hệ thống Tuyến Đường sắt Đô thị",
+    "content_hash": "6c9145b305eeb47a",
+    "created_at": 1791108549.6147926
+  },
+  "VN_DOC_009": {
+    "current_version": 1,
+    "title": "Y tế Dự phòng và Năng lực Ứng phó Dịch bệnh Truyền nhiễm",
+    "content_hash": "0994ca1e57bbbc7a",
+    "created_at": 1791108549.615784
+  },
+  "VN_DOC_010": {
+    "current_version": 1,
+    "title": "Phát triển Tài chính Số và Thanh toán Không dùng Tiền mặt",
+    "content_hash": "4ddaeb8d81428951",
+    "created_at": 1791108549.6172724
+  },
+  "VN_DOC_011": {
+    "current_version": 1,
+    "title": "Công nghệ Hàng không Vũ trụ và Khai thác Vệ tinh Viễn thám",
+    "content_hash": "bd31b02eaf032fa0",
+    "created_at": 1791108549.6177688
+  },
+  "VN_DOC_012": {
+    "current_version": 1,
+    "title": "Kinh tế Tuần hoàn và Quản lý Rác thải Nhựa Đại dương",
+    "content_hash": "8808409a58bcef7d",
+    "created_at": 1791108549.61876
+  },
+  "VN_DOC_013": {
+    "current_version": 1,
+    "title": "Phát triển Du lịch Bền vững và Bảo tồn Đa dạng Sinh học Vườn Quốc gia",
+    "content_hash": "f9ef9f0d800ae685",
+    "created_at": 1791108549.6197517
+  },
+  "VN_DOC_014": {
+    "current_version": 1,
+    "title": "Bảo hộ Sở hữu Trí tuệ và Nhận diện Thương hiệu Toàn cầu",
+    "content_hash": "766f02eed9c7dc9b",
+    "created_at": 1791108549.6207457
+  },
+  "VN_DOC_015": {
+    "current_version": 1,
+    "title": "Phát triển Logistics và Cụm Cảng Nước sâu Quốc tế Cái Mép - Thị Vải",
+    "content_hash": "0cd4ede75ac621aa",
+    "created_at": 1791108549.6217353
+  },
+  "VN_DOC_016": {
+    "current_version": 1,
+    "title": "Nông nghiệp Công nghệ cao và Chuỗi Giá trị Cà phê Tây Nguyên",
+    "content_hash": "d1155f2ea9cac30d",
+    "created_at": 1791108549.6227283
+  },
+  "VN_DOC_017": {
+    "current_version": 1,
+    "title": "Chuyển đổi Số Chính phủ và Định danh Điện tử Quốc gia VNeID",
+    "content_hash": "7ec656690ed1da2c",
+    "created_at": 1791108549.6237195
+  },
+  "VN_DOC_018": {
+    "current_version": 1,
+    "title": "Phòng chống Rửa tiền và Quản lý Tài sản Ảo trong Hệ thống Tín dụng",
+    "content_hash": "b1b7dc4ddc7ef811",
+    "created_at": 1791108549.6247125
+  },
+  "VN_DOC_019": {
+    "current_version": 1,
+    "title": "Công nghệ Sinh học Ứng dụng trong Chọn tạo Giống Tôm Nước lợ",
+    "content_hash": "002d799de182a2d6",
+    "created_at": 1791108549.6257043
+  },
+  "VN_DOC_020": {
+    "current_version": 1,
+    "title": "Quy hoạch Đô thị Giảm Phát thải và Mục tiêu Phát thải Ròng bằng Không (Net-Zero)",
+    "content_hash": "20214ea68b46732f",
+    "created_at": 1791108549.6261997
   }
 }

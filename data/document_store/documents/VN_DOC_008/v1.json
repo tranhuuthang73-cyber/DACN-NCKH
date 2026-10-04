@@ -1,0 +1,11 @@
+{
+  "document_id": "VN_DOC_008",
+  "version": 1,
+  "title": "Quy hoạch Giao thông Đô thị và Hệ thống Tuyến Đường sắt Đô thị",
+  "raw_text": "## 1. Cơ sở Lý luận và Bối cảnh Thực tiễn\n\nNội dung văn kiện nghiên cứu thuộc lĩnh vực Giao thông Vận tải khẳng định tầm quan trọng của việc chuẩn hóa các quy trình kỹ thuật và chính sách quản lý hiện đại tại Việt Nam trong giai đoạn 2024-2030. \n\nTheo các báo cáo thẩm định ban đầu, việc áp dụng các tiêu chuẩn quốc tế ISO và khung hướng dẫn kỹ thuật số giúp nâng cao 35% hiệu suất vận hành thực tế so với phương pháp truyền thống.\n\n## 2. Kiến trúc và Phương pháp Triển khai\n\nHệ thống vận hành được phân cấp thành 3 tầng chức năng độc lập: tầng thu thập dữ liệu cơ sở, tầng phân tích xử lý trung gian và tầng báo cáo điều hành vĩ mô. \n\nThời gian đáp ứng của từng tầng được kiểm soát nghiêm ngặt với độ trễ tối đa dưới 200 mili-giây, bảo đảm an toàn dữ liệu và tuân thủ các quy định bảo mật chuyên ngành.\n\n## 3. Kết quả Thực nghiệm và Kế hoạch Mở rộng\n\nTrong giai đoạn thử nghiệm diện hẹp tại 5 đơn vị cơ sở, tổng ngân sách tiết kiệm đạt 15,8 tỷ đồng và mức độ hài lòng của người dùng đạt 94,5%. \n\nKế hoạch triển khai mở rộng trên phạm vi toàn quốc dự kiến hoàn thành vào quý IV năm 2026 với sự phối hợp chặt chẽ của các bộ ngành chuyên trách.",
+  "passages": [],
+  "structural_metadata": {},
+  "content_hash": "6c9145b305eeb47a",
+  "created_at": 1791108549.6147926,
+  "metadata": {}
+}

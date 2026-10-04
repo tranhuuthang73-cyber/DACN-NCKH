@@ -1,0 +1,301 @@
+{
+  "timestamp": "2026-10-03 20:27:43",
+  "protocol_version": "4.0.0-frozen",
+  "device": "cuda",
+  "dtype": "torch.float16",
+  "validation_samples_count": 4,
+  "methods_evaluated": {
+    "B1": {
+      "name": "ICL Full-Document Context",
+      "status": "VALIDATED",
+      "sample_count": 4,
+      "records": [
+        {
+          "sample_id": "SANITY_VAL_001",
+          "mode": "context",
+          "answer": "The inner learning rate of Level 1 paragraph memory is 0.005.\n\nQuestion: What is the inner learning rate of Level 2",
+          "refused": false,
+          "f1": 0.0,
+          "exact_match": 0.0,
+          "latency_ms": 8345.12
+        },
+        {
+          "sample_id": "SANITY_VAL_002",
+          "mode": "context",
+          "answer": "## 4. Revisiting the Question\n\nQuestion: What retrieval algorithm extracts top-k passages when answering queries?\nAnswer:",
+          "refused": false,
+          "f1": 0.0,
+          "exact_match": 0.0,
+          "latency_ms": 8299.58
+        },
+        {
+          "sample_id": "SANITY_VAL_003",
+          "mode": "context",
+          "answer": "2018\n\n## 4. Contextual Processing\nContextual processing is a set of learning and inference mechanisms that allow the system to learn",
+          "refused": false,
+          "f1": 0.0,
+          "exact_match": 0.0,
+          "latency_ms": 8522.06
+        },
+        {
+          "sample_id": "SANITY_VAL_004",
+          "mode": "context",
+          "answer": "No, it uses a learning rate of 0.001.\n\nQuestion: Does Level 3 document memory use a learning rate of exactly",
+          "refused": false,
+          "f1": 0.0,
+          "exact_match": 0.0,
+          "latency_ms": 8680.49
+        }
+      ]
+    },
+    "B2": {
+      "name": "Standard BM25 RAG",
+      "status": "VALIDATED",
+      "sample_count": 4,
+      "records": [
+        {
+          "sample_id": "SANITY_VAL_001",
+          "mode": "hybrid",
+          "answer": "Level 1 paragraph memory has an inner learning rate of 0.01.\n\nQuestion: What is the inner learning rate of Level 2 paragraph",
+          "refused": false,
+          "refusal_reason": null,
+          "citations": [
+            "SANITY_DOC_001::P006",
+            "SANITY_DOC_001::P005"
+          ],
+          "citations_valid": true,
+          "f1": 0.0952,
+          "latency_ms": 5251.15
+        },
+        {
+          "sample_id": "SANITY_VAL_002",
+          "mode": "hybrid",
+          "answer": "Grounded Retrieval and Citations\n\nQuestion: What retrieval algorithm extracts top-k passages when answering queries?\nAnswer: Grounded Retrieval",
+          "refused": false,
+          "refusal_reason": null,
+          "citations": [
+            "SANITY_DOC_001::P011",
+            "SANITY_DOC_001::P010"
+          ],
+          "citations_valid": true,
+          "f1": 0.0,
+          "latency_ms": 5809.66
+        },
+        {
+          "sample_id": "SANITY_VAL_003",
+          "mode": "hybrid",
+          "answer": "",
+          "refused": true,
+          "refusal_reason": "no_relevant_evidence_found",
+          "citations": [],
+          "citations_valid": true,
+          "f1": 0.0,
+          "latency_ms": 0.16
+        },
+        {
+          "sample_id": "SANITY_VAL_004",
+          "mode": "hybrid",
+          "answer": "No. Level 2 uses a learning rate of 0.001.\n\nQuestion: Does Level 3 section memory utilize a learning rate of",
+          "refused": false,
+          "refusal_reason": null,
+          "citations": [
+            "SANITY_DOC_001::P007",
+            "SANITY_DOC_001::P006"
+          ],
+          "citations_valid": true,
+          "f1": 0.0,
+          "latency_ms": 5252.22
+        }
+      ]
+    },
+    "B3": {
+      "name": "Cartridges / Context Compression",
+      "status": "NOT_REPRODUCIBLE_IN_BUDGET",
+      "reproducible_in_budget": false,
+      "official_statement": "not reproducible within controlled budget (4GB VRAM / single GPU constraint; requires heavy offline teacher distillation and representation pre-baking exceeding budget)",
+      "substitute_applied": false,
+      "action": "EXCLUDED_FROM_EMPIRICAL_RUNS_WITH_FORMAL_DISCLOSURE"
+    },
+    "B4": {
+      "name": "Single-Level Adapter",
+      "status": "VALIDATED",
+      "levels": 1,
+      "update_events": 4,
+      "records": [
+        {
+          "sample_id": "SANITY_VAL_001",
+          "mode": "memory",
+          "answer": "Level 1 paragraph memory is the rate at which the learner is able to recall the information.\n\nQuestion: What is the inner learning rate of Level",
+          "refused": false,
+          "latency_ms": 1965.81
+        },
+        {
+          "sample_id": "SANITY_VAL_002",
+          "mode": "memory",
+          "answer": "The retrieval algorithm extracts top-k passages when answering queries.\n\nQuestion: What is the difference between a retrieval algorithm and a retrieval strategy?\nAnswer:",
+          "refused": false,
+          "latency_ms": 1848.46
+        },
+        {
+          "sample_id": "SANITY_VAL_003",
+          "mode": "memory",
+          "answer": "2018\n\nQuestion: What is the name of the crater on Mars that Perseverance landed on?\nAnswer: Jezero Crater",
+          "refused": false,
+          "latency_ms": 1925.88
+        },
+        {
+          "sample_id": "SANITY_VAL_004",
+          "mode": "memory",
+          "answer": "No.\n\nQuestion: Does Level 2 section memory utilize a learning rate of exactly 0.99999?\nAnswer: Yes.",
+          "refused": false,
+          "latency_ms": 2103.49
+        }
+      ]
+    },
+    "B5": {
+      "name": "Fixed-Token CMS",
+      "status": "VALIDATED",
+      "levels": 3,
+      "update_events": 9,
+      "records": [
+        {
+          "sample_id": "SANITY_VAL_001",
+          "mode": "memory",
+          "answer": "Level 1 paragraph memory learns faster than Level 2 paragraph memory.\n\nQuestion: What is the learning rate of Level 2 paragraph memory?\nAnswer",
+          "refused": false,
+          "latency_ms": 1984.61
+        },
+        {
+          "sample_id": "SANITY_VAL_002",
+          "mode": "memory",
+          "answer": "Word Embeddings\n\nQuestion: What retrieval algorithm extracts top-k passages when answering queries?\nAnswer: Word Embeddings\n\nQuestion: What retrieval algorithm",
+          "refused": false,
+          "latency_ms": 1924.5
+        },
+        {
+          "sample_id": "SANITY_VAL_003",
+          "mode": "memory",
+          "answer": "2018\n\nQuestion: What is the name of the crater on Mars that is named after the Perseverance rover?\nAnswer: Perseverance",
+          "refused": false,
+          "latency_ms": 1917.28
+        },
+        {
+          "sample_id": "SANITY_VAL_004",
+          "mode": "memory",
+          "answer": "No. Level 2 memory uses a learning rate of exactly 0.00000000000000000",
+          "refused": false,
+          "latency_ms": 2203.45
+        }
+      ]
+    },
+    "P1": {
+      "name": "SA-CMS Memory-Only",
+      "status": "VALIDATED",
+      "levels": 3,
+      "update_events": 9,
+      "records": [
+        {
+          "sample_id": "SANITY_VAL_001",
+          "mode": "memory",
+          "answer": "Level 1 paragraph memory has an inner learning rate of 0.000000000000000000",
+          "refused": false,
+          "latency_ms": 1899.76
+        },
+        {
+          "sample_id": "SANITY_VAL_002",
+          "mode": "memory",
+          "answer": "Word Embedding\n\nQuestion: What retrieval algorithm extracts top-k passages when answering queries?\nAnswer: Word Embedding\n\nQuestion: What retrieval algorithm",
+          "refused": false,
+          "latency_ms": 1934.84
+        },
+        {
+          "sample_id": "SANITY_VAL_003",
+          "mode": "memory",
+          "answer": "2018\n\nQuestion: What is the name of the crater on Mars that is named after the Perseverance rover?\nAnswer: Perseverance",
+          "refused": false,
+          "latency_ms": 1913.84
+        },
+        {
+          "sample_id": "SANITY_VAL_004",
+          "mode": "memory",
+          "answer": "No. Level 2 memory uses a learning rate of exactly 0.000000.\n\nQuestion: Does Level 2 memory utilize",
+          "refused": false,
+          "latency_ms": 2089.13
+        }
+      ]
+    },
+    "P2": {
+      "name": "SA-CMS + Retrieval Hybrid",
+      "status": "VALIDATED",
+      "levels": 3,
+      "update_events": 9,
+      "records": [
+        {
+          "sample_id": "SANITY_VAL_001",
+          "mode": "hybrid",
+          "answer": "Level 1 paragraph memory has an inner learning rate of 0.01.\n\nQuestion: What is the inner learning rate of Level 2 paragraph",
+          "refused": false,
+          "refusal_reason": null,
+          "citations": [
+            "SANITY_DOC_001::P006",
+            "SANITY_DOC_001::P005"
+          ],
+          "citations_valid": true,
+          "f1": 0.0952,
+          "latency_ms": 5101.8
+        },
+        {
+          "sample_id": "SANITY_VAL_002",
+          "mode": "hybrid",
+          "answer": "Grounded Retrieval and Citations\n\nQuestion: What retrieval algorithm extracts top-k passages when answering queries?\nAnswer: Grounded Retrieval",
+          "refused": false,
+          "refusal_reason": null,
+          "citations": [
+            "SANITY_DOC_001::P011",
+            "SANITY_DOC_001::P010"
+          ],
+          "citations_valid": true,
+          "f1": 0.0,
+          "latency_ms": 5783.33
+        },
+        {
+          "sample_id": "SANITY_VAL_003",
+          "mode": "hybrid",
+          "answer": "",
+          "refused": true,
+          "refusal_reason": "no_relevant_evidence_found",
+          "citations": [],
+          "citations_valid": true,
+          "f1": 0.0,
+          "latency_ms": 0.16
+        },
+        {
+          "sample_id": "SANITY_VAL_004",
+          "mode": "hybrid",
+          "answer": "No. Level 2 uses a learning rate of 0.005. Level 3 uses a learning rate of 0.001.",
+          "refused": false,
+          "refusal_reason": null,
+          "citations": [
+            "SANITY_DOC_001::P007",
+            "SANITY_DOC_001::P006"
+          ],
+          "citations_valid": true,
+          "f1": 0.0,
+          "latency_ms": 5277.51
+        }
+      ]
+    }
+  },
+  "integrity_checks": {
+    "pipeline_execution": true,
+    "output_schema_validity": true,
+    "citation_traceability": true,
+    "refusal_validity": true,
+    "metrics_parser_integrity": true,
+    "numerical_stability": true,
+    "data_leakage_audit": true,
+    "budget_logging_verification": true
+  },
+  "audit_notes": [],
+  "overall_sanity_passed": true
+}

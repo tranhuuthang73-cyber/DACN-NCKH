@@ -1,0 +1,166 @@
+{
+  "protocol_version": "4.0.2-final-fairness-lock",
+  "audit_timestamp": "2026-10-03 20:50:00",
+  "final_protocol_status": "READY_FOR_PHASE_4_1",
+  "all_fairness_checks_passed": true,
+  "task1_training_sample_count": {
+    "locked_sample_size": 200,
+    "corpus_documents": 20,
+    "disallowed_sizes": [
+      100,
+      500,
+      1000
+    ],
+    "passed": true
+  },
+  "task2_b5_vs_p1_fairness": {
+    "delta_theta_0": 0.0,
+    "delta_training_data": 0,
+    "delta_training_config": 0,
+    "delta_update_budget": 0,
+    "p1_events": 9,
+    "b5_events": 9,
+    "passed": true
+  },
+  "task3_b2_p2_retrieval_fairness": {
+    "retrieval_config_cand_07": {
+      "chunk_size": 256,
+      "chunk_overlap": 32,
+      "top_k": 5,
+      "bm25_k1": 1.5,
+      "bm25_b": 0.75,
+      "score_threshold": 3.0
+    },
+    "shared_retrieval_for_b2_p2": true,
+    "p2_uses_same_3_0_threshold": true,
+    "passed": true
+  },
+  "task4_refusal_fairness": {
+    "principles": {
+      "retrieval_relevance": "BM25 score measures lexical surface match only",
+      "evidence_sufficiency": "Requires score >= 3.0, passage_count >= 1, query_coverage >= 0.35",
+      "refusal_decision": "RefusalController separates NO_EVIDENCE, LOW_CONFIDENCE, INSUFFICIENT_COVERAGE",
+      "standardized_metrics": [
+        "correct_refusal",
+        "false_refusal",
+        "false_answer",
+        "insufficient_evidence_refusal"
+      ]
+    },
+    "passed": true
+  },
+  "task5_final_config": {
+    "config_file": "configs\\phase4_experiment.yaml",
+    "training_final_samples": 200,
+    "retrieval_bm25_k1": 1.5,
+    "retrieval_bm25_b": 0.75,
+    "retrieval_top_k": 5,
+    "retrieval_score_threshold": 3.0,
+    "shared_retrieval_for_b2_p2": true,
+    "passed": true
+  },
+  "task6_data_partitions_leakage": {
+    "train_samples_count": 200,
+    "train_docs_count": 20,
+    "validation_samples_count": 50,
+    "qasper_test_docs_count": 10,
+    "mkniah_test_samples_count": 100,
+    "vietnamese_test_docs_count": 5,
+    "vietnamese_test_questions_count": 40,
+    "leakage_audits": {
+      "train_vs_val_overlap_count": 0,
+      "train_vs_qasper_overlap_count": 0,
+      "train_vs_vietnamese_overlap_count": 0,
+      "train_vs_p31_overlap_count": 0,
+      "val_vs_qasper_overlap_count": 0,
+      "val_vs_vietnamese_overlap_count": 0
+    },
+    "passed": true
+  },
+  "task7_seven_methods_fairness_matrix": [
+    {
+      "method": "B1",
+      "name": "ICL Full-Document Context",
+      "training": false,
+      "training_samples": 0,
+      "same_training_corpus": "N/A (No training)",
+      "same_initialization": true,
+      "same_retrieval": "No (Full Context)",
+      "same_context": "Full Window (<=512)",
+      "same_quantization": "float16",
+      "same_update_budget": "0 (Frozen)"
+    },
+    {
+      "method": "B2",
+      "name": "Standard BM25 RAG",
+      "training": false,
+      "training_samples": 0,
+      "same_training_corpus": "N/A (No training)",
+      "same_initialization": true,
+      "same_retrieval": "Yes (BM25 CAND_07, top_k=5, thresh=3.0)",
+      "same_context": "Evicted (Passages in Prompt)",
+      "same_quantization": "float16",
+      "same_update_budget": "0 (Frozen)"
+    },
+    {
+      "method": "B3",
+      "name": "Cartridges / Compression",
+      "training": "N/A",
+      "training_samples": "N/A",
+      "same_training_corpus": "N/A (Not reproducible in budget)",
+      "same_initialization": "N/A",
+      "same_retrieval": "N/A",
+      "same_context": "N/A",
+      "same_quantization": "N/A",
+      "same_update_budget": "N/A"
+    },
+    {
+      "method": "B4",
+      "name": "Single-Level Adapter",
+      "training": true,
+      "training_samples": 200,
+      "same_training_corpus": true,
+      "same_initialization": true,
+      "same_retrieval": "No (Memory-Only)",
+      "same_context": "Evicted (Query Only)",
+      "same_quantization": "float16",
+      "same_update_budget": "Single-level timescale"
+    },
+    {
+      "method": "B5",
+      "name": "Fixed-Token CMS",
+      "training": true,
+      "training_samples": 200,
+      "same_training_corpus": true,
+      "same_initialization": true,
+      "same_retrieval": "No (Memory-Only)",
+      "same_context": "Evicted (Query Only)",
+      "same_quantization": "float16",
+      "same_update_budget": "Matched to P1 (Delta = 0)"
+    },
+    {
+      "method": "P1",
+      "name": "SA-CMS Memory-Only",
+      "training": true,
+      "training_samples": 200,
+      "same_training_corpus": true,
+      "same_initialization": true,
+      "same_retrieval": "No (Memory-Only)",
+      "same_context": "Evicted (Query Only)",
+      "same_quantization": "float16",
+      "same_update_budget": "Target Budget (Delta = 0)"
+    },
+    {
+      "method": "P2",
+      "name": "SA-CMS + Retrieval Hybrid",
+      "training": true,
+      "training_samples": 200,
+      "same_training_corpus": true,
+      "same_initialization": true,
+      "same_retrieval": "Yes (IDENTICAL TO B2 CAND_07)",
+      "same_context": "Evicted (Passages in Prompt)",
+      "same_quantization": "float16",
+      "same_update_budget": "Matched to P1 (Delta = 0)"
+    }
+  ]
+}

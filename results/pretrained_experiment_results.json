@@ -1,0 +1,87 @@
+{
+  "experiment_name": "track2_pretrained_smollm2_reproduction",
+  "timestamp": "20261002_205239",
+  "device": "cuda",
+  "seed": 42,
+  "backbone_model": "HuggingFaceTB/SmolLM2-135M",
+  "configurations": [
+    {
+      "name": "level_1_icl_baseline",
+      "num_levels": 1,
+      "chunk_sizes": [
+        64
+      ],
+      "total_params": 134515008,
+      "cms_params": 0,
+      "mkniah_accuracy_pct": 70.0,
+      "mkniah_correct": 7,
+      "mkniah_total": 10,
+      "mkniah_avg_target_prob": 0.25457763671875,
+      "qasper_avg_loss": 3.6890625,
+      "qasper_perplexity": 40.00732250559936,
+      "runtime_seconds": 14.85,
+      "peak_vram_mb": 322.34,
+      "checkpoint_path": "D:\\NCKH\\checkpoints\\pretrained_level_1_icl_baseline.pt"
+    },
+    {
+      "name": "level_2_cms",
+      "num_levels": 2,
+      "chunk_sizes": [
+        64,
+        32
+      ],
+      "total_params": 138059328,
+      "cms_params": 3544320,
+      "mkniah_accuracy_pct": 70.0,
+      "mkniah_correct": 7,
+      "mkniah_total": 10,
+      "mkniah_avg_target_prob": 0.68974609375,
+      "qasper_avg_loss": 4.298046875,
+      "qasper_perplexity": 73.55598926975397,
+      "runtime_seconds": 17.88,
+      "peak_vram_mb": 344.66,
+      "checkpoint_path": "D:\\NCKH\\checkpoints\\pretrained_level_2_cms.pt"
+    },
+    {
+      "name": "level_3_cms",
+      "num_levels": 3,
+      "chunk_sizes": [
+        64,
+        32,
+        16
+      ],
+      "total_params": 139830912,
+      "cms_params": 5315904,
+      "mkniah_accuracy_pct": 10.0,
+      "mkniah_correct": 1,
+      "mkniah_total": 10,
+      "mkniah_avg_target_prob": 0.30224609375,
+      "qasper_avg_loss": 4.093359375,
+      "qasper_perplexity": 59.940917874930044,
+      "runtime_seconds": 18.83,
+      "peak_vram_mb": 350.73,
+      "checkpoint_path": "D:\\NCKH\\checkpoints\\pretrained_level_3_cms.pt"
+    },
+    {
+      "name": "level_4_cms",
+      "num_levels": 4,
+      "chunk_sizes": [
+        64,
+        32,
+        16,
+        8
+      ],
+      "total_params": 141602496,
+      "cms_params": 7087488,
+      "mkniah_accuracy_pct": 0.0,
+      "mkniah_correct": 0,
+      "mkniah_total": 10,
+      "mkniah_avg_target_prob": 0.066241455078125,
+      "qasper_avg_loss": 4.17265625,
+      "qasper_perplexity": 64.88758103458778,
+      "runtime_seconds": 19.91,
+      "peak_vram_mb": 357.49,
+      "checkpoint_path": "D:\\NCKH\\checkpoints\\pretrained_level_4_cms.pt"
+    }
+  ]
+}

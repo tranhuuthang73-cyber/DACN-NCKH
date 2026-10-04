@@ -1,0 +1,222 @@
+{
+  "protocol_version": "4.0.3-final-scope-lock",
+  "audit_timestamp": "2026-10-03 20:56:00",
+  "final_protocol_status": "READY_FOR_PHASE_4_1",
+  "all_checks_passed": true,
+  "task1_longhealth": {
+    "implemented": true,
+    "full_dataset_size": "20 documents, 200 multiple-choice questions",
+    "subset_size": "5 documents, 20 multiple-choice questions",
+    "num_documents": 5,
+    "num_questions": 20,
+    "selection_rule": "5 representative clinical specialties covering multi-section synthesis",
+    "resource_constraint": "GTX 1650 Ti 4GB VRAM; full 140k tokens exceed student-scale iteration budget",
+    "passed": true
+  },
+  "task2_dataset_size_labeling": {
+    "QASPER": {
+      "size": "10 documents",
+      "official_label": "fixed experimental subset",
+      "proposal_mandate_claim": false,
+      "rationale": "Project-selected student-scale subset for fast iterative evaluation on single GPU"
+    },
+    "MK-NIAH": {
+      "size": "100 samples",
+      "official_label": "fixed experimental subset",
+      "proposal_mandate_claim": false,
+      "rationale": "Project-selected student-scale subset of RULER benchmark"
+    },
+    "LongHealth": {
+      "size": "5 documents, 20 questions",
+      "official_label": "fixed experimental subset",
+      "full_size": "20 documents, 200 multiple-choice questions",
+      "proposal_mandate_claim": false,
+      "rationale": "Selected 5 clinical records / 20 MCQs to fit within 4GB VRAM constraint"
+    }
+  },
+  "task3_vietnamese_final_test": {
+    "documents_count": 20,
+    "answerable_questions_count": 300,
+    "questions_without_answer_count": 50,
+    "total_questions_count": 350,
+    "proposal_source": "De cuong NCKH Section 7.1 (line 199)",
+    "labeling_protocol": "300 answerable questions grounded in evidence passages; 50 questions without answer in documents",
+    "provenance_subdivision": {
+      "out_of_domain_unanswerable": 25,
+      "in_domain_insufficient_evidence": 25,
+      "methodology": "Phase 3.1 template-driven entity-attribute mutation ensuring reproducible ground truth provenance"
+    }
+  },
+  "task4_rq_coverage_matrix": [
+    {
+      "dataset": "QASPER",
+      "RQ1": "YES (B5 vs B4 vs B1)",
+      "RQ2": "YES (P1 vs B5 schedule)",
+      "RQ3": "YES (P2 vs B2 vs P1)",
+      "RQ4": "NO (Sequential stream used)",
+      "RQ5": "YES (Cost profiling)",
+      "role": "Core Scientific NLP Document QA Benchmark (multi-section reasoning)"
+    },
+    {
+      "dataset": "LongHealth",
+      "RQ1": "YES (B5 vs B4 vs B1)",
+      "RQ2": "YES (P1 vs B5 clinical)",
+      "RQ3": "YES (P2 vs B2 vs P1)",
+      "RQ4": "NO (Sequential stream used)",
+      "RQ5": "YES (Cost profiling)",
+      "role": "Core Clinical Document QA Benchmark (multi-note medical synthesis)"
+    },
+    {
+      "dataset": "MK-NIAH (RULER)",
+      "RQ1": "YES (Associative recall)",
+      "RQ2": "NO (Synthetic haystack)",
+      "RQ3": "NO (Synthetic haystack)",
+      "RQ4": "NO (Single document test)",
+      "RQ5": "YES (Throughput / VRAM)",
+      "role": "Multi-Key Needle Retrieval Reproduction Benchmark"
+    },
+    {
+      "dataset": "Incremental Corpus",
+      "RQ1": "NO (Sequential task)",
+      "RQ2": "NO (Retention task)",
+      "RQ3": "NO (Retention task)",
+      "RQ4": "YES (Primary D0 retention after +5, +10, +20 docs)",
+      "RQ5": "YES (Sequential VRAM / drift)",
+      "role": "Continual Ingestion Catastrophic Forgetting Benchmark"
+    },
+    {
+      "dataset": "Vietnamese QA",
+      "RQ1": "NO (Cross-lingual focus)",
+      "RQ2": "YES (Structure vs Fixed schedule)",
+      "RQ3": "YES (Citation & Refusal grounding)",
+      "RQ4": "NO (Single document test)",
+      "RQ5": "YES (Latency / Tokens)",
+      "role": "Cross-Lingual Real-World Document QA & Grounded Refusal Benchmark"
+    }
+  ],
+  "task5_required_datasets": {
+    "QASPER": {
+      "in_plan": true,
+      "status": "NOT_RUN_YET",
+      "reason": "Scheduled for formal execution in Phase 4.1 Benchmark"
+    },
+    "LongHealth": {
+      "in_plan": true,
+      "status": "NOT_RUN_YET",
+      "reason": "Scheduled for formal execution in Phase 4.1 Benchmark"
+    },
+    "MK-NIAH": {
+      "in_plan": true,
+      "status": "NOT_RUN_YET",
+      "reason": "Scheduled for formal execution in Phase 4.1 Benchmark"
+    },
+    "Incremental Corpus": {
+      "in_plan": true,
+      "status": "NOT_RUN_YET",
+      "reason": "Scheduled for formal execution in Phase 4.1 Benchmark (RQ4 forgetting experiment)"
+    },
+    "Vietnamese QA": {
+      "in_plan": true,
+      "status": "NOT_RUN_YET",
+      "reason": "Scheduled for formal execution in Phase 4.1 Benchmark (smoke test validated in Phase 3.3)"
+    }
+  },
+  "task6_method_dataset_matrix": [
+    {
+      "method": "B1",
+      "method_name": "ICL Full-Document Context",
+      "QASPER": "RUN",
+      "LongHealth": "RUN",
+      "MK-NIAH": "RUN",
+      "Vietnamese": "RUN",
+      "Incremental_Corpus": "NOT APPLICABLE",
+      "notes": "Incremental corpus exceeds 512 context window"
+    },
+    {
+      "method": "B2",
+      "method_name": "Standard BM25 RAG",
+      "QASPER": "RUN",
+      "LongHealth": "RUN",
+      "MK-NIAH": "RUN",
+      "Vietnamese": "RUN",
+      "Incremental_Corpus": "NOT APPLICABLE",
+      "notes": "External index does not measure parametric forgetting"
+    },
+    {
+      "method": "B3",
+      "method_name": "Cartridges / Compression",
+      "QASPER": "EXCLUDED",
+      "LongHealth": "EXCLUDED",
+      "MK-NIAH": "EXCLUDED",
+      "Vietnamese": "EXCLUDED",
+      "Incremental_Corpus": "EXCLUDED",
+      "notes": "Not reproducible within controlled 4GB VRAM budget; formal non-reproducibility logging"
+    },
+    {
+      "method": "B4",
+      "method_name": "Single-Level Adapter",
+      "QASPER": "RUN",
+      "LongHealth": "RUN",
+      "MK-NIAH": "RUN",
+      "Vietnamese": "RUN",
+      "Incremental_Corpus": "RUN",
+      "notes": "Primary baseline for RQ4 forgetting"
+    },
+    {
+      "method": "B5",
+      "method_name": "Fixed-Token CMS",
+      "QASPER": "RUN",
+      "LongHealth": "RUN",
+      "MK-NIAH": "RUN",
+      "Vietnamese": "RUN",
+      "Incremental_Corpus": "RUN",
+      "notes": "Fixed-token multi-timescale comparison"
+    },
+    {
+      "method": "P1",
+      "method_name": "SA-CMS Memory-Only",
+      "QASPER": "RUN",
+      "LongHealth": "RUN",
+      "MK-NIAH": "RUN",
+      "Vietnamese": "RUN",
+      "Incremental_Corpus": "RUN",
+      "notes": "Proposed structure-aligned memory architecture"
+    },
+    {
+      "method": "P2",
+      "method_name": "SA-CMS + Retrieval Hybrid",
+      "QASPER": "RUN",
+      "LongHealth": "RUN",
+      "MK-NIAH": "RUN",
+      "Vietnamese": "RUN",
+      "Incremental_Corpus": "NOT APPLICABLE",
+      "notes": "RQ4 isolates parameter degradation without external retrieval"
+    }
+  ],
+  "task7_final_training_lock": {
+    "samples_count": 200,
+    "docs_count": 20,
+    "passed": true
+  },
+  "task8_statistical_lock": {
+    "seeds": [
+      42,
+      43,
+      44
+    ],
+    "bootstrap": {
+      "iterations": 1000,
+      "resampling_unit": "individual_evaluation_item",
+      "prohibit_seed_average_resampling": true,
+      "confidence_level": 0.95
+    },
+    "hypothesis_testing": {
+      "p1_vs_b5_paired": true,
+      "tests": [
+        "paired_students_t_test",
+        "wilcoxon_signed_rank_test"
+      ],
+      "alpha": 0.05
+    }
+  }
+}

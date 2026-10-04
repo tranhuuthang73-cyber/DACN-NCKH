@@ -1,0 +1,6 @@
+[2026-10-02 20:42:12] [INFO] Logger initialized. File sink: D:\NCKH\logs\synthetic_memory_test_20261002_204212.log
+[2026-10-02 20:42:12] [INFO] ================================================================================
+[2026-10-02 20:42:12] [INFO] STARTING SYNTHETIC MEMORY & RETRIEVAL VALIDATION (TRACK 1)
+[2026-10-02 20:42:12] [INFO] [DISCLAIMER] MECHANISM VALIDATION ONLY — NOT A PAPER REPRODUCTION RESULT
+[2026-10-02 20:42:12] [INFO] ================================================================================
+[2026-10-02 20:42:12] [INFO] Using compute device: cuda

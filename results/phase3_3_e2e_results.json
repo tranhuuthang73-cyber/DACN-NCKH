@@ -1,0 +1,2985 @@
+{
+  "timestamp": "2026-10-03 17:39:47",
+  "hardware": {
+    "device": "cuda",
+    "peak_vram_mb": 373.14,
+    "avg_ingest_time_ms": 1632.4,
+    "avg_retrieval_time_ms": 0.73,
+    "avg_generation_time_ms": 22020.22,
+    "avg_total_latency_ms": 22020.95,
+    "memory_checkpoint_size_mb": 10.14
+  },
+  "architecture": {
+    "num_levels": 3,
+    "levels": [
+      {
+        "level": 1,
+        "name": "Paragraph Memory",
+        "timescale": "fast"
+      },
+      {
+        "level": 2,
+        "name": "Section Memory",
+        "timescale": "medium"
+      },
+      {
+        "level": 3,
+        "name": "Document Memory",
+        "timescale": "slow"
+      }
+    ],
+    "trainable_cms_parameters": 5315904,
+    "frozen_backbone_parameters": 134515008,
+    "pipeline": "Document -> Parser -> Structure -> SA-CMS 3-level ingestion -> Context eviction -> Query -> Retrieval -> Evidence -> Answer Generator -> Citation / Refusal"
+  },
+  "language_behavior": {
+    "test_type": "Vietnamese inference smoke test",
+    "answer_language": "Vietnamese",
+    "refusal_language": "Vietnamese",
+    "citation_language": "Vietnamese",
+    "retrieval_language": "Vietnamese",
+    "language_counts": {
+      "answer_langs": {
+        "Vietnamese": 34
+      },
+      "refusal_langs": {
+        "Vietnamese": 6
+      },
+      "citation_langs": {
+        "Vietnamese": 161
+      },
+      "retrieval_langs": {
+        "Vietnamese": 40
+      }
+    }
+  },
+  "refusal_evidence_metrics": {
+    "total_questions": 40,
+    "answerable_count": 20,
+    "unanswerable_count": 10,
+    "insufficient_evidence_count": 10,
+    "correct_answer": 20,
+    "correct_refusal": 6,
+    "false_answer": 14,
+    "false_refusal": 0,
+    "accuracy": 0.65,
+    "citation_support": 1.0
+  },
+  "document_versioning": {
+    "status": "PASSED",
+    "v1_query_versions": [
+      1
+    ],
+    "v2_query_versions": [
+      2
+    ],
+    "v2_update_verified": true
+  },
+  "scientific_boundary": {
+    "disclaimer_1": "Does NOT claim SA-CMS is superior to standard RAG.",
+    "disclaimer_2": "Does NOT claim P2 is superior to B2.",
+    "disclaimer_3": "Does NOT claim comprehensive multilingual or Vietnamese benchmark superiority.",
+    "disclaimer_4": "Refusal thresholds remain frozen; this is an engineering readiness validation, not threshold tuning."
+  },
+  "records": [
+    {
+      "question_id": "VN_ANS_001",
+      "category": "answerable",
+      "expected_decision": "answer",
+      "question": "Kiến trúc SA-CMS 3 cấp độ phân chia các tầng bộ nhớ như thế nào?",
+      "refused": false,
+      "refusal_reason": null,
+      "refusal_message": "",
+      "answer": "Đề tài nghiên cứu sinh ra nhằm giải quyết hiện tượng suy giảm ngữ cảnh của mô h",
+      "citations": [
+        "VN_DOC_001::P003",
+        "VN_DOC_001::P004",
+        "VN_DOC_001::P001",
+        "VN_DOC_001::P008",
+        "VN_DOC_001::P002"
+      ],
+      "citation_valid": true,
+      "document_versions": [
+        1
+      ],
+      "pass": true,
+      "latency_ms": 25417.45,
+      "retrieval_ms": 0.62,
+      "generation_ms": 25416.82,
+      "chatbot_output": {
+        "language": "vi",
+        "mode": "hybrid",
+        "answer": "Đề tài nghiên cứu sinh ra nhằm giải quyết hiện tượng suy giảm ngữ cảnh của mô h",
+        "refused": false,
+        "citations": [
+          "VN_DOC_001::P003",
+          "VN_DOC_001::P004",
+          "VN_DOC_001::P001",
+          "VN_DOC_001::P008",
+          "VN_DOC_001::P002"
+        ],
+        "document_version": "v1",
+        "evidence": [
+          {
+            "passage_id": "VN_DOC_001::P003",
+            "document_id": "VN_DOC_001",
+            "score": 19.8451,
+            "section_title": "## 2. Kiến trúc 3 cấp độ SA-CMS",
+            "text": "## 2. Kiến trúc 3 cấp độ SA-CMS"
+          },
+          {
+            "passage_id": "VN_DOC_001::P004",
+            "document_id": "VN_DOC_001",
+            "score": 14.5,
+            "section_title": "## 2. Kiến trúc 3 cấp độ SA-CMS",
+            "text": "Kiến trúc SA-CMS 3 cấp độ liên kết trực tiếp với cấu trúc thứ bậc của tài liệu. Cấp độ 1 là Paragraph Memory tương ứng với thang thời gian nhanh nhất, thực hiện cập nhật cục bộ sau mỗi đoạn văn."
+          },
+          {
+            "passage_id": "VN_DOC_001::P001",
+            "document_id": "VN_DOC_001",
+            "score": 14.0627,
+            "section_title": "## 1. Giới thiệu tổng quan",
+            "text": "Đề tài nghiên cứu sinh ra nhằm giải quyết hiện tượng suy giảm ngữ cảnh của mô hình ngôn ngữ khi xử lý văn bản dài. Khung kiến trúc Continuum Memory System (CMS) phân tách các tầng bộ nhớ thành nhiều thang thời gian khác nhau để ghi nhớ thông tin một cách bền vững."
+          },
+          {
+            "passage_id": "VN_DOC_001::P008",
+            "document_id": "VN_DOC_001",
+            "score": 9.7445,
+            "section_title": "## 3. Quy trình Trả lời và Trích dẫn",
+            "text": "Hệ thống hybrid kết hợp bộ nhớ tham số SA-CMS với công cụ truy xuất BM25 để thu thập bằng chứng ngoại biên. Bộ chọn bằng chứng lọc các đoạn trích có điểm tương đồng vượt ngưỡng quy định."
+          },
+          {
+            "passage_id": "VN_DOC_001::P002",
+            "document_id": "VN_DOC_001",
+            "score": 6.0219,
+            "section_title": "## 1. Giới thiệu tổng quan",
+            "text": "Khác với cơ chế In-Context Learning thuần túy vốn bị giới hạn bởi độ dài cửa sổ context, mô hình kết hợp bộ nhớ liên tục cho phép duy trì thông tin cốt lõi ngay cả khi đoạn văn bản gốc đã trôi khỏi bộ nhớ đệm attention."
+          }
+        ],
+        "metadata": {
+          "question_id": "VN_ANS_001",
+          "confidence": 1.0,
+          "refusal_reason": null,
+          "latency_ms": 25417.44
+        }
+      }
+    },
+    {
+      "question_id": "VN_ANS_002",
+      "category": "answerable",
+      "expected_decision": "answer",
+      "question": "Cấp độ 1 Paragraph Memory trong SA-CMS thực hiện cập nhật vào thời điểm nào?",
+      "refused": false,
+      "refusal_reason": null,
+      "refusal_message": "",
+      "answer": "kỳ độ độ độ độ độ độ độ độ độ độ độ độ độ độ độ �",
+      "citations": [
+        "VN_DOC_001::P004",
+        "VN_DOC_001::P005",
+        "VN_DOC_001::P003",
+        "VN_DOC_001::P006",
+        "VN_DOC_001::P008"
+      ],
+      "citation_valid": true,
+      "document_versions": [
+        1
+      ],
+      "pass": true,
+      "latency_ms": 27367.6,
+      "retrieval_ms": 1.01,
+      "generation_ms": 27366.6,
+      "chatbot_output": {
+        "language": "vi",
+        "mode": "hybrid",
+        "answer": "kỳ độ độ độ độ độ độ độ độ độ độ độ độ độ độ độ �",
+        "refused": false,
+        "citations": [
+          "VN_DOC_001::P004",
+          "VN_DOC_001::P005",
+          "VN_DOC_001::P003",
+          "VN_DOC_001::P006",
+          "VN_DOC_001::P008"
+        ],
+        "document_version": "v1",
+        "evidence": [
+          {
+            "passage_id": "VN_DOC_001::P004",
+            "document_id": "VN_DOC_001",
+            "score": 23.4708,
+            "section_title": "## 2. Kiến trúc 3 cấp độ SA-CMS",
+            "text": "Kiến trúc SA-CMS 3 cấp độ liên kết trực tiếp với cấu trúc thứ bậc của tài liệu. Cấp độ 1 là Paragraph Memory tương ứng với thang thời gian nhanh nhất, thực hiện cập nhật cục bộ sau mỗi đoạn văn."
+          },
+          {
+            "passage_id": "VN_DOC_001::P005",
+            "document_id": "VN_DOC_001",
+            "score": 17.244,
+            "section_title": "## 2. Kiến trúc 3 cấp độ SA-CMS",
+            "text": "Cấp độ 2 là Section Memory hoạt động ở thang thời gian trung bình, thực hiện tích lũy và cập nhật gradient tại ranh giới kết thúc mỗi đề mục của tài liệu."
+          },
+          {
+            "passage_id": "VN_DOC_001::P003",
+            "document_id": "VN_DOC_001",
+            "score": 13.4622,
+            "section_title": "## 2. Kiến trúc 3 cấp độ SA-CMS",
+            "text": "## 2. Kiến trúc 3 cấp độ SA-CMS"
+          },
+          {
+            "passage_id": "VN_DOC_001::P006",
+            "document_id": "VN_DOC_001",
+            "score": 7.4698,
+            "section_title": "## 2. Kiến trúc 3 cấp độ SA-CMS",
+            "text": "Cấp độ 3 là Document Memory hoạt động ở thang thời gian chậm nhất, ghi lại biểu diễn trừu tượng bất biến toàn cục của toàn bộ tài liệu khi hoàn thành lượt đọc."
+          },
+          {
+            "passage_id": "VN_DOC_001::P008",
+            "document_id": "VN_DOC_001",
+            "score": 7.0467,
+            "section_title": "## 3. Quy trình Trả lời và Trích dẫn",
+            "text": "Hệ thống hybrid kết hợp bộ nhớ tham số SA-CMS với công cụ truy xuất BM25 để thu thập bằng chứng ngoại biên. Bộ chọn bằng chứng lọc các đoạn trích có điểm tương đồng vượt ngưỡng quy định."
+          }
+        ],
+        "metadata": {
+          "question_id": "VN_ANS_002",
+          "confidence": 1.0,
+          "refusal_reason": null,
+          "latency_ms": 27367.6
+        }
+      }
+    },
+    {
+      "question_id": "VN_ANS_003",
+      "category": "answerable",
+      "expected_decision": "answer",
+      "question": "Bộ điều khiển từ chối trong hệ thống hybrid có nhiệm vụ gì?",
+      "refused": false,
+      "refusal_reason": null,
+      "refusal_message": "",
+      "answer": "bằng chứng lọc.\n\n[VN_DOC_002::P005] Hệ thống trực tuyến trong bằng chứng lọc các",
+      "citations": [
+        "VN_DOC_001::P009",
+        "VN_DOC_001::P008",
+        "VN_DOC_002::P004",
+        "VN_DOC_005::P003",
+        "VN_DOC_003::P005"
+      ],
+      "citation_valid": true,
+      "document_versions": [
+        1
+      ],
+      "pass": true,
+      "latency_ms": 27566.51,
+      "retrieval_ms": 0.92,
+      "generation_ms": 27565.6,
+      "chatbot_output": {
+        "language": "vi",
+        "mode": "hybrid",
+        "answer": "bằng chứng lọc.\n\n[VN_DOC_002::P005] Hệ thống trực tuyến trong bằng chứng lọc các",
+        "refused": false,
+        "citations": [
+          "VN_DOC_001::P009",
+          "VN_DOC_001::P008",
+          "VN_DOC_002::P004",
+          "VN_DOC_005::P003",
+          "VN_DOC_003::P005"
+        ],
+        "document_version": "v1",
+        "evidence": [
+          {
+            "passage_id": "VN_DOC_001::P009",
+            "document_id": "VN_DOC_001",
+            "score": 15.2806,
+            "section_title": "## 3. Quy trình Trả lời và Trích dẫn",
+            "text": "Bộ điều khiển từ chối (Refusal Controller) chịu trách nhiệm thẩm định độ bao phủ từ khóa và độ tin cậy của bằng chứng trước khi chuyển cho mô hình sinh câu trả lời kèm mã định danh trích dẫn."
+          },
+          {
+            "passage_id": "VN_DOC_001::P008",
+            "document_id": "VN_DOC_001",
+            "score": 10.3592,
+            "section_title": "## 3. Quy trình Trả lời và Trích dẫn",
+            "text": "Hệ thống hybrid kết hợp bộ nhớ tham số SA-CMS với công cụ truy xuất BM25 để thu thập bằng chứng ngoại biên. Bộ chọn bằng chứng lọc các đoạn trích có điểm tương đồng vượt ngưỡng quy định."
+          },
+          {
+            "passage_id": "VN_DOC_002::P004",
+            "document_id": "VN_DOC_002",
+            "score": 6.7649,
+            "section_title": "## 2. Quyền của Chủ thể Dữ liệu",
+            "text": "Chủ thể dữ liệu có quyền yêu cầu xem, chỉnh sửa, hạn chế xử lý hoặc xóa bỏ toàn bộ dữ liệu cá nhân của mình trong vòng 72 giờ kể từ khi gửi văn bản hợp lệ."
+          },
+          {
+            "passage_id": "VN_DOC_005::P003",
+            "document_id": "VN_DOC_005",
+            "score": 6.4711,
+            "section_title": "## 2. Hệ thống Lưu trữ và Lưới điện Thông minh",
+            "text": "## 2. Hệ thống Lưu trữ và Lưới điện Thông minh"
+          },
+          {
+            "passage_id": "VN_DOC_003::P005",
+            "document_id": "VN_DOC_003",
+            "score": 5.4294,
+            "section_title": "## 2. Nghệ thuật Nhã nhạc Cung đình",
+            "text": "Hệ thống dàn nhạc Cung đình bao gồm nhiều thể loại nhạc khí độc đáo như đàn tỳ bà, đàn nhị, trống bản, kèn bóp và dàn chuông đá cử hành trong các đại lễ Tế Nam Giao và lễ đăng quang."
+          }
+        ],
+        "metadata": {
+          "question_id": "VN_ANS_003",
+          "confidence": 1.0,
+          "refusal_reason": null,
+          "latency_ms": 27566.5
+        }
+      }
+    },
+    {
+      "question_id": "VN_ANS_004",
+      "category": "answerable",
+      "expected_decision": "answer",
+      "question": "Công cụ truy xuất nào được kết hợp với bộ nhớ SA-CMS để thu thập bằng chứng ngoại biên?",
+      "refused": false,
+      "refusal_reason": null,
+      "refusal_message": "",
+      "answer": "000 độ lớn nhưng nó được tự động để tạo độ lớn nhưng nó được t",
+      "citations": [
+        "VN_DOC_001::P008",
+        "VN_DOC_002::P001",
+        "VN_DOC_001::P004",
+        "VN_DOC_001::P002",
+        "VN_DOC_001::P003"
+      ],
+      "citation_valid": true,
+      "document_versions": [
+        1
+      ],
+      "pass": true,
+      "latency_ms": 27086.16,
+      "retrieval_ms": 0.84,
+      "generation_ms": 27085.33,
+      "chatbot_output": {
+        "language": "vi",
+        "mode": "hybrid",
+        "answer": "000 độ lớn nhưng nó được tự động để tạo độ lớn nhưng nó được t",
+        "refused": false,
+        "citations": [
+          "VN_DOC_001::P008",
+          "VN_DOC_002::P001",
+          "VN_DOC_001::P004",
+          "VN_DOC_001::P002",
+          "VN_DOC_001::P003"
+        ],
+        "document_version": "v1",
+        "evidence": [
+          {
+            "passage_id": "VN_DOC_001::P008",
+            "document_id": "VN_DOC_001",
+            "score": 40.4289,
+            "section_title": "## 3. Quy trình Trả lời và Trích dẫn",
+            "text": "Hệ thống hybrid kết hợp bộ nhớ tham số SA-CMS với công cụ truy xuất BM25 để thu thập bằng chứng ngoại biên. Bộ chọn bằng chứng lọc các đoạn trích có điểm tương đồng vượt ngưỡng quy định."
+          },
+          {
+            "passage_id": "VN_DOC_002::P001",
+            "document_id": "VN_DOC_002",
+            "score": 10.4818,
+            "section_title": "## 1. Nguyên tắc Xử lý Dữ liệu",
+            "text": "Nghị định 13/2023/NĐ-CP quy định dữ liệu cá nhân phải được xử lý theo nguyên tắc hợp pháp, công bằng, minh bạch và có sự đồng thuận rõ ràng của chủ thể dữ liệu trước khi thu thập."
+          },
+          {
+            "passage_id": "VN_DOC_001::P004",
+            "document_id": "VN_DOC_001",
+            "score": 9.2843,
+            "section_title": "## 2. Kiến trúc 3 cấp độ SA-CMS",
+            "text": "Kiến trúc SA-CMS 3 cấp độ liên kết trực tiếp với cấu trúc thứ bậc của tài liệu. Cấp độ 1 là Paragraph Memory tương ứng với thang thời gian nhanh nhất, thực hiện cập nhật cục bộ sau mỗi đoạn văn."
+          },
+          {
+            "passage_id": "VN_DOC_001::P002",
+            "document_id": "VN_DOC_001",
+            "score": 8.9291,
+            "section_title": "## 1. Giới thiệu tổng quan",
+            "text": "Khác với cơ chế In-Context Learning thuần túy vốn bị giới hạn bởi độ dài cửa sổ context, mô hình kết hợp bộ nhớ liên tục cho phép duy trì thông tin cốt lõi ngay cả khi đoạn văn bản gốc đã trôi khỏi bộ nhớ đệm attention."
+          },
+          {
+            "passage_id": "VN_DOC_001::P003",
+            "document_id": "VN_DOC_001",
+            "score": 7.6517,
+            "section_title": "## 2. Kiến trúc 3 cấp độ SA-CMS",
+            "text": "## 2. Kiến trúc 3 cấp độ SA-CMS"
+          }
+        ],
+        "metadata": {
+          "question_id": "VN_ANS_004",
+          "confidence": 1.0,
+          "refusal_reason": null,
+          "latency_ms": 27086.14
+        }
+      }
+    },
+    {
+      "question_id": "VN_ANS_005",
+      "category": "answerable",
+      "expected_decision": "answer",
+      "question": "Theo Nghị định 13/2023/NĐ-CP, việc xử lý dữ liệu cá nhân phải tuân theo những nguyên tắc nào?",
+      "refused": false,
+      "refusal_reason": null,
+      "refusal_message": "",
+      "answer": "nhưng nhưng nói đến nhiều trường hợp xảy ra, nói đến nhiều trường hợp x�",
+      "citations": [
+        "VN_DOC_002::P001",
+        "VN_DOC_002::P000",
+        "VN_DOC_002::P007",
+        "VN_DOC_002::P005",
+        "VN_DOC_002::P004"
+      ],
+      "citation_valid": true,
+      "document_versions": [
+        1
+      ],
+      "pass": true,
+      "latency_ms": 27064.89,
+      "retrieval_ms": 0.97,
+      "generation_ms": 27063.92,
+      "chatbot_output": {
+        "language": "vi",
+        "mode": "hybrid",
+        "answer": "nhưng nhưng nói đến nhiều trường hợp xảy ra, nói đến nhiều trường hợp x�",
+        "refused": false,
+        "citations": [
+          "VN_DOC_002::P001",
+          "VN_DOC_002::P000",
+          "VN_DOC_002::P007",
+          "VN_DOC_002::P005",
+          "VN_DOC_002::P004"
+        ],
+        "document_version": "v1",
+        "evidence": [
+          {
+            "passage_id": "VN_DOC_002::P001",
+            "document_id": "VN_DOC_002",
+            "score": 37.4722,
+            "section_title": "## 1. Nguyên tắc Xử lý Dữ liệu",
+            "text": "Nghị định 13/2023/NĐ-CP quy định dữ liệu cá nhân phải được xử lý theo nguyên tắc hợp pháp, công bằng, minh bạch và có sự đồng thuận rõ ràng của chủ thể dữ liệu trước khi thu thập."
+          },
+          {
+            "passage_id": "VN_DOC_002::P000",
+            "document_id": "VN_DOC_002",
+            "score": 18.8217,
+            "section_title": "## 1. Nguyên tắc Xử lý Dữ liệu",
+            "text": "## 1. Nguyên tắc Xử lý Dữ liệu"
+          },
+          {
+            "passage_id": "VN_DOC_002::P007",
+            "document_id": "VN_DOC_002",
+            "score": 12.1526,
+            "section_title": "## 3. Chế tài Xử phạt",
+            "text": "Các hành vi mua bán trái phép dữ liệu cá nhân dưới 10.000 bản ghi có thể bị xử phạt vi phạm hành chính từ 50 triệu đến 100 triệu đồng tùy theo mức độ nghiêm trọng."
+          },
+          {
+            "passage_id": "VN_DOC_002::P005",
+            "document_id": "VN_DOC_002",
+            "score": 10.7291,
+            "section_title": "## 2. Quyền của Chủ thể Dữ liệu",
+            "text": "Trong trường hợp xảy ra sự cố vi phạm dữ liệu cá nhân, tổ chức chịu trách nhiệm phải thông báo cho Cục An ninh mạng và Phòng chống tội phạm công nghệ cao trong vòng 72 giờ làm việc."
+          },
+          {
+            "passage_id": "VN_DOC_002::P004",
+            "document_id": "VN_DOC_002",
+            "score": 10.604,
+            "section_title": "## 2. Quyền của Chủ thể Dữ liệu",
+            "text": "Chủ thể dữ liệu có quyền yêu cầu xem, chỉnh sửa, hạn chế xử lý hoặc xóa bỏ toàn bộ dữ liệu cá nhân của mình trong vòng 72 giờ kể từ khi gửi văn bản hợp lệ."
+          }
+        ],
+        "metadata": {
+          "question_id": "VN_ANS_005",
+          "confidence": 1.0,
+          "refusal_reason": null,
+          "latency_ms": 27064.88
+        }
+      }
+    },
+    {
+      "question_id": "VN_ANS_006",
+      "category": "answerable",
+      "expected_decision": "answer",
+      "question": "Chủ thể dữ liệu có quyền yêu cầu chỉnh sửa hoặc xóa dữ liệu cá nhân trong thời hạn bao lâu?",
+      "refused": false,
+      "refusal_reason": null,
+      "refusal_message": "",
+      "answer": "được xử lý thường nhận xét nhưng nhưng nhưng nhưng nhưng nhưng nhưng như",
+      "citations": [
+        "VN_DOC_002::P004",
+        "VN_DOC_002::P003",
+        "VN_DOC_002::P001",
+        "VN_DOC_002::P007",
+        "VN_DOC_002::P002"
+      ],
+      "citation_valid": true,
+      "document_versions": [
+        1
+      ],
+      "pass": true,
+      "latency_ms": 25306.06,
+      "retrieval_ms": 0.83,
+      "generation_ms": 25305.23,
+      "chatbot_output": {
+        "language": "vi",
+        "mode": "hybrid",
+        "answer": "được xử lý thường nhận xét nhưng nhưng nhưng nhưng nhưng nhưng nhưng như",
+        "refused": false,
+        "citations": [
+          "VN_DOC_002::P004",
+          "VN_DOC_002::P003",
+          "VN_DOC_002::P001",
+          "VN_DOC_002::P007",
+          "VN_DOC_002::P002"
+        ],
+        "document_version": "v1",
+        "evidence": [
+          {
+            "passage_id": "VN_DOC_002::P004",
+            "document_id": "VN_DOC_002",
+            "score": 40.0549,
+            "section_title": "## 2. Quyền của Chủ thể Dữ liệu",
+            "text": "Chủ thể dữ liệu có quyền yêu cầu xem, chỉnh sửa, hạn chế xử lý hoặc xóa bỏ toàn bộ dữ liệu cá nhân của mình trong vòng 72 giờ kể từ khi gửi văn bản hợp lệ."
+          },
+          {
+            "passage_id": "VN_DOC_002::P003",
+            "document_id": "VN_DOC_002",
+            "score": 20.2581,
+            "section_title": "## 2. Quyền của Chủ thể Dữ liệu",
+            "text": "## 2. Quyền của Chủ thể Dữ liệu"
+          },
+          {
+            "passage_id": "VN_DOC_002::P001",
+            "document_id": "VN_DOC_002",
+            "score": 15.6707,
+            "section_title": "## 1. Nguyên tắc Xử lý Dữ liệu",
+            "text": "Nghị định 13/2023/NĐ-CP quy định dữ liệu cá nhân phải được xử lý theo nguyên tắc hợp pháp, công bằng, minh bạch và có sự đồng thuận rõ ràng của chủ thể dữ liệu trước khi thu thập."
+          },
+          {
+            "passage_id": "VN_DOC_002::P007",
+            "document_id": "VN_DOC_002",
+            "score": 11.5444,
+            "section_title": "## 3. Chế tài Xử phạt",
+            "text": "Các hành vi mua bán trái phép dữ liệu cá nhân dưới 10.000 bản ghi có thể bị xử phạt vi phạm hành chính từ 50 triệu đến 100 triệu đồng tùy theo mức độ nghiêm trọng."
+          },
+          {
+            "passage_id": "VN_DOC_002::P002",
+            "document_id": "VN_DOC_002",
+            "score": 11.4599,
+            "section_title": "## 1. Nguyên tắc Xử lý Dữ liệu",
+            "text": "Bên kiểm soát dữ liệu có nghĩa vụ áp dụng các biện pháp an ninh mạng kỹ thuật số như mã hóa AES-256 và ẩn danh hóa để ngăn chặn truy cập trái phép hoặc rò rỉ thông tin cá nhân."
+          }
+        ],
+        "metadata": {
+          "question_id": "VN_ANS_006",
+          "confidence": 1.0,
+          "refusal_reason": null,
+          "latency_ms": 25306.05
+        }
+      }
+    },
+    {
+      "question_id": "VN_ANS_007",
+      "category": "answerable",
+      "expected_decision": "answer",
+      "question": "Khi xảy ra sự cố rò rỉ dữ liệu cá nhân, tổ chức phải thông báo cho cơ quan nào?",
+      "refused": false,
+      "refusal_reason": null,
+      "refusal_message": "",
+      "answer": "ịu trách nhiệm phải thông báo cho Cục An ninh mạng và Phòng chống tội phạm công nghệ cao trong vò",
+      "citations": [
+        "VN_DOC_002::P005",
+        "VN_DOC_002::P001",
+        "VN_DOC_002::P002",
+        "VN_DOC_002::P008",
+        "VN_DOC_002::P004"
+      ],
+      "citation_valid": true,
+      "document_versions": [
+        1
+      ],
+      "pass": true,
+      "latency_ms": 25300.44,
+      "retrieval_ms": 0.75,
+      "generation_ms": 25299.69,
+      "chatbot_output": {
+        "language": "vi",
+        "mode": "hybrid",
+        "answer": "ịu trách nhiệm phải thông báo cho Cục An ninh mạng và Phòng chống tội phạm công nghệ cao trong vò",
+        "refused": false,
+        "citations": [
+          "VN_DOC_002::P005",
+          "VN_DOC_002::P001",
+          "VN_DOC_002::P002",
+          "VN_DOC_002::P008",
+          "VN_DOC_002::P004"
+        ],
+        "document_version": "v1",
+        "evidence": [
+          {
+            "passage_id": "VN_DOC_002::P005",
+            "document_id": "VN_DOC_002",
+            "score": 29.1761,
+            "section_title": "## 2. Quyền của Chủ thể Dữ liệu",
+            "text": "Trong trường hợp xảy ra sự cố vi phạm dữ liệu cá nhân, tổ chức chịu trách nhiệm phải thông báo cho Cục An ninh mạng và Phòng chống tội phạm công nghệ cao trong vòng 72 giờ làm việc."
+          },
+          {
+            "passage_id": "VN_DOC_002::P001",
+            "document_id": "VN_DOC_002",
+            "score": 13.443,
+            "section_title": "## 1. Nguyên tắc Xử lý Dữ liệu",
+            "text": "Nghị định 13/2023/NĐ-CP quy định dữ liệu cá nhân phải được xử lý theo nguyên tắc hợp pháp, công bằng, minh bạch và có sự đồng thuận rõ ràng của chủ thể dữ liệu trước khi thu thập."
+          },
+          {
+            "passage_id": "VN_DOC_002::P002",
+            "document_id": "VN_DOC_002",
+            "score": 12.7852,
+            "section_title": "## 1. Nguyên tắc Xử lý Dữ liệu",
+            "text": "Bên kiểm soát dữ liệu có nghĩa vụ áp dụng các biện pháp an ninh mạng kỹ thuật số như mã hóa AES-256 và ẩn danh hóa để ngăn chặn truy cập trái phép hoặc rò rỉ thông tin cá nhân."
+          },
+          {
+            "passage_id": "VN_DOC_002::P008",
+            "document_id": "VN_DOC_002",
+            "score": 9.9693,
+            "section_title": "## 3. Chế tài Xử phạt",
+            "text": "Trường hợp tổ chức vi phạm nhiều lần hoặc chuyển giao dữ liệu trái phép ra nước ngoài có thể bị áp mức phạt tiền tối đa lên đến 5% tổng doanh thu năm tài chính liền trước."
+          },
+          {
+            "passage_id": "VN_DOC_002::P004",
+            "document_id": "VN_DOC_002",
+            "score": 8.8961,
+            "section_title": "## 2. Quyền của Chủ thể Dữ liệu",
+            "text": "Chủ thể dữ liệu có quyền yêu cầu xem, chỉnh sửa, hạn chế xử lý hoặc xóa bỏ toàn bộ dữ liệu cá nhân của mình trong vòng 72 giờ kể từ khi gửi văn bản hợp lệ."
+          }
+        ],
+        "metadata": {
+          "question_id": "VN_ANS_007",
+          "confidence": 1.0,
+          "refusal_reason": null,
+          "latency_ms": 25300.44
+        }
+      }
+    },
+    {
+      "question_id": "VN_ANS_008",
+      "category": "answerable",
+      "expected_decision": "answer",
+      "question": "Mức phạt tiền tối đa đối với tổ chức chuyển giao dữ liệu trái phép ra nước ngoài là bao nhiêu?",
+      "refused": false,
+      "refusal_reason": null,
+      "refusal_message": "",
+      "answer": "ng.\n\n[VN_DOC_002::P008] Nhưng nói nói nói nói nói nói nói nói nói nói nói nói nói",
+      "citations": [
+        "VN_DOC_002::P008",
+        "VN_DOC_005::P008",
+        "VN_DOC_002::P007",
+        "VN_DOC_002::P005",
+        "VN_DOC_002::P002"
+      ],
+      "citation_valid": true,
+      "document_versions": [
+        1
+      ],
+      "pass": true,
+      "latency_ms": 25302.76,
+      "retrieval_ms": 0.8,
+      "generation_ms": 25301.96,
+      "chatbot_output": {
+        "language": "vi",
+        "mode": "hybrid",
+        "answer": "ng.\n\n[VN_DOC_002::P008] Nhưng nói nói nói nói nói nói nói nói nói nói nói nói nói",
+        "refused": false,
+        "citations": [
+          "VN_DOC_002::P008",
+          "VN_DOC_005::P008",
+          "VN_DOC_002::P007",
+          "VN_DOC_002::P005",
+          "VN_DOC_002::P002"
+        ],
+        "document_version": "v1",
+        "evidence": [
+          {
+            "passage_id": "VN_DOC_002::P008",
+            "document_id": "VN_DOC_002",
+            "score": 36.2918,
+            "section_title": "## 3. Chế tài Xử phạt",
+            "text": "Trường hợp tổ chức vi phạm nhiều lần hoặc chuyển giao dữ liệu trái phép ra nước ngoài có thể bị áp mức phạt tiền tối đa lên đến 5% tổng doanh thu năm tài chính liền trước."
+          },
+          {
+            "passage_id": "VN_DOC_005::P008",
+            "document_id": "VN_DOC_005",
+            "score": 13.7341,
+            "section_title": "## 3. Cơ chế Mua bán Điện Trực tiếp (DPPA)",
+            "text": "Mức giá trần đối với dự án điện gió trên bờ trong khung giá chuyển tiếp được quy định là 1.587,12 đồng trên một kilowatt giờ (chưa bao gồm thuế VAT)."
+          },
+          {
+            "passage_id": "VN_DOC_002::P007",
+            "document_id": "VN_DOC_002",
+            "score": 10.8857,
+            "section_title": "## 3. Chế tài Xử phạt",
+            "text": "Các hành vi mua bán trái phép dữ liệu cá nhân dưới 10.000 bản ghi có thể bị xử phạt vi phạm hành chính từ 50 triệu đến 100 triệu đồng tùy theo mức độ nghiêm trọng."
+          },
+          {
+            "passage_id": "VN_DOC_002::P005",
+            "document_id": "VN_DOC_002",
+            "score": 9.5671,
+            "section_title": "## 2. Quyền của Chủ thể Dữ liệu",
+            "text": "Trong trường hợp xảy ra sự cố vi phạm dữ liệu cá nhân, tổ chức chịu trách nhiệm phải thông báo cho Cục An ninh mạng và Phòng chống tội phạm công nghệ cao trong vòng 72 giờ làm việc."
+          },
+          {
+            "passage_id": "VN_DOC_002::P002",
+            "document_id": "VN_DOC_002",
+            "score": 6.2714,
+            "section_title": "## 1. Nguyên tắc Xử lý Dữ liệu",
+            "text": "Bên kiểm soát dữ liệu có nghĩa vụ áp dụng các biện pháp an ninh mạng kỹ thuật số như mã hóa AES-256 và ẩn danh hóa để ngăn chặn truy cập trái phép hoặc rò rỉ thông tin cá nhân."
+          }
+        ],
+        "metadata": {
+          "question_id": "VN_ANS_008",
+          "confidence": 1.0,
+          "refusal_reason": null,
+          "latency_ms": 25302.75
+        }
+      }
+    },
+    {
+      "question_id": "VN_ANS_009",
+      "category": "answerable",
+      "expected_decision": "answer",
+      "question": "Kinh thành Huế được khởi công xây dựng vào năm nào và hoàn thành dưới triều vua nào?",
+      "refused": false,
+      "refusal_reason": null,
+      "refusal_message": "",
+      "answer": "ịu mặn ST25 và OM18 được triển khai gieo cấy thành công trên diện tích 150.000 héc-",
+      "citations": [
+        "VN_DOC_003::P001",
+        "VN_DOC_003::P000",
+        "VN_DOC_003::P004",
+        "VN_DOC_004::P005",
+        "VN_DOC_003::P007"
+      ],
+      "citation_valid": true,
+      "document_versions": [
+        1
+      ],
+      "pass": true,
+      "latency_ms": 25413.21,
+      "retrieval_ms": 0.72,
+      "generation_ms": 25412.49,
+      "chatbot_output": {
+        "language": "vi",
+        "mode": "hybrid",
+        "answer": "ịu mặn ST25 và OM18 được triển khai gieo cấy thành công trên diện tích 150.000 héc-",
+        "refused": false,
+        "citations": [
+          "VN_DOC_003::P001",
+          "VN_DOC_003::P000",
+          "VN_DOC_003::P004",
+          "VN_DOC_004::P005",
+          "VN_DOC_003::P007"
+        ],
+        "document_version": "v1",
+        "evidence": [
+          {
+            "passage_id": "VN_DOC_003::P001",
+            "document_id": "VN_DOC_003",
+            "score": 37.7462,
+            "section_title": "## 1. Quần thể Di tích Kinh thành",
+            "text": "Kinh thành Huế được khởi công xây dựng vào năm 1805 dưới triều vua Gia Long và hoàn thành vào năm 1832 dưới thời vua Minh Mạng, kết hợp giữa kiến trúc cung đình phương Đông và nguyên lý phòng thủ Vauban của Pháp."
+          },
+          {
+            "passage_id": "VN_DOC_003::P000",
+            "document_id": "VN_DOC_003",
+            "score": 10.1448,
+            "section_title": "## 1. Quần thể Di tích Kinh thành",
+            "text": "## 1. Quần thể Di tích Kinh thành"
+          },
+          {
+            "passage_id": "VN_DOC_003::P004",
+            "document_id": "VN_DOC_003",
+            "score": 8.7623,
+            "section_title": "## 2. Nghệ thuật Nhã nhạc Cung đình",
+            "text": "Nhã nhạc Cung đình Huế đã được UNESCO chính thức vinh danh là Kiệt tác Di sản Văn hóa Phi vật thể và Truyền khẩu của Nhân loại vào năm 2003."
+          },
+          {
+            "passage_id": "VN_DOC_004::P005",
+            "document_id": "VN_DOC_004",
+            "score": 8.3847,
+            "section_title": "## 2. Mô hình Chuyển đổi Cơ cấu Mùa vụ",
+            "text": "Giống lúa chịu mặn ST25 và OM18 được triển khai gieo cấy thành công trên diện tích 150.000 héc-ta, chịu được độ mặn tới 5 phần nghìn trong giai đoạn đẻ nhánh."
+          },
+          {
+            "passage_id": "VN_DOC_003::P007",
+            "document_id": "VN_DOC_003",
+            "score": 7.6054,
+            "section_title": "## 3. Bảo tồn và Tu bổ Di sản",
+            "text": "Dự án bảo tồn điện Kiến Trung được khởi động trùng tu phục hồi từ năm 2019 và chính thức mở cửa đón khách tham quan nhân dịp Tết Nguyên đán năm 2024."
+          }
+        ],
+        "metadata": {
+          "question_id": "VN_ANS_009",
+          "confidence": 1.0,
+          "refusal_reason": null,
+          "latency_ms": 25413.2
+        }
+      }
+    },
+    {
+      "question_id": "VN_ANS_010",
+      "category": "answerable",
+      "expected_decision": "answer",
+      "question": "Bốn cổng chính của Hoàng thành Huế gồm những cổng nào?",
+      "refused": false,
+      "refusal_reason": null,
+      "refusal_message": "",
+      "answer": "động động nhưng nhưng nhưng nhưng nhưng nhưng nhưng nhưng nhưng nhưng như",
+      "citations": [
+        "VN_DOC_003::P002",
+        "VN_DOC_003::P004",
+        "VN_DOC_003::P001"
+      ],
+      "citation_valid": true,
+      "document_versions": [
+        1
+      ],
+      "pass": true,
+      "latency_ms": 26642.63,
+      "retrieval_ms": 0.64,
+      "generation_ms": 26641.99,
+      "chatbot_output": {
+        "language": "vi",
+        "mode": "hybrid",
+        "answer": "động động nhưng nhưng nhưng nhưng nhưng nhưng nhưng nhưng nhưng nhưng như",
+        "refused": false,
+        "citations": [
+          "VN_DOC_003::P002",
+          "VN_DOC_003::P004",
+          "VN_DOC_003::P001"
+        ],
+        "document_version": "v1",
+        "evidence": [
+          {
+            "passage_id": "VN_DOC_003::P002",
+            "document_id": "VN_DOC_003",
+            "score": 21.265,
+            "section_title": "## 1. Quần thể Di tích Kinh thành",
+            "text": "Hoàng thành Huế có cấu trúc hình vuông với bốn cổng chính gồm Ngọ Môn ở phía Nam, cửa Hiển Nhơn ở phía Đông, cửa Chương Đức ở phía Tây và cửa Hòa Bình ở phía Bắc."
+          },
+          {
+            "passage_id": "VN_DOC_003::P004",
+            "document_id": "VN_DOC_003",
+            "score": 5.7188,
+            "section_title": "## 2. Nghệ thuật Nhã nhạc Cung đình",
+            "text": "Nhã nhạc Cung đình Huế đã được UNESCO chính thức vinh danh là Kiệt tác Di sản Văn hóa Phi vật thể và Truyền khẩu của Nhân loại vào năm 2003."
+          },
+          {
+            "passage_id": "VN_DOC_003::P001",
+            "document_id": "VN_DOC_003",
+            "score": 5.5845,
+            "section_title": "## 1. Quần thể Di tích Kinh thành",
+            "text": "Kinh thành Huế được khởi công xây dựng vào năm 1805 dưới triều vua Gia Long và hoàn thành vào năm 1832 dưới thời vua Minh Mạng, kết hợp giữa kiến trúc cung đình phương Đông và nguyên lý phòng thủ Vauban của Pháp."
+          }
+        ],
+        "metadata": {
+          "question_id": "VN_ANS_010",
+          "confidence": 1.0,
+          "refusal_reason": null,
+          "latency_ms": 26642.62
+        }
+      }
+    },
+    {
+      "question_id": "VN_ANS_011",
+      "category": "answerable",
+      "expected_decision": "answer",
+      "question": "Nhã nhạc Cung đình Huế được UNESCO công nhận là di sản văn hóa vào năm nào?",
+      "refused": false,
+      "refusal_reason": null,
+      "refusal_message": "",
+      "answer": "m những địa chỉ nhất nhưng nhưng nhưng nhưng nhưng nhưng nhưng nhưng nhưng",
+      "citations": [
+        "VN_DOC_003::P004",
+        "VN_DOC_003::P003",
+        "VN_DOC_003::P001",
+        "VN_DOC_003::P006",
+        "VN_DOC_003::P005"
+      ],
+      "citation_valid": true,
+      "document_versions": [
+        1
+      ],
+      "pass": true,
+      "latency_ms": 26334.51,
+      "retrieval_ms": 0.61,
+      "generation_ms": 26333.91,
+      "chatbot_output": {
+        "language": "vi",
+        "mode": "hybrid",
+        "answer": "m những địa chỉ nhất nhưng nhưng nhưng nhưng nhưng nhưng nhưng nhưng nhưng",
+        "refused": false,
+        "citations": [
+          "VN_DOC_003::P004",
+          "VN_DOC_003::P003",
+          "VN_DOC_003::P001",
+          "VN_DOC_003::P006",
+          "VN_DOC_003::P005"
+        ],
+        "document_version": "v1",
+        "evidence": [
+          {
+            "passage_id": "VN_DOC_003::P004",
+            "document_id": "VN_DOC_003",
+            "score": 31.8932,
+            "section_title": "## 2. Nghệ thuật Nhã nhạc Cung đình",
+            "text": "Nhã nhạc Cung đình Huế đã được UNESCO chính thức vinh danh là Kiệt tác Di sản Văn hóa Phi vật thể và Truyền khẩu của Nhân loại vào năm 2003."
+          },
+          {
+            "passage_id": "VN_DOC_003::P003",
+            "document_id": "VN_DOC_003",
+            "score": 15.8243,
+            "section_title": "## 2. Nghệ thuật Nhã nhạc Cung đình",
+            "text": "## 2. Nghệ thuật Nhã nhạc Cung đình"
+          },
+          {
+            "passage_id": "VN_DOC_003::P001",
+            "document_id": "VN_DOC_003",
+            "score": 13.3498,
+            "section_title": "## 1. Quần thể Di tích Kinh thành",
+            "text": "Kinh thành Huế được khởi công xây dựng vào năm 1805 dưới triều vua Gia Long và hoàn thành vào năm 1832 dưới thời vua Minh Mạng, kết hợp giữa kiến trúc cung đình phương Đông và nguyên lý phòng thủ Vauban của Pháp."
+          },
+          {
+            "passage_id": "VN_DOC_003::P006",
+            "document_id": "VN_DOC_003",
+            "score": 7.0871,
+            "section_title": "## 3. Bảo tồn và Tu bổ Di sản",
+            "text": "## 3. Bảo tồn và Tu bổ Di sản"
+          },
+          {
+            "passage_id": "VN_DOC_003::P005",
+            "document_id": "VN_DOC_003",
+            "score": 7.0404,
+            "section_title": "## 2. Nghệ thuật Nhã nhạc Cung đình",
+            "text": "Hệ thống dàn nhạc Cung đình bao gồm nhiều thể loại nhạc khí độc đáo như đàn tỳ bà, đàn nhị, trống bản, kèn bóp và dàn chuông đá cử hành trong các đại lễ Tế Nam Giao và lễ đăng quang."
+          }
+        ],
+        "metadata": {
+          "question_id": "VN_ANS_011",
+          "confidence": 1.0,
+          "refusal_reason": null,
+          "latency_ms": 26334.51
+        }
+      }
+    },
+    {
+      "question_id": "VN_ANS_012",
+      "category": "answerable",
+      "expected_decision": "answer",
+      "question": "Điện Kiến Trung tại Huế mở cửa đón khách tham quan vào dịp nào sau khi phục hồi?",
+      "refused": false,
+      "refusal_reason": null,
+      "refusal_message": "",
+      "answer": "được động động nhân dịp năm 2030 và những năm năm 2030 vào năm 2030 và",
+      "citations": [
+        "VN_DOC_003::P007",
+        "VN_DOC_005::P002",
+        "VN_DOC_003::P001",
+        "VN_DOC_003::P002"
+      ],
+      "citation_valid": true,
+      "document_versions": [
+        1
+      ],
+      "pass": true,
+      "latency_ms": 25840.54,
+      "retrieval_ms": 0.69,
+      "generation_ms": 25839.85,
+      "chatbot_output": {
+        "language": "vi",
+        "mode": "hybrid",
+        "answer": "được động động nhân dịp năm 2030 và những năm năm 2030 vào năm 2030 và",
+        "refused": false,
+        "citations": [
+          "VN_DOC_003::P007",
+          "VN_DOC_005::P002",
+          "VN_DOC_003::P001",
+          "VN_DOC_003::P002"
+        ],
+        "document_version": "v1",
+        "evidence": [
+          {
+            "passage_id": "VN_DOC_003::P007",
+            "document_id": "VN_DOC_003",
+            "score": 30.3672,
+            "section_title": "## 3. Bảo tồn và Tu bổ Di sản",
+            "text": "Dự án bảo tồn điện Kiến Trung được khởi động trùng tu phục hồi từ năm 2019 và chính thức mở cửa đón khách tham quan nhân dịp Tết Nguyên đán năm 2024."
+          },
+          {
+            "passage_id": "VN_DOC_005::P002",
+            "document_id": "VN_DOC_005",
+            "score": 9.7417,
+            "section_title": "## 1. Quy hoạch Điện VIII",
+            "text": "Công suất điện gió ngoài khơi dự kiến đạt 6.000 MW vào năm 2030, ưu tiên triển khai tại khu vực Nam Trung Bộ nhờ tiềm năng tốc độ gió trung bình trên 8 mét trên giây."
+          },
+          {
+            "passage_id": "VN_DOC_003::P001",
+            "document_id": "VN_DOC_003",
+            "score": 6.2413,
+            "section_title": "## 1. Quần thể Di tích Kinh thành",
+            "text": "Kinh thành Huế được khởi công xây dựng vào năm 1805 dưới triều vua Gia Long và hoàn thành vào năm 1832 dưới thời vua Minh Mạng, kết hợp giữa kiến trúc cung đình phương Đông và nguyên lý phòng thủ Vauban của Pháp."
+          },
+          {
+            "passage_id": "VN_DOC_003::P002",
+            "document_id": "VN_DOC_003",
+            "score": 6.1559,
+            "section_title": "## 1. Quần thể Di tích Kinh thành",
+            "text": "Hoàng thành Huế có cấu trúc hình vuông với bốn cổng chính gồm Ngọ Môn ở phía Nam, cửa Hiển Nhơn ở phía Đông, cửa Chương Đức ở phía Tây và cửa Hòa Bình ở phía Bắc."
+          }
+        ],
+        "metadata": {
+          "question_id": "VN_ANS_012",
+          "confidence": 1.0,
+          "refusal_reason": null,
+          "latency_ms": 25840.53
+        }
+      }
+    },
+    {
+      "question_id": "VN_ANS_013",
+      "category": "answerable",
+      "expected_decision": "answer",
+      "question": "Ranh mặn 4 gam trên lít xâm nhập sâu bao nhiêu km vào đất liền tại Bến Tre và Trà Vinh?",
+      "refused": false,
+      "refusal_reason": null,
+      "refusal_message": "",
+      "answer": "h phố vào năm 2030 vào năm 2040 vào năm 2050 vào năm 2060 vào năm 2070 vào nă",
+      "citations": [
+        "VN_DOC_004::P001",
+        "VN_DOC_004::P000",
+        "VN_DOC_005::P002",
+        "VN_DOC_004::P005",
+        "VN_DOC_004::P008"
+      ],
+      "citation_valid": true,
+      "document_versions": [
+        1
+      ],
+      "pass": true,
+      "latency_ms": 26596.73,
+      "retrieval_ms": 0.77,
+      "generation_ms": 26595.96,
+      "chatbot_output": {
+        "language": "vi",
+        "mode": "hybrid",
+        "answer": "h phố vào năm 2030 vào năm 2040 vào năm 2050 vào năm 2060 vào năm 2070 vào nă",
+        "refused": false,
+        "citations": [
+          "VN_DOC_004::P001",
+          "VN_DOC_004::P000",
+          "VN_DOC_005::P002",
+          "VN_DOC_004::P005",
+          "VN_DOC_004::P008"
+        ],
+        "document_version": "v1",
+        "evidence": [
+          {
+            "passage_id": "VN_DOC_004::P001",
+            "document_id": "VN_DOC_004",
+            "score": 39.645,
+            "section_title": "## 1. Thách thức Xâm nhập Mặn",
+            "text": "Biến đổi khí hậu và việc phát triển đập thủy điện thượng nguồn sông Mê Kông đã làm giảm lưu lượng dòng chảy mùa kiệt, đẩy ranh mặn 4 gam trên lít xâm nhập sâu tới 70 km vào đất liền tại Bến Tre và Trà Vinh."
+          },
+          {
+            "passage_id": "VN_DOC_004::P000",
+            "document_id": "VN_DOC_004",
+            "score": 12.1842,
+            "section_title": "## 1. Thách thức Xâm nhập Mặn",
+            "text": "## 1. Thách thức Xâm nhập Mặn"
+          },
+          {
+            "passage_id": "VN_DOC_005::P002",
+            "document_id": "VN_DOC_005",
+            "score": 6.7353,
+            "section_title": "## 1. Quy hoạch Điện VIII",
+            "text": "Công suất điện gió ngoài khơi dự kiến đạt 6.000 MW vào năm 2030, ưu tiên triển khai tại khu vực Nam Trung Bộ nhờ tiềm năng tốc độ gió trung bình trên 8 mét trên giây."
+          },
+          {
+            "passage_id": "VN_DOC_004::P005",
+            "document_id": "VN_DOC_004",
+            "score": 5.8941,
+            "section_title": "## 2. Mô hình Chuyển đổi Cơ cấu Mùa vụ",
+            "text": "Giống lúa chịu mặn ST25 và OM18 được triển khai gieo cấy thành công trên diện tích 150.000 héc-ta, chịu được độ mặn tới 5 phần nghìn trong giai đoạn đẻ nhánh."
+          },
+          {
+            "passage_id": "VN_DOC_004::P008",
+            "document_id": "VN_DOC_004",
+            "score": 5.7232,
+            "section_title": "## 3. Nền tảng IoT và Quản lý Nước",
+            "text": "Hệ thống đóng mở cống ngăn mặn tự động bằng năng lượng mặt trời tại cống Cái Lớn - Cái Bé giúp kiểm soát nguồn nước ngọt cho hơn 384.000 héc-ta diện tích đất sản xuất nông nghiệp."
+          }
+        ],
+        "metadata": {
+          "question_id": "VN_ANS_013",
+          "confidence": 1.0,
+          "refusal_reason": null,
+          "latency_ms": 26596.73
+        }
+      }
+    },
+    {
+      "question_id": "VN_ANS_014",
+      "category": "answerable",
+      "expected_decision": "answer",
+      "question": "Mô hình canh tác lúa - tôm thông minh giúp giảm bao nhiêu phần trăm lượng phân bón hóa học?",
+      "refused": false,
+      "refusal_reason": null,
+      "refusal_message": "",
+      "answer": "Mô hình cấu trúc một cơ cấu mùa vụ được tự động nhưng nhưng nó được",
+      "citations": [
+        "VN_DOC_004::P004",
+        "VN_DOC_001::P001",
+        "VN_DOC_004::P003",
+        "VN_DOC_004::P005",
+        "VN_DOC_005::P003"
+      ],
+      "citation_valid": true,
+      "document_versions": [
+        1
+      ],
+      "pass": true,
+      "latency_ms": 25691.23,
+      "retrieval_ms": 0.88,
+      "generation_ms": 25690.35,
+      "chatbot_output": {
+        "language": "vi",
+        "mode": "hybrid",
+        "answer": "Mô hình cấu trúc một cơ cấu mùa vụ được tự động nhưng nhưng nó được",
+        "refused": false,
+        "citations": [
+          "VN_DOC_004::P004",
+          "VN_DOC_001::P001",
+          "VN_DOC_004::P003",
+          "VN_DOC_004::P005",
+          "VN_DOC_005::P003"
+        ],
+        "document_version": "v1",
+        "evidence": [
+          {
+            "passage_id": "VN_DOC_004::P004",
+            "document_id": "VN_DOC_004",
+            "score": 31.9321,
+            "section_title": "## 2. Mô hình Chuyển đổi Cơ cấu Mùa vụ",
+            "text": "Mô hình canh tác lúa - tôm thông minh thích ứng biến đổi khí hậu đã chứng minh hiệu quả kinh tế vượt trội, giảm 60% lượng phân bón hóa học và tăng thu nhập thêm 40% cho bà con vùng ngọt hóa ven biển."
+          },
+          {
+            "passage_id": "VN_DOC_001::P001",
+            "document_id": "VN_DOC_001",
+            "score": 7.8566,
+            "section_title": "## 1. Giới thiệu tổng quan",
+            "text": "Đề tài nghiên cứu sinh ra nhằm giải quyết hiện tượng suy giảm ngữ cảnh của mô hình ngôn ngữ khi xử lý văn bản dài. Khung kiến trúc Continuum Memory System (CMS) phân tách các tầng bộ nhớ thành nhiều thang thời gian khác nhau để ghi nhớ thông tin một cách bền vững."
+          },
+          {
+            "passage_id": "VN_DOC_004::P003",
+            "document_id": "VN_DOC_004",
+            "score": 6.0816,
+            "section_title": "## 2. Mô hình Chuyển đổi Cơ cấu Mùa vụ",
+            "text": "## 2. Mô hình Chuyển đổi Cơ cấu Mùa vụ"
+          },
+          {
+            "passage_id": "VN_DOC_004::P005",
+            "document_id": "VN_DOC_004",
+            "score": 5.9153,
+            "section_title": "## 2. Mô hình Chuyển đổi Cơ cấu Mùa vụ",
+            "text": "Giống lúa chịu mặn ST25 và OM18 được triển khai gieo cấy thành công trên diện tích 150.000 héc-ta, chịu được độ mặn tới 5 phần nghìn trong giai đoạn đẻ nhánh."
+          },
+          {
+            "passage_id": "VN_DOC_005::P003",
+            "document_id": "VN_DOC_005",
+            "score": 5.7351,
+            "section_title": "## 2. Hệ thống Lưu trữ và Lưới điện Thông minh",
+            "text": "## 2. Hệ thống Lưu trữ và Lưới điện Thông minh"
+          }
+        ],
+        "metadata": {
+          "question_id": "VN_ANS_014",
+          "confidence": 1.0,
+          "refusal_reason": null,
+          "latency_ms": 25691.23
+        }
+      }
+    },
+    {
+      "question_id": "VN_ANS_015",
+      "category": "answerable",
+      "expected_decision": "answer",
+      "question": "Những giống lúa chịu mặn nào được triển khai gieo cấy trên diện tích 150.000 héc-ta?",
+      "refused": false,
+      "refusal_reason": null,
+      "refusal_message": "",
+      "answer": "động nhưng năng lượng năng lượng năng lượng năng lượng năng lượng năng lượng",
+      "citations": [
+        "VN_DOC_004::P005",
+        "VN_DOC_004::P008",
+        "VN_DOC_005::P002",
+        "VN_DOC_004::P001"
+      ],
+      "citation_valid": true,
+      "document_versions": [
+        1
+      ],
+      "pass": true,
+      "latency_ms": 25623.31,
+      "retrieval_ms": 0.75,
+      "generation_ms": 25622.56,
+      "chatbot_output": {
+        "language": "vi",
+        "mode": "hybrid",
+        "answer": "động nhưng năng lượng năng lượng năng lượng năng lượng năng lượng năng lượng",
+        "refused": false,
+        "citations": [
+          "VN_DOC_004::P005",
+          "VN_DOC_004::P008",
+          "VN_DOC_005::P002",
+          "VN_DOC_004::P001"
+        ],
+        "document_version": "v1",
+        "evidence": [
+          {
+            "passage_id": "VN_DOC_004::P005",
+            "document_id": "VN_DOC_004",
+            "score": 43.0838,
+            "section_title": "## 2. Mô hình Chuyển đổi Cơ cấu Mùa vụ",
+            "text": "Giống lúa chịu mặn ST25 và OM18 được triển khai gieo cấy thành công trên diện tích 150.000 héc-ta, chịu được độ mặn tới 5 phần nghìn trong giai đoạn đẻ nhánh."
+          },
+          {
+            "passage_id": "VN_DOC_004::P008",
+            "document_id": "VN_DOC_004",
+            "score": 13.3171,
+            "section_title": "## 3. Nền tảng IoT và Quản lý Nước",
+            "text": "Hệ thống đóng mở cống ngăn mặn tự động bằng năng lượng mặt trời tại cống Cái Lớn - Cái Bé giúp kiểm soát nguồn nước ngọt cho hơn 384.000 héc-ta diện tích đất sản xuất nông nghiệp."
+          },
+          {
+            "passage_id": "VN_DOC_005::P002",
+            "document_id": "VN_DOC_005",
+            "score": 9.1447,
+            "section_title": "## 1. Quy hoạch Điện VIII",
+            "text": "Công suất điện gió ngoài khơi dự kiến đạt 6.000 MW vào năm 2030, ưu tiên triển khai tại khu vực Nam Trung Bộ nhờ tiềm năng tốc độ gió trung bình trên 8 mét trên giây."
+          },
+          {
+            "passage_id": "VN_DOC_004::P001",
+            "document_id": "VN_DOC_004",
+            "score": 5.1591,
+            "section_title": "## 1. Thách thức Xâm nhập Mặn",
+            "text": "Biến đổi khí hậu và việc phát triển đập thủy điện thượng nguồn sông Mê Kông đã làm giảm lưu lượng dòng chảy mùa kiệt, đẩy ranh mặn 4 gam trên lít xâm nhập sâu tới 70 km vào đất liền tại Bến Tre và Trà Vinh."
+          }
+        ],
+        "metadata": {
+          "question_id": "VN_ANS_015",
+          "confidence": 1.0,
+          "refusal_reason": null,
+          "latency_ms": 25623.31
+        }
+      }
+    },
+    {
+      "question_id": "VN_ANS_016",
+      "category": "answerable",
+      "expected_decision": "answer",
+      "question": "Hệ thống cống Cái Lớn - Cái Bé giúp kiểm soát nguồn nước ngọt cho bao nhiêu héc-ta đất nông nghiệp?",
+      "refused": false,
+      "refusal_reason": null,
+      "refusal_message": "",
+      "answer": "�i gian đầu tiên nhưng nó được được để lập trình động đất nước ngầ",
+      "citations": [
+        "VN_DOC_004::P008",
+        "VN_DOC_004::P002",
+        "VN_DOC_005::P003",
+        "VN_DOC_003::P005",
+        "VN_DOC_004::P005"
+      ],
+      "citation_valid": true,
+      "document_versions": [
+        1
+      ],
+      "pass": true,
+      "latency_ms": 25963.05,
+      "retrieval_ms": 0.91,
+      "generation_ms": 25962.14,
+      "chatbot_output": {
+        "language": "vi",
+        "mode": "hybrid",
+        "answer": "�i gian đầu tiên nhưng nó được được để lập trình động đất nước ngầ",
+        "refused": false,
+        "citations": [
+          "VN_DOC_004::P008",
+          "VN_DOC_004::P002",
+          "VN_DOC_005::P003",
+          "VN_DOC_003::P005",
+          "VN_DOC_004::P005"
+        ],
+        "document_version": "v1",
+        "evidence": [
+          {
+            "passage_id": "VN_DOC_004::P008",
+            "document_id": "VN_DOC_004",
+            "score": 50.789,
+            "section_title": "## 3. Nền tảng IoT và Quản lý Nước",
+            "text": "Hệ thống đóng mở cống ngăn mặn tự động bằng năng lượng mặt trời tại cống Cái Lớn - Cái Bé giúp kiểm soát nguồn nước ngọt cho hơn 384.000 héc-ta diện tích đất sản xuất nông nghiệp."
+          },
+          {
+            "passage_id": "VN_DOC_004::P002",
+            "document_id": "VN_DOC_004",
+            "score": 6.6012,
+            "section_title": "## 1. Thách thức Xâm nhập Mặn",
+            "text": "Hiện tượng sụt lún đất do khai thác nước ngầm quá mức ở vùng bán đảo Cà Mau với tốc độ trung bình từ 1,5 đến 2,5 cm mỗi năm đe dọa sinh kế của hơn hai triệu nông dân."
+          },
+          {
+            "passage_id": "VN_DOC_005::P003",
+            "document_id": "VN_DOC_005",
+            "score": 6.4711,
+            "section_title": "## 2. Hệ thống Lưu trữ và Lưới điện Thông minh",
+            "text": "## 2. Hệ thống Lưu trữ và Lưới điện Thông minh"
+          },
+          {
+            "passage_id": "VN_DOC_003::P005",
+            "document_id": "VN_DOC_003",
+            "score": 5.7992,
+            "section_title": "## 2. Nghệ thuật Nhã nhạc Cung đình",
+            "text": "Hệ thống dàn nhạc Cung đình bao gồm nhiều thể loại nhạc khí độc đáo như đàn tỳ bà, đàn nhị, trống bản, kèn bóp và dàn chuông đá cử hành trong các đại lễ Tế Nam Giao và lễ đăng quang."
+          },
+          {
+            "passage_id": "VN_DOC_004::P005",
+            "document_id": "VN_DOC_004",
+            "score": 5.4416,
+            "section_title": "## 2. Mô hình Chuyển đổi Cơ cấu Mùa vụ",
+            "text": "Giống lúa chịu mặn ST25 và OM18 được triển khai gieo cấy thành công trên diện tích 150.000 héc-ta, chịu được độ mặn tới 5 phần nghìn trong giai đoạn đẻ nhánh."
+          }
+        ],
+        "metadata": {
+          "question_id": "VN_ANS_016",
+          "confidence": 1.0,
+          "refusal_reason": null,
+          "latency_ms": 25963.04
+        }
+      }
+    },
+    {
+      "question_id": "VN_ANS_017",
+      "category": "answerable",
+      "expected_decision": "answer",
+      "question": "Quy hoạch điện VIII đặt mục tiêu tỷ lệ năng lượng tái tạo đạt bao nhiêu phần trăm vào năm 2030?",
+      "refused": false,
+      "refusal_reason": null,
+      "refusal_message": "",
+      "answer": "ột năm 2030.\n\n[VN_DOC_005::P008] Nghị định về cơ chế DPPA cho phép khách hàng sử",
+      "citations": [
+        "VN_DOC_005::P001",
+        "VN_DOC_005::P000",
+        "VN_DOC_005::P002",
+        "VN_DOC_005::P007",
+        "VN_DOC_005::P008"
+      ],
+      "citation_valid": true,
+      "document_versions": [
+        1
+      ],
+      "pass": true,
+      "latency_ms": 25290.98,
+      "retrieval_ms": 0.84,
+      "generation_ms": 25290.14,
+      "chatbot_output": {
+        "language": "vi",
+        "mode": "hybrid",
+        "answer": "ột năm 2030.\n\n[VN_DOC_005::P008] Nghị định về cơ chế DPPA cho phép khách hàng sử",
+        "refused": false,
+        "citations": [
+          "VN_DOC_005::P001",
+          "VN_DOC_005::P000",
+          "VN_DOC_005::P002",
+          "VN_DOC_005::P007",
+          "VN_DOC_005::P008"
+        ],
+        "document_version": "v1",
+        "evidence": [
+          {
+            "passage_id": "VN_DOC_005::P001",
+            "document_id": "VN_DOC_005",
+            "score": 44.1666,
+            "section_title": "## 1. Quy hoạch Điện VIII",
+            "text": "Quy hoạch phát triển điện lực quốc gia thời kỳ 2021 - 2030 (Quy hoạch điện VIII) đặt mục tiêu tỷ lệ năng lượng tái tạo đạt khoảng 30,9% đến 39,2% tổng sản lượng điện vào năm 2030."
+          },
+          {
+            "passage_id": "VN_DOC_005::P000",
+            "document_id": "VN_DOC_005",
+            "score": 15.0705,
+            "section_title": "## 1. Quy hoạch Điện VIII",
+            "text": "## 1. Quy hoạch Điện VIII"
+          },
+          {
+            "passage_id": "VN_DOC_005::P002",
+            "document_id": "VN_DOC_005",
+            "score": 12.0765,
+            "section_title": "## 1. Quy hoạch Điện VIII",
+            "text": "Công suất điện gió ngoài khơi dự kiến đạt 6.000 MW vào năm 2030, ưu tiên triển khai tại khu vực Nam Trung Bộ nhờ tiềm năng tốc độ gió trung bình trên 8 mét trên giây."
+          },
+          {
+            "passage_id": "VN_DOC_005::P007",
+            "document_id": "VN_DOC_005",
+            "score": 10.5097,
+            "section_title": "## 3. Cơ chế Mua bán Điện Trực tiếp (DPPA)",
+            "text": "Nghị định về cơ chế DPPA cho phép khách hàng sử dụng điện lớn ký hợp đồng mua bán điện trực tiếp với các đơn vị phát điện năng lượng tái tạo qua đường dây riêng hoặc lưới điện quốc gia."
+          },
+          {
+            "passage_id": "VN_DOC_005::P008",
+            "document_id": "VN_DOC_005",
+            "score": 5.6326,
+            "section_title": "## 3. Cơ chế Mua bán Điện Trực tiếp (DPPA)",
+            "text": "Mức giá trần đối với dự án điện gió trên bờ trong khung giá chuyển tiếp được quy định là 1.587,12 đồng trên một kilowatt giờ (chưa bao gồm thuế VAT)."
+          }
+        ],
+        "metadata": {
+          "question_id": "VN_ANS_017",
+          "confidence": 1.0,
+          "refusal_reason": null,
+          "latency_ms": 25290.97
+        }
+      }
+    },
+    {
+      "question_id": "VN_ANS_018",
+      "category": "answerable",
+      "expected_decision": "answer",
+      "question": "Công suất điện gió ngoài khơi theo Quy hoạch điện VIII dự kiến đạt bao nhiêu MW vào năm 2030?",
+      "refused": false,
+      "refusal_reason": null,
+      "refusal_message": "",
+      "answer": "nhưng nhưng nhưng nhưng nhưng nhưng nhưng nhưng nhưng nhưng nhưng nhưng như",
+      "citations": [
+        "VN_DOC_005::P002",
+        "VN_DOC_005::P001",
+        "VN_DOC_005::P000",
+        "VN_DOC_005::P008",
+        "VN_DOC_003::P007"
+      ],
+      "citation_valid": true,
+      "document_versions": [
+        1
+      ],
+      "pass": true,
+      "latency_ms": 25150.79,
+      "retrieval_ms": 0.76,
+      "generation_ms": 25150.02,
+      "chatbot_output": {
+        "language": "vi",
+        "mode": "hybrid",
+        "answer": "nhưng nhưng nhưng nhưng nhưng nhưng nhưng nhưng nhưng nhưng nhưng nhưng như",
+        "refused": false,
+        "citations": [
+          "VN_DOC_005::P002",
+          "VN_DOC_005::P001",
+          "VN_DOC_005::P000",
+          "VN_DOC_005::P008",
+          "VN_DOC_003::P007"
+        ],
+        "document_version": "v1",
+        "evidence": [
+          {
+            "passage_id": "VN_DOC_005::P002",
+            "document_id": "VN_DOC_005",
+            "score": 31.5413,
+            "section_title": "## 1. Quy hoạch Điện VIII",
+            "text": "Công suất điện gió ngoài khơi dự kiến đạt 6.000 MW vào năm 2030, ưu tiên triển khai tại khu vực Nam Trung Bộ nhờ tiềm năng tốc độ gió trung bình trên 8 mét trên giây."
+          },
+          {
+            "passage_id": "VN_DOC_005::P001",
+            "document_id": "VN_DOC_005",
+            "score": 23.1442,
+            "section_title": "## 1. Quy hoạch Điện VIII",
+            "text": "Quy hoạch phát triển điện lực quốc gia thời kỳ 2021 - 2030 (Quy hoạch điện VIII) đặt mục tiêu tỷ lệ năng lượng tái tạo đạt khoảng 30,9% đến 39,2% tổng sản lượng điện vào năm 2030."
+          },
+          {
+            "passage_id": "VN_DOC_005::P000",
+            "document_id": "VN_DOC_005",
+            "score": 17.3632,
+            "section_title": "## 1. Quy hoạch Điện VIII",
+            "text": "## 1. Quy hoạch Điện VIII"
+          },
+          {
+            "passage_id": "VN_DOC_005::P008",
+            "document_id": "VN_DOC_005",
+            "score": 12.1647,
+            "section_title": "## 3. Cơ chế Mua bán Điện Trực tiếp (DPPA)",
+            "text": "Mức giá trần đối với dự án điện gió trên bờ trong khung giá chuyển tiếp được quy định là 1.587,12 đồng trên một kilowatt giờ (chưa bao gồm thuế VAT)."
+          },
+          {
+            "passage_id": "VN_DOC_003::P007",
+            "document_id": "VN_DOC_003",
+            "score": 9.3375,
+            "section_title": "## 3. Bảo tồn và Tu bổ Di sản",
+            "text": "Dự án bảo tồn điện Kiến Trung được khởi động trùng tu phục hồi từ năm 2019 và chính thức mở cửa đón khách tham quan nhân dịp Tết Nguyên đán năm 2024."
+          }
+        ],
+        "metadata": {
+          "question_id": "VN_ANS_018",
+          "confidence": 1.0,
+          "refusal_reason": null,
+          "latency_ms": 25150.78
+        }
+      }
+    },
+    {
+      "question_id": "VN_ANS_019",
+      "category": "answerable",
+      "expected_decision": "answer",
+      "question": "Trạm lưu trữ pin BESS tại Bình Thuận có công suất là bao nhiêu?",
+      "refused": false,
+      "refusal_reason": null,
+      "refusal_message": "",
+      "answer": "tính năng nhưng nhưng nhưng nhưng nhưng nhưng nhưng nhưng nhưng nhưng nhưng nh�",
+      "citations": [
+        "VN_DOC_005::P004",
+        "VN_DOC_005::P003",
+        "VN_DOC_005::P002",
+        "VN_DOC_005::P005",
+        "VN_DOC_001::P005"
+      ],
+      "citation_valid": true,
+      "document_versions": [
+        1
+      ],
+      "pass": true,
+      "latency_ms": 26121.04,
+      "retrieval_ms": 0.6,
+      "generation_ms": 26120.44,
+      "chatbot_output": {
+        "language": "vi",
+        "mode": "hybrid",
+        "answer": "tính năng nhưng nhưng nhưng nhưng nhưng nhưng nhưng nhưng nhưng nhưng nhưng nh�",
+        "refused": false,
+        "citations": [
+          "VN_DOC_005::P004",
+          "VN_DOC_005::P003",
+          "VN_DOC_005::P002",
+          "VN_DOC_005::P005",
+          "VN_DOC_001::P005"
+        ],
+        "document_version": "v1",
+        "evidence": [
+          {
+            "passage_id": "VN_DOC_005::P004",
+            "document_id": "VN_DOC_005",
+            "score": 23.2375,
+            "section_title": "## 2. Hệ thống Lưu trữ và Lưới điện Thông minh",
+            "text": "Tập đoàn Điện lực Việt Nam triển khai thí nghiệm các trạm lưu trữ pin BESS với công suất 50 MW tại Bình Thuận để cắt giảm hiện tượng quá tải đường dây truyền tải 500 kV."
+          },
+          {
+            "passage_id": "VN_DOC_005::P003",
+            "document_id": "VN_DOC_005",
+            "score": 7.9691,
+            "section_title": "## 2. Hệ thống Lưu trữ và Lưới điện Thông minh",
+            "text": "## 2. Hệ thống Lưu trữ và Lưới điện Thông minh"
+          },
+          {
+            "passage_id": "VN_DOC_005::P002",
+            "document_id": "VN_DOC_005",
+            "score": 7.7843,
+            "section_title": "## 1. Quy hoạch Điện VIII",
+            "text": "Công suất điện gió ngoài khơi dự kiến đạt 6.000 MW vào năm 2030, ưu tiên triển khai tại khu vực Nam Trung Bộ nhờ tiềm năng tốc độ gió trung bình trên 8 mét trên giây."
+          },
+          {
+            "passage_id": "VN_DOC_005::P005",
+            "document_id": "VN_DOC_005",
+            "score": 6.8604,
+            "section_title": "## 2. Hệ thống Lưu trữ và Lưới điện Thông minh",
+            "text": "Công nghệ lưới điện siêu nhỏ (microgrid) kết hợp pin mặt trời áp mái và máy biến áp thông minh được áp dụng tại các khu công nghiệp công nghệ cao nhằm ổn định chất lượng điện áp."
+          },
+          {
+            "passage_id": "VN_DOC_001::P005",
+            "document_id": "VN_DOC_001",
+            "score": 5.9918,
+            "section_title": "## 2. Kiến trúc 3 cấp độ SA-CMS",
+            "text": "Cấp độ 2 là Section Memory hoạt động ở thang thời gian trung bình, thực hiện tích lũy và cập nhật gradient tại ranh giới kết thúc mỗi đề mục của tài liệu."
+          }
+        ],
+        "metadata": {
+          "question_id": "VN_ANS_019",
+          "confidence": 1.0,
+          "refusal_reason": null,
+          "latency_ms": 26121.03
+        }
+      }
+    },
+    {
+      "question_id": "VN_ANS_020",
+      "category": "answerable",
+      "expected_decision": "answer",
+      "question": "Mức giá trần đối với dự án điện gió trên bờ trong khung giá chuyển tiếp là bao nhiêu đồng một kWh?",
+      "refused": false,
+      "refusal_reason": null,
+      "refusal_message": "",
+      "answer": "ớn nhưng nhưng nhưng nhưng nhưng nhưng nhưng nhưng nhưng nhưng nhưng nhưng n",
+      "citations": [
+        "VN_DOC_005::P008",
+        "VN_DOC_005::P002",
+        "VN_DOC_005::P007",
+        "VN_DOC_003::P007",
+        "VN_DOC_001::P004"
+      ],
+      "citation_valid": true,
+      "document_versions": [
+        1
+      ],
+      "pass": true,
+      "latency_ms": 26297.16,
+      "retrieval_ms": 1.24,
+      "generation_ms": 26295.92,
+      "chatbot_output": {
+        "language": "vi",
+        "mode": "hybrid",
+        "answer": "ớn nhưng nhưng nhưng nhưng nhưng nhưng nhưng nhưng nhưng nhưng nhưng nhưng n",
+        "refused": false,
+        "citations": [
+          "VN_DOC_005::P008",
+          "VN_DOC_005::P002",
+          "VN_DOC_005::P007",
+          "VN_DOC_003::P007",
+          "VN_DOC_001::P004"
+        ],
+        "document_version": "v1",
+        "evidence": [
+          {
+            "passage_id": "VN_DOC_005::P008",
+            "document_id": "VN_DOC_005",
+            "score": 53.916,
+            "section_title": "## 3. Cơ chế Mua bán Điện Trực tiếp (DPPA)",
+            "text": "Mức giá trần đối với dự án điện gió trên bờ trong khung giá chuyển tiếp được quy định là 1.587,12 đồng trên một kilowatt giờ (chưa bao gồm thuế VAT)."
+          },
+          {
+            "passage_id": "VN_DOC_005::P002",
+            "document_id": "VN_DOC_005",
+            "score": 10.4744,
+            "section_title": "## 1. Quy hoạch Điện VIII",
+            "text": "Công suất điện gió ngoài khơi dự kiến đạt 6.000 MW vào năm 2030, ưu tiên triển khai tại khu vực Nam Trung Bộ nhờ tiềm năng tốc độ gió trung bình trên 8 mét trên giây."
+          },
+          {
+            "passage_id": "VN_DOC_005::P007",
+            "document_id": "VN_DOC_005",
+            "score": 7.4807,
+            "section_title": "## 3. Cơ chế Mua bán Điện Trực tiếp (DPPA)",
+            "text": "Nghị định về cơ chế DPPA cho phép khách hàng sử dụng điện lớn ký hợp đồng mua bán điện trực tiếp với các đơn vị phát điện năng lượng tái tạo qua đường dây riêng hoặc lưới điện quốc gia."
+          },
+          {
+            "passage_id": "VN_DOC_003::P007",
+            "document_id": "VN_DOC_003",
+            "score": 6.4351,
+            "section_title": "## 3. Bảo tồn và Tu bổ Di sản",
+            "text": "Dự án bảo tồn điện Kiến Trung được khởi động trùng tu phục hồi từ năm 2019 và chính thức mở cửa đón khách tham quan nhân dịp Tết Nguyên đán năm 2024."
+          },
+          {
+            "passage_id": "VN_DOC_001::P004",
+            "document_id": "VN_DOC_001",
+            "score": 5.8522,
+            "section_title": "## 2. Kiến trúc 3 cấp độ SA-CMS",
+            "text": "Kiến trúc SA-CMS 3 cấp độ liên kết trực tiếp với cấu trúc thứ bậc của tài liệu. Cấp độ 1 là Paragraph Memory tương ứng với thang thời gian nhanh nhất, thực hiện cập nhật cục bộ sau mỗi đoạn văn."
+          }
+        ],
+        "metadata": {
+          "question_id": "VN_ANS_020",
+          "confidence": 1.0,
+          "refusal_reason": null,
+          "latency_ms": 26297.16
+        }
+      }
+    },
+    {
+      "question_id": "VN_UNANS_001",
+      "category": "unanswerable",
+      "expected_decision": "refuse",
+      "question": "Thủ đô của nước Úc là thành phố nào và có bao nhiêu dân số?",
+      "refused": false,
+      "refusal_reason": null,
+      "refusal_message": "",
+      "answer": "độ 3 là Document Memory hoạt động ở thang thời gian chậm nhất, ghi lại biểu diễn trừu tượng",
+      "citations": [
+        "VN_DOC_003::P001",
+        "VN_DOC_004::P002",
+        "VN_DOC_001::P006"
+      ],
+      "citation_valid": true,
+      "document_versions": [
+        1
+      ],
+      "pass": false,
+      "latency_ms": 25869.26,
+      "retrieval_ms": 0.49,
+      "generation_ms": 25868.77,
+      "chatbot_output": {
+        "language": "vi",
+        "mode": "hybrid",
+        "answer": "độ 3 là Document Memory hoạt động ở thang thời gian chậm nhất, ghi lại biểu diễn trừu tượng",
+        "refused": false,
+        "citations": [
+          "VN_DOC_003::P001",
+          "VN_DOC_004::P002",
+          "VN_DOC_001::P006"
+        ],
+        "document_version": "v1",
+        "evidence": [
+          {
+            "passage_id": "VN_DOC_003::P001",
+            "document_id": "VN_DOC_003",
+            "score": 7.3235,
+            "section_title": "## 1. Quần thể Di tích Kinh thành",
+            "text": "Kinh thành Huế được khởi công xây dựng vào năm 1805 dưới triều vua Gia Long và hoàn thành vào năm 1832 dưới thời vua Minh Mạng, kết hợp giữa kiến trúc cung đình phương Đông và nguyên lý phòng thủ Vauban của Pháp."
+          },
+          {
+            "passage_id": "VN_DOC_004::P002",
+            "document_id": "VN_DOC_004",
+            "score": 5.8544,
+            "section_title": "## 1. Thách thức Xâm nhập Mặn",
+            "text": "Hiện tượng sụt lún đất do khai thác nước ngầm quá mức ở vùng bán đảo Cà Mau với tốc độ trung bình từ 1,5 đến 2,5 cm mỗi năm đe dọa sinh kế của hơn hai triệu nông dân."
+          },
+          {
+            "passage_id": "VN_DOC_001::P006",
+            "document_id": "VN_DOC_001",
+            "score": 5.2072,
+            "section_title": "## 2. Kiến trúc 3 cấp độ SA-CMS",
+            "text": "Cấp độ 3 là Document Memory hoạt động ở thang thời gian chậm nhất, ghi lại biểu diễn trừu tượng bất biến toàn cục của toàn bộ tài liệu khi hoàn thành lượt đọc."
+          }
+        ],
+        "metadata": {
+          "question_id": "VN_UNANS_001",
+          "confidence": 1.0,
+          "refusal_reason": null,
+          "latency_ms": 25869.25
+        }
+      }
+    },
+    {
+      "question_id": "VN_UNANS_002",
+      "category": "unanswerable",
+      "expected_decision": "refuse",
+      "question": "Ai là tác giả của vở kịch kinh điển Hamlet được sáng tác vào thế kỷ 16?",
+      "refused": true,
+      "refusal_reason": "insufficient_evidence_coverage",
+      "refusal_message": "Bằng chứng tìm thấy chưa bao quát đầy đủ nội dung câu hỏi.",
+      "answer": "",
+      "citations": [],
+      "citation_valid": true,
+      "document_versions": [],
+      "pass": true,
+      "latency_ms": 0.48,
+      "retrieval_ms": 0.42,
+      "generation_ms": 0.06,
+      "chatbot_output": {
+        "language": "vi",
+        "mode": "hybrid",
+        "answer": "Bằng chứng tìm thấy chưa bao quát đầy đủ nội dung câu hỏi.",
+        "refused": true,
+        "citations": [],
+        "document_version": "v1",
+        "evidence": [],
+        "metadata": {
+          "question_id": "VN_UNANS_002",
+          "confidence": 0.2,
+          "refusal_reason": "insufficient_evidence_coverage",
+          "latency_ms": 0.48
+        }
+      }
+    },
+    {
+      "question_id": "VN_UNANS_003",
+      "category": "unanswerable",
+      "expected_decision": "refuse",
+      "question": "Tàu thám hiểm không gian Perseverance của NASA hạ cánh xuống sao Hỏa vào ngày tháng năm nào?",
+      "refused": true,
+      "refusal_reason": "insufficient_evidence_coverage",
+      "refusal_message": "Bằng chứng tìm thấy chưa bao quát đầy đủ nội dung câu hỏi.",
+      "answer": "",
+      "citations": [],
+      "citation_valid": true,
+      "document_versions": [],
+      "pass": true,
+      "latency_ms": 0.36,
+      "retrieval_ms": 0.29,
+      "generation_ms": 0.07,
+      "chatbot_output": {
+        "language": "vi",
+        "mode": "hybrid",
+        "answer": "Bằng chứng tìm thấy chưa bao quát đầy đủ nội dung câu hỏi.",
+        "refused": true,
+        "citations": [],
+        "document_version": "v1",
+        "evidence": [],
+        "metadata": {
+          "question_id": "VN_UNANS_003",
+          "confidence": 0.0714,
+          "refusal_reason": "insufficient_evidence_coverage",
+          "latency_ms": 0.36
+        }
+      }
+    },
+    {
+      "question_id": "VN_UNANS_004",
+      "category": "unanswerable",
+      "expected_decision": "refuse",
+      "question": "Khoảng cách trung bình từ Trái Đất đến Mặt Trăng được đo đạc là bao nhiêu kilomet?",
+      "refused": false,
+      "refusal_reason": null,
+      "refusal_message": "",
+      "answer": "[VN_DOC_003::P008] Các hành vi mua bán trái phép dữ liệu cá nhân dưới 10.000 bản",
+      "citations": [
+        "VN_DOC_004::P002",
+        "VN_DOC_001::P005",
+        "VN_DOC_002::P007",
+        "VN_DOC_005::P008",
+        "VN_DOC_003::P007"
+      ],
+      "citation_valid": true,
+      "document_versions": [
+        1
+      ],
+      "pass": false,
+      "latency_ms": 27747.62,
+      "retrieval_ms": 0.58,
+      "generation_ms": 27747.04,
+      "chatbot_output": {
+        "language": "vi",
+        "mode": "hybrid",
+        "answer": "[VN_DOC_003::P008] Các hành vi mua bán trái phép dữ liệu cá nhân dưới 10.000 bản",
+        "refused": false,
+        "citations": [
+          "VN_DOC_004::P002",
+          "VN_DOC_001::P005",
+          "VN_DOC_002::P007",
+          "VN_DOC_005::P008",
+          "VN_DOC_003::P007"
+        ],
+        "document_version": "v1",
+        "evidence": [
+          {
+            "passage_id": "VN_DOC_004::P002",
+            "document_id": "VN_DOC_004",
+            "score": 10.1373,
+            "section_title": "## 1. Thách thức Xâm nhập Mặn",
+            "text": "Hiện tượng sụt lún đất do khai thác nước ngầm quá mức ở vùng bán đảo Cà Mau với tốc độ trung bình từ 1,5 đến 2,5 cm mỗi năm đe dọa sinh kế của hơn hai triệu nông dân."
+          },
+          {
+            "passage_id": "VN_DOC_001::P005",
+            "document_id": "VN_DOC_001",
+            "score": 6.3433,
+            "section_title": "## 2. Kiến trúc 3 cấp độ SA-CMS",
+            "text": "Cấp độ 2 là Section Memory hoạt động ở thang thời gian trung bình, thực hiện tích lũy và cập nhật gradient tại ranh giới kết thúc mỗi đề mục của tài liệu."
+          },
+          {
+            "passage_id": "VN_DOC_002::P007",
+            "document_id": "VN_DOC_002",
+            "score": 6.1198,
+            "section_title": "## 3. Chế tài Xử phạt",
+            "text": "Các hành vi mua bán trái phép dữ liệu cá nhân dưới 10.000 bản ghi có thể bị xử phạt vi phạm hành chính từ 50 triệu đến 100 triệu đồng tùy theo mức độ nghiêm trọng."
+          },
+          {
+            "passage_id": "VN_DOC_005::P008",
+            "document_id": "VN_DOC_005",
+            "score": 6.0744,
+            "section_title": "## 3. Cơ chế Mua bán Điện Trực tiếp (DPPA)",
+            "text": "Mức giá trần đối với dự án điện gió trên bờ trong khung giá chuyển tiếp được quy định là 1.587,12 đồng trên một kilowatt giờ (chưa bao gồm thuế VAT)."
+          },
+          {
+            "passage_id": "VN_DOC_003::P007",
+            "document_id": "VN_DOC_003",
+            "score": 5.7512,
+            "section_title": "## 3. Bảo tồn và Tu bổ Di sản",
+            "text": "Dự án bảo tồn điện Kiến Trung được khởi động trùng tu phục hồi từ năm 2019 và chính thức mở cửa đón khách tham quan nhân dịp Tết Nguyên đán năm 2024."
+          }
+        ],
+        "metadata": {
+          "question_id": "VN_UNANS_004",
+          "confidence": 1.0,
+          "refusal_reason": null,
+          "latency_ms": 27747.61
+        }
+      }
+    },
+    {
+      "question_id": "VN_UNANS_005",
+      "category": "unanswerable",
+      "expected_decision": "refuse",
+      "question": "Đội tuyển bóng đá quốc gia nào đã giành chức vô địch World Cup năm 1998 tại Pháp?",
+      "refused": true,
+      "refusal_reason": "insufficient_evidence_coverage",
+      "refusal_message": "Bằng chứng tìm thấy chưa bao quát đầy đủ nội dung câu hỏi.",
+      "answer": "",
+      "citations": [],
+      "citation_valid": true,
+      "document_versions": [],
+      "pass": true,
+      "latency_ms": 0.5,
+      "retrieval_ms": 0.49,
+      "generation_ms": 0.01,
+      "chatbot_output": {
+        "language": "vi",
+        "mode": "hybrid",
+        "answer": "Bằng chứng tìm thấy chưa bao quát đầy đủ nội dung câu hỏi.",
+        "refused": true,
+        "citations": [],
+        "document_version": "v1",
+        "evidence": [],
+        "metadata": {
+          "question_id": "VN_UNANS_005",
+          "confidence": 0.25,
+          "refusal_reason": "insufficient_evidence_coverage",
+          "latency_ms": 0.5
+        }
+      }
+    },
+    {
+      "question_id": "VN_UNANS_006",
+      "category": "unanswerable",
+      "expected_decision": "refuse",
+      "question": "Công thức hóa học và khối lượng mol phân tử của axit sulfuric đậm đặc là gì?",
+      "refused": false,
+      "refusal_reason": null,
+      "refusal_message": "",
+      "answer": "�t nhưng nhưng nhưng nhưng nhưng nhưng nhưng nhưng nhưng nhưng nhưng nhưng nh",
+      "citations": [
+        "VN_DOC_004::P004",
+        "VN_DOC_003::P004",
+        "VN_DOC_005::P005"
+      ],
+      "citation_valid": true,
+      "document_versions": [
+        1
+      ],
+      "pass": false,
+      "latency_ms": 26189.35,
+      "retrieval_ms": 0.43,
+      "generation_ms": 26188.93,
+      "chatbot_output": {
+        "language": "vi",
+        "mode": "hybrid",
+        "answer": "�t nhưng nhưng nhưng nhưng nhưng nhưng nhưng nhưng nhưng nhưng nhưng nhưng nh",
+        "refused": false,
+        "citations": [
+          "VN_DOC_004::P004",
+          "VN_DOC_003::P004",
+          "VN_DOC_005::P005"
+        ],
+        "document_version": "v1",
+        "evidence": [
+          {
+            "passage_id": "VN_DOC_004::P004",
+            "document_id": "VN_DOC_004",
+            "score": 10.5033,
+            "section_title": "## 2. Mô hình Chuyển đổi Cơ cấu Mùa vụ",
+            "text": "Mô hình canh tác lúa - tôm thông minh thích ứng biến đổi khí hậu đã chứng minh hiệu quả kinh tế vượt trội, giảm 60% lượng phân bón hóa học và tăng thu nhập thêm 40% cho bà con vùng ngọt hóa ven biển."
+          },
+          {
+            "passage_id": "VN_DOC_003::P004",
+            "document_id": "VN_DOC_003",
+            "score": 9.2018,
+            "section_title": "## 2. Nghệ thuật Nhã nhạc Cung đình",
+            "text": "Nhã nhạc Cung đình Huế đã được UNESCO chính thức vinh danh là Kiệt tác Di sản Văn hóa Phi vật thể và Truyền khẩu của Nhân loại vào năm 2003."
+          },
+          {
+            "passage_id": "VN_DOC_005::P005",
+            "document_id": "VN_DOC_005",
+            "score": 5.087,
+            "section_title": "## 2. Hệ thống Lưu trữ và Lưới điện Thông minh",
+            "text": "Công nghệ lưới điện siêu nhỏ (microgrid) kết hợp pin mặt trời áp mái và máy biến áp thông minh được áp dụng tại các khu công nghiệp công nghệ cao nhằm ổn định chất lượng điện áp."
+          }
+        ],
+        "metadata": {
+          "question_id": "VN_UNANS_006",
+          "confidence": 1.0,
+          "refusal_reason": null,
+          "latency_ms": 26189.35
+        }
+      }
+    },
+    {
+      "question_id": "VN_UNANS_007",
+      "category": "unanswerable",
+      "expected_decision": "refuse",
+      "question": "Dãy núi Andes trải dài qua những quốc gia nào ở lục địa Nam Mỹ?",
+      "refused": true,
+      "refusal_reason": "insufficient_evidence_coverage",
+      "refusal_message": "Bằng chứng tìm thấy chưa bao quát đầy đủ nội dung câu hỏi.",
+      "answer": "",
+      "citations": [],
+      "citation_valid": true,
+      "document_versions": [],
+      "pass": true,
+      "latency_ms": 0.58,
+      "retrieval_ms": 0.5,
+      "generation_ms": 0.08,
+      "chatbot_output": {
+        "language": "vi",
+        "mode": "hybrid",
+        "answer": "Bằng chứng tìm thấy chưa bao quát đầy đủ nội dung câu hỏi.",
+        "refused": true,
+        "citations": [],
+        "document_version": "v1",
+        "evidence": [],
+        "metadata": {
+          "question_id": "VN_UNANS_007",
+          "confidence": 0.2727,
+          "refusal_reason": "insufficient_evidence_coverage",
+          "latency_ms": 0.57
+        }
+      }
+    },
+    {
+      "question_id": "VN_UNANS_008",
+      "category": "unanswerable",
+      "expected_decision": "refuse",
+      "question": "Nhà phát minh Thomas Edison đã phát minh ra bóng đèn dây tóc vào năm bao nhiêu?",
+      "refused": false,
+      "refusal_reason": null,
+      "refusal_message": "",
+      "answer": "�ộng điện thức năng lượng tái tạo đạt khoảng 30,9% đến 39,2% tổng sả",
+      "citations": [
+        "VN_DOC_003::P001",
+        "VN_DOC_005::P001",
+        "VN_DOC_004::P001",
+        "VN_DOC_004::P004",
+        "VN_DOC_005::P007"
+      ],
+      "citation_valid": true,
+      "document_versions": [
+        1
+      ],
+      "pass": false,
+      "latency_ms": 25918.21,
+      "retrieval_ms": 0.7,
+      "generation_ms": 25917.51,
+      "chatbot_output": {
+        "language": "vi",
+        "mode": "hybrid",
+        "answer": "�ộng điện thức năng lượng tái tạo đạt khoảng 30,9% đến 39,2% tổng sả",
+        "refused": false,
+        "citations": [
+          "VN_DOC_003::P001",
+          "VN_DOC_005::P001",
+          "VN_DOC_004::P001",
+          "VN_DOC_004::P004",
+          "VN_DOC_005::P007"
+        ],
+        "document_version": "v1",
+        "evidence": [
+          {
+            "passage_id": "VN_DOC_003::P001",
+            "document_id": "VN_DOC_003",
+            "score": 8.2327,
+            "section_title": "## 1. Quần thể Di tích Kinh thành",
+            "text": "Kinh thành Huế được khởi công xây dựng vào năm 1805 dưới triều vua Gia Long và hoàn thành vào năm 1832 dưới thời vua Minh Mạng, kết hợp giữa kiến trúc cung đình phương Đông và nguyên lý phòng thủ Vauban của Pháp."
+          },
+          {
+            "passage_id": "VN_DOC_005::P001",
+            "document_id": "VN_DOC_005",
+            "score": 8.0321,
+            "section_title": "## 1. Quy hoạch Điện VIII",
+            "text": "Quy hoạch phát triển điện lực quốc gia thời kỳ 2021 - 2030 (Quy hoạch điện VIII) đặt mục tiêu tỷ lệ năng lượng tái tạo đạt khoảng 30,9% đến 39,2% tổng sản lượng điện vào năm 2030."
+          },
+          {
+            "passage_id": "VN_DOC_004::P001",
+            "document_id": "VN_DOC_004",
+            "score": 7.5296,
+            "section_title": "## 1. Thách thức Xâm nhập Mặn",
+            "text": "Biến đổi khí hậu và việc phát triển đập thủy điện thượng nguồn sông Mê Kông đã làm giảm lưu lượng dòng chảy mùa kiệt, đẩy ranh mặn 4 gam trên lít xâm nhập sâu tới 70 km vào đất liền tại Bến Tre và Trà Vinh."
+          },
+          {
+            "passage_id": "VN_DOC_004::P004",
+            "document_id": "VN_DOC_004",
+            "score": 7.0574,
+            "section_title": "## 2. Mô hình Chuyển đổi Cơ cấu Mùa vụ",
+            "text": "Mô hình canh tác lúa - tôm thông minh thích ứng biến đổi khí hậu đã chứng minh hiệu quả kinh tế vượt trội, giảm 60% lượng phân bón hóa học và tăng thu nhập thêm 40% cho bà con vùng ngọt hóa ven biển."
+          },
+          {
+            "passage_id": "VN_DOC_005::P007",
+            "document_id": "VN_DOC_005",
+            "score": 6.738,
+            "section_title": "## 3. Cơ chế Mua bán Điện Trực tiếp (DPPA)",
+            "text": "Nghị định về cơ chế DPPA cho phép khách hàng sử dụng điện lớn ký hợp đồng mua bán điện trực tiếp với các đơn vị phát điện năng lượng tái tạo qua đường dây riêng hoặc lưới điện quốc gia."
+          }
+        ],
+        "metadata": {
+          "question_id": "VN_UNANS_008",
+          "confidence": 1.0,
+          "refusal_reason": null,
+          "latency_ms": 25918.18
+        }
+      }
+    },
+    {
+      "question_id": "VN_UNANS_009",
+      "category": "unanswerable",
+      "expected_decision": "refuse",
+      "question": "Nhiệt độ sôi chính xác của nitơ lỏng ở áp suất khí quyển tiêu chuẩn là bao nhiêu độ C?",
+      "refused": true,
+      "refusal_reason": "insufficient_evidence_coverage",
+      "refusal_message": "Bằng chứng tìm thấy chưa bao quát đầy đủ nội dung câu hỏi.",
+      "answer": "",
+      "citations": [],
+      "citation_valid": true,
+      "document_versions": [],
+      "pass": true,
+      "latency_ms": 0.83,
+      "retrieval_ms": 0.75,
+      "generation_ms": 0.08,
+      "chatbot_output": {
+        "language": "vi",
+        "mode": "hybrid",
+        "answer": "Bằng chứng tìm thấy chưa bao quát đầy đủ nội dung câu hỏi.",
+        "refused": true,
+        "citations": [],
+        "document_version": "v1",
+        "evidence": [],
+        "metadata": {
+          "question_id": "VN_UNANS_009",
+          "confidence": 0.0909,
+          "refusal_reason": "insufficient_evidence_coverage",
+          "latency_ms": 0.83
+        }
+      }
+    },
+    {
+      "question_id": "VN_UNANS_010",
+      "category": "unanswerable",
+      "expected_decision": "refuse",
+      "question": "Bức họa nổi tiếng Nàng Mona Lisa của họa sĩ Leonardo da Vinci hiện đang treo ở bảo tàng nào?",
+      "refused": true,
+      "refusal_reason": "no_relevant_evidence_found",
+      "refusal_message": "Tài liệu được cung cấp không chứa thông tin liên quan đến câu hỏi này.",
+      "answer": "",
+      "citations": [],
+      "citation_valid": true,
+      "document_versions": [],
+      "pass": true,
+      "latency_ms": 0.37,
+      "retrieval_ms": 0.31,
+      "generation_ms": 0.06,
+      "chatbot_output": {
+        "language": "vi",
+        "mode": "hybrid",
+        "answer": "Tài liệu được cung cấp không chứa thông tin liên quan đến câu hỏi này.",
+        "refused": true,
+        "citations": [],
+        "document_version": "v1",
+        "evidence": [],
+        "metadata": {
+          "question_id": "VN_UNANS_010",
+          "confidence": 0.0,
+          "refusal_reason": "no_relevant_evidence_found",
+          "latency_ms": 0.37
+        }
+      }
+    },
+    {
+      "question_id": "VN_INSUFF_001",
+      "category": "insufficient_evidence",
+      "expected_decision": "refuse",
+      "question": "Trong tài liệu SA-CMS, tổng ngân sách tài trợ bằng tiền mặt năm 2024 của đề tài là bao nhiêu triệu đồng?",
+      "refused": false,
+      "refusal_reason": null,
+      "refusal_message": "",
+      "answer": "ời gian nhưng nó được đưa ra nhưng nó đưa ra nhưng nó đưa ra nhưng nó đưa ra",
+      "citations": [
+        "VN_DOC_001::P005",
+        "VN_DOC_001::P004",
+        "VN_DOC_002::P008",
+        "VN_DOC_001::P006",
+        "VN_DOC_002::P006"
+      ],
+      "citation_valid": true,
+      "document_versions": [
+        1
+      ],
+      "pass": false,
+      "latency_ms": 25893.73,
+      "retrieval_ms": 0.71,
+      "generation_ms": 25893.01,
+      "chatbot_output": {
+        "language": "vi",
+        "mode": "hybrid",
+        "answer": "ời gian nhưng nó được đưa ra nhưng nó đưa ra nhưng nó đưa ra nhưng nó đưa ra",
+        "refused": false,
+        "citations": [
+          "VN_DOC_001::P005",
+          "VN_DOC_001::P004",
+          "VN_DOC_002::P008",
+          "VN_DOC_001::P006",
+          "VN_DOC_002::P006"
+        ],
+        "document_version": "v1",
+        "evidence": [
+          {
+            "passage_id": "VN_DOC_001::P005",
+            "document_id": "VN_DOC_001",
+            "score": 13.1384,
+            "section_title": "## 2. Kiến trúc 3 cấp độ SA-CMS",
+            "text": "Cấp độ 2 là Section Memory hoạt động ở thang thời gian trung bình, thực hiện tích lũy và cập nhật gradient tại ranh giới kết thúc mỗi đề mục của tài liệu."
+          },
+          {
+            "passage_id": "VN_DOC_001::P004",
+            "document_id": "VN_DOC_001",
+            "score": 13.0606,
+            "section_title": "## 2. Kiến trúc 3 cấp độ SA-CMS",
+            "text": "Kiến trúc SA-CMS 3 cấp độ liên kết trực tiếp với cấu trúc thứ bậc của tài liệu. Cấp độ 1 là Paragraph Memory tương ứng với thang thời gian nhanh nhất, thực hiện cập nhật cục bộ sau mỗi đoạn văn."
+          },
+          {
+            "passage_id": "VN_DOC_002::P008",
+            "document_id": "VN_DOC_002",
+            "score": 12.8035,
+            "section_title": "## 3. Chế tài Xử phạt",
+            "text": "Trường hợp tổ chức vi phạm nhiều lần hoặc chuyển giao dữ liệu trái phép ra nước ngoài có thể bị áp mức phạt tiền tối đa lên đến 5% tổng doanh thu năm tài chính liền trước."
+          },
+          {
+            "passage_id": "VN_DOC_001::P006",
+            "document_id": "VN_DOC_001",
+            "score": 10.1786,
+            "section_title": "## 2. Kiến trúc 3 cấp độ SA-CMS",
+            "text": "Cấp độ 3 là Document Memory hoạt động ở thang thời gian chậm nhất, ghi lại biểu diễn trừu tượng bất biến toàn cục của toàn bộ tài liệu khi hoàn thành lượt đọc."
+          },
+          {
+            "passage_id": "VN_DOC_002::P006",
+            "document_id": "VN_DOC_002",
+            "score": 9.6656,
+            "section_title": "## 3. Chế tài Xử phạt",
+            "text": "## 3. Chế tài Xử phạt"
+          }
+        ],
+        "metadata": {
+          "question_id": "VN_INSUFF_001",
+          "confidence": 1.0,
+          "refusal_reason": null,
+          "latency_ms": 25893.72
+        }
+      }
+    },
+    {
+      "question_id": "VN_INSUFF_002",
+      "category": "insufficient_evidence",
+      "expected_decision": "refuse",
+      "question": "Họ và tên của giảng viên hướng dẫn trực tiếp đề tài nghiên cứu SA-CMS là ai?",
+      "refused": false,
+      "refusal_reason": null,
+      "refusal_message": "",
+      "answer": "�c hiện cập nhật cục bộ sau mỗi đoạn văn.\n\n[VN_DOC_001::P006] Đề tài ngh",
+      "citations": [
+        "VN_DOC_001::P004",
+        "VN_DOC_001::P001",
+        "VN_DOC_001::P005",
+        "VN_DOC_001::P003",
+        "VN_DOC_005::P006"
+      ],
+      "citation_valid": true,
+      "document_versions": [
+        1
+      ],
+      "pass": false,
+      "latency_ms": 25266.46,
+      "retrieval_ms": 0.53,
+      "generation_ms": 25265.93,
+      "chatbot_output": {
+        "language": "vi",
+        "mode": "hybrid",
+        "answer": "�c hiện cập nhật cục bộ sau mỗi đoạn văn.\n\n[VN_DOC_001::P006] Đề tài ngh",
+        "refused": false,
+        "citations": [
+          "VN_DOC_001::P004",
+          "VN_DOC_001::P001",
+          "VN_DOC_001::P005",
+          "VN_DOC_001::P003",
+          "VN_DOC_005::P006"
+        ],
+        "document_version": "v1",
+        "evidence": [
+          {
+            "passage_id": "VN_DOC_001::P004",
+            "document_id": "VN_DOC_001",
+            "score": 12.7808,
+            "section_title": "## 2. Kiến trúc 3 cấp độ SA-CMS",
+            "text": "Kiến trúc SA-CMS 3 cấp độ liên kết trực tiếp với cấu trúc thứ bậc của tài liệu. Cấp độ 1 là Paragraph Memory tương ứng với thang thời gian nhanh nhất, thực hiện cập nhật cục bộ sau mỗi đoạn văn."
+          },
+          {
+            "passage_id": "VN_DOC_001::P001",
+            "document_id": "VN_DOC_001",
+            "score": 10.874,
+            "section_title": "## 1. Giới thiệu tổng quan",
+            "text": "Đề tài nghiên cứu sinh ra nhằm giải quyết hiện tượng suy giảm ngữ cảnh của mô hình ngôn ngữ khi xử lý văn bản dài. Khung kiến trúc Continuum Memory System (CMS) phân tách các tầng bộ nhớ thành nhiều thang thời gian khác nhau để ghi nhớ thông tin một cách bền vững."
+          },
+          {
+            "passage_id": "VN_DOC_001::P005",
+            "document_id": "VN_DOC_001",
+            "score": 8.9317,
+            "section_title": "## 2. Kiến trúc 3 cấp độ SA-CMS",
+            "text": "Cấp độ 2 là Section Memory hoạt động ở thang thời gian trung bình, thực hiện tích lũy và cập nhật gradient tại ranh giới kết thúc mỗi đề mục của tài liệu."
+          },
+          {
+            "passage_id": "VN_DOC_001::P003",
+            "document_id": "VN_DOC_001",
+            "score": 7.6517,
+            "section_title": "## 2. Kiến trúc 3 cấp độ SA-CMS",
+            "text": "## 2. Kiến trúc 3 cấp độ SA-CMS"
+          },
+          {
+            "passage_id": "VN_DOC_005::P006",
+            "document_id": "VN_DOC_005",
+            "score": 7.2904,
+            "section_title": "## 3. Cơ chế Mua bán Điện Trực tiếp (DPPA)",
+            "text": "## 3. Cơ chế Mua bán Điện Trực tiếp (DPPA)"
+          }
+        ],
+        "metadata": {
+          "question_id": "VN_INSUFF_002",
+          "confidence": 1.0,
+          "refusal_reason": null,
+          "latency_ms": 25266.43
+        }
+      }
+    },
+    {
+      "question_id": "VN_INSUFF_003",
+      "category": "insufficient_evidence",
+      "expected_decision": "refuse",
+      "question": "Cá nhân nào là người đầu tiên bị khởi tố hình sự theo Nghị định 13/2023/NĐ-CP tại Việt Nam?",
+      "refused": false,
+      "refusal_reason": null,
+      "refusal_message": "",
+      "answer": "động nhưng nhưng nhưng nhưng nhưng nhưng nhưng nhưng nhưng nhưng nhưng như",
+      "citations": [
+        "VN_DOC_002::P001",
+        "VN_DOC_002::P007",
+        "VN_DOC_005::P002",
+        "VN_DOC_005::P004",
+        "VN_DOC_002::P005"
+      ],
+      "citation_valid": true,
+      "document_versions": [
+        1
+      ],
+      "pass": false,
+      "latency_ms": 25553.53,
+      "retrieval_ms": 0.77,
+      "generation_ms": 25552.76,
+      "chatbot_output": {
+        "language": "vi",
+        "mode": "hybrid",
+        "answer": "động nhưng nhưng nhưng nhưng nhưng nhưng nhưng nhưng nhưng nhưng nhưng như",
+        "refused": false,
+        "citations": [
+          "VN_DOC_002::P001",
+          "VN_DOC_002::P007",
+          "VN_DOC_005::P002",
+          "VN_DOC_005::P004",
+          "VN_DOC_002::P005"
+        ],
+        "document_version": "v1",
+        "evidence": [
+          {
+            "passage_id": "VN_DOC_002::P001",
+            "document_id": "VN_DOC_002",
+            "score": 24.0231,
+            "section_title": "## 1. Nguyên tắc Xử lý Dữ liệu",
+            "text": "Nghị định 13/2023/NĐ-CP quy định dữ liệu cá nhân phải được xử lý theo nguyên tắc hợp pháp, công bằng, minh bạch và có sự đồng thuận rõ ràng của chủ thể dữ liệu trước khi thu thập."
+          },
+          {
+            "passage_id": "VN_DOC_002::P007",
+            "document_id": "VN_DOC_002",
+            "score": 7.9211,
+            "section_title": "## 3. Chế tài Xử phạt",
+            "text": "Các hành vi mua bán trái phép dữ liệu cá nhân dưới 10.000 bản ghi có thể bị xử phạt vi phạm hành chính từ 50 triệu đến 100 triệu đồng tùy theo mức độ nghiêm trọng."
+          },
+          {
+            "passage_id": "VN_DOC_005::P002",
+            "document_id": "VN_DOC_005",
+            "score": 6.8977,
+            "section_title": "## 1. Quy hoạch Điện VIII",
+            "text": "Công suất điện gió ngoài khơi dự kiến đạt 6.000 MW vào năm 2030, ưu tiên triển khai tại khu vực Nam Trung Bộ nhờ tiềm năng tốc độ gió trung bình trên 8 mét trên giây."
+          },
+          {
+            "passage_id": "VN_DOC_005::P004",
+            "document_id": "VN_DOC_005",
+            "score": 6.801,
+            "section_title": "## 2. Hệ thống Lưu trữ và Lưới điện Thông minh",
+            "text": "Tập đoàn Điện lực Việt Nam triển khai thí nghiệm các trạm lưu trữ pin BESS với công suất 50 MW tại Bình Thuận để cắt giảm hiện tượng quá tải đường dây truyền tải 500 kV."
+          },
+          {
+            "passage_id": "VN_DOC_002::P005",
+            "document_id": "VN_DOC_002",
+            "score": 5.8087,
+            "section_title": "## 2. Quyền của Chủ thể Dữ liệu",
+            "text": "Trong trường hợp xảy ra sự cố vi phạm dữ liệu cá nhân, tổ chức chịu trách nhiệm phải thông báo cho Cục An ninh mạng và Phòng chống tội phạm công nghệ cao trong vòng 72 giờ làm việc."
+          }
+        ],
+        "metadata": {
+          "question_id": "VN_INSUFF_003",
+          "confidence": 1.0,
+          "refusal_reason": null,
+          "latency_ms": 25553.52
+        }
+      }
+    },
+    {
+      "question_id": "VN_INSUFF_004",
+      "category": "insufficient_evidence",
+      "expected_decision": "refuse",
+      "question": "Mã số thuế doanh nghiệp và số tài khoản ngân hàng của bên xử lý dữ liệu cá nhân theo Nghị định 13 là gì?",
+      "refused": false,
+      "refusal_reason": null,
+      "refusal_message": "",
+      "answer": "lặp.\n\n[VN_DOC_002::P005] Nghĩa vụ áp dụng các biện pháp an ninh mạng kỹ thuật",
+      "citations": [
+        "VN_DOC_002::P001",
+        "VN_DOC_002::P002",
+        "VN_DOC_002::P004",
+        "VN_DOC_002::P000",
+        "VN_DOC_002::P007"
+      ],
+      "citation_valid": true,
+      "document_versions": [
+        1
+      ],
+      "pass": false,
+      "latency_ms": 25311.65,
+      "retrieval_ms": 0.85,
+      "generation_ms": 25310.8,
+      "chatbot_output": {
+        "language": "vi",
+        "mode": "hybrid",
+        "answer": "lặp.\n\n[VN_DOC_002::P005] Nghĩa vụ áp dụng các biện pháp an ninh mạng kỹ thuật",
+        "refused": false,
+        "citations": [
+          "VN_DOC_002::P001",
+          "VN_DOC_002::P002",
+          "VN_DOC_002::P004",
+          "VN_DOC_002::P000",
+          "VN_DOC_002::P007"
+        ],
+        "document_version": "v1",
+        "evidence": [
+          {
+            "passage_id": "VN_DOC_002::P001",
+            "document_id": "VN_DOC_002",
+            "score": 21.8406,
+            "section_title": "## 1. Nguyên tắc Xử lý Dữ liệu",
+            "text": "Nghị định 13/2023/NĐ-CP quy định dữ liệu cá nhân phải được xử lý theo nguyên tắc hợp pháp, công bằng, minh bạch và có sự đồng thuận rõ ràng của chủ thể dữ liệu trước khi thu thập."
+          },
+          {
+            "passage_id": "VN_DOC_002::P002",
+            "document_id": "VN_DOC_002",
+            "score": 16.3859,
+            "section_title": "## 1. Nguyên tắc Xử lý Dữ liệu",
+            "text": "Bên kiểm soát dữ liệu có nghĩa vụ áp dụng các biện pháp an ninh mạng kỹ thuật số như mã hóa AES-256 và ẩn danh hóa để ngăn chặn truy cập trái phép hoặc rò rỉ thông tin cá nhân."
+          },
+          {
+            "passage_id": "VN_DOC_002::P004",
+            "document_id": "VN_DOC_002",
+            "score": 11.8194,
+            "section_title": "## 2. Quyền của Chủ thể Dữ liệu",
+            "text": "Chủ thể dữ liệu có quyền yêu cầu xem, chỉnh sửa, hạn chế xử lý hoặc xóa bỏ toàn bộ dữ liệu cá nhân của mình trong vòng 72 giờ kể từ khi gửi văn bản hợp lệ."
+          },
+          {
+            "passage_id": "VN_DOC_002::P000",
+            "document_id": "VN_DOC_002",
+            "score": 10.6492,
+            "section_title": "## 1. Nguyên tắc Xử lý Dữ liệu",
+            "text": "## 1. Nguyên tắc Xử lý Dữ liệu"
+          },
+          {
+            "passage_id": "VN_DOC_002::P007",
+            "document_id": "VN_DOC_002",
+            "score": 9.9103,
+            "section_title": "## 3. Chế tài Xử phạt",
+            "text": "Các hành vi mua bán trái phép dữ liệu cá nhân dưới 10.000 bản ghi có thể bị xử phạt vi phạm hành chính từ 50 triệu đến 100 triệu đồng tùy theo mức độ nghiêm trọng."
+          }
+        ],
+        "metadata": {
+          "question_id": "VN_INSUFF_004",
+          "confidence": 1.0,
+          "refusal_reason": null,
+          "latency_ms": 25311.64
+        }
+      }
+    },
+    {
+      "question_id": "VN_INSUFF_005",
+      "category": "insufficient_evidence",
+      "expected_decision": "refuse",
+      "question": "Chi phí xây dựng chính xác bằng tiền đồng của Kinh thành Huế năm 1805 là bao nhiêu vạn quan tiền?",
+      "refused": false,
+      "refusal_reason": null,
+      "refusal_message": "",
+      "answer": "nghiệp năm 2003.\n\n[VN_DOC_002::P009] Nhã nhạc đường hợp tổ chức vi phạm",
+      "citations": [
+        "VN_DOC_003::P001",
+        "VN_DOC_003::P004",
+        "VN_DOC_002::P008",
+        "VN_DOC_003::P000",
+        "VN_DOC_004::P007"
+      ],
+      "citation_valid": true,
+      "document_versions": [
+        1
+      ],
+      "pass": false,
+      "latency_ms": 25324.99,
+      "retrieval_ms": 0.69,
+      "generation_ms": 25324.3,
+      "chatbot_output": {
+        "language": "vi",
+        "mode": "hybrid",
+        "answer": "nghiệp năm 2003.\n\n[VN_DOC_002::P009] Nhã nhạc đường hợp tổ chức vi phạm",
+        "refused": false,
+        "citations": [
+          "VN_DOC_003::P001",
+          "VN_DOC_003::P004",
+          "VN_DOC_002::P008",
+          "VN_DOC_003::P000",
+          "VN_DOC_004::P007"
+        ],
+        "document_version": "v1",
+        "evidence": [
+          {
+            "passage_id": "VN_DOC_003::P001",
+            "document_id": "VN_DOC_003",
+            "score": 18.1119,
+            "section_title": "## 1. Quần thể Di tích Kinh thành",
+            "text": "Kinh thành Huế được khởi công xây dựng vào năm 1805 dưới triều vua Gia Long và hoàn thành vào năm 1832 dưới thời vua Minh Mạng, kết hợp giữa kiến trúc cung đình phương Đông và nguyên lý phòng thủ Vauban của Pháp."
+          },
+          {
+            "passage_id": "VN_DOC_003::P004",
+            "document_id": "VN_DOC_003",
+            "score": 9.5234,
+            "section_title": "## 2. Nghệ thuật Nhã nhạc Cung đình",
+            "text": "Nhã nhạc Cung đình Huế đã được UNESCO chính thức vinh danh là Kiệt tác Di sản Văn hóa Phi vật thể và Truyền khẩu của Nhân loại vào năm 2003."
+          },
+          {
+            "passage_id": "VN_DOC_002::P008",
+            "document_id": "VN_DOC_002",
+            "score": 8.475,
+            "section_title": "## 3. Chế tài Xử phạt",
+            "text": "Trường hợp tổ chức vi phạm nhiều lần hoặc chuyển giao dữ liệu trái phép ra nước ngoài có thể bị áp mức phạt tiền tối đa lên đến 5% tổng doanh thu năm tài chính liền trước."
+          },
+          {
+            "passage_id": "VN_DOC_003::P000",
+            "document_id": "VN_DOC_003",
+            "score": 7.0826,
+            "section_title": "## 1. Quần thể Di tích Kinh thành",
+            "text": "## 1. Quần thể Di tích Kinh thành"
+          },
+          {
+            "passage_id": "VN_DOC_004::P007",
+            "document_id": "VN_DOC_004",
+            "score": 6.8355,
+            "section_title": "## 3. Nền tảng IoT và Quản lý Nước",
+            "text": "Mạng lưới 120 trạm quan trắc tự động IoT đo độ mặn và độ pH theo thời gian thực được lắp đặt dọc các cửa sông Tiền và sông Hậu, truyền dữ liệu cảnh báo qua ứng dụng di động cho nông dân."
+          }
+        ],
+        "metadata": {
+          "question_id": "VN_INSUFF_005",
+          "confidence": 1.0,
+          "refusal_reason": null,
+          "latency_ms": 25324.98
+        }
+      }
+    },
+    {
+      "question_id": "VN_INSUFF_006",
+      "category": "insufficient_evidence",
+      "expected_decision": "refuse",
+      "question": "Vua Minh Mạng đã dùng loại gỗ quý cụ thể nào để đóng cổng Hòa Bình ở phía Bắc Hoàng thành Huế?",
+      "refused": false,
+      "refusal_reason": null,
+      "refusal_message": "",
+      "answer": "�i động động động động động động động động động động động động đ",
+      "citations": [
+        "VN_DOC_003::P002",
+        "VN_DOC_003::P001",
+        "VN_DOC_003::P004",
+        "VN_DOC_003::P000"
+      ],
+      "citation_valid": true,
+      "document_versions": [
+        1
+      ],
+      "pass": false,
+      "latency_ms": 25303.61,
+      "retrieval_ms": 0.69,
+      "generation_ms": 25302.93,
+      "chatbot_output": {
+        "language": "vi",
+        "mode": "hybrid",
+        "answer": "�i động động động động động động động động động động động động đ",
+        "refused": false,
+        "citations": [
+          "VN_DOC_003::P002",
+          "VN_DOC_003::P001",
+          "VN_DOC_003::P004",
+          "VN_DOC_003::P000"
+        ],
+        "document_version": "v1",
+        "evidence": [
+          {
+            "passage_id": "VN_DOC_003::P002",
+            "document_id": "VN_DOC_003",
+            "score": 25.059,
+            "section_title": "## 1. Quần thể Di tích Kinh thành",
+            "text": "Hoàng thành Huế có cấu trúc hình vuông với bốn cổng chính gồm Ngọ Môn ở phía Nam, cửa Hiển Nhơn ở phía Đông, cửa Chương Đức ở phía Tây và cửa Hòa Bình ở phía Bắc."
+          },
+          {
+            "passage_id": "VN_DOC_003::P001",
+            "document_id": "VN_DOC_003",
+            "score": 12.207,
+            "section_title": "## 1. Quần thể Di tích Kinh thành",
+            "text": "Kinh thành Huế được khởi công xây dựng vào năm 1805 dưới triều vua Gia Long và hoàn thành vào năm 1832 dưới thời vua Minh Mạng, kết hợp giữa kiến trúc cung đình phương Đông và nguyên lý phòng thủ Vauban của Pháp."
+          },
+          {
+            "passage_id": "VN_DOC_003::P004",
+            "document_id": "VN_DOC_003",
+            "score": 9.1632,
+            "section_title": "## 2. Nghệ thuật Nhã nhạc Cung đình",
+            "text": "Nhã nhạc Cung đình Huế đã được UNESCO chính thức vinh danh là Kiệt tác Di sản Văn hóa Phi vật thể và Truyền khẩu của Nhân loại vào năm 2003."
+          },
+          {
+            "passage_id": "VN_DOC_003::P000",
+            "document_id": "VN_DOC_003",
+            "score": 5.7091,
+            "section_title": "## 1. Quần thể Di tích Kinh thành",
+            "text": "## 1. Quần thể Di tích Kinh thành"
+          }
+        ],
+        "metadata": {
+          "question_id": "VN_INSUFF_006",
+          "confidence": 1.0,
+          "refusal_reason": null,
+          "latency_ms": 25303.6
+        }
+      }
+    },
+    {
+      "question_id": "VN_INSUFF_007",
+      "category": "insufficient_evidence",
+      "expected_decision": "refuse",
+      "question": "Số lượng cá heo nước ngọt còn lại ở sông Tiền sau khi xây dựng cống Cái Lớn là bao nhiêu con?",
+      "refused": false,
+      "refusal_reason": null,
+      "refusal_message": "",
+      "answer": "ới nhiều từng từng từng từng từng từng từng từng từng từng từng từng từng từng",
+      "citations": [
+        "VN_DOC_004::P008",
+        "VN_DOC_001::P006",
+        "VN_DOC_004::P004",
+        "VN_DOC_004::P007",
+        "VN_DOC_003::P001"
+      ],
+      "citation_valid": true,
+      "document_versions": [
+        1
+      ],
+      "pass": false,
+      "latency_ms": 25317.94,
+      "retrieval_ms": 0.7,
+      "generation_ms": 25317.24,
+      "chatbot_output": {
+        "language": "vi",
+        "mode": "hybrid",
+        "answer": "ới nhiều từng từng từng từng từng từng từng từng từng từng từng từng từng từng",
+        "refused": false,
+        "citations": [
+          "VN_DOC_004::P008",
+          "VN_DOC_001::P006",
+          "VN_DOC_004::P004",
+          "VN_DOC_004::P007",
+          "VN_DOC_003::P001"
+        ],
+        "document_version": "v1",
+        "evidence": [
+          {
+            "passage_id": "VN_DOC_004::P008",
+            "document_id": "VN_DOC_004",
+            "score": 17.4308,
+            "section_title": "## 3. Nền tảng IoT và Quản lý Nước",
+            "text": "Hệ thống đóng mở cống ngăn mặn tự động bằng năng lượng mặt trời tại cống Cái Lớn - Cái Bé giúp kiểm soát nguồn nước ngọt cho hơn 384.000 héc-ta diện tích đất sản xuất nông nghiệp."
+          },
+          {
+            "passage_id": "VN_DOC_001::P006",
+            "document_id": "VN_DOC_001",
+            "score": 7.1246,
+            "section_title": "## 2. Kiến trúc 3 cấp độ SA-CMS",
+            "text": "Cấp độ 3 là Document Memory hoạt động ở thang thời gian chậm nhất, ghi lại biểu diễn trừu tượng bất biến toàn cục của toàn bộ tài liệu khi hoàn thành lượt đọc."
+          },
+          {
+            "passage_id": "VN_DOC_004::P004",
+            "document_id": "VN_DOC_004",
+            "score": 6.662,
+            "section_title": "## 2. Mô hình Chuyển đổi Cơ cấu Mùa vụ",
+            "text": "Mô hình canh tác lúa - tôm thông minh thích ứng biến đổi khí hậu đã chứng minh hiệu quả kinh tế vượt trội, giảm 60% lượng phân bón hóa học và tăng thu nhập thêm 40% cho bà con vùng ngọt hóa ven biển."
+          },
+          {
+            "passage_id": "VN_DOC_004::P007",
+            "document_id": "VN_DOC_004",
+            "score": 5.9504,
+            "section_title": "## 3. Nền tảng IoT và Quản lý Nước",
+            "text": "Mạng lưới 120 trạm quan trắc tự động IoT đo độ mặn và độ pH theo thời gian thực được lắp đặt dọc các cửa sông Tiền và sông Hậu, truyền dữ liệu cảnh báo qua ứng dụng di động cho nông dân."
+          },
+          {
+            "passage_id": "VN_DOC_003::P001",
+            "document_id": "VN_DOC_003",
+            "score": 5.4921,
+            "section_title": "## 1. Quần thể Di tích Kinh thành",
+            "text": "Kinh thành Huế được khởi công xây dựng vào năm 1805 dưới triều vua Gia Long và hoàn thành vào năm 1832 dưới thời vua Minh Mạng, kết hợp giữa kiến trúc cung đình phương Đông và nguyên lý phòng thủ Vauban của Pháp."
+          }
+        ],
+        "metadata": {
+          "question_id": "VN_INSUFF_007",
+          "confidence": 1.0,
+          "refusal_reason": null,
+          "latency_ms": 25317.94
+        }
+      }
+    },
+    {
+      "question_id": "VN_INSUFF_008",
+      "category": "insufficient_evidence",
+      "expected_decision": "refuse",
+      "question": "Tên và quê quán của vị giáo sư nông nghiệp đã phát minh ra giống lúa ST25 là ai?",
+      "refused": false,
+      "refusal_reason": null,
+      "refusal_message": "",
+      "answer": "[VN_DOC_003::P003] Nhã nhạc Cung đình Huế đã được UNESCO chính thức vinh danh là Kiệt t",
+      "citations": [
+        "VN_DOC_004::P005",
+        "VN_DOC_004::P004",
+        "VN_DOC_003::P004",
+        "VN_DOC_005::P005",
+        "VN_DOC_005::P007"
+      ],
+      "citation_valid": true,
+      "document_versions": [
+        1
+      ],
+      "pass": false,
+      "latency_ms": 25325.3,
+      "retrieval_ms": 0.74,
+      "generation_ms": 25324.56,
+      "chatbot_output": {
+        "language": "vi",
+        "mode": "hybrid",
+        "answer": "[VN_DOC_003::P003] Nhã nhạc Cung đình Huế đã được UNESCO chính thức vinh danh là Kiệt t",
+        "refused": false,
+        "citations": [
+          "VN_DOC_004::P005",
+          "VN_DOC_004::P004",
+          "VN_DOC_003::P004",
+          "VN_DOC_005::P005",
+          "VN_DOC_005::P007"
+        ],
+        "document_version": "v1",
+        "evidence": [
+          {
+            "passage_id": "VN_DOC_004::P005",
+            "document_id": "VN_DOC_004",
+            "score": 9.9257,
+            "section_title": "## 2. Mô hình Chuyển đổi Cơ cấu Mùa vụ",
+            "text": "Giống lúa chịu mặn ST25 và OM18 được triển khai gieo cấy thành công trên diện tích 150.000 héc-ta, chịu được độ mặn tới 5 phần nghìn trong giai đoạn đẻ nhánh."
+          },
+          {
+            "passage_id": "VN_DOC_004::P004",
+            "document_id": "VN_DOC_004",
+            "score": 7.504,
+            "section_title": "## 2. Mô hình Chuyển đổi Cơ cấu Mùa vụ",
+            "text": "Mô hình canh tác lúa - tôm thông minh thích ứng biến đổi khí hậu đã chứng minh hiệu quả kinh tế vượt trội, giảm 60% lượng phân bón hóa học và tăng thu nhập thêm 40% cho bà con vùng ngọt hóa ven biển."
+          },
+          {
+            "passage_id": "VN_DOC_003::P004",
+            "document_id": "VN_DOC_003",
+            "score": 6.4791,
+            "section_title": "## 2. Nghệ thuật Nhã nhạc Cung đình",
+            "text": "Nhã nhạc Cung đình Huế đã được UNESCO chính thức vinh danh là Kiệt tác Di sản Văn hóa Phi vật thể và Truyền khẩu của Nhân loại vào năm 2003."
+          },
+          {
+            "passage_id": "VN_DOC_005::P005",
+            "document_id": "VN_DOC_005",
+            "score": 5.1444,
+            "section_title": "## 2. Hệ thống Lưu trữ và Lưới điện Thông minh",
+            "text": "Công nghệ lưới điện siêu nhỏ (microgrid) kết hợp pin mặt trời áp mái và máy biến áp thông minh được áp dụng tại các khu công nghiệp công nghệ cao nhằm ổn định chất lượng điện áp."
+          },
+          {
+            "passage_id": "VN_DOC_005::P007",
+            "document_id": "VN_DOC_005",
+            "score": 5.0084,
+            "section_title": "## 3. Cơ chế Mua bán Điện Trực tiếp (DPPA)",
+            "text": "Nghị định về cơ chế DPPA cho phép khách hàng sử dụng điện lớn ký hợp đồng mua bán điện trực tiếp với các đơn vị phát điện năng lượng tái tạo qua đường dây riêng hoặc lưới điện quốc gia."
+          }
+        ],
+        "metadata": {
+          "question_id": "VN_INSUFF_008",
+          "confidence": 1.0,
+          "refusal_reason": null,
+          "latency_ms": 25325.29
+        }
+      }
+    },
+    {
+      "question_id": "VN_INSUFF_009",
+      "category": "insufficient_evidence",
+      "expected_decision": "refuse",
+      "question": "Tập đoàn Điện lực Việt Nam đã mua bao nhiêu tấn lithium từ Chile để làm pin BESS tại Bình Thuận?",
+      "refused": false,
+      "refusal_reason": null,
+      "refusal_message": "",
+      "answer": "n giờ ngoài những thời gian nhưng nên nhưng nên nhưng nên nhưng nên nhưng nên nhưng",
+      "citations": [
+        "VN_DOC_005::P004",
+        "VN_DOC_005::P002",
+        "VN_DOC_004::P001",
+        "VN_DOC_005::P005",
+        "VN_DOC_005::P006"
+      ],
+      "citation_valid": true,
+      "document_versions": [
+        1
+      ],
+      "pass": false,
+      "latency_ms": 25526.47,
+      "retrieval_ms": 0.79,
+      "generation_ms": 25525.67,
+      "chatbot_output": {
+        "language": "vi",
+        "mode": "hybrid",
+        "answer": "n giờ ngoài những thời gian nhưng nên nhưng nên nhưng nên nhưng nên nhưng nên nhưng",
+        "refused": false,
+        "citations": [
+          "VN_DOC_005::P004",
+          "VN_DOC_005::P002",
+          "VN_DOC_004::P001",
+          "VN_DOC_005::P005",
+          "VN_DOC_005::P006"
+        ],
+        "document_version": "v1",
+        "evidence": [
+          {
+            "passage_id": "VN_DOC_005::P004",
+            "document_id": "VN_DOC_005",
+            "score": 28.5407,
+            "section_title": "## 2. Hệ thống Lưu trữ và Lưới điện Thông minh",
+            "text": "Tập đoàn Điện lực Việt Nam triển khai thí nghiệm các trạm lưu trữ pin BESS với công suất 50 MW tại Bình Thuận để cắt giảm hiện tượng quá tải đường dây truyền tải 500 kV."
+          },
+          {
+            "passage_id": "VN_DOC_005::P002",
+            "document_id": "VN_DOC_005",
+            "score": 6.994,
+            "section_title": "## 1. Quy hoạch Điện VIII",
+            "text": "Công suất điện gió ngoài khơi dự kiến đạt 6.000 MW vào năm 2030, ưu tiên triển khai tại khu vực Nam Trung Bộ nhờ tiềm năng tốc độ gió trung bình trên 8 mét trên giây."
+          },
+          {
+            "passage_id": "VN_DOC_004::P001",
+            "document_id": "VN_DOC_004",
+            "score": 6.7365,
+            "section_title": "## 1. Thách thức Xâm nhập Mặn",
+            "text": "Biến đổi khí hậu và việc phát triển đập thủy điện thượng nguồn sông Mê Kông đã làm giảm lưu lượng dòng chảy mùa kiệt, đẩy ranh mặn 4 gam trên lít xâm nhập sâu tới 70 km vào đất liền tại Bến Tre và Trà Vinh."
+          },
+          {
+            "passage_id": "VN_DOC_005::P005",
+            "document_id": "VN_DOC_005",
+            "score": 6.0475,
+            "section_title": "## 2. Hệ thống Lưu trữ và Lưới điện Thông minh",
+            "text": "Công nghệ lưới điện siêu nhỏ (microgrid) kết hợp pin mặt trời áp mái và máy biến áp thông minh được áp dụng tại các khu công nghiệp công nghệ cao nhằm ổn định chất lượng điện áp."
+          },
+          {
+            "passage_id": "VN_DOC_005::P006",
+            "document_id": "VN_DOC_005",
+            "score": 5.9067,
+            "section_title": "## 3. Cơ chế Mua bán Điện Trực tiếp (DPPA)",
+            "text": "## 3. Cơ chế Mua bán Điện Trực tiếp (DPPA)"
+          }
+        ],
+        "metadata": {
+          "question_id": "VN_INSUFF_009",
+          "confidence": 1.0,
+          "refusal_reason": null,
+          "latency_ms": 25526.46
+        }
+      }
+    },
+    {
+      "question_id": "VN_INSUFF_010",
+      "category": "insufficient_evidence",
+      "expected_decision": "refuse",
+      "question": "Họ và tên của giám đốc ban quản lý dự án điện gió ngoài khơi Nam Trung Bộ là ai?",
+      "refused": false,
+      "refusal_reason": null,
+      "refusal_message": "",
+      "answer": "n với năm 2020.\n\n[VN_DOC_004::P008] Nhưng nội dung nhưng nhưng nhưng nhưng nh",
+      "citations": [
+        "VN_DOC_005::P002",
+        "VN_DOC_005::P008",
+        "VN_DOC_004::P006",
+        "VN_DOC_003::P007",
+        "VN_DOC_001::P005"
+      ],
+      "citation_valid": true,
+      "document_versions": [
+        1
+      ],
+      "pass": false,
+      "latency_ms": 24909.7,
+      "retrieval_ms": 1.51,
+      "generation_ms": 24908.19,
+      "chatbot_output": {
+        "language": "vi",
+        "mode": "hybrid",
+        "answer": "n với năm 2020.\n\n[VN_DOC_004::P008] Nhưng nội dung nhưng nhưng nhưng nhưng nh",
+        "refused": false,
+        "citations": [
+          "VN_DOC_005::P002",
+          "VN_DOC_005::P008",
+          "VN_DOC_004::P006",
+          "VN_DOC_003::P007",
+          "VN_DOC_001::P005"
+        ],
+        "document_version": "v1",
+        "evidence": [
+          {
+            "passage_id": "VN_DOC_005::P002",
+            "document_id": "VN_DOC_005",
+            "score": 19.7387,
+            "section_title": "## 1. Quy hoạch Điện VIII",
+            "text": "Công suất điện gió ngoài khơi dự kiến đạt 6.000 MW vào năm 2030, ưu tiên triển khai tại khu vực Nam Trung Bộ nhờ tiềm năng tốc độ gió trung bình trên 8 mét trên giây."
+          },
+          {
+            "passage_id": "VN_DOC_005::P008",
+            "document_id": "VN_DOC_005",
+            "score": 11.3135,
+            "section_title": "## 3. Cơ chế Mua bán Điện Trực tiếp (DPPA)",
+            "text": "Mức giá trần đối với dự án điện gió trên bờ trong khung giá chuyển tiếp được quy định là 1.587,12 đồng trên một kilowatt giờ (chưa bao gồm thuế VAT)."
+          },
+          {
+            "passage_id": "VN_DOC_004::P006",
+            "document_id": "VN_DOC_004",
+            "score": 9.5199,
+            "section_title": "## 3. Nền tảng IoT và Quản lý Nước",
+            "text": "## 3. Nền tảng IoT và Quản lý Nước"
+          },
+          {
+            "passage_id": "VN_DOC_003::P007",
+            "document_id": "VN_DOC_003",
+            "score": 9.4267,
+            "section_title": "## 3. Bảo tồn và Tu bổ Di sản",
+            "text": "Dự án bảo tồn điện Kiến Trung được khởi động trùng tu phục hồi từ năm 2019 và chính thức mở cửa đón khách tham quan nhân dịp Tết Nguyên đán năm 2024."
+          },
+          {
+            "passage_id": "VN_DOC_001::P005",
+            "document_id": "VN_DOC_001",
+            "score": 6.4791,
+            "section_title": "## 2. Kiến trúc 3 cấp độ SA-CMS",
+            "text": "Cấp độ 2 là Section Memory hoạt động ở thang thời gian trung bình, thực hiện tích lũy và cập nhật gradient tại ranh giới kết thúc mỗi đề mục của tài liệu."
+          }
+        ],
+        "metadata": {
+          "question_id": "VN_INSUFF_010",
+          "confidence": 1.0,
+          "refusal_reason": null,
+          "latency_ms": 24909.7
+        }
+      }
+    }
+  ]
+}

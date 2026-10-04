@@ -1,0 +1,83 @@
+{
+  "benchmark": "RQ5",
+  "description": "Computational and Memory Cost Profile",
+  "hardware": "NVIDIA GeForce GTX 1650 Ti (4GB VRAM)",
+  "precision": "torch.float16",
+  "device": "cuda",
+  "methods_profiled": [
+    "B1",
+    "B2",
+    "B4",
+    "B5",
+    "P1",
+    "P2"
+  ],
+  "runs": [
+    {
+      "method": "B1",
+      "ingest_time_per_1k_tokens_sec": 0.0,
+      "answer_tokens_generated": 1,
+      "latency_retrieval_ms": 0.0,
+      "latency_memory_update_ms": 0.0,
+      "latency_generation_ms": 108.81,
+      "total_latency_ms": 108.81,
+      "peak_vram_mb": 294.94,
+      "checkpoint_size_mb": 0.0
+    },
+    {
+      "method": "B2",
+      "ingest_time_per_1k_tokens_sec": 0.0,
+      "answer_tokens_generated": 1,
+      "latency_retrieval_ms": 11.28,
+      "latency_memory_update_ms": 0.0,
+      "latency_generation_ms": 89.8,
+      "total_latency_ms": 101.08,
+      "peak_vram_mb": 296.38,
+      "checkpoint_size_mb": 0.0
+    },
+    {
+      "method": "B4",
+      "ingest_time_per_1k_tokens_sec": 1.2752,
+      "answer_tokens_generated": 1,
+      "latency_retrieval_ms": 0.0,
+      "latency_memory_update_ms": 0.0,
+      "latency_generation_ms": 46.47,
+      "total_latency_ms": 46.47,
+      "peak_vram_mb": 328.78,
+      "checkpoint_size_mb": 6.77
+    },
+    {
+      "method": "B5",
+      "ingest_time_per_1k_tokens_sec": 1.7266,
+      "answer_tokens_generated": 1,
+      "latency_retrieval_ms": 0.0,
+      "latency_memory_update_ms": 0.0,
+      "latency_generation_ms": 45.68,
+      "total_latency_ms": 45.68,
+      "peak_vram_mb": 345.08,
+      "checkpoint_size_mb": 20.28
+    },
+    {
+      "method": "P1",
+      "ingest_time_per_1k_tokens_sec": 2.1339,
+      "answer_tokens_generated": 1,
+      "latency_retrieval_ms": 0.0,
+      "latency_memory_update_ms": 0.0,
+      "latency_generation_ms": 47.09,
+      "total_latency_ms": 47.09,
+      "peak_vram_mb": 357.14,
+      "checkpoint_size_mb": 20.28
+    },
+    {
+      "method": "P2",
+      "ingest_time_per_1k_tokens_sec": 2.2149,
+      "answer_tokens_generated": 1,
+      "latency_retrieval_ms": 11.39,
+      "latency_memory_update_ms": 0.0,
+      "latency_generation_ms": 47.5,
+      "total_latency_ms": 58.89,
+      "peak_vram_mb": 357.14,
+      "checkpoint_size_mb": 20.28
+    }
+  ]
+}

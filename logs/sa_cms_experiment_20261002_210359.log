@@ -1,0 +1,81 @@
+[2026-10-02 21:03:59] [INFO] Logger initialized. File sink: D:\NCKH\logs\sa_cms_experiment_20261002_210359.log
+[2026-10-02 21:03:59] [INFO] ==========================================================================================
+[2026-10-02 21:03:59] [INFO] STARTING PHASE 2: SA-CMS CONTROLLED COMPARISON & ABLATIONS
+[2026-10-02 21:03:59] [INFO] Comparing: Fixed Token (A1) vs. SA-CMS Structure (A2) vs. Random (A3)
+[2026-10-02 21:03:59] [INFO] Backbone: HuggingFaceTB/SmolLM2-135M | GPU: GTX 1650 Ti (4GB VRAM)
+[2026-10-02 21:03:59] [INFO] ==========================================================================================
+[2026-10-02 21:03:59] [INFO] Compute device: cuda
+[2026-10-02 21:03:59] [INFO] 
+======================================================================
+[2026-10-02 21:03:59] [INFO] RUNNING CONFIGURATION: level_1_icl (Levels=1, Schedule=none)
+[2026-10-02 21:03:59] [INFO] Details: 1-level Pure ICL Baseline (no CMS)
+[2026-10-02 21:03:59] [INFO] ======================================================================
+[2026-10-02 21:04:03] [INFO] [level_1_icl] Running MK-NIAH Benchmark (50 samples)...
+[2026-10-02 21:04:58] [INFO] [level_1_icl] MK-NIAH Acc: 52.00% (26/50) | Avg Target Prob: 0.252893 | Avg Rank: 1.2 | Total Updates: 0
+[2026-10-02 21:04:58] [INFO] [level_1_icl] Running QASPER Benchmark (5 documents)...
+[2026-10-02 21:04:59] [INFO] [level_1_icl] QASPER Avg Loss: 3.6891 | Perplexity: 40.0073
+[2026-10-02 21:04:59] [INFO] [level_1_icl] Finished in 59.71s | Peak VRAM: 322.34 MB
+[2026-10-02 21:04:59] [INFO] 
+======================================================================
+[2026-10-02 21:04:59] [INFO] RUNNING CONFIGURATION: level_2_fixed_token (Levels=2, Schedule=fixed_token)
+[2026-10-02 21:04:59] [INFO] Details: A1: 2-level CMS with Fixed Token Schedule [64, 32]
+[2026-10-02 21:04:59] [INFO] ======================================================================
+[2026-10-02 21:05:01] [INFO] [level_2_fixed_token] Running MK-NIAH Benchmark (50 samples)...
+[2026-10-02 21:06:26] [INFO] [level_2_fixed_token] MK-NIAH Acc: 0.00% (0/50) | Avg Target Prob: 0.117412 | Avg Rank: 2.1 | Total Updates: 450
+[2026-10-02 21:06:26] [INFO] [level_2_fixed_token] Running QASPER Benchmark (5 documents)...
+[2026-10-02 21:06:27] [INFO] [level_2_fixed_token] QASPER Avg Loss: 4.2059 | Perplexity: 67.0782
+[2026-10-02 21:06:27] [INFO] [level_2_fixed_token] Finished in 88.13s | Peak VRAM: 344.66 MB
+[2026-10-02 21:06:27] [INFO] 
+======================================================================
+[2026-10-02 21:06:27] [INFO] RUNNING CONFIGURATION: level_2_sa_cms (Levels=2, Schedule=structure)
+[2026-10-02 21:06:27] [INFO] Details: A2: 2-level SA-CMS with Paragraph + Section Boundaries
+[2026-10-02 21:06:27] [INFO] ======================================================================
+[2026-10-02 21:06:29] [INFO] [level_2_sa_cms] Running MK-NIAH Benchmark (50 samples)...
+[2026-10-02 21:08:07] [INFO] [level_2_sa_cms] MK-NIAH Acc: 0.00% (0/50) | Avg Target Prob: 0.146705 | Avg Rank: 2.2 | Total Updates: 750
+[2026-10-02 21:08:07] [INFO] [level_2_sa_cms] Running QASPER Benchmark (5 documents)...
+[2026-10-02 21:08:09] [INFO] [level_2_sa_cms] QASPER Avg Loss: 4.0891 | Perplexity: 59.6839
+[2026-10-02 21:08:09] [INFO] [level_2_sa_cms] Finished in 101.89s | Peak VRAM: 344.59 MB
+[2026-10-02 21:08:09] [INFO] 
+======================================================================
+[2026-10-02 21:08:09] [INFO] RUNNING CONFIGURATION: level_2_random (Levels=2, Schedule=random)
+[2026-10-02 21:08:09] [INFO] Details: A3: 2-level Ablation with Random Boundaries (Matched Event Count)
+[2026-10-02 21:08:09] [INFO] ======================================================================
+[2026-10-02 21:08:11] [INFO] [level_2_random] Running MK-NIAH Benchmark (50 samples)...
+[2026-10-02 21:09:56] [INFO] [level_2_random] MK-NIAH Acc: 28.00% (14/50) | Avg Target Prob: 0.357390 | Avg Rank: 1.5 | Total Updates: 691
+[2026-10-02 21:09:56] [INFO] [level_2_random] Running QASPER Benchmark (5 documents)...
+[2026-10-02 21:09:58] [INFO] [level_2_random] QASPER Avg Loss: 4.1828 | Perplexity: 65.5500
+[2026-10-02 21:09:58] [INFO] [level_2_random] Finished in 108.76s | Peak VRAM: 352.58 MB
+[2026-10-02 21:09:58] [INFO] 
+======================================================================
+[2026-10-02 21:09:58] [INFO] RUNNING CONFIGURATION: level_3_fixed_token (Levels=3, Schedule=fixed_token)
+[2026-10-02 21:09:58] [INFO] Details: A1: 3-level CMS with Fixed Token Schedule [64, 32, 16]
+[2026-10-02 21:09:58] [INFO] ======================================================================
+[2026-10-02 21:10:00] [INFO] [level_3_fixed_token] Running MK-NIAH Benchmark (50 samples)...
+[2026-10-02 21:11:44] [INFO] [level_3_fixed_token] MK-NIAH Acc: 6.00% (3/50) | Avg Target Prob: 0.232612 | Avg Rank: 1.9 | Total Updates: 1000
+[2026-10-02 21:11:44] [INFO] [level_3_fixed_token] Running QASPER Benchmark (5 documents)...
+[2026-10-02 21:11:46] [INFO] [level_3_fixed_token] QASPER Avg Loss: 4.2531 | Perplexity: 70.3248
+[2026-10-02 21:11:46] [INFO] [level_3_fixed_token] Finished in 108.02s | Peak VRAM: 351.35 MB
+[2026-10-02 21:11:46] [INFO] 
+======================================================================
+[2026-10-02 21:11:46] [INFO] RUNNING CONFIGURATION: level_3_sa_cms (Levels=3, Schedule=structure)
+[2026-10-02 21:11:46] [INFO] Details: A2: 3-level SA-CMS with Paragraph + Section + Document Boundaries
+[2026-10-02 21:11:46] [INFO] ======================================================================
+[2026-10-02 21:11:48] [INFO] [level_3_sa_cms] Running MK-NIAH Benchmark (50 samples)...
+[2026-10-02 21:13:24] [INFO] [level_3_sa_cms] MK-NIAH Acc: 0.00% (0/50) | Avg Target Prob: 0.196598 | Avg Rank: 2.0 | Total Updates: 800
+[2026-10-02 21:13:24] [INFO] [level_3_sa_cms] Running QASPER Benchmark (5 documents)...
+[2026-10-02 21:13:25] [INFO] [level_3_sa_cms] QASPER Avg Loss: 4.2352 | Perplexity: 69.0725
+[2026-10-02 21:13:25] [INFO] [level_3_sa_cms] Finished in 99.36s | Peak VRAM: 351.35 MB
+[2026-10-02 21:13:25] [INFO] 
+======================================================================
+[2026-10-02 21:13:25] [INFO] RUNNING CONFIGURATION: level_3_random (Levels=3, Schedule=random)
+[2026-10-02 21:13:25] [INFO] Details: A3: 3-level Ablation with Random Boundaries (Matched Event Count)
+[2026-10-02 21:13:25] [INFO] ======================================================================
+[2026-10-02 21:13:27] [INFO] [level_3_random] Running MK-NIAH Benchmark (50 samples)...
+[2026-10-02 21:15:22] [INFO] [level_3_random] MK-NIAH Acc: 54.00% (27/50) | Avg Target Prob: 0.498271 | Avg Rank: 1.0 | Total Updates: 739
+[2026-10-02 21:15:22] [INFO] [level_3_random] Running QASPER Benchmark (5 documents)...
+[2026-10-02 21:15:23] [INFO] [level_3_random] QASPER Avg Loss: 4.1621 | Perplexity: 64.2068
+[2026-10-02 21:15:23] [INFO] [level_3_random] Finished in 118.33s | Peak VRAM: 359.83 MB
+[2026-10-02 21:15:24] [INFO] 
+Generated CSV comparison at: D:\NCKH\results\sa_cms_comparison.csv
+[2026-10-02 21:15:24] [INFO] Generated Markdown report at: D:\NCKH\results\sa_cms_comparison.md
+[2026-10-02 21:15:24] [INFO] Generated JSON records at: D:\NCKH\results\sa_cms_experiment_results.json

@@ -1,0 +1,88 @@
+{
+  "experiment_name": "phase1_levels_ablation",
+  "timestamp": "2026-10-02 20:25:18",
+  "device": "cuda",
+  "seed": 42,
+  "configurations": [
+    {
+      "name": "level_1_icl_baseline",
+      "num_levels": 1,
+      "chunk_sizes": [
+        64
+      ],
+      "frequencies": [
+        1.0
+      ],
+      "mk_niah_accuracy_pct": 0.0,
+      "mk_niah_correct": 0,
+      "mk_niah_total": 25,
+      "mk_niah_avg_target_prob": 0.0008680250914767384,
+      "doc_qa_avg_loss": 6.960814416408539,
+      "doc_qa_perplexity": 1054.4920032187206,
+      "checkpoint_path": "checkpoints\\level_1_icl_baseline.pt"
+    },
+    {
+      "name": "level_2_cms",
+      "num_levels": 2,
+      "chunk_sizes": [
+        64,
+        32
+      ],
+      "frequencies": [
+        1.0,
+        2.0
+      ],
+      "mk_niah_accuracy_pct": 0.0,
+      "mk_niah_correct": 0,
+      "mk_niah_total": 25,
+      "mk_niah_avg_target_prob": 0.001106403584126383,
+      "doc_qa_avg_loss": 7.00764274597168,
+      "doc_qa_perplexity": 1105.0465568626687,
+      "checkpoint_path": "checkpoints\\level_2_cms.pt"
+    },
+    {
+      "name": "level_3_cms",
+      "num_levels": 3,
+      "chunk_sizes": [
+        64,
+        32,
+        16
+      ],
+      "frequencies": [
+        1.0,
+        2.0,
+        4.0
+      ],
+      "mk_niah_accuracy_pct": 0.0,
+      "mk_niah_correct": 0,
+      "mk_niah_total": 25,
+      "mk_niah_avg_target_prob": 0.0010173209756612778,
+      "doc_qa_avg_loss": 6.9529173374176025,
+      "doc_qa_perplexity": 1046.1973912837707,
+      "checkpoint_path": "checkpoints\\level_3_cms.pt"
+    },
+    {
+      "name": "level_4_cms",
+      "num_levels": 4,
+      "chunk_sizes": [
+        64,
+        32,
+        16,
+        8
+      ],
+      "frequencies": [
+        1.0,
+        2.0,
+        4.0,
+        8.0
+      ],
+      "mk_niah_accuracy_pct": 0.0,
+      "mk_niah_correct": 0,
+      "mk_niah_total": 25,
+      "mk_niah_avg_target_prob": 0.0010251247812993825,
+      "doc_qa_avg_loss": 6.926102340221405,
+      "doc_qa_perplexity": 1018.5164026208816,
+      "checkpoint_path": "checkpoints\\level_4_cms.pt"
+    }
+  ]
+}

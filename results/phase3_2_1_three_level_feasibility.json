@@ -1,0 +1,34 @@
+{
+  "architecture": "SmolLM2-135M + SA-CMS (num_levels=3)",
+  "levels": [
+    {
+      "level": 1,
+      "name": "Paragraph",
+      "timescale": "fast",
+      "description": "Local paragraph boundary adaptations"
+    },
+    {
+      "level": 2,
+      "name": "Section",
+      "timescale": "medium",
+      "description": "Thematic section boundary updates"
+    },
+    {
+      "level": 3,
+      "name": "Document",
+      "timescale": "slow",
+      "description": "Global invariant document abstractions"
+    }
+  ],
+  "trainable_cms_parameters": 5315904,
+  "frozen_backbone_parameters": 134515008,
+  "trainable_percentage": 3.8,
+  "forward_pass_loss": 5.45,
+  "backward_pass_max_grad": 0.4754,
+  "backbone_gradients_isolated": true,
+  "memory_reset_verified": true,
+  "checkpoint_reload_max_logit_diff": 0.0,
+  "checkpoint_size_mb": 20.28,
+  "feasibility_status": "PASSED",
+  "scientific_boundary": "Feasibility audit only; not used as comparative benchmark."
+}

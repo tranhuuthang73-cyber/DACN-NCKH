@@ -1,0 +1,35 @@
+[2026-10-02 20:25:18] [INFO] Logger initialized. File sink: logs\micro_experiment_20261002_202518.log
+[2026-10-02 20:25:18] [INFO] === STARTING PHASE 1 REPRODUCTION EXPERIMENT ===
+[2026-10-02 20:25:18] [INFO] Using device: cuda
+[2026-10-02 20:25:18] [INFO] --- Running evaluation for: level_1_icl_baseline (num_levels=1) ---
+[2026-10-02 20:25:18] [INFO] [level_1_icl_baseline] Running MK-NIAH benchmark...
+[2026-10-02 20:25:18] [INFO] [level_1_icl_baseline] MK-NIAH Accuracy: 0.00% (0/25), Avg Target Prob: 0.000868
+[2026-10-02 20:25:18] [INFO] [level_1_icl_baseline] Running Document QA benchmark...
+[2026-10-02 20:25:18] [INFO] [level_1_icl_baseline] Doc QA Avg Loss: 6.9608, Perplexity: 1054.4920
+[2026-10-02 20:25:18] [INFO] [level_1_icl_baseline] Saved checkpoint to checkpoints\level_1_icl_baseline.pt
+[2026-10-02 20:25:18] [INFO] --- Running evaluation for: level_2_cms (num_levels=2) ---
+[2026-10-02 20:25:18] [INFO] [level_2_cms] Running MK-NIAH benchmark...
+[2026-10-02 20:25:25] [INFO] [level_2_cms] MK-NIAH Accuracy: 0.00% (0/25), Avg Target Prob: 0.001106
+[2026-10-02 20:25:25] [INFO] [level_2_cms] Running Document QA benchmark...
+[2026-10-02 20:25:28] [INFO] [level_2_cms] Doc QA Avg Loss: 7.0076, Perplexity: 1105.0466
+[2026-10-02 20:25:28] [INFO] [level_2_cms] Saved checkpoint to checkpoints\level_2_cms.pt
+[2026-10-02 20:25:28] [INFO] --- Running evaluation for: level_3_cms (num_levels=3) ---
+[2026-10-02 20:25:28] [INFO] [level_3_cms] Running MK-NIAH benchmark...
+[2026-10-02 20:25:43] [INFO] [level_3_cms] MK-NIAH Accuracy: 0.00% (0/25), Avg Target Prob: 0.001017
+[2026-10-02 20:25:43] [INFO] [level_3_cms] Running Document QA benchmark...
+[2026-10-02 20:25:47] [INFO] [level_3_cms] Doc QA Avg Loss: 6.9529, Perplexity: 1046.1974
+[2026-10-02 20:25:47] [INFO] [level_3_cms] Saved checkpoint to checkpoints\level_3_cms.pt
+[2026-10-02 20:25:47] [INFO] --- Running evaluation for: level_4_cms (num_levels=4) ---
+[2026-10-02 20:25:48] [INFO] [level_4_cms] Running MK-NIAH benchmark...
+[2026-10-02 20:26:09] [INFO] [level_4_cms] MK-NIAH Accuracy: 0.00% (0/25), Avg Target Prob: 0.001025
+[2026-10-02 20:26:09] [INFO] [level_4_cms] Running Document QA benchmark...
+[2026-10-02 20:26:15] [INFO] [level_4_cms] Doc QA Avg Loss: 6.9261, Perplexity: 1018.5164
+[2026-10-02 20:26:15] [INFO] [level_4_cms] Saved checkpoint to checkpoints\level_4_cms.pt
+[2026-10-02 20:26:15] [INFO] Saved complete experiment results to: results\experiment_results.json
+[2026-10-02 20:26:15] [INFO] === EXPERIMENT RESULTS SUMMARY TABLE ===
+[2026-10-02 20:26:15] [INFO] Config Name               | Levels | Chunk Sizes          | MK-NIAH Acc (%) | Doc QA PPL  
+[2026-10-02 20:26:15] [INFO] ----------------------------------------------------------------------------------------
+[2026-10-02 20:26:15] [INFO] level_1_icl_baseline      | 1      | [64]                 | 0.00            | 1054.4920   
+[2026-10-02 20:26:15] [INFO] level_2_cms               | 2      | [64, 32]             | 0.00            | 1105.0466   
+[2026-10-02 20:26:15] [INFO] level_3_cms               | 3      | [64, 32, 16]         | 0.00            | 1046.1974   
+[2026-10-02 20:26:15] [INFO] level_4_cms               | 4      | [64, 32, 16, 8]      | 0.00            | 1018.5164   

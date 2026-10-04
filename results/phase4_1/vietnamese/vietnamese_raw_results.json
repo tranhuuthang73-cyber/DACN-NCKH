@@ -1,0 +1,87 @@
+{
+  "benchmark": "Vietnamese_Final",
+  "description": "20 documents, 300 answerable, 50 without answer (Section 7.1)",
+  "num_documents": 20,
+  "total_questions": 350,
+  "seeds": [42, 43, 44],
+  "methods": ["B1", "B2", "B4", "B5", "P1", "P2"],
+  "runs": [
+    {
+      "method": "B1",
+      "seed": 42,
+      "token_f1": 0.0117,
+      "exact_match": 0.0,
+      "correct_refusal_rate_pct": 0.0,
+      "false_refusal_rate_pct": 0.0,
+      "faithfulness_rate_pct": 0.0,
+      "avg_latency_ms": 12485.8,
+      "peak_vram_mb": 294.9,
+      "records": []
+    },
+    {
+      "method": "B2",
+      "seed": 42,
+      "token_f1": 0.1543,
+      "exact_match": 0.0,
+      "correct_refusal_rate_pct": 76.0,
+      "false_refusal_rate_pct": 0.0,
+      "faithfulness_rate_pct": 100.0,
+      "avg_latency_ms": 11166.5,
+      "peak_vram_mb": 296.4,
+      "records": []
+    },
+    {
+      "method": "B4",
+      "seed": 42,
+      "token_f1": 0.0339,
+      "exact_match": 0.0,
+      "correct_refusal_rate_pct": 0.0,
+      "false_refusal_rate_pct": 0.0,
+      "faithfulness_rate_pct": 0.0,
+      "avg_latency_ms": 4499.3,
+      "peak_vram_mb": 328.8,
+      "records": []
+    },
+    {
+      "method": "B5",
+      "seed": 42,
+      "token_f1": 0.1060,
+      "exact_match": 0.0,
+      "correct_refusal_rate_pct": 0.0,
+      "false_refusal_rate_pct": 0.0,
+      "faithfulness_rate_pct": 0.0,
+      "avg_latency_ms": 4603.3,
+      "peak_vram_mb": 345.1,
+      "records": []
+    },
+    {
+      "method": "P1",
+      "seed": 42,
+      "token_f1": 0.0739,
+      "exact_match": 0.0,
+      "correct_refusal_rate_pct": 0.0,
+      "false_refusal_rate_pct": 0.0,
+      "faithfulness_rate_pct": 0.0,
+      "avg_latency_ms": 4604.6,
+      "peak_vram_mb": 357.1,
+      "records": []
+    },
+    {
+      "method": "P2",
+      "seed": 42,
+      "token_f1": 0.1543,
+      "exact_match": 0.0,
+      "correct_refusal_rate_pct": 76.0,
+      "false_refusal_rate_pct": 0.0,
+      "faithfulness_rate_pct": 100.0,
+      "avg_latency_ms": 11124.5,
+      "peak_vram_mb": 357.1,
+      "records": []
+    }
+  ],
+  "excluded_method_b3": {
+    "name": "Cartridges / Context Compression",
+    "status": "NOT_REPRODUCIBLE_IN_BUDGET",
+    "reason": "Single GPU / 4GB VRAM constraint does not support offline representation baking distillation"
+  }
+}

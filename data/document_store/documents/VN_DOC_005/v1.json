@@ -1,0 +1,133 @@
+{
+  "document_id": "VN_DOC_005",
+  "version": 1,
+  "title": "Chiến lược Phát triển Năng lượng Tái tạo và Lưới điện Quốc gia",
+  "raw_text": "## 1. Quy hoạch Điện VIII\n\nQuy hoạch phát triển điện lực quốc gia thời kỳ 2021 - 2030 (Quy hoạch điện VIII) đặt mục tiêu tỷ lệ năng lượng tái tạo đạt khoảng 30,9% đến 39,2% tổng sản lượng điện vào năm 2030.\n\nCông suất điện gió ngoài khơi dự kiến đạt 6.000 MW vào năm 2030, ưu tiên triển khai tại khu vực Nam Trung Bộ nhờ tiềm năng tốc độ gió trung bình trên 8 mét trên giây.\n\n## 2. Hệ thống Lưu trữ và Lưới điện Thông minh\n\nTập đoàn Điện lực Việt Nam triển khai thí nghiệm các trạm lưu trữ pin BESS với công suất 50 MW tại Bình Thuận để cắt giảm hiện tượng quá tải đường dây truyền tải 500 kV.\n\nCông nghệ lưới điện siêu nhỏ (microgrid) kết hợp pin mặt trời áp mái và máy biến áp thông minh được áp dụng tại các khu công nghiệp công nghệ cao nhằm ổn định chất lượng điện áp.\n\n## 3. Cơ chế Mua bán Điện Trực tiếp (DPPA)\n\nNghị định về cơ chế DPPA cho phép khách hàng sử dụng điện lớn ký hợp đồng mua bán điện trực tiếp với các đơn vị phát điện năng lượng tái tạo qua đường dây riêng hoặc lưới điện quốc gia.\n\nMức giá trần đối với dự án điện gió trên bờ trong khung giá chuyển tiếp được quy định là 1.587,12 đồng trên một kilowatt giờ (chưa bao gồm thuế VAT).",
+  "passages": [
+    {
+      "passage_id": "VN_DOC_005::P000",
+      "document_id": "VN_DOC_005",
+      "text": "## 1. Quy hoạch Điện VIII",
+      "start_char": 0,
+      "end_char": 25,
+      "start_token": 0,
+      "end_token": 6,
+      "section_title": "",
+      "metadata": {
+        "document_version": 1
+      }
+    },
+    {
+      "passage_id": "VN_DOC_005::P001",
+      "document_id": "VN_DOC_005",
+      "text": "Quy hoạch phát triển điện lực quốc gia thời kỳ 2021 - 2030 (Quy hoạch điện VIII) đặt mục tiêu tỷ lệ năng lượng tái tạo đạt khoảng 30,9% đến 39,2% tổng sản lượng điện vào năm 2030.",
+      "start_char": 27,
+      "end_char": 206,
+      "start_token": 6,
+      "end_token": 44,
+      "section_title": "",
+      "metadata": {
+        "document_version": 1
+      }
+    },
+    {
+      "passage_id": "VN_DOC_005::P002",
+      "document_id": "VN_DOC_005",
+      "text": "Công suất điện gió ngoài khơi dự kiến đạt 6.000 MW vào năm 2030, ưu tiên triển khai tại khu vực Nam Trung Bộ nhờ tiềm năng tốc độ gió trung bình trên 8 mét trên giây.",
+      "start_char": 208,
+      "end_char": 374,
+      "start_token": 44,
+      "end_token": 81,
+      "section_title": "",
+      "metadata": {
+        "document_version": 1
+      }
+    },
+    {
+      "passage_id": "VN_DOC_005::P003",
+      "document_id": "VN_DOC_005",
+      "text": "## 2. Hệ thống Lưu trữ và Lưới điện Thông minh",
+      "start_char": 376,
+      "end_char": 422,
+      "start_token": 81,
+      "end_token": 92,
+      "section_title": "",
+      "metadata": {
+        "document_version": 1
+      }
+    },
+    {
+      "passage_id": "VN_DOC_005::P004",
+      "document_id": "VN_DOC_005",
+      "text": "Tập đoàn Điện lực Việt Nam triển khai thí nghiệm các trạm lưu trữ pin BESS với công suất 50 MW tại Bình Thuận để cắt giảm hiện tượng quá tải đường dây truyền tải 500 kV.",
+      "start_char": 424,
+      "end_char": 593,
+      "start_token": 92,
+      "end_token": 129,
+      "section_title": "",
+      "metadata": {
+        "document_version": 1
+      }
+    },
+    {
+      "passage_id": "VN_DOC_005::P005",
+      "document_id": "VN_DOC_005",
+      "text": "Công nghệ lưới điện siêu nhỏ (microgrid) kết hợp pin mặt trời áp mái và máy biến áp thông minh được áp dụng tại các khu công nghiệp công nghệ cao nhằm ổn định chất lượng điện áp.",
+      "start_char": 595,
+      "end_char": 773,
+      "start_token": 129,
+      "end_token": 167,
+      "section_title": "",
+      "metadata": {
+        "document_version": 1
+      }
+    },
+    {
+      "passage_id": "VN_DOC_005::P006",
+      "document_id": "VN_DOC_005",
+      "text": "## 3. Cơ chế Mua bán Điện Trực tiếp (DPPA)",
+      "start_char": 775,
+      "end_char": 817,
+      "start_token": 167,
+      "end_token": 177,
+      "section_title": "",
+      "metadata": {
+        "document_version": 1
+      }
+    },
+    {
+      "passage_id": "VN_DOC_005::P007",
+      "document_id": "VN_DOC_005",
+      "text": "Nghị định về cơ chế DPPA cho phép khách hàng sử dụng điện lớn ký hợp đồng mua bán điện trực tiếp với các đơn vị phát điện năng lượng tái tạo qua đường dây riêng hoặc lưới điện quốc gia.",
+      "start_char": 819,
+      "end_char": 1004,
+      "start_token": 177,
+      "end_token": 218,
+      "section_title": "",
+      "metadata": {
+        "document_version": 1
+      }
+    },
+    {
+      "passage_id": "VN_DOC_005::P008",
+      "document_id": "VN_DOC_005",
+      "text": "Mức giá trần đối với dự án điện gió trên bờ trong khung giá chuyển tiếp được quy định là 1.587,12 đồng trên một kilowatt giờ (chưa bao gồm thuế VAT).",
+      "start_char": 1006,
+      "end_char": 1155,
+      "start_token": 218,
+      "end_token": 249,
+      "section_title": "",
+      "metadata": {
+        "document_version": 1
+      }
+    }
+  ],
+  "structural_metadata": {},
+  "content_hash": "304bcc6645bc0799",
+  "created_at": 1791024170.7739487,
+  "metadata": {
+    "field": "Năng lượng & Công nghệ Kỹ thuật",
+    "author": "Bộ Công Thương",
+    "language": "vi"
+  }
+}

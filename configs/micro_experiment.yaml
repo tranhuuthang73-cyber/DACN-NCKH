@@ -1,0 +1,44 @@
+# Configuration for Micro Experiments on Document QA & MK-NIAH (Phase 1)
+# Paper: Figure 7 comparisons (1-level ICL baseline vs 2, 3, 4 memory levels)
+
+experiment:
+  name: "phase1_levels_ablation"
+  seed: 42
+  device: "cuda"
+
+model:
+  vocab_size: 1000
+  d_model: 256
+  n_heads: 4
+  n_layers: 4
+  d_ff: 1024
+  dropout: 0.0
+  max_seq_len: 1024
+
+cms_configurations:
+  - name: "level_1_icl_baseline"
+    num_levels: 1
+    lowest_chunk_size: 64
+    base_lr: 0.0001
+  - name: "level_2_cms"
+    num_levels: 2
+    lowest_chunk_size: 64
+    base_lr: 0.0001
+  - name: "level_3_cms"
+    num_levels: 3
+    lowest_chunk_size: 64
+    base_lr: 0.0001
+  - name: "level_4_cms"
+    num_levels: 4
+    lowest_chunk_size: 64
+    base_lr: 0.0001
+
+evaluation:
+  mk_niah:
+    context_length: 256
+    num_needles: 4
+    num_samples: 25
+  doc_qa:
+    num_docs: 8
+    doc_len: 256
+    qa_len: 32

@@ -1,0 +1,44 @@
+[2026-10-02 20:19:59] [INFO] Logger initialized. File sink: logs\debug_mkniah_20261002_201959.log
+[2026-10-02 20:19:59] [INFO] ==================================================
+[2026-10-02 20:19:59] [INFO] === STARTING MK-NIAH AUDIT & ROOT CAUSE DEBUG ===
+[2026-10-02 20:19:59] [INFO] ==================================================
+[2026-10-02 20:19:59] [INFO] Execution Device: cuda
+[2026-10-02 20:19:59] [INFO] 
+--- [AUDIT ITEM 1 & 2] MANUAL SAMPLE TRACE ---
+[2026-10-02 20:19:59] [INFO] Generated Sequence Length: 135 tokens (Context budget: 128)
+[2026-10-02 20:19:59] [INFO] Model Max Sequence Length: 1024 tokens
+[2026-10-02 20:19:59] [INFO] Is Context Truncated?: False (seq_len 135 <= 1024)
+[2026-10-02 20:19:59] [INFO] Queried Key: 116
+[2026-10-02 20:19:59] [INFO] Expected Target Value: 516
+[2026-10-02 20:19:59] [INFO] 
+Inspecting Needle Placements in Sequence:
+[2026-10-02 20:19:59] [INFO]   Needle [116 -> 516]: Key at index [24, 134], Value at index [25]
+[2026-10-02 20:19:59] [INFO]   Local Context around needle: [63, 38, 116, 516, 67, 85, 45]
+[2026-10-02 20:19:59] [INFO] Prompt Tail (last 8 tokens): [86, 18, 59, 58, 86, 69, 77, 116]
+[2026-10-02 20:19:59] [INFO] Final Query Token (at index 134): 116
+[2026-10-02 20:19:59] [INFO] 
+--- [AUDIT ITEM 3] MODEL FORWARD & LOGITS DISTRIBUTION ---
+[2026-10-02 20:19:59] [INFO] Target Token: 516 | Predicted Token (Argmax): 116
+[2026-10-02 20:19:59] [INFO] Target Token Probability: 0.000696 (Random chance = 0.001000)
+[2026-10-02 20:19:59] [INFO] Target Token Rank in Vocabulary: 813 / 1000
+[2026-10-02 20:19:59] [INFO] Top 5 Predicted Tokens: [116, 903, 694, 513, 33] with Probs: [0.02123, 0.00282, 0.00243, 0.00239, 0.00236]
+[2026-10-02 20:19:59] [INFO] Evaluator Exact Match Result: False
+[2026-10-02 20:19:59] [INFO] 
+--- [AUDIT ITEM 4] MEMORY UPDATE AUDIT (Equation 71) ---
+[2026-10-02 20:19:59] [INFO] Parameter Norm Difference in CMS during evaluate_model(): 0.0000000000
+[2026-10-02 20:19:59] [ERROR] >>> CRITICAL FINDING: CMS parameters were NOT updated during evaluate_model()! <<<
+[2026-10-02 20:19:59] [ERROR] >>> In bench.evaluate_model(), torch.no_grad() was used and update_cms_online was never called! <<<
+[2026-10-02 20:19:59] [INFO] 
+--- [AUDIT ITEM 5] CHECKPOINT INTEGRITY CHECK ---
+[2026-10-02 20:19:59] [INFO] Checkpoint loaded successfully from checkpoints/level_3_cms.pt.
+[2026-10-02 20:19:59] [INFO] Checkpoint config metadata: {'name': 'level_3_cms', 'num_levels': 3, 'lowest_chunk_size': 64, 'base_lr': 0.0001}
+[2026-10-02 20:19:59] [INFO] Checkpoint saved metrics: {'mk_niah': {'num_samples': 25, 'context_length': 256, 'num_needles': 4, 'correct': 0, 'accuracy_pct': 0.0}, 'doc_qa': {'num_docs': 8, 'doc_len': 256, 'qa_len': 32, 'enable_online_cms': True, 'avg_loss': 6.9529173374176025, 'perplexity': 1046.1973912837707}}
+[2026-10-02 20:19:59] [INFO] 
+--- [AUDIT ITEM 6] CMS MEMORIZATION CAPACITY TEST ---
+[2026-10-02 20:19:59] [INFO] Testing whether Equation 71 can memorize [query_key -> target_val] if updated properly:
+[2026-10-02 20:20:00] [INFO]   Step 0: Loss = 7.1020, Target Prob = 0.000823
+[2026-10-02 20:20:00] [INFO]   Step 10: Loss = 1.9581, Target Prob = 0.141126
+[2026-10-02 20:20:00] [INFO]   Target: 516 | Final Prediction: 516 | Match: True
+[2026-10-02 20:20:00] [INFO]   After Reset: Prediction = 116 | Match Target: False
+[2026-10-02 20:20:00] [INFO] 
+=== DIAGNOSTICS COMPLETE ===

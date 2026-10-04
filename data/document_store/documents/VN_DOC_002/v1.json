@@ -1,0 +1,133 @@
+{
+  "document_id": "VN_DOC_002",
+  "version": 1,
+  "title": "Quy định Bảo vệ Dữ liệu Cá nhân và An toàn Thông tin Số",
+  "raw_text": "## 1. Nguyên tắc Xử lý Dữ liệu\n\nNghị định 13/2023/NĐ-CP quy định dữ liệu cá nhân phải được xử lý theo nguyên tắc hợp pháp, công bằng, minh bạch và có sự đồng thuận rõ ràng của chủ thể dữ liệu trước khi thu thập.\n\nBên kiểm soát dữ liệu có nghĩa vụ áp dụng các biện pháp an ninh mạng kỹ thuật số như mã hóa AES-256 và ẩn danh hóa để ngăn chặn truy cập trái phép hoặc rò rỉ thông tin cá nhân.\n\n## 2. Quyền của Chủ thể Dữ liệu\n\nChủ thể dữ liệu có quyền yêu cầu xem, chỉnh sửa, hạn chế xử lý hoặc xóa bỏ toàn bộ dữ liệu cá nhân của mình trong vòng 72 giờ kể từ khi gửi văn bản hợp lệ.\n\nTrong trường hợp xảy ra sự cố vi phạm dữ liệu cá nhân, tổ chức chịu trách nhiệm phải thông báo cho Cục An ninh mạng và Phòng chống tội phạm công nghệ cao trong vòng 72 giờ làm việc.\n\n## 3. Chế tài Xử phạt\n\nCác hành vi mua bán trái phép dữ liệu cá nhân dưới 10.000 bản ghi có thể bị xử phạt vi phạm hành chính từ 50 triệu đến 100 triệu đồng tùy theo mức độ nghiêm trọng.\n\nTrường hợp tổ chức vi phạm nhiều lần hoặc chuyển giao dữ liệu trái phép ra nước ngoài có thể bị áp mức phạt tiền tối đa lên đến 5% tổng doanh thu năm tài chính liền trước.",
+  "passages": [
+    {
+      "passage_id": "VN_DOC_002::P000",
+      "document_id": "VN_DOC_002",
+      "text": "## 1. Nguyên tắc Xử lý Dữ liệu",
+      "start_char": 0,
+      "end_char": 30,
+      "start_token": 0,
+      "end_token": 8,
+      "section_title": "",
+      "metadata": {
+        "document_version": 1
+      }
+    },
+    {
+      "passage_id": "VN_DOC_002::P001",
+      "document_id": "VN_DOC_002",
+      "text": "Nghị định 13/2023/NĐ-CP quy định dữ liệu cá nhân phải được xử lý theo nguyên tắc hợp pháp, công bằng, minh bạch và có sự đồng thuận rõ ràng của chủ thể dữ liệu trước khi thu thập.",
+      "start_char": 32,
+      "end_char": 211,
+      "start_token": 8,
+      "end_token": 46,
+      "section_title": "",
+      "metadata": {
+        "document_version": 1
+      }
+    },
+    {
+      "passage_id": "VN_DOC_002::P002",
+      "document_id": "VN_DOC_002",
+      "text": "Bên kiểm soát dữ liệu có nghĩa vụ áp dụng các biện pháp an ninh mạng kỹ thuật số như mã hóa AES-256 và ẩn danh hóa để ngăn chặn truy cập trái phép hoặc rò rỉ thông tin cá nhân.",
+      "start_char": 213,
+      "end_char": 389,
+      "start_token": 46,
+      "end_token": 87,
+      "section_title": "",
+      "metadata": {
+        "document_version": 1
+      }
+    },
+    {
+      "passage_id": "VN_DOC_002::P003",
+      "document_id": "VN_DOC_002",
+      "text": "## 2. Quyền của Chủ thể Dữ liệu",
+      "start_char": 391,
+      "end_char": 422,
+      "start_token": 87,
+      "end_token": 95,
+      "section_title": "",
+      "metadata": {
+        "document_version": 1
+      }
+    },
+    {
+      "passage_id": "VN_DOC_002::P004",
+      "document_id": "VN_DOC_002",
+      "text": "Chủ thể dữ liệu có quyền yêu cầu xem, chỉnh sửa, hạn chế xử lý hoặc xóa bỏ toàn bộ dữ liệu cá nhân của mình trong vòng 72 giờ kể từ khi gửi văn bản hợp lệ.",
+      "start_char": 424,
+      "end_char": 579,
+      "start_token": 95,
+      "end_token": 133,
+      "section_title": "",
+      "metadata": {
+        "document_version": 1
+      }
+    },
+    {
+      "passage_id": "VN_DOC_002::P005",
+      "document_id": "VN_DOC_002",
+      "text": "Trong trường hợp xảy ra sự cố vi phạm dữ liệu cá nhân, tổ chức chịu trách nhiệm phải thông báo cho Cục An ninh mạng và Phòng chống tội phạm công nghệ cao trong vòng 72 giờ làm việc.",
+      "start_char": 581,
+      "end_char": 762,
+      "start_token": 133,
+      "end_token": 173,
+      "section_title": "",
+      "metadata": {
+        "document_version": 1
+      }
+    },
+    {
+      "passage_id": "VN_DOC_002::P006",
+      "document_id": "VN_DOC_002",
+      "text": "## 3. Chế tài Xử phạt",
+      "start_char": 764,
+      "end_char": 785,
+      "start_token": 173,
+      "end_token": 179,
+      "section_title": "",
+      "metadata": {
+        "document_version": 1
+      }
+    },
+    {
+      "passage_id": "VN_DOC_002::P007",
+      "document_id": "VN_DOC_002",
+      "text": "Các hành vi mua bán trái phép dữ liệu cá nhân dưới 10.000 bản ghi có thể bị xử phạt vi phạm hành chính từ 50 triệu đến 100 triệu đồng tùy theo mức độ nghiêm trọng.",
+      "start_char": 787,
+      "end_char": 950,
+      "start_token": 179,
+      "end_token": 216,
+      "section_title": "",
+      "metadata": {
+        "document_version": 1
+      }
+    },
+    {
+      "passage_id": "VN_DOC_002::P008",
+      "document_id": "VN_DOC_002",
+      "text": "Trường hợp tổ chức vi phạm nhiều lần hoặc chuyển giao dữ liệu trái phép ra nước ngoài có thể bị áp mức phạt tiền tối đa lên đến 5% tổng doanh thu năm tài chính liền trước.",
+      "start_char": 952,
+      "end_char": 1123,
+      "start_token": 216,
+      "end_token": 254,
+      "section_title": "",
+      "metadata": {
+        "document_version": 1
+      }
+    }
+  ],
+  "structural_metadata": {},
+  "content_hash": "f7b940781e46a26b",
+  "created_at": 1791024170.763976,
+  "metadata": {
+    "field": "Pháp luật & An ninh thông tin",
+    "author": "Ban Pháp chế",
+    "language": "vi"
+  }
+}

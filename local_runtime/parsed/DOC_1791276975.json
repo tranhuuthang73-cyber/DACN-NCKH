@@ -1,0 +1,18 @@
+{
+  "document_id": "DOC_1791276975",
+  "sections": [
+    {
+      "title": "Section Chunk 1",
+      "start": 0,
+      "end": 0
+    }
+  ],
+  "paragraphs": [
+    {
+      "text": "Chunk [0:25]",
+      "start": 0,
+      "end": 0
+    }
+  ],
+  "total_tokens": 25
+}

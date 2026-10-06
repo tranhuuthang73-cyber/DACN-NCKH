@@ -1,0 +1,33 @@
+{
+  "document_id": "DOC_1791277969256_ce3a89",
+  "sections": [
+    {
+      "title": "# Mục 1: Tri thức Cốt lõi",
+      "start": 0,
+      "end": 129
+    },
+    {
+      "title": "# Mục 2: Kiểm thử",
+      "start": 129,
+      "end": 146
+    }
+  ],
+  "paragraphs": [
+    {
+      "text": "# Mục 1: Tri thức Cốt lõi",
+      "start": 0,
+      "end": 25
+    },
+    {
+      "text": "Đặc tính quan trọng của SA-CMS là lưu trữ tri thức tham số hóa cục bộ ngay cả khi ngắt kết nối mạng.",
+      "start": 27,
+      "end": 127
+    },
+    {
+      "text": "# Mục 2: Kiểm thử",
+      "start": 129,
+      "end": 146
+    }
+  ],
+  "total_tokens": 114
+}

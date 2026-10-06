@@ -1,0 +1,2123 @@
+{
+  "document_id": "DOC_1791119870",
+  "version": 1,
+  "title": "Đe   Cu O Ng Chatbot Ho I Đa P Tre N Ta I Lie  U Vo  I Bo   Nho   Đa Thang Du  A Tre N Nested Learning",
+  "raw_text": "# Đề cương: Chatbot hỏi đáp trên tài liệu với bộ nhớ đa thang dựa trên Nested Learning\n\nOct 2, 2026 · @Nguyen Huu Trung\n\n## 1. Tên đề tài đề xuất\n\nKhuyến nghị dùng phương án A vì nó có một điểm mới về phương pháp, phát biểu được bằng công thức và kiểm chứng được bằng ablation.\n\nPhần còn lại của đề cương viết cho phương án A. Ý của B và C được giữ lại làm hai thí nghiệm trong bài, nên sinh viên không mất gì khi chọn A.\n\n## 2. Tóm tắt\n\nĐề tài xây dựng một chatbot chỉ trả lời dựa trên tài liệu người dùng cung cấp: mô hình đọc tài liệu vào một bộ nhớ tham số đa thang, rồi dùng truy hồi để dẫn chứng cho từng câu trả lời.\n\nBaseline là Hope-Attention với Continuum Memory System (CMS) trong bài báo Nested Learning. Bài báo cho thấy CMS nhiều mức tốt hơn ICL và DuoAttention trên hai bộ hỏi đáp tài liệu dài là LongHealth và QASPER.\n\nPhương pháp đề xuất, gọi là SA-CMS (Structure-Aligned CMS), mở rộng baseline ở ba điểm:\n\nLịch cập nhật căn theo cấu trúc văn bản: mức 1 cập nhật ở cuối mỗi đoạn, mức 2 ở cuối mỗi mục, mức 3 ở cuối mỗi tài liệu.\n\nMức bộ nhớ hạng thấp, có tự học: mỗi mức là một adapter nhỏ, được luyện thêm bằng các cặp hỏi đáp do mô hình tự sinh từ chính tài liệu.\n\nTrả lời có căn cứ: câu trả lời kèm đoạn trích dẫn, và mô hình từ chối khi tài liệu không chứa thông tin.\n\n## 3. Đặt vấn đề và khoảng trống nghiên cứu\n\nChatbot hỏi đáp trên tài liệu hiện nay chủ yếu dựa vào truy hồi, nên chất lượng bị chặn bởi bước tìm đoạn văn và mô hình không nắm được toàn bộ tài liệu.\n\nBa cách làm phổ biến đều có giới hạn rõ:\n\nRAG: mỗi lần mô hình chỉ thấy vài đoạn, nên câu hỏi cần tổng hợp nhiều phần của tài liệu dễ sai.\n\nĐưa cả tài liệu vào ngữ cảnh: tốn token ở mọi câu hỏi và vượt cửa sổ của mô hình nhỏ. Theo bài báo baseline, tri thức trong ngữ cảnh cũng không bao giờ đi vào tham số dài hạn.\n\nTinh chỉnh một mức trên tài liệu: nạp tài liệu mới làm quên tài liệu cũ.\n\nCMS trong Nested Learning là một hướng thứ tư: nén tài liệu vào nhiều mức tham số có nhịp cập nhật khác nhau. Bài báo đã thử hướng này trên hỏi đáp tài liệu, nhưng còn để lại sáu khoảng trống.\n\n## 4. Baseline: CMS trong bài báo Nested Learning\n\nBaseline thay khối MLP của Transformer bằng một chuỗi k khối MLP cập nhật ở các tần số khác nhau, và giữ nguyên attention (biến thể Hope-Attention).\n\nĐầu ra của chuỗi (phương trình 70 của bài báo):\n\ny_t = \\mathrm{MLP}^{(f_k)}\\big(\\mathrm{MLP}^{(f_{k-1})}(\\cdots \\mathrm{MLP}^{(f_1)}(x_t))\\big)\n\nKhối thứ ℓ chỉ cập nhật sau mỗi C(ℓ) token, bằng gradient tích lũy của mất mát dự đoán token kế tiếp (phương trình 71):\n\n\\theta^{(f_\\ell)}_{i+1} = \\theta^{(f_\\ell)}_{i} - \\begin{cases} \\sum_{t=i-C^{(\\ell)}}^{i} \\eta^{(\\ell)}_t \\, f\\big(\\theta^{(f_\\ell)}_t; x_t\\big) & \\text{nếu } i \\equiv 0 \\pmod{C^{(\\ell)}} \\\\ 0 & \\text{ngược lại} \\end{cases}\n\nMỗi khối lấy trọng số MLP đã pre-train làm trạng thái đầu (mục 7.3 của bài báo). Khi tốc độ học nội tại tiến về 0, khối giữ nguyên hành vi gốc.\n\nKết quả của bài báo trên hỏi đáp tài liệu (hình 7):\n\nHai xu hướng mà đề tài phải tái hiện được trước khi cải tiến:\n\nThêm mức bộ nhớ thì khả năng hiểu ngữ cảnh dài tốt hơn.\n\nTần số thấp nhất càng cao thì trí nhớ dài hạn càng yếu, đổi lại mô hình thích nghi nhanh hơn.\n\nTác giả cũng nêu rõ hiện tượng quên thảm khốc chưa được giải quyết triệt để. Đề tài vì vậy đo mức quên như một kết quả chính.\n\n## 5. Mục tiêu, câu hỏi nghiên cứu và đóng góp\n\nMục tiêu tổng quát: thiết kế và đánh giá SA-CMS, một bộ nhớ đa thang cập nhật theo cấu trúc văn bản, cho chatbot trả lời có dẫn chứng trên tài liệu được cung cấp.\n\n### 5.1 Câu hỏi nghiên cứu\n\nCác giả thuyết là dự đoán cần kiểm chứng, chưa phải kết quả.\n\n### 5.2 Đóng góp hướng tới bài Q1\n\nPhương pháp: SA-CMS, trong đó lịch token cố định của baseline là một trường hợp riêng.\n\nGiao thức đánh giá: ba chế độ trả lời (tài liệu trong ngữ cảnh, tài liệu đã rời ngữ cảnh, bản lai) so sánh ở cùng ngân sách tính toán.\n\nBằng chứng thực nghiệm: so sánh với RAG và nén ngữ cảnh, có ablation, kiểm định thống kê và phân tích lỗi.\n\nTài nguyên: mã nguồn mở và một bộ câu hỏi trên tài liệu tiếng Việt.\n\n### 5.3 Phạm vi và giả định\n\nTrong phạm vi: tài liệu văn bản tiếng Anh và tiếng Việt, đã trích xuất chữ; backbone mở 1–4 tỷ tham số.\n\nNgoài phạm vi: bảng, hình và công thức trong tài liệu; huấn luyện Hope đầy đủ từ đầu; bộ tối ưu M3.\n\nGiả định cần xác nhận: thời gian 32 tuần; có một GPU 24 GB; chưa có mã nguồn chính thức của Hope, nên baseline được tự cài đặt theo phương trình 70–71.\n\n## 6. Phương pháp đề xuất: SA-CMS\n\nSA-CMS giữ nguyên backbone đã pre-train, thêm ba mức adapter hạng thấp, và cho mỗi mức cập nhật đúng tại ranh giới đoạn, mục hoặc tài liệu.\n\n### 6.1 Luồng xử lý\n\nLuồng SA-CMS · 2 pha, 3 mức bộ nhớ, 1 nhánh từ chối\n\nỞ pha nạp, mỗi mức cập nhật tại ranh giới của riêng nó và tri thức được củng cố dần xuống mức chậm hơn. Ở pha trả lời, chatbot chỉ trả lời khi có đoạn chứng cứ hỗ trợ.\n\n### 6.2 Các mức bộ nhớ\n\nĐầu ra của mỗi khối theo biến thể CMS độc lập trong bài báo (phương trình 74), với hàm Agg là tổng có cổng:\n\ny_t = \\mathrm{MLP}_{\\mathrm{pre}}(x_t) + \\sum_{\\ell=1}^{3} g_\\ell(x_t)\\, B_\\ell A_\\ell\\, x_t\n\nCổng g nằm trong khoảng 0 đến 1 và được học. Khi mọi cổng bằng 0, mô hình trở về đúng backbone gốc.\n\n### 6.3 Lịch cập nhật căn theo cấu trúc\n\nGọi b = 1 khi token t kết thúc một đơn vị của mức ℓ (đoạn, mục hoặc tài liệu). Mức ℓ gom các token của đơn vị đó vào bộ đệm B và cập nhật tại ranh giới:\n\n\\theta^{(\\ell)} \\leftarrow \\theta^{(\\ell)} - \\frac{\\eta^{(\\ell)}}{|\\mathcal{B}_\\ell|} \\sum_{t \\in \\mathcal{B}_\\ell} \\nabla_{\\theta^{(\\ell)}} \\mathcal{L}(x_t) \\quad \\text{khi} \\quad b_\\ell(t) = 1\n\nNếu ranh giới rơi đúng vào các bội của C(ℓ), công thức trở về phương trình 71, chỉ khác một hằng số nhân vào tốc độ học. Baseline vì vậy là một trường hợp riêng của SA-CMS.\n\nRanh giới lấy từ tiêu đề và ngắt đoạn của tài liệu.\n\nĐơn vị quá dài được cắt ở một độ dài trần; tài liệu không có cấu trúc dùng lịch token cố định như baseline.\n\nGradient chỉ tính cho adapter ở K tầng trên cùng để giữ chi phí nạp thấp.\n\n### 6.4 Tự học bằng câu hỏi tự sinh\n\nỞ cuối mỗi mục và mỗi tài liệu, mô hình tự sinh các cặp hỏi đáp từ phần vừa đọc và dùng chúng để cập nhật mức 2 và mức 3. Ý tưởng tự học này gần với Cartridges, nhưng ở đây tri thức đi vào nhiều mức thay vì một biểu diễn duy nhất.\n\n### 6.5 Trả lời có căn cứ\n\nTruy hồi các đoạn liên quan từ chỉ mục của kho tài liệu.\n\nSinh câu trả lời bằng backbone cùng ba mức bộ nhớ, kèm mã của đoạn làm chứng cứ.\n\nKiểm tra căn cứ: nếu không đoạn nào hỗ trợ câu trả lời, chatbot trả lời rằng tài liệu không đề cập.\n\nBa chế độ dùng trong thực nghiệm: tài liệu nằm trong ngữ cảnh, chỉ dùng bộ nhớ sau khi tài liệu rời ngữ cảnh, và bản lai giữa bộ nhớ với truy hồi.\n\n### 6.6 Huấn luyện khởi tạo\n\nBài báo meta-học trạng thái đầu của các mức bằng 15 tỷ token. Đề tài thu nhỏ bước này: chỉ huấn luyện adapter và cổng, mô phỏng vòng đọc rồi trả lời bằng xấp xỉ bậc nhất, trên phần huấn luyện của các bộ hỏi đáp tài liệu.\n\nQuy mô dự kiến là 50–100 triệu token trên một GPU 24 GB, chốt lại sau thử nghiệm ở tuần 8.\n\n### 6.7 Quản lý kho tài liệu\n\nMỗi kho có một tệp bộ nhớ riêng, gồm trọng số adapter của ba mức.\n\nHệ thống chụp trạng thái trước mỗi lần nạp, nên gỡ một tài liệu vừa nạp là quay lui về bản chụp.\n\nKhi tài liệu có phiên bản mới, hệ thống nạp lại và đo xem câu trả lời có theo phiên bản mới không.\n\n## 7. Thiết kế thực nghiệm\n\nThực nghiệm dùng lại hai bộ hỏi đáp tài liệu của bài báo để so sánh trực tiếp với baseline, rồi thêm kho tài liệu tăng dần và tài liệu tiếng Việt.\n\n### 7.1 Dữ liệu\n\n### 7.2 Phương pháp so sánh\n\nMọi phương pháp dùng chung backbone, chung cửa sổ ngữ cảnh và chung mức lượng tử hóa.\n\n### 7.3 Thước đo\n\n### 7.4 Ablation\n\nLịch token cố định so với lịch theo cấu trúc, ở cùng tổng số lần cập nhật.\n\nRanh giới thật so với ranh giới ngẫu nhiên có cùng số lượng, để tách tác dụng của cấu trúc khỏi tác dụng của độ dài thay đổi.\n\nSố mức bộ nhớ: 1, 2, 3.\n\nCó và không có tự học bằng câu hỏi tự sinh.\n\nTổng thường so với tổng có cổng khi gộp các mức.\n\nHạng adapter và số tầng K được cập nhật.\n\n### 7.5 Độ tin cậy thống kê\n\nMỗi cấu hình chạy 3 hạt giống. Kết quả báo cáo kèm khoảng tin cậy 95% bằng bootstrap, và so sánh P1 với B5 dùng kiểm định bắt cặp trên cùng bộ câu hỏi.\n\n### 7.6 Tiêu chí thành công\n\nBài báo đủ mạnh khi P1 hơn B5 có ý nghĩa thống kê trên QASPER ở cùng chi phí nạp, và P2 đạt độ trung thực không thấp hơn B2. Nếu lịch theo cấu trúc không hơn lịch cố định, bài báo chuyển trọng tâm sang phương án B hoặc C ở mục 1.\n\n## 8. Lộ trình viết bài Q1\n\nSinh viên nộp bản thảo ở tuần 32; vòng phản biện của tạp chí nằm ngoài khung thời gian này.\n\n### 8.1 Dàn ý bài báo\n\nIntroduction: vấn đề, sáu khoảng trống ở mục 3, bốn đóng góp ở mục 5.2.\n\nRelated Work: RAG, nén ngữ cảnh dài, học liên tục, Nested Learning và Titans.\n\nBackground: CMS và phương trình 70–71.\n\nMethod: SA-CMS, lịch theo cấu trúc, tự học, trả lời có căn cứ.\n\nExperimental Setup: dữ liệu, phương pháp so sánh, thước đo, ngân sách tính toán.\n\nResults: trả lời lần lượt RQ1 đến RQ5.\n\nAnalysis: ablation, phân tích lỗi, chi phí.\n\nLimitations: những gì phương pháp chưa làm được, gồm cả việc xóa chọn lọc.\n\nConclusion.\n\n### 8.2 Tạp chí ứng viên\n\nCả ba được các trang tổng hợp chỉ số ghi là Q1 theo SJR (IP&M, KBS, ESWA). Sinh viên cần đối chiếu lại trên trang Scimago chính thức ngay trước khi nộp.\n\n### 8.3 Điều kiện để bản thảo đủ mạnh\n\n☐ Điểm mới phát biểu được bằng công thức, baseline là trường hợp riêng.\n\n☐ Có ít nhất hai bộ dữ liệu công khai dùng chung với bài báo gốc.\n\n☐ So sánh với một hệ RAG được tinh chỉnh kỹ, không chỉ với mốc yếu.\n\n☐ Ablation tách từng thành phần, có đối chứng ranh giới ngẫu nhiên.\n\n☐ Mọi bảng kết quả có khoảng tin cậy và kiểm định thống kê.\n\n☐ Báo cáo đầy đủ chi phí và giới hạn của phương pháp.\n\n☐ Mã nguồn, cấu hình và bộ câu hỏi tiếng Việt được công bố.\n\n### 8.4 Tiến độ\n\nNếu G2 không đạt sau tuần 12, bài chuyển trọng tâm sang phương án B hoặc C ở mục 1 mà không phải làm lại giai đoạn 1.\n\n## 9. Rủi ro và phương án dự phòng\n\n## 10. Tài liệu tham khảo\n\nMục 1 là bài báo baseline do người dùng cung cấp. Mục 2–8 lấy từ danh mục tham khảo của chính bài báo đó.\n\nA. Behrouz, M. Razaviyayn, P. Zhong, V. Mirrokni. \"Nested Learning: The Illusion of Deep Learning Architectures.\" arXiv:2512.24695, 2025. Một phiên bản đăng tại NeurIPS 2025.\n\nA. Behrouz, P. Zhong, V. Mirrokni. \"Titans: Learning to Memorize at Test Time.\" NeurIPS 2025.\n\nP. Dasigi, K. Lo, I. Beltagy, A. Cohan, N. A. Smith, M. Gardner. \"A dataset of information-seeking questions and answers anchored in research papers.\" arXiv:2105.03011, 2021.\n\nL. Adams và cộng sự. \"LongHealth: A question answering benchmark with long clinical documents.\" Journal of Healthcare Informatics Research, 2025, tr. 1–17.\n\nC.-P. Hsieh và cộng sự. \"RULER: What's the Real Context Size of Your Long-Context Language Models?\" Conference on Language Modeling, 2024.\n\nS. Eyuboglu và cộng sự. \"Cartridges: Lightweight and general-purpose long context representations via self-study.\" arXiv:2506.06266, 2025.\n\nG. Xiao và cộng sự. \"DuoAttention: Efficient Long-Context LLM Inference with Retrieval and Streaming Heads.\" ICLR 2025.\n\nA. Dubey và cộng sự. \"The Llama 3 Herd of Models.\" arXiv:2407.21783, 2024.",
+  "passages": [
+    {
+      "passage_id": "DOC_1791119870::P000",
+      "document_id": "DOC_1791119870",
+      "text": "# Đề cương: Chatbot hỏi đáp trên tài liệu với bộ nhớ đa thang dựa trên Nested Learning Oct 2, 2026 · @Nguyen Huu Trung ## 1. Tên đề tài đề xuất",
+      "start_char": 0,
+      "end_char": 146,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "Đề cương: Chatbot hỏi đáp trên tài liệu với bộ nhớ đa thang dựa trên Nested Learning",
+      "metadata": {
+        "section_id": "SEC001",
+        "paragraph_id": "PARA001",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P001",
+      "document_id": "DOC_1791119870",
+      "text": "Oct 2, 2026 · @Nguyen Huu Trung ## 1. Tên đề tài đề xuất Khuyến nghị dùng phương án A vì nó có một điểm mới về phương pháp, phát biểu được bằng công thức và kiểm chứng được bằng ablation. Phần còn lại của đề cương viết cho phương án A.",
+      "start_char": 88,
+      "end_char": 326,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "Đề cương: Chatbot hỏi đáp trên tài liệu với bộ nhớ đa thang dựa trên Nested Learning",
+      "metadata": {
+        "section_id": "SEC001",
+        "paragraph_id": "PARA001",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P002",
+      "document_id": "DOC_1791119870",
+      "text": "Phần còn lại của đề cương viết cho phương án A. Ý của B và C được giữ lại làm hai thí nghiệm trong bài, nên sinh viên không mất gì khi chọn A. ## 2. Tóm tắt",
+      "start_char": 279,
+      "end_char": 437,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "1. Tên đề tài đề xuất",
+      "metadata": {
+        "section_id": "SEC002",
+        "paragraph_id": "PARA004",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P003",
+      "document_id": "DOC_1791119870",
+      "text": "Ý của B và C được giữ lại làm hai thí nghiệm trong bài, nên sinh viên không mất gì khi chọn A. ## 2. Tóm tắt Đề tài xây dựng một chatbot chỉ trả lời dựa trên tài liệu người dùng cung cấp: mô hình đọc tài liệu vào một bộ nhớ tham số đa thang, rồi dùng truy hồi để dẫn chứng cho từng câu trả lời.",
+      "start_char": 327,
+      "end_char": 623,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "1. Tên đề tài đề xuất",
+      "metadata": {
+        "section_id": "SEC002",
+        "paragraph_id": "PARA005",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P004",
+      "document_id": "DOC_1791119870",
+      "text": "Đề tài xây dựng một chatbot chỉ trả lời dựa trên tài liệu người dùng cung cấp: mô hình đọc tài liệu vào một bộ nhớ tham số đa thang, rồi dùng truy hồi để dẫn chứng cho từng câu trả lời. Baseline là Hope-Attention với Continuum Memory System (CMS) trong bài báo Nested Learning.",
+      "start_char": 438,
+      "end_char": 716,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "2. Tóm tắt",
+      "metadata": {
+        "section_id": "SEC003",
+        "paragraph_id": "PARA006",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P005",
+      "document_id": "DOC_1791119870",
+      "text": "Baseline là Hope-Attention với Continuum Memory System (CMS) trong bài báo Nested Learning. Bài báo cho thấy CMS nhiều mức tốt hơn ICL và DuoAttention trên hai bộ hỏi đáp tài liệu dài là LongHealth và QASPER.",
+      "start_char": 625,
+      "end_char": 833,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "2. Tóm tắt",
+      "metadata": {
+        "section_id": "SEC003",
+        "paragraph_id": "PARA007",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P006",
+      "document_id": "DOC_1791119870",
+      "text": "Bài báo cho thấy CMS nhiều mức tốt hơn ICL và DuoAttention trên hai bộ hỏi đáp tài liệu dài là LongHealth và QASPER. Phương pháp đề xuất, gọi là SA-CMS (Structure-Aligned CMS), mở rộng baseline ở ba điểm:",
+      "start_char": 717,
+      "end_char": 923,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "2. Tóm tắt",
+      "metadata": {
+        "section_id": "SEC003",
+        "paragraph_id": "PARA008",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P007",
+      "document_id": "DOC_1791119870",
+      "text": "Phương pháp đề xuất, gọi là SA-CMS (Structure-Aligned CMS), mở rộng baseline ở ba điểm: Lịch cập nhật căn theo cấu trúc văn bản: mức 1 cập nhật ở cuối mỗi đoạn, mức 2 ở cuối mỗi mục, mức 3 ở cuối mỗi tài liệu.",
+      "start_char": 835,
+      "end_char": 1045,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "2. Tóm tắt",
+      "metadata": {
+        "section_id": "SEC003",
+        "paragraph_id": "PARA008",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P008",
+      "document_id": "DOC_1791119870",
+      "text": "Lịch cập nhật căn theo cấu trúc văn bản: mức 1 cập nhật ở cuối mỗi đoạn, mức 2 ở cuối mỗi mục, mức 3 ở cuối mỗi tài liệu. Mức bộ nhớ hạng thấp, có tự học: mỗi mức là một adapter nhỏ, được luyện thêm bằng các cặp hỏi đáp do mô hình tự sinh từ chính tài liệu.",
+      "start_char": 924,
+      "end_char": 1182,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "2. Tóm tắt",
+      "metadata": {
+        "section_id": "SEC003",
+        "paragraph_id": "PARA009",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P009",
+      "document_id": "DOC_1791119870",
+      "text": "Mức bộ nhớ hạng thấp, có tự học: mỗi mức là một adapter nhỏ, được luyện thêm bằng các cặp hỏi đáp do mô hình tự sinh từ chính tài liệu. Trả lời có căn cứ: câu trả lời kèm đoạn trích dẫn, và mô hình từ chối khi tài liệu không chứa thông tin. ## 3.",
+      "start_char": 1047,
+      "end_char": 1295,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "2. Tóm tắt",
+      "metadata": {
+        "section_id": "SEC003",
+        "paragraph_id": "PARA010",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P010",
+      "document_id": "DOC_1791119870",
+      "text": "Trả lời có căn cứ: câu trả lời kèm đoạn trích dẫn, và mô hình từ chối khi tài liệu không chứa thông tin. ## 3. Đặt vấn đề và khoảng trống nghiên cứu",
+      "start_char": 1184,
+      "end_char": 1334,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "2. Tóm tắt",
+      "metadata": {
+        "section_id": "SEC003",
+        "paragraph_id": "PARA011",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P011",
+      "document_id": "DOC_1791119870",
+      "text": "Đặt vấn đề và khoảng trống nghiên cứu Chatbot hỏi đáp trên tài liệu hiện nay chủ yếu dựa vào truy hồi, nên chất lượng bị chặn bởi bước tìm đoạn văn và mô hình không nắm được toàn bộ tài liệu. Ba cách làm phổ biến đều có giới hạn rõ:",
+      "start_char": 1296,
+      "end_char": 1531,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "3. Đặt vấn đề và khoảng trống nghiên cứu",
+      "metadata": {
+        "section_id": "SEC004",
+        "paragraph_id": "PARA013",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P012",
+      "document_id": "DOC_1791119870",
+      "text": "Ba cách làm phổ biến đều có giới hạn rõ: RAG: mỗi lần mô hình chỉ thấy vài đoạn, nên câu hỏi cần tổng hợp nhiều phần của tài liệu dễ sai. Đưa cả tài liệu vào ngữ cảnh: tốn token ở mọi câu hỏi và vượt cửa sổ của mô hình nhỏ.",
+      "start_char": 1490,
+      "end_char": 1715,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "3. Đặt vấn đề và khoảng trống nghiên cứu",
+      "metadata": {
+        "section_id": "SEC004",
+        "paragraph_id": "PARA014",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P013",
+      "document_id": "DOC_1791119870",
+      "text": "Đưa cả tài liệu vào ngữ cảnh: tốn token ở mọi câu hỏi và vượt cửa sổ của mô hình nhỏ. Theo bài báo baseline, tri thức trong ngữ cảnh cũng không bao giờ đi vào tham số dài hạn. Tinh chỉnh một mức trên tài liệu: nạp tài liệu mới làm quên tài liệu cũ.",
+      "start_char": 1630,
+      "end_char": 1879,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "3. Đặt vấn đề và khoảng trống nghiên cứu",
+      "metadata": {
+        "section_id": "SEC004",
+        "paragraph_id": "PARA016",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P014",
+      "document_id": "DOC_1791119870",
+      "text": "Tinh chỉnh một mức trên tài liệu: nạp tài liệu mới làm quên tài liệu cũ. CMS trong Nested Learning là một hướng thứ tư: nén tài liệu vào nhiều mức tham số có nhịp cập nhật khác nhau.",
+      "start_char": 1807,
+      "end_char": 1990,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "3. Đặt vấn đề và khoảng trống nghiên cứu",
+      "metadata": {
+        "section_id": "SEC004",
+        "paragraph_id": "PARA017",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P015",
+      "document_id": "DOC_1791119870",
+      "text": "CMS trong Nested Learning là một hướng thứ tư: nén tài liệu vào nhiều mức tham số có nhịp cập nhật khác nhau. Bài báo đã thử hướng này trên hỏi đáp tài liệu, nhưng còn để lại sáu khoảng trống. ## 4. Baseline: CMS trong bài báo Nested Learning",
+      "start_char": 1881,
+      "end_char": 2125,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "3. Đặt vấn đề và khoảng trống nghiên cứu",
+      "metadata": {
+        "section_id": "SEC004",
+        "paragraph_id": "PARA018",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P016",
+      "document_id": "DOC_1791119870",
+      "text": "Baseline: CMS trong bài báo Nested Learning Baseline thay khối MLP của Transformer bằng một chuỗi k khối MLP cập nhật ở các tần số khác nhau, và giữ nguyên attention (biến thể Hope-Attention). Đầu ra của chuỗi (phương trình 70 của bài báo):",
+      "start_char": 2081,
+      "end_char": 2324,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "4. Baseline: CMS trong bài báo Nested Learning",
+      "metadata": {
+        "section_id": "SEC005",
+        "paragraph_id": "PARA020",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P017",
+      "document_id": "DOC_1791119870",
+      "text": "Đầu ra của chuỗi (phương trình 70 của bài báo): y_t = \\mathrm{MLP}^{(f_k)}\\big(\\mathrm{MLP}^{(f_{k-1})}(\\cdots \\mathrm{MLP}^{(f_1)}(x_t))\\big)",
+      "start_char": 2276,
+      "end_char": 2420,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "4. Baseline: CMS trong bài báo Nested Learning",
+      "metadata": {
+        "section_id": "SEC005",
+        "paragraph_id": "PARA021",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P018",
+      "document_id": "DOC_1791119870",
+      "text": "y_t = \\mathrm{MLP}^{(f_k)}\\big(\\mathrm{MLP}^{(f_{k-1})}(\\cdots \\mathrm{MLP}^{(f_1)}(x_t))\\big) Khối thứ ℓ chỉ cập nhật sau mỗi C(ℓ) token, bằng gradient tích lũy của mất mát dự đoán token kế tiếp (phương trình 71):",
+      "start_char": 2325,
+      "end_char": 2541,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "4. Baseline: CMS trong bài báo Nested Learning",
+      "metadata": {
+        "section_id": "SEC005",
+        "paragraph_id": "PARA022",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P019",
+      "document_id": "DOC_1791119870",
+      "text": "Khối thứ ℓ chỉ cập nhật sau mỗi C(ℓ) token, bằng gradient tích lũy của mất mát dự đoán token kế tiếp (phương trình 71): \\theta^{(f_\\ell)}_{i+1} = \\theta^{(f_\\ell)}_{i} - \\begin{cases} \\sum_{t=i-C^{(\\ell)}}^{i} \\eta^{(\\ell)}_t \\, f\\big(\\theta^{(f_\\ell)}_t; x_t\\big) & \\text{nếu } i \\equiv 0 \\pmod{C^{(\\ell)}} \\\\ 0 & \\text{ngược lại} \\end{cases}",
+      "start_char": 2421,
+      "end_char": 2766,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "4. Baseline: CMS trong bài báo Nested Learning",
+      "metadata": {
+        "section_id": "SEC005",
+        "paragraph_id": "PARA023",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P020",
+      "document_id": "DOC_1791119870",
+      "text": "\\theta^{(f_\\ell)}_{i+1} = \\theta^{(f_\\ell)}_{i} - \\begin{cases} \\sum_{t=i-C^{(\\ell)}}^{i} \\eta^{(\\ell)}_t \\, f\\big(\\theta^{(f_\\ell)}_t; x_t\\big) & \\text{nếu } i \\equiv 0 \\pmod{C^{(\\ell)}} \\\\ 0 & \\text{ngược lại} \\end{cases} Mỗi khối lấy trọng số MLP đã pre-train làm trạng thái đầu (mục 7.3 của bài báo).",
+      "start_char": 2542,
+      "end_char": 2847,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "4. Baseline: CMS trong bài báo Nested Learning",
+      "metadata": {
+        "section_id": "SEC005",
+        "paragraph_id": "PARA024",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P021",
+      "document_id": "DOC_1791119870",
+      "text": "Mỗi khối lấy trọng số MLP đã pre-train làm trạng thái đầu (mục 7.3 của bài báo). Khi tốc độ học nội tại tiến về 0, khối giữ nguyên hành vi gốc. Kết quả của bài báo trên hỏi đáp tài liệu (hình 7): Hai xu hướng mà đề tài phải tái hiện được trước khi cải tiến:",
+      "start_char": 2767,
+      "end_char": 3027,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "4. Baseline: CMS trong bài báo Nested Learning",
+      "metadata": {
+        "section_id": "SEC005",
+        "paragraph_id": "PARA025",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P022",
+      "document_id": "DOC_1791119870",
+      "text": "Hai xu hướng mà đề tài phải tái hiện được trước khi cải tiến: Thêm mức bộ nhớ thì khả năng hiểu ngữ cảnh dài tốt hơn. Tần số thấp nhất càng cao thì trí nhớ dài hạn càng yếu, đổi lại mô hình thích nghi nhanh hơn.",
+      "start_char": 2965,
+      "end_char": 3178,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "4. Baseline: CMS trong bài báo Nested Learning",
+      "metadata": {
+        "section_id": "SEC005",
+        "paragraph_id": "PARA027",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P023",
+      "document_id": "DOC_1791119870",
+      "text": "Tần số thấp nhất càng cao thì trí nhớ dài hạn càng yếu, đổi lại mô hình thích nghi nhanh hơn. Tác giả cũng nêu rõ hiện tượng quên thảm khốc chưa được giải quyết triệt để. Đề tài vì vậy đo mức quên như một kết quả chính. ## 5.",
+      "start_char": 3085,
+      "end_char": 3312,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "4. Baseline: CMS trong bài báo Nested Learning",
+      "metadata": {
+        "section_id": "SEC005",
+        "paragraph_id": "PARA029",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P024",
+      "document_id": "DOC_1791119870",
+      "text": "Đề tài vì vậy đo mức quên như một kết quả chính. ## 5. Mục tiêu, câu hỏi nghiên cứu và đóng góp Mục tiêu tổng quát: thiết kế và đánh giá SA-CMS, một bộ nhớ đa thang cập nhật theo cấu trúc văn bản, cho chatbot trả lời có dẫn chứng trên tài liệu được cung cấp.",
+      "start_char": 3257,
+      "end_char": 3518,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "4. Baseline: CMS trong bài báo Nested Learning",
+      "metadata": {
+        "section_id": "SEC005",
+        "paragraph_id": "PARA031",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P025",
+      "document_id": "DOC_1791119870",
+      "text": "Mục tiêu tổng quát: thiết kế và đánh giá SA-CMS, một bộ nhớ đa thang cập nhật theo cấu trúc văn bản, cho chatbot trả lời có dẫn chứng trên tài liệu được cung cấp. ### 5.1 Câu hỏi nghiên cứu Các giả thuyết là dự đoán cần kiểm chứng, chưa phải kết quả.",
+      "start_char": 3355,
+      "end_char": 3608,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "5. Mục tiêu, câu hỏi nghiên cứu và đóng góp",
+      "metadata": {
+        "section_id": "SEC006",
+        "paragraph_id": "PARA032",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P026",
+      "document_id": "DOC_1791119870",
+      "text": "Các giả thuyết là dự đoán cần kiểm chứng, chưa phải kết quả. ### 5.2 Đóng góp hướng tới bài Q1 Phương pháp: SA-CMS, trong đó lịch token cố định của baseline là một trường hợp riêng.",
+      "start_char": 3547,
+      "end_char": 3730,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "5.1 Câu hỏi nghiên cứu",
+      "metadata": {
+        "section_id": "SEC007",
+        "paragraph_id": "PARA034",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P027",
+      "document_id": "DOC_1791119870",
+      "text": "Phương pháp: SA-CMS, trong đó lịch token cố định của baseline là một trường hợp riêng. Giao thức đánh giá: ba chế độ trả lời (tài liệu trong ngữ cảnh, tài liệu đã rời ngữ cảnh, bản lai) so sánh ở cùng ngân sách tính toán.",
+      "start_char": 3644,
+      "end_char": 3866,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "5.2 Đóng góp hướng tới bài Q1",
+      "metadata": {
+        "section_id": "SEC008",
+        "paragraph_id": "PARA036",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P028",
+      "document_id": "DOC_1791119870",
+      "text": "Giao thức đánh giá: ba chế độ trả lời (tài liệu trong ngữ cảnh, tài liệu đã rời ngữ cảnh, bản lai) so sánh ở cùng ngân sách tính toán. Bằng chứng thực nghiệm: so sánh với RAG và nén ngữ cảnh, có ablation, kiểm định thống kê và phân tích lỗi.",
+      "start_char": 3732,
+      "end_char": 3974,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "5.2 Đóng góp hướng tới bài Q1",
+      "metadata": {
+        "section_id": "SEC008",
+        "paragraph_id": "PARA037",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P029",
+      "document_id": "DOC_1791119870",
+      "text": "Bằng chứng thực nghiệm: so sánh với RAG và nén ngữ cảnh, có ablation, kiểm định thống kê và phân tích lỗi. Tài nguyên: mã nguồn mở và một bộ câu hỏi trên tài liệu tiếng Việt. ### 5.3 Phạm vi và giả định",
+      "start_char": 3868,
+      "end_char": 4073,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "5.2 Đóng góp hướng tới bài Q1",
+      "metadata": {
+        "section_id": "SEC008",
+        "paragraph_id": "PARA038",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P030",
+      "document_id": "DOC_1791119870",
+      "text": "Tài nguyên: mã nguồn mở và một bộ câu hỏi trên tài liệu tiếng Việt. ### 5.3 Phạm vi và giả định Trong phạm vi: tài liệu văn bản tiếng Anh và tiếng Việt, đã trích xuất chữ; backbone mở 1–4 tỷ tham số.",
+      "start_char": 3976,
+      "end_char": 4177,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "5.2 Đóng góp hướng tới bài Q1",
+      "metadata": {
+        "section_id": "SEC008",
+        "paragraph_id": "PARA039",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P031",
+      "document_id": "DOC_1791119870",
+      "text": "Trong phạm vi: tài liệu văn bản tiếng Anh và tiếng Việt, đã trích xuất chữ; backbone mở 1–4 tỷ tham số. Ngoài phạm vi: bảng, hình và công thức trong tài liệu; huấn luyện Hope đầy đủ từ đầu; bộ tối ưu M3.",
+      "start_char": 4074,
+      "end_char": 4278,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "5.3 Phạm vi và giả định",
+      "metadata": {
+        "section_id": "SEC009",
+        "paragraph_id": "PARA041",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P032",
+      "document_id": "DOC_1791119870",
+      "text": "Ngoài phạm vi: bảng, hình và công thức trong tài liệu; huấn luyện Hope đầy đủ từ đầu; bộ tối ưu M3. Giả định cần xác nhận: thời gian 32 tuần; có một GPU 24 GB; chưa có mã nguồn chính thức của Hope, nên baseline được tự cài đặt theo phương trình 70–71. ## 6.",
+      "start_char": 4179,
+      "end_char": 4438,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "5.3 Phạm vi và giả định",
+      "metadata": {
+        "section_id": "SEC009",
+        "paragraph_id": "PARA042",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P033",
+      "document_id": "DOC_1791119870",
+      "text": "Giả định cần xác nhận: thời gian 32 tuần; có một GPU 24 GB; chưa có mã nguồn chính thức của Hope, nên baseline được tự cài đặt theo phương trình 70–71. ## 6. Phương pháp đề xuất: SA-CMS",
+      "start_char": 4280,
+      "end_char": 4467,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "5.3 Phạm vi và giả định",
+      "metadata": {
+        "section_id": "SEC009",
+        "paragraph_id": "PARA043",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P034",
+      "document_id": "DOC_1791119870",
+      "text": "## 6. Phương pháp đề xuất: SA-CMS SA-CMS giữ nguyên backbone đã pre-train, thêm ba mức adapter hạng thấp, và cho mỗi mức cập nhật đúng tại ranh giới đoạn, mục hoặc tài liệu. ### 6.1 Luồng xử lý Luồng SA-CMS · 2 pha, 3 mức bộ nhớ, 1 nhánh từ chối",
+      "start_char": 4433,
+      "end_char": 4682,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "6. Phương pháp đề xuất: SA-CMS",
+      "metadata": {
+        "section_id": "SEC010",
+        "paragraph_id": "PARA044",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P035",
+      "document_id": "DOC_1791119870",
+      "text": "Luồng SA-CMS · 2 pha, 3 mức bộ nhớ, 1 nhánh từ chối Ở pha nạp, mỗi mức cập nhật tại ranh giới của riêng nó và tri thức được củng cố dần xuống mức chậm hơn. Ở pha trả lời, chatbot chỉ trả lời khi có đoạn chứng cứ hỗ trợ. ### 6.2 Các mức bộ nhớ",
+      "start_char": 4630,
+      "end_char": 4875,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "6.1 Luồng xử lý",
+      "metadata": {
+        "section_id": "SEC011",
+        "paragraph_id": "PARA047",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P036",
+      "document_id": "DOC_1791119870",
+      "text": "Ở pha nạp, mỗi mức cập nhật tại ranh giới của riêng nó và tri thức được củng cố dần xuống mức chậm hơn. Ở pha trả lời, chatbot chỉ trả lời khi có đoạn chứng cứ hỗ trợ. ### 6.2 Các mức bộ nhớ Đầu ra của mỗi khối theo biến thể CMS độc lập trong bài báo (phương trình 74), với hàm Agg là tổng có cổng:",
+      "start_char": 4683,
+      "end_char": 4984,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "6.1 Luồng xử lý",
+      "metadata": {
+        "section_id": "SEC011",
+        "paragraph_id": "PARA048",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P037",
+      "document_id": "DOC_1791119870",
+      "text": "Đầu ra của mỗi khối theo biến thể CMS độc lập trong bài báo (phương trình 74), với hàm Agg là tổng có cổng: y_t = \\mathrm{MLP}_{\\mathrm{pre}}(x_t) + \\sum_{\\ell=1}^{3} g_\\ell(x_t)\\, B_\\ell A_\\ell\\, x_t Cổng g nằm trong khoảng 0 đến 1 và được học.",
+      "start_char": 4876,
+      "end_char": 5123,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "6.2 Các mức bộ nhớ",
+      "metadata": {
+        "section_id": "SEC012",
+        "paragraph_id": "PARA050",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P038",
+      "document_id": "DOC_1791119870",
+      "text": "Cổng g nằm trong khoảng 0 đến 1 và được học. Khi mọi cổng bằng 0, mô hình trở về đúng backbone gốc. ### 6.3 Lịch cập nhật căn theo cấu trúc Gọi b = 1 khi token t kết thúc một đơn vị của mức ℓ (đoạn, mục hoặc tài liệu).",
+      "start_char": 5079,
+      "end_char": 5299,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "6.2 Các mức bộ nhớ",
+      "metadata": {
+        "section_id": "SEC012",
+        "paragraph_id": "PARA052",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P039",
+      "document_id": "DOC_1791119870",
+      "text": "Gọi b = 1 khi token t kết thúc một đơn vị của mức ℓ (đoạn, mục hoặc tài liệu). Mức ℓ gom các token của đơn vị đó vào bộ đệm B và cập nhật tại ranh giới:",
+      "start_char": 5221,
+      "end_char": 5374,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "6.3 Lịch cập nhật căn theo cấu trúc",
+      "metadata": {
+        "section_id": "SEC013",
+        "paragraph_id": "PARA054",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P040",
+      "document_id": "DOC_1791119870",
+      "text": "Mức ℓ gom các token của đơn vị đó vào bộ đệm B và cập nhật tại ranh giới: \\theta^{(\\ell)} \\leftarrow \\theta^{(\\ell)} - \\frac{\\eta^{(\\ell)}}{|\\mathcal{B}_\\ell|} \\sum_{t \\in \\mathcal{B}_\\ell} \\nabla_{\\theta^{(\\ell)}} \\mathcal{L}(x_t) \\quad \\text{khi} \\quad b_\\ell(t) = 1",
+      "start_char": 5300,
+      "end_char": 5570,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "6.3 Lịch cập nhật căn theo cấu trúc",
+      "metadata": {
+        "section_id": "SEC013",
+        "paragraph_id": "PARA055",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P041",
+      "document_id": "DOC_1791119870",
+      "text": "\\theta^{(\\ell)} \\leftarrow \\theta^{(\\ell)} - \\frac{\\eta^{(\\ell)}}{|\\mathcal{B}_\\ell|} \\sum_{t \\in \\mathcal{B}_\\ell} \\nabla_{\\theta^{(\\ell)}} \\mathcal{L}(x_t) \\quad \\text{khi} \\quad b_\\ell(t) = 1 Nếu ranh giới rơi đúng vào các bội của C(ℓ), công thức trở về phương trình 71, chỉ khác một hằng số nhân vào tốc độ học.",
+      "start_char": 5375,
+      "end_char": 5691,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "6.3 Lịch cập nhật căn theo cấu trúc",
+      "metadata": {
+        "section_id": "SEC013",
+        "paragraph_id": "PARA055",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P042",
+      "document_id": "DOC_1791119870",
+      "text": "Nếu ranh giới rơi đúng vào các bội của C(ℓ), công thức trở về phương trình 71, chỉ khác một hằng số nhân vào tốc độ học. Baseline vì vậy là một trường hợp riêng của SA-CMS. Ranh giới lấy từ tiêu đề và ngắt đoạn của tài liệu.",
+      "start_char": 5571,
+      "end_char": 5796,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "6.3 Lịch cập nhật căn theo cấu trúc",
+      "metadata": {
+        "section_id": "SEC013",
+        "paragraph_id": "PARA056",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P043",
+      "document_id": "DOC_1791119870",
+      "text": "Ranh giới lấy từ tiêu đề và ngắt đoạn của tài liệu. Đơn vị quá dài được cắt ở một độ dài trần; tài liệu không có cấu trúc dùng lịch token cố định như baseline. Gradient chỉ tính cho adapter ở K tầng trên cùng để giữ chi phí nạp thấp.",
+      "start_char": 5745,
+      "end_char": 5981,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "6.3 Lịch cập nhật căn theo cấu trúc",
+      "metadata": {
+        "section_id": "SEC013",
+        "paragraph_id": "PARA057",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P044",
+      "document_id": "DOC_1791119870",
+      "text": "Gradient chỉ tính cho adapter ở K tầng trên cùng để giữ chi phí nạp thấp. ### 6.4 Tự học bằng câu hỏi tự sinh Ở cuối mỗi mục và mỗi tài liệu, mô hình tự sinh các cặp hỏi đáp từ phần vừa đọc và dùng chúng để cập nhật mức 2 và mức 3.",
+      "start_char": 5907,
+      "end_char": 6140,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "6.3 Lịch cập nhật căn theo cấu trúc",
+      "metadata": {
+        "section_id": "SEC013",
+        "paragraph_id": "PARA059",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P045",
+      "document_id": "DOC_1791119870",
+      "text": "Ở cuối mỗi mục và mỗi tài liệu, mô hình tự sinh các cặp hỏi đáp từ phần vừa đọc và dùng chúng để cập nhật mức 2 và mức 3. Ý tưởng tự học này gần với Cartridges, nhưng ở đây tri thức đi vào nhiều mức thay vì một biểu diễn duy nhất. ### 6.5 Trả lời có căn cứ",
+      "start_char": 6019,
+      "end_char": 6277,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "6.4 Tự học bằng câu hỏi tự sinh",
+      "metadata": {
+        "section_id": "SEC014",
+        "paragraph_id": "PARA061",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P046",
+      "document_id": "DOC_1791119870",
+      "text": "Ý tưởng tự học này gần với Cartridges, nhưng ở đây tri thức đi vào nhiều mức thay vì một biểu diễn duy nhất. ### 6.5 Trả lời có căn cứ Truy hồi các đoạn liên quan từ chỉ mục của kho tài liệu.",
+      "start_char": 6141,
+      "end_char": 6334,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "6.4 Tự học bằng câu hỏi tự sinh",
+      "metadata": {
+        "section_id": "SEC014",
+        "paragraph_id": "PARA062",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P047",
+      "document_id": "DOC_1791119870",
+      "text": "Truy hồi các đoạn liên quan từ chỉ mục của kho tài liệu. Sinh câu trả lời bằng backbone cùng ba mức bộ nhớ, kèm mã của đoạn làm chứng cứ. Kiểm tra căn cứ: nếu không đoạn nào hỗ trợ câu trả lời, chatbot trả lời rằng tài liệu không đề cập.",
+      "start_char": 6278,
+      "end_char": 6517,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "6.5 Trả lời có căn cứ",
+      "metadata": {
+        "section_id": "SEC015",
+        "paragraph_id": "PARA063",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P048",
+      "document_id": "DOC_1791119870",
+      "text": "Kiểm tra căn cứ: nếu không đoạn nào hỗ trợ câu trả lời, chatbot trả lời rằng tài liệu không đề cập. Ba chế độ dùng trong thực nghiệm: tài liệu nằm trong ngữ cảnh, chỉ dùng bộ nhớ sau khi tài liệu rời ngữ cảnh, và bản lai giữa bộ nhớ với truy hồi.",
+      "start_char": 6418,
+      "end_char": 6666,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "6.5 Trả lời có căn cứ",
+      "metadata": {
+        "section_id": "SEC015",
+        "paragraph_id": "PARA065",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P049",
+      "document_id": "DOC_1791119870",
+      "text": "Ba chế độ dùng trong thực nghiệm: tài liệu nằm trong ngữ cảnh, chỉ dùng bộ nhớ sau khi tài liệu rời ngữ cảnh, và bản lai giữa bộ nhớ với truy hồi. ### 6.6 Huấn luyện khởi tạo Bài báo meta-học trạng thái đầu của các mức bằng 15 tỷ token.",
+      "start_char": 6519,
+      "end_char": 6757,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "6.5 Trả lời có căn cứ",
+      "metadata": {
+        "section_id": "SEC015",
+        "paragraph_id": "PARA066",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P050",
+      "document_id": "DOC_1791119870",
+      "text": "Bài báo meta-học trạng thái đầu của các mức bằng 15 tỷ token. Đề tài thu nhỏ bước này: chỉ huấn luyện adapter và cổng, mô phỏng vòng đọc rồi trả lời bằng xấp xỉ bậc nhất, trên phần huấn luyện của các bộ hỏi đáp tài liệu.",
+      "start_char": 6696,
+      "end_char": 6916,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "6.6 Huấn luyện khởi tạo",
+      "metadata": {
+        "section_id": "SEC016",
+        "paragraph_id": "PARA068",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P051",
+      "document_id": "DOC_1791119870",
+      "text": "Đề tài thu nhỏ bước này: chỉ huấn luyện adapter và cổng, mô phỏng vòng đọc rồi trả lời bằng xấp xỉ bậc nhất, trên phần huấn luyện của các bộ hỏi đáp tài liệu. Quy mô dự kiến là 50–100 triệu token trên một GPU 24 GB, chốt lại sau thử nghiệm ở tuần 8.",
+      "start_char": 6758,
+      "end_char": 7009,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "6.6 Huấn luyện khởi tạo",
+      "metadata": {
+        "section_id": "SEC016",
+        "paragraph_id": "PARA069",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P052",
+      "document_id": "DOC_1791119870",
+      "text": "Quy mô dự kiến là 50–100 triệu token trên một GPU 24 GB, chốt lại sau thử nghiệm ở tuần 8. ### 6.7 Quản lý kho tài liệu Mỗi kho có một tệp bộ nhớ riêng, gồm trọng số adapter của ba mức.",
+      "start_char": 6918,
+      "end_char": 7105,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "6.6 Huấn luyện khởi tạo",
+      "metadata": {
+        "section_id": "SEC016",
+        "paragraph_id": "PARA069",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P053",
+      "document_id": "DOC_1791119870",
+      "text": "Mỗi kho có một tệp bộ nhớ riêng, gồm trọng số adapter của ba mức. Hệ thống chụp trạng thái trước mỗi lần nạp, nên gỡ một tài liệu vừa nạp là quay lui về bản chụp.",
+      "start_char": 7040,
+      "end_char": 7203,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "6.7 Quản lý kho tài liệu",
+      "metadata": {
+        "section_id": "SEC017",
+        "paragraph_id": "PARA071",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P054",
+      "document_id": "DOC_1791119870",
+      "text": "Hệ thống chụp trạng thái trước mỗi lần nạp, nên gỡ một tài liệu vừa nạp là quay lui về bản chụp. Khi tài liệu có phiên bản mới, hệ thống nạp lại và đo xem câu trả lời có theo phiên bản mới không. ## 7. Thiết kế thực nghiệm",
+      "start_char": 7107,
+      "end_char": 7332,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "6.7 Quản lý kho tài liệu",
+      "metadata": {
+        "section_id": "SEC017",
+        "paragraph_id": "PARA072",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P055",
+      "document_id": "DOC_1791119870",
+      "text": "Khi tài liệu có phiên bản mới, hệ thống nạp lại và đo xem câu trả lời có theo phiên bản mới không. ## 7. Thiết kế thực nghiệm Thực nghiệm dùng lại hai bộ hỏi đáp tài liệu của bài báo để so sánh trực tiếp với baseline, rồi thêm kho tài liệu tăng dần và tài liệu tiếng Việt.",
+      "start_char": 7205,
+      "end_char": 7480,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "6.7 Quản lý kho tài liệu",
+      "metadata": {
+        "section_id": "SEC017",
+        "paragraph_id": "PARA073",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P056",
+      "document_id": "DOC_1791119870",
+      "text": "Thực nghiệm dùng lại hai bộ hỏi đáp tài liệu của bài báo để so sánh trực tiếp với baseline, rồi thêm kho tài liệu tăng dần và tài liệu tiếng Việt. ### 7.1 Dữ liệu ### 7.2 Phương pháp so sánh",
+      "start_char": 7333,
+      "end_char": 7526,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "7. Thiết kế thực nghiệm",
+      "metadata": {
+        "section_id": "SEC018",
+        "paragraph_id": "PARA075",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P057",
+      "document_id": "DOC_1791119870",
+      "text": "### 7.1 Dữ liệu ### 7.2 Phương pháp so sánh Mọi phương pháp dùng chung backbone, chung cửa sổ ngữ cảnh và chung mức lượng tử hóa. ### 7.3 Thước đo ### 7.4 Ablation Lịch token cố định so với lịch theo cấu trúc, ở cùng tổng số lần cập nhật.",
+      "start_char": 7481,
+      "end_char": 7724,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "7.1 Dữ liệu",
+      "metadata": {
+        "section_id": "SEC019",
+        "paragraph_id": "PARA076",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P058",
+      "document_id": "DOC_1791119870",
+      "text": "Lịch token cố định so với lịch theo cấu trúc, ở cùng tổng số lần cập nhật. Ranh giới thật so với ranh giới ngẫu nhiên có cùng số lượng, để tách tác dụng của cấu trúc khỏi tác dụng của độ dài thay đổi. Số mức bộ nhớ: 1, 2, 3.",
+      "start_char": 7650,
+      "end_char": 7876,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "7.4 Ablation",
+      "metadata": {
+        "section_id": "SEC022",
+        "paragraph_id": "PARA081",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P059",
+      "document_id": "DOC_1791119870",
+      "text": "Ranh giới thật so với ranh giới ngẫu nhiên có cùng số lượng, để tách tác dụng của cấu trúc khỏi tác dụng của độ dài thay đổi. Số mức bộ nhớ: 1, 2, 3. Có và không có tự học bằng câu hỏi tự sinh. Tổng thường so với tổng có cổng khi gộp các mức.",
+      "start_char": 7726,
+      "end_char": 7971,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "7.4 Ablation",
+      "metadata": {
+        "section_id": "SEC022",
+        "paragraph_id": "PARA082",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P060",
+      "document_id": "DOC_1791119870",
+      "text": "Tổng thường so với tổng có cổng khi gộp các mức. Hạng adapter và số tầng K được cập nhật. ### 7.5 Độ tin cậy thống kê Mỗi cấu hình chạy 3 hạt giống.",
+      "start_char": 7923,
+      "end_char": 8074,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "7.4 Ablation",
+      "metadata": {
+        "section_id": "SEC022",
+        "paragraph_id": "PARA085",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P061",
+      "document_id": "DOC_1791119870",
+      "text": "### 7.5 Độ tin cậy thống kê Mỗi cấu hình chạy 3 hạt giống. Kết quả báo cáo kèm khoảng tin cậy 95% bằng bootstrap, và so sánh P1 với B5 dùng kiểm định bắt cặp trên cùng bộ câu hỏi. ### 7.6 Tiêu chí thành công",
+      "start_char": 8015,
+      "end_char": 8225,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "7.5 Độ tin cậy thống kê",
+      "metadata": {
+        "section_id": "SEC023",
+        "paragraph_id": "PARA087",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P062",
+      "document_id": "DOC_1791119870",
+      "text": "Kết quả báo cáo kèm khoảng tin cậy 95% bằng bootstrap, và so sánh P1 với B5 dùng kiểm định bắt cặp trên cùng bộ câu hỏi. ### 7.6 Tiêu chí thành công Bài báo đủ mạnh khi P1 hơn B5 có ý nghĩa thống kê trên QASPER ở cùng chi phí nạp, và P2 đạt độ trung thực không thấp hơn B2.",
+      "start_char": 8075,
+      "end_char": 8350,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "7.5 Độ tin cậy thống kê",
+      "metadata": {
+        "section_id": "SEC023",
+        "paragraph_id": "PARA089",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P063",
+      "document_id": "DOC_1791119870",
+      "text": "Bài báo đủ mạnh khi P1 hơn B5 có ý nghĩa thống kê trên QASPER ở cùng chi phí nạp, và P2 đạt độ trung thực không thấp hơn B2. Nếu lịch theo cấu trúc không hơn lịch cố định, bài báo chuyển trọng tâm sang phương án B hoặc C ở mục 1. ## 8. Lộ trình viết bài Q1",
+      "start_char": 8226,
+      "end_char": 8484,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "7.6 Tiêu chí thành công",
+      "metadata": {
+        "section_id": "SEC024",
+        "paragraph_id": "PARA090",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P064",
+      "document_id": "DOC_1791119870",
+      "text": "Nếu lịch theo cấu trúc không hơn lịch cố định, bài báo chuyển trọng tâm sang phương án B hoặc C ở mục 1. ## 8. Lộ trình viết bài Q1 Sinh viên nộp bản thảo ở tuần 32; vòng phản biện của tạp chí nằm ngoài khung thời gian này. ### 8.1 Dàn ý bài báo",
+      "start_char": 8351,
+      "end_char": 8600,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "7.6 Tiêu chí thành công",
+      "metadata": {
+        "section_id": "SEC024",
+        "paragraph_id": "PARA091",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P065",
+      "document_id": "DOC_1791119870",
+      "text": "Sinh viên nộp bản thảo ở tuần 32; vòng phản biện của tạp chí nằm ngoài khung thời gian này. ### 8.1 Dàn ý bài báo Introduction: vấn đề, sáu khoảng trống ở mục 3, bốn đóng góp ở mục 5.2.",
+      "start_char": 8485,
+      "end_char": 8672,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "8. Lộ trình viết bài Q1",
+      "metadata": {
+        "section_id": "SEC025",
+        "paragraph_id": "PARA092",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P066",
+      "document_id": "DOC_1791119870",
+      "text": "Introduction: vấn đề, sáu khoảng trống ở mục 3, bốn đóng góp ở mục 5.2. Related Work: RAG, nén ngữ cảnh dài, học liên tục, Nested Learning và Titans. Background: CMS và phương trình 70–71. Method: SA-CMS, lịch theo cấu trúc, tự học, trả lời có căn cứ.",
+      "start_char": 8601,
+      "end_char": 8855,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "8.1 Dàn ý bài báo",
+      "metadata": {
+        "section_id": "SEC026",
+        "paragraph_id": "PARA094",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P067",
+      "document_id": "DOC_1791119870",
+      "text": "Method: SA-CMS, lịch theo cấu trúc, tự học, trả lời có căn cứ. Experimental Setup: dữ liệu, phương pháp so sánh, thước đo, ngân sách tính toán. Results: trả lời lần lượt RQ1 đến RQ5. Analysis: ablation, phân tích lỗi, chi phí.",
+      "start_char": 8793,
+      "end_char": 9022,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "8.1 Dàn ý bài báo",
+      "metadata": {
+        "section_id": "SEC026",
+        "paragraph_id": "PARA097",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P068",
+      "document_id": "DOC_1791119870",
+      "text": "Analysis: ablation, phân tích lỗi, chi phí. Limitations: những gì phương pháp chưa làm được, gồm cả việc xóa chọn lọc. Conclusion. ### 8.2 Tạp chí ứng viên Cả ba được các trang tổng hợp chỉ số ghi là Q1 theo SJR (IP&M, KBS, ESWA).",
+      "start_char": 8979,
+      "end_char": 9213,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "8.1 Dàn ý bài báo",
+      "metadata": {
+        "section_id": "SEC026",
+        "paragraph_id": "PARA100",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P069",
+      "document_id": "DOC_1791119870",
+      "text": "Cả ba được các trang tổng hợp chỉ số ghi là Q1 theo SJR (IP&M, KBS, ESWA). Sinh viên cần đối chiếu lại trên trang Scimago chính thức ngay trước khi nộp. ### 8.3 Điều kiện để bản thảo đủ mạnh",
+      "start_char": 9139,
+      "end_char": 9331,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "8.2 Tạp chí ứng viên",
+      "metadata": {
+        "section_id": "SEC027",
+        "paragraph_id": "PARA104",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P070",
+      "document_id": "DOC_1791119870",
+      "text": "### 8.3 Điều kiện để bản thảo đủ mạnh ☐ Điểm mới phát biểu được bằng công thức, baseline là trường hợp riêng. ☐ Có ít nhất hai bộ dữ liệu công khai dùng chung với bài báo gốc. ☐ So sánh với một hệ RAG được tinh chỉnh kỹ, không chỉ với mốc yếu.",
+      "start_char": 9293,
+      "end_char": 9540,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "8.3 Điều kiện để bản thảo đủ mạnh",
+      "metadata": {
+        "section_id": "SEC028",
+        "paragraph_id": "PARA105",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P071",
+      "document_id": "DOC_1791119870",
+      "text": "☐ So sánh với một hệ RAG được tinh chỉnh kỹ, không chỉ với mốc yếu. ☐ Ablation tách từng thành phần, có đối chứng ranh giới ngẫu nhiên. ☐ Mọi bảng kết quả có khoảng tin cậy và kiểm định thống kê. ☐ Báo cáo đầy đủ chi phí và giới hạn của phương pháp.",
+      "start_char": 9472,
+      "end_char": 9725,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "8.3 Điều kiện để bản thảo đủ mạnh",
+      "metadata": {
+        "section_id": "SEC028",
+        "paragraph_id": "PARA108",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P072",
+      "document_id": "DOC_1791119870",
+      "text": "☐ Báo cáo đầy đủ chi phí và giới hạn của phương pháp. ☐ Mã nguồn, cấu hình và bộ câu hỏi tiếng Việt được công bố. ### 8.4 Tiến độ Nếu G2 không đạt sau tuần 12, bài chuyển trọng tâm sang phương án B hoặc C ở mục 1 mà không phải làm lại giai đoạn 1. ## 9.",
+      "start_char": 9671,
+      "end_char": 9928,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "8.3 Điều kiện để bản thảo đủ mạnh",
+      "metadata": {
+        "section_id": "SEC028",
+        "paragraph_id": "PARA111",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P073",
+      "document_id": "DOC_1791119870",
+      "text": "Nếu G2 không đạt sau tuần 12, bài chuyển trọng tâm sang phương án B hoặc C ở mục 1 mà không phải làm lại giai đoạn 1. ## 9. Rủi ro và phương án dự phòng ## 10. Tài liệu tham khảo Mục 1 là bài báo baseline do người dùng cung cấp.",
+      "start_char": 9804,
+      "end_char": 10035,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "8.4 Tiến độ",
+      "metadata": {
+        "section_id": "SEC029",
+        "paragraph_id": "PARA114",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P074",
+      "document_id": "DOC_1791119870",
+      "text": "Mục 1 là bài báo baseline do người dùng cung cấp. Mục 2–8 lấy từ danh mục tham khảo của chính bài báo đó. A. Behrouz, M. Razaviyayn, P. Zhong, V. Mirrokni. \"Nested Learning: The Illusion of Deep Learning Architectures.\" arXiv:2512.24695, 2025.",
+      "start_char": 9986,
+      "end_char": 10230,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "10. Tài liệu tham khảo",
+      "metadata": {
+        "section_id": "SEC031",
+        "paragraph_id": "PARA117",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P075",
+      "document_id": "DOC_1791119870",
+      "text": "Mirrokni. \"Nested Learning: The Illusion of Deep Learning Architectures.\" arXiv:2512.24695, 2025. Một phiên bản đăng tại NeurIPS 2025. A. Behrouz, P. Zhong, V. Mirrokni. \"Titans: Learning to Memorize at Test Time.\" NeurIPS 2025. P. Dasigi, K. Lo, I. Beltagy, A.",
+      "start_char": 10133,
+      "end_char": 10396,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "10. Tài liệu tham khảo",
+      "metadata": {
+        "section_id": "SEC031",
+        "paragraph_id": "PARA119",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P076",
+      "document_id": "DOC_1791119870",
+      "text": "Mirrokni. \"Titans: Learning to Memorize at Test Time.\" NeurIPS 2025. P. Dasigi, K. Lo, I. Beltagy, A. Cohan, N. A. Smith, M. Gardner. \"A dataset of information-seeking questions and answers anchored in research papers.\" arXiv:2105.03011, 2021. L.",
+      "start_char": 10294,
+      "end_char": 10542,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "10. Tài liệu tham khảo",
+      "metadata": {
+        "section_id": "SEC031",
+        "paragraph_id": "PARA120",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P077",
+      "document_id": "DOC_1791119870",
+      "text": "Gardner. \"A dataset of information-seeking questions and answers anchored in research papers.\" arXiv:2105.03011, 2021. L. Adams và cộng sự. \"LongHealth: A question answering benchmark with long clinical documents.\" Journal of Healthcare Informatics Research, 2025, tr. 1–17.",
+      "start_char": 10420,
+      "end_char": 10695,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "10. Tài liệu tham khảo",
+      "metadata": {
+        "section_id": "SEC031",
+        "paragraph_id": "PARA121",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P078",
+      "document_id": "DOC_1791119870",
+      "text": "Adams và cộng sự. \"LongHealth: A question answering benchmark with long clinical documents.\" Journal of Healthcare Informatics Research, 2025, tr. 1–17. C.-P.",
+      "start_char": 10543,
+      "end_char": 10702,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "10. Tài liệu tham khảo",
+      "metadata": {
+        "section_id": "SEC031",
+        "paragraph_id": "PARA122",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P079",
+      "document_id": "DOC_1791119870",
+      "text": "Adams và cộng sự. \"LongHealth: A question answering benchmark with long clinical documents.\" Journal of Healthcare Informatics Research, 2025, tr. 1–17. C.-P. Hsieh và cộng sự. \"RULER: What's the Real Context Size of Your Long-Context Language Models?\" Conference on Language Modeling, 2024.",
+      "start_char": 10543,
+      "end_char": 10835,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "10. Tài liệu tham khảo",
+      "metadata": {
+        "section_id": "SEC031",
+        "paragraph_id": "PARA122",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P080",
+      "document_id": "DOC_1791119870",
+      "text": "Hsieh và cộng sự. \"RULER: What's the Real Context Size of Your Long-Context Language Models?\" Conference on Language Modeling, 2024. S.",
+      "start_char": 10703,
+      "end_char": 10839,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "10. Tài liệu tham khảo",
+      "metadata": {
+        "section_id": "SEC031",
+        "paragraph_id": "PARA123",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P081",
+      "document_id": "DOC_1791119870",
+      "text": "Hsieh và cộng sự. \"RULER: What's the Real Context Size of Your Long-Context Language Models?\" Conference on Language Modeling, 2024. S. Eyuboglu và cộng sự. \"Cartridges: Lightweight and general-purpose long context representations via self-study.\" arXiv:2506.06266, 2025.",
+      "start_char": 10703,
+      "end_char": 10975,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "10. Tài liệu tham khảo",
+      "metadata": {
+        "section_id": "SEC031",
+        "paragraph_id": "PARA123",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P082",
+      "document_id": "DOC_1791119870",
+      "text": "Eyuboglu và cộng sự. \"Cartridges: Lightweight and general-purpose long context representations via self-study.\" arXiv:2506.06266, 2025. G. Xiao và cộng sự. \"DuoAttention: Efficient Long-Context LLM Inference with Retrieval and Streaming Heads.\" ICLR 2025. A.",
+      "start_char": 10840,
+      "end_char": 11100,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "10. Tài liệu tham khảo",
+      "metadata": {
+        "section_id": "SEC031",
+        "paragraph_id": "PARA124",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791119870::P083",
+      "document_id": "DOC_1791119870",
+      "text": "Xiao và cộng sự. \"DuoAttention: Efficient Long-Context LLM Inference with Retrieval and Streaming Heads.\" ICLR 2025. A. Dubey và cộng sự. \"The Llama 3 Herd of Models.\" arXiv:2407.21783, 2024.",
+      "start_char": 10980,
+      "end_char": 11172,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "10. Tài liệu tham khảo",
+      "metadata": {
+        "section_id": "SEC031",
+        "paragraph_id": "PARA125",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+          "extension": ".docx",
+          "size_bytes": 161978,
+          "word_count": 2265,
+          "approx_tokens": 3057
+        },
+        "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+        "file_size": "158.2 KB"
+      }
+    }
+  ],
+  "structural_metadata": {},
+  "content_hash": "391a654e653624ec",
+  "created_at": 1791119870.616533,
+  "metadata": {
+    "category": "Uploaded",
+    "upload_meta": {
+      "original_filename": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+      "extension": ".docx",
+      "size_bytes": 161978,
+      "word_count": 2265,
+      "approx_tokens": 3057
+    },
+    "file_name": "Đe___cu_o_ng_Chatbot_ho_i_đa_p_tre_n_ta_i_lie__u_vo__i_bo___nho___đa_thang_du__a_tre_n_Nested_Learning.docx",
+    "file_size": "158.2 KB"
+  }
+}

@@ -1,0 +1,1366 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trợ lý Hỏi đáp Tài liệu AI (SA-CMS)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/app.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📄</text></svg>">
+</head>
+<body>
+  <div class="chat-app-layout">
+    <!-- ============================================================== -->
+    <!-- THANH ĐIỀU HƯỚNG TRÁI (LEFT SIDEBAR)                           -->
+    <!-- ============================================================== -->
+    <aside class="chat-sidebar" id="sidebar">
+      <div class="sidebar-top">
+        <div class="sidebar-brand-card">
+          <div class="brand-title">SA-CMS</div>
+          <div class="brand-subtitle">Structure-Aligned Continuum Memory</div>
+          <div class="brand-tagline">Document-Grounded Question Answering</div>
+          <span class="brand-prototype-tag">Offline Research Prototype</span>
+        </div>
+        <button class="btn btn-new-chat" id="btn-new-chat">
+          <span class="icon">＋</span>
+          <span>Cuộc trò chuyện mới</span>
+        </button>
+      </div>
+
+      <!-- Danh sách lịch sử cuộc trò chuyện -->
+      <div class="sidebar-sessions" id="sidebar-sessions-list">
+        <!-- Render động qua JS: Hôm nay, Hôm qua, Trước đó -->
+      </div>
+
+      <!-- Menu chân trang Sidebar -->
+      <div class="sidebar-bottom">
+        <button class="sidebar-action-btn" id="btn-open-documents-modal">
+          <span class="icon">📂</span>
+          <span>Kho tài liệu</span>
+        </button>
+
+        <button class="sidebar-action-btn" id="btn-open-dashboard-modal" title="Môi trường Nghiên cứu Khoa học & Bảng điều khiển">
+          <span class="icon">🔬</span>
+          <span>Research Lab</span>
+        </button>
+
+        <button class="sidebar-action-btn" id="btn-open-settings-modal" title="Cài đặt hệ thống">
+          <span class="icon">⚙️</span>
+          <span>Cài đặt</span>
+        </button>
+
+        <button class="sidebar-action-btn btn-secondary-subtle" id="btn-seed-demo" title="Nạp 4 tài liệu nghiên cứu mẫu">
+          <span class="icon">🌱</span>
+          <span>Nạp dữ liệu mẫu</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- ============================================================== -->
+    <!-- KHÔNG GIAN TRÒ CHUYỆN TRUNG TÂM (MAIN CHAT AREA)               -->
+    <!-- ============================================================== -->
+    <main class="chat-main">
+      <!-- Thanh tiêu đề trên (Top Bar) -->
+      <header class="chat-header">
+        <div class="header-left">
+          <button class="btn-icon" id="btn-toggle-sidebar" title="Thu gọn / Mở rộng thanh bên">
+            <span>☰</span>
+          </button>
+          <div class="session-info">
+            <h2 class="session-title" id="header-session-title" title="Nhấp đúp để đổi tên">Cuộc trò chuyện mới</h2>
+          </div>
+        </div>
+
+        <div class="header-center">
+          <!-- Tài liệu đang đính kèm vào phiên chat -->
+          <div class="attached-docs-bar" id="attached-docs-bar">
+            <span class="attached-label">Tài liệu:</span>
+            <div class="attached-tags-list" id="attached-tags-list">
+              <!-- Render động qua JS -->
+            </div>
+            <button class="btn btn-sm btn-outline" id="btn-attach-more" title="Đính kèm thêm tài liệu">
+              <span>＋</span> Thêm tài liệu
+            </button>
+          </div>
+        </div>
+
+        <div class="header-right">
+          <button class="btn-offline-status" id="btn-open-system-status" title="Xem trạng thái tài nguyên ngoại tuyến">
+            <span class="status-indicator-dot"></span>
+            <span id="header-offline-status-text">Offline Ready</span>
+          </button>
+          <button class="btn btn-sm btn-ghost" id="btn-open-research-drawer" title="Mở ngăn nghiên cứu và phân tích câu trả lời">
+            <span>📊</span> <span class="hide-mobile">Phân tích</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Drag & Drop Overlay (hiển thị khi kéo file vào vùng chat) -->
+      <div class="chat-drag-overlay" id="chat-drag-overlay">
+        <div class="drag-overlay-content">
+          <span class="drag-overlay-icon">📥</span>
+          <p class="drag-overlay-text">Thả tài liệu để thêm vào cuộc trò chuyện</p>
+          <p class="drag-overlay-hint">PDF, DOCX, TXT, Markdown — Tối đa 15MB</p>
+        </div>
+      </div>
+
+      <!-- Vùng hiển thị tin nhắn & Empty State -->
+      <div class="chat-scroll-container" id="chat-scroll-container">
+        <!-- Banner hướng dẫn nhanh lần đầu sử dụng (Step 16) -->
+        <div class="first-use-banner" id="first-use-banner" style="display: none;">
+          <div class="first-use-content">
+            <span class="first-use-icon">💡</span>
+            <span class="first-use-text"><strong>Quy trình nhanh:</strong> 1. Thêm tài liệu &rarr; 2. Đợi SA-CMS sẵn sàng &rarr; 3. Hỏi về tài liệu</span>
+          </div>
+          <button class="btn btn-xs btn-primary-subtle" id="btn-dismiss-first-use">Đã hiểu</button>
+        </div>
+
+        <!-- 1. Trạng thái rỗng ban đầu (Empty State - Step 1) -->
+        <div class="welcome-screen" id="welcome-screen">
+          <div class="welcome-hero">
+            <div class="welcome-icon">🧠</div>
+            <h1 class="welcome-title">SA-CMS — Chatbot hỏi đáp tài liệu chạy ngoại tuyến</h1>
+            <p class="welcome-description">
+              Thêm tài liệu để hệ thống đọc, phân tích cấu trúc và nạp vào bộ nhớ SA-CMS. Sau khi sẵn sàng, bạn có thể hỏi về tài liệu mà không cần kết nối Internet.
+            </p>
+            
+            <div class="empty-action-buttons">
+              <button class="btn btn-primary btn-lg" id="btn-empty-upload">
+                <span class="icon">＋</span> Thêm tài liệu
+              </button>
+              <button class="btn btn-outline btn-lg" id="btn-empty-library">
+                <span class="icon">📁</span> Chọn từ kho tài liệu
+              </button>
+            </div>
+
+            <!-- Quy trình 3 bước giải thích đơn giản -->
+            <div class="empty-steps-card">
+              <div class="step-item">
+                <span class="step-num">①</span>
+                <span class="step-text">Thêm tài liệu</span>
+              </div>
+              <div class="step-arrow">→</div>
+              <div class="step-item">
+                <span class="step-num">②</span>
+                <span class="step-text">SA-CMS đọc và ghi nhớ</span>
+              </div>
+              <div class="step-arrow">→</div>
+              <div class="step-item">
+                <span class="step-num">③</span>
+                <span class="step-text">Hỏi chatbot</span>
+              </div>
+            </div>
+
+            <!-- Các cam kết kiến trúc & bảo đảm ngoại tuyến -->
+            <div class="empty-trust-badges">
+              <span class="trust-badge">
+                <span class="trust-badge-dot"></span>
+                100% Ngoại tuyến (Zero Cloud)
+              </span>
+              <span class="trust-badge">
+                <span class="trust-badge-icon">⚡</span>
+                Siêu tốc 58.89ms TTFT
+              </span>
+              <span class="trust-badge">
+                <span class="trust-badge-icon">🛡️</span>
+                Căn cứ Tài liệu &amp; Có Trích dẫn
+              </span>
+            </div>
+          </div>
+
+          <!-- File input ẩn cho upload -->
+          <input type="file" id="file-upload-input" accept=".pdf,.docx,.txt,.md,.png,.jpg,.jpeg" style="display: none;" multiple>
+        </div>
+
+        <!-- 2. Thẻ tiến trình nạp tài liệu động (Ingestion Pipeline Progress Card - Step 2 & 3) -->
+        <div class="ingestion-pipeline-card" id="ingestion-pipeline-card" style="display: none;">
+          <div class="pipeline-header">
+            <div class="pipeline-file-meta">
+              <span class="pipeline-file-icon">📄</span>
+              <div class="pipeline-file-info">
+                <h4 class="pipeline-filename" id="pipeline-filename">document.pdf</h4>
+                <div class="pipeline-meta-row">
+                  <span class="pipeline-badge" id="pipeline-filetype">PDF</span>
+                  <span class="pipeline-filesize" id="pipeline-filesize">0 KB</span>
+                </div>
+              </div>
+            </div>
+            <span class="pipeline-overall-status" id="pipeline-overall-status">Đang xử lý...</span>
+          </div>
+
+          <div class="pipeline-stages-list" id="pipeline-stages-list">
+            <div class="pipeline-stage-item done" id="stage-received">
+              <span class="stage-icon">✓</span>
+              <div class="stage-label-group">
+                <span class="stage-name">Tệp đã lưu</span>
+                <span class="stage-desc">File đã lưu an toàn trên ổ đĩa cục bộ</span>
+              </div>
+              <span class="stage-tag">FILE STORED</span>
+            </div>
+            <div class="pipeline-stage-item" id="stage-reading">
+              <span class="stage-icon">○</span>
+              <div class="stage-label-group">
+                <span class="stage-name">Văn bản đã trích xuất</span>
+                <span class="stage-desc">Văn bản đã trích xuất &amp; làm sạch</span>
+              </div>
+              <span class="stage-tag">TEXT EXTRACTED</span>
+            </div>
+            <div class="pipeline-stage-item" id="stage-structure">
+              <span class="stage-icon">○</span>
+              <div class="stage-label-group">
+                <span class="stage-name">Cấu trúc đã phân tích</span>
+                <span class="stage-desc">Cấu trúc đã phân tích (L1 Đoạn, L2 Mục, L3 Tài liệu)</span>
+              </div>
+              <span class="stage-tag">STRUCTURE PARSED</span>
+            </div>
+            <div class="pipeline-stage-item" id="stage-index">
+              <span class="stage-icon">○</span>
+              <div class="stage-label-group">
+                <span class="stage-name">Chỉ mục cục bộ đã sẵn sàng</span>
+                <span class="stage-desc">Chỉ mục tìm kiếm BM25 cục bộ đã sẵn sàng</span>
+              </div>
+              <span class="stage-tag">INDEX READY</span>
+            </div>
+            <div class="pipeline-stage-item" id="stage-memory">
+              <span class="stage-icon">○</span>
+              <div class="stage-label-group">
+                <span class="stage-name">SA-CMS Memory đã sẵn sàng</span>
+                <span class="stage-desc">SA-CMS Memory đã sẵn sàng (L1/L2/L3)</span>
+              </div>
+              <span class="stage-tag">MEMORY INGESTED</span>
+            </div>
+            <div class="pipeline-stage-item" id="stage-ready">
+              <span class="stage-icon">○</span>
+              <div class="stage-label-group">
+                <span class="stage-name">Sẵn sàng hỏi</span>
+                <span class="stage-desc">Sẵn sàng đặt câu hỏi về tài liệu</span>
+              </div>
+              <span class="stage-tag">READY</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Thẻ giải thích bộ nhớ SA-CMS (Memory Explanation Card - Step 4) -->
+        <div class="memory-ready-card" id="memory-ready-card" style="display: none;">
+          <div class="memory-card-header">
+            <span class="memory-card-icon">🧠</span>
+            <div class="memory-card-titles">
+              <h4>SA-CMS Memory đã sẵn sàng</h4>
+              <p>Tài liệu đã được tích hợp vào bộ nhớ tham số 3 cấp độ:</p>
+            </div>
+            <span class="badge-tag badge-ready">✓ SA-CMS Memory đã sẵn sàng</span>
+          </div>
+
+          <div class="memory-levels-compact-grid">
+            <div class="memory-level-pill">
+              <div class="pill-top">
+                <span class="pill-tag">L1</span>
+                <span class="pill-name">Đoạn</span>
+              </div>
+              <p class="pill-desc">L1 lưu thông tin cục bộ ở cấp đoạn.</p>
+            </div>
+            <div class="memory-level-pill">
+              <div class="pill-top">
+                <span class="pill-tag">L2</span>
+                <span class="pill-name">Mục</span>
+              </div>
+              <p class="pill-desc">L2 tổng hợp thông tin ở cấp mục.</p>
+            </div>
+            <div class="memory-level-pill">
+              <div class="pill-top">
+                <span class="pill-tag">L3</span>
+                <span class="pill-name">Tài liệu</span>
+              </div>
+              <p class="pill-desc">L3 lưu trạng thái ở cấp tài liệu.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. Trạng thái tài liệu đã sẵn sàng (Ready State - Step 5) -->
+        <div class="ready-screen" id="ready-screen" style="display: none;">
+          <div class="ready-hero">
+            <div class="ready-icon">✅</div>
+            <h2 class="ready-title">Tài liệu đã sẵn sàng</h2>
+            <p class="ready-subtitle">Bạn có thể đặt câu hỏi về tài liệu.</p>
+            <div class="ready-active-docs-list" id="ready-active-docs-list">
+              <!-- Render chip tài liệu đang chọn -->
+            </div>
+          </div>
+
+          <div class="ready-suggestions-box">
+            <p class="suggestions-header">Gợi ý câu hỏi bắt đầu:</p>
+            <div class="suggestions-grid">
+              <button class="suggestion-chip" data-query="Tóm tắt nội dung chính của tài liệu này cho tôi.">
+                <span>📝</span> Tóm tắt nội dung chính
+              </button>
+              <button class="suggestion-chip" data-query="Các kết luận hoặc luận điểm quan trọng nhất là gì?">
+                <span>💡</span> Các kết luận quan trọng nhất?
+              </button>
+              <button class="suggestion-chip" data-query="Tác giả đề xuất giải pháp hoặc phương pháp gì?">
+                <span>🔍</span> Giải pháp đề xuất là gì?
+              </button>
+              <button class="suggestion-chip" data-query="Chi tiết phần giới thiệu và bối cảnh nghiên cứu.">
+                <span>📖</span> Bối cảnh nghiên cứu?
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5. Danh sách tin nhắn (Message Stream) -->
+        <div class="messages-stream" id="messages-stream" style="display: none;">
+          <div class="messages-list" id="messages-list"></div>
+          <div class="thinking-indicator" id="thinking-indicator" style="display: none;">
+            <div class="thinking-spinner"></div>
+            <span class="thinking-text" id="thinking-text">Đang tìm kiếm trong tài liệu...</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Thanh nhập tin nhắn Chat (Fixed Bottom Composer) -->
+      <footer class="chat-input-area">
+        <div class="input-box-wrapper">
+          <!-- Hàng công cụ nhỏ: Độ dài câu trả lời -->
+          <div class="input-controls-bar">
+            <div class="length-mode-selector" title="Chọn mức độ chi tiết của câu trả lời">
+              <span class="length-label">Độ dài:</span>
+              <button class="btn-length-mode" data-mode="concise">Ngắn gọn</button>
+              <button class="btn-length-mode active" data-mode="balanced">Cân bằng</button>
+              <button class="btn-length-mode" data-mode="detailed">Chi tiết</button>
+            </div>
+            <div class="input-badges" id="input-doc-indicator">
+              <span class="doc-badge-pill">● Toàn bộ tài liệu</span>
+            </div>
+          </div>
+
+          <!-- ===== COMPOSER ATTACHMENTS AREA (nằm NGAY TRÊN chat input) ===== -->
+          <div class="composer-attachments" id="composer-attachments" style="display: none;">
+            <div class="composer-attachments-list" id="composer-attachments-list">
+              <!-- File chips render động qua JS -->
+            </div>
+            <button class="composer-add-more-btn" id="composer-add-more-btn" title="Thêm tài liệu">
+              <span>＋</span> Thêm
+            </button>
+          </div>
+
+          <!-- Form nhập câu hỏi -->
+          <form class="input-form" id="chat-input-form">
+            <!-- Nút đính kèm file -->
+            <label class="btn-attach" for="chat-file-attachment" title="Đính kèm tài liệu vào cuộc trò chuyện">
+              <span>📎</span>
+            </label>
+            <input type="file" id="chat-file-attachment" accept=".pdf,.docx,.txt,.md,.png,.jpg,.jpeg" style="display: none;" multiple>
+
+            <!-- Ô nhập văn bản đa dòng -->
+            <textarea
+              id="chat-textarea"
+              placeholder="Hỏi điều gì về tài liệu này..."
+              rows="1"
+              autofocus
+            ></textarea>
+
+            <!-- Nút gửi câu hỏi -->
+            <button type="submit" class="btn-send" id="btn-send-message" title="Gửi câu hỏi (Enter)">
+              <span>➤</span>
+            </button>
+          </form>
+
+          <div class="input-disclaimer">
+            <span>AI chỉ trả lời dựa trên căn cứ trong tài liệu và sẽ từ chối nếu không tìm thấy đủ thông tin.</span>
+          </div>
+        </div>
+      </footer>
+    </main>
+
+    <!-- ============================================================== -->
+    <!-- BẢNG TRÍCH DẪN NGUỒN BÊN PHẢI (RIGHT SOURCE PANEL)            -->
+    <!-- ============================================================== -->
+    <aside class="source-panel" id="source-panel">
+      <div class="source-panel-header">
+        <div class="source-panel-title">
+          <span class="icon">📖</span>
+          <h3>Nguồn tham khảo</h3>
+        </div>
+        <button class="btn-icon" id="btn-close-source-panel" title="Đóng bảng nguồn">✕</button>
+      </div>
+
+      <div class="source-panel-body" id="source-panel-body">
+        <div class="source-meta-card">
+          <div class="meta-row">
+            <span class="meta-label">Tài liệu:</span>
+            <span class="meta-value" id="source-doc-title">Tài liệu</span>
+          </div>
+          <div class="meta-row">
+            <span class="meta-label">Chương / Phần:</span>
+            <span class="meta-value" id="source-section-title">Phần nội dung</span>
+          </div>
+          <div class="meta-row">
+            <span class="meta-label">Vị trí:</span>
+            <span class="meta-value" id="source-paragraph-index">Đoạn 1</span>
+          </div>
+          <div class="meta-row">
+            <span class="meta-label">Độ tương quan:</span>
+            <span class="meta-badge" id="source-score">BM25: 4.5</span>
+          </div>
+        </div>
+
+        <div class="source-text-card">
+          <div class="source-text-header">Đoạn trích dẫn nguyên văn:</div>
+          <blockquote class="source-quote" id="source-quote-text">
+            "Nội dung trích dẫn chi tiết sẽ hiển thị tại đây khi bạn nhấp vào nguồn..."
+          </blockquote>
+        </div>
+
+        <div class="source-actions">
+          <button class="btn btn-sm btn-outline w-100" id="btn-view-doc-structure">
+            <span>🌳</span> Xem cấu trúc tài liệu này
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ============================================================== -->
+    <!-- NGĂN KÉO CHẾ ĐỘ NGHIÊN CỨU & SO SÁNH (RESEARCH DRAWER)         -->
+    <!-- ============================================================== -->
+    <div class="research-drawer" id="research-drawer">
+      <div class="drawer-header">
+        <div class="drawer-title">
+          <span class="icon">🔬</span>
+          <h3>Chế độ Nghiên cứu NCKH & Đo lường</h3>
+        </div>
+        <button class="btn-icon" id="btn-close-research-drawer">✕</button>
+      </div>
+
+      <div class="drawer-tabs">
+        <button class="drawer-tab-btn active" data-tab="tab-diagnostics">Trình phân tích</button>
+        <button class="drawer-tab-btn" data-tab="tab-memory">Bộ nhớ SA-CMS</button>
+        <button class="drawer-tab-btn" data-tab="tab-compare">So sánh mô hình</button>
+        <button class="drawer-tab-btn" data-tab="tab-telemetry">Đo lường Token</button>
+      </div>
+
+      <div class="drawer-content">
+        <!-- Tab 1: Trình phân tích câu trả lời (Why this answer) -->
+        <div class="drawer-tab-pane active" id="tab-diagnostics">
+          <div class="panel-section">
+            <h4>Chiến lược định tuyến câu hỏi (Question Routing)</h4>
+            <div class="routing-badge-card" id="drawer-routing-card">
+              <span class="badge-route" id="drawer-route-name">DIRECT_LOOKUP</span>
+              <p id="drawer-route-desc">Tra cứu trực tiếp định nghĩa hoặc dữ kiện cụ thể.</p>
+            </div>
+          </div>
+
+          <div class="panel-section">
+            <h4>Bằng chứng & Cổng kiểm soát từ chối (Refusal Gate)</h4>
+            <div class="stats-mini-grid">
+              <div class="stat-mini-card">
+                <span class="stat-label">Bằng chứng tìm thấy</span>
+                <span class="stat-number" id="drawer-evidence-count">0</span>
+              </div>
+              <div class="stat-mini-card">
+                <span class="stat-label">Trạng thái từ chối</span>
+                <span class="stat-number" id="drawer-refusal-status">Được xác nhận</span>
+              </div>
+              <div class="stat-mini-card">
+                <span class="stat-label">Cấp độ bộ nhớ</span>
+                <span class="stat-number" id="drawer-memory-level">Level 3</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel-section">
+            <h4>Hiệu suất thực thi</h4>
+            <div class="telemetry-bar-list">
+              <div class="telemetry-bar-item">
+                <span>Token đầu vào:</span>
+                <strong id="drawer-input-tokens">0</strong>
+              </div>
+              <div class="telemetry-bar-item">
+                <span>Token câu trả lời:</span>
+                <strong id="drawer-output-tokens">0</strong>
+              </div>
+              <div class="telemetry-bar-item">
+                <span>Tổng độ trễ:</span>
+                <strong id="drawer-total-latency">0 ms</strong>
+              </div>
+              <div class="telemetry-bar-item">
+                <span>Thời gian truy xuất:</span>
+                <strong id="drawer-retrieval-latency">0 ms</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 2: Bộ nhớ SA-CMS -->
+        <div class="drawer-tab-pane" id="tab-memory">
+          <div class="memory-levels-container" id="drawer-memory-levels">
+            <div class="memory-level-box">
+              <div class="level-badge">CẤP ĐỘ 1: ĐOẠN VĂN (PARAGRAPH)</div>
+              <p>Quy mô thời gian mịn · Cập nhật theo ranh giới đoạn</p>
+              <div class="level-meta">Tham số: 1,771,584 · Tần suất cập nhật: Cao</div>
+            </div>
+            <div class="memory-level-box">
+              <div class="level-badge">CẤP ĐỘ 2: CHƯƠNG MỤC (SECTION)</div>
+              <p>Quy mô thời gian trung bình · Cập nhật theo ranh giới mục</p>
+              <div class="level-meta">Tham số: 1,771,584 · Duy trì tính mạch lạc ngữ cảnh</div>
+            </div>
+            <div class="memory-level-box">
+              <div class="level-badge">CẤP ĐỘ 3: TOÀN BỘ TÀI LIỆU (DOCUMENT)</div>
+              <p>Quy mô thời gian thô · Neo tham số bền vững toàn văn bản</p>
+              <div class="level-meta">Tham số: 1,771,584 · Tổng tham số: 5,314,752 ($d=576$)</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 3: So sánh mô hình (B1, B2, P1, P2) -->
+        <div class="drawer-tab-pane" id="tab-compare">
+          <p class="tab-subtitle">So sánh câu trả lời của 4 phương pháp trên câu hỏi hiện tại:</p>
+          <div class="compare-actions-bar">
+            <button class="btn btn-sm btn-primary" id="btn-run-drawer-compare">
+              <span>▶</span> Chạy đối chiếu B1, B2, P1, P2
+            </button>
+          </div>
+          <div class="compare-cards-grid" id="drawer-compare-grid">
+            <div class="compare-placeholder">Nhấp 'Chạy đối chiếu' để xem kết quả so sánh.</div>
+          </div>
+        </div>
+
+        <!-- Tab 4: Đo lường Token -->
+        <div class="drawer-tab-pane" id="tab-telemetry">
+          <div class="stats-summary-card">
+            <h4>Hiệu quả tiết kiệm Token</h4>
+            <p>Phương pháp SA-CMS nén ngữ cảnh tài liệu vào bộ nhớ tham số, giảm thiểu token đầu vào so với Full-Context RAG.</p>
+            <div class="savings-metric">
+              <span class="savings-pct">~75.4%</span>
+              <span class="savings-desc">Mức tiết kiệm Token đầu vào trung bình</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- MODAL THƯ VIỆN TÀI LIỆU (DOCUMENT LIBRARY MODAL)               -->
+    <!-- ============================================================== -->
+    <div class="modal-backdrop" id="modal-documents" style="display: none;">
+      <div class="modal-dialog">
+        <div class="modal-header">
+          <div class="modal-title">
+            <span class="icon">📂</span>
+            <h3>Thư viện tài liệu</h3>
+          </div>
+          <button class="btn-icon" id="btn-close-documents-modal">✕</button>
+        </div>
+
+        <div class="modal-body">
+          <div class="documents-toolbar">
+            <input type="text" class="input-search" id="input-search-docs" placeholder="Tìm kiếm tài liệu...">
+            <label class="btn btn-primary btn-sm" for="modal-upload-input">
+              <span>＋</span> Tải tài liệu mới
+            </label>
+            <input type="file" id="modal-upload-input" accept=".pdf,.docx,.txt,.md" style="display: none;" multiple>
+          </div>
+
+          <div class="documents-table-wrapper">
+            <table class="documents-table">
+              <thead>
+                <tr>
+                  <th>Tên tài liệu</th>
+                  <th>Dung lượng / Từ</th>
+                  <th>Số đoạn trích</th>
+                  <th>Ngày nạp</th>
+                  <th>Thao tác</th>
+                </tr>
+              </thead>
+              <tbody id="documents-table-body">
+                <!-- Render động qua JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- BẢNG ĐIỀU KHIỂN NGHIÊN CỨU 8 TRANG (RESEARCH DASHBOARD MODAL)  -->
+    <!-- ============================================================== -->
+    <div class="modal-backdrop" id="modal-research-dashboard" style="display: none;">
+      <div class="modal-dialog modal-xl">
+        <div class="modal-header">
+          <div class="modal-title-group">
+            <div class="modal-title">
+              <span class="icon">🔬</span>
+              <h3>SA-CMS Research Lab — Môi trường Nghiên cứu &amp; Thực nghiệm</h3>
+            </div>
+            <div class="protocol-badges">
+              <span class="badge-tag badge-phase4" title="Bộ dữ liệu và ngưỡng điểm Phase 4.1 được bảo vệ bất biến">🔒 OFFICIAL PHASE 4 (FROZEN)</span>
+              <span class="badge-tag badge-round2" title="Phần mở rộng cơ chế, hiệu quả và độ bền vững Vòng 2">⚡ ROUND 2 EXTENSION</span>
+            </div>
+          </div>
+          <button class="btn-icon" id="btn-close-dashboard-modal">✕</button>
+        </div>
+
+        <!-- Thanh điều hướng chính của Research Lab (Step 10, 11, 12, 13) -->
+        <div class="modal-tabs-bar research-lab-main-nav">
+          <button class="lab-main-tab-btn active" data-lab-target="lab-section-dashboard">📊 Bảng điều khiển (8 Trang)</button>
+          <button class="lab-main-tab-btn" data-lab-target="lab-section-demo">▶ Demo SA-CMS (10 Bước)</button>
+          <button class="lab-main-tab-btn" data-lab-target="lab-section-diagram">📐 Sơ đồ Nguyên lý Cốt lõi</button>
+          <button class="lab-main-tab-btn" data-lab-target="lab-section-scenarios">🎯 7 Kịch bản Thực nghiệm NCKH</button>
+        </div>
+
+        <div class="modal-body dashboard-modal-body">
+          <!-- PHÂN HỆ 1: BẢNG ĐIỀU KHIỂN 8 TRANG -->
+          <div class="lab-main-pane active" id="lab-section-dashboard">
+            <div class="modal-tabs-bar" style="margin-bottom: 1rem; border-bottom: 1px dashed var(--border-subtle);">
+              <button class="dash-tab-btn active" data-dash-tab="dash-tab-1">1. Tổng quan</button>
+              <button class="dash-tab-btn" data-dash-tab="dash-tab-2">2. Điểm chuẩn</button>
+              <button class="dash-tab-btn" data-dash-tab="dash-tab-3">3. Động lực Bộ nhớ</button>
+              <button class="dash-tab-btn" data-dash-tab="dash-tab-4">4. Truy xuất BM25</button>
+              <button class="dash-tab-btn" data-dash-tab="dash-tab-5">5. Kinh tế Token</button>
+              <button class="dash-tab-btn" data-dash-tab="dash-tab-6">6. Học liên tục</button>
+              <button class="dash-tab-btn" data-dash-tab="dash-tab-7">7. Tiếng Việt (VN QA)</button>
+              <button class="dash-tab-btn" data-dash-tab="dash-tab-8">8. Đối sánh Mô hình</button>
+            </div>
+          <!-- TRANG 1: TỔNG QUAN -->
+          <div class="dash-tab-pane active" id="dash-tab-1">
+            <div class="dash-card">
+              <h4>Kiến trúc SA-CMS: Bộ nhớ Tham số Đa Quy mô Căn chỉnh Cấu trúc</h4>
+              <p class="dash-desc">Hệ thống nén tri thức văn bản dài vào 3 cấp độ thời gian (Đoạn văn, Chương mục, Toàn văn bản) với <strong>5,314,752 tham số thích ứng</strong>, đóng băng hoàn toàn 135M tham số của mô hình nền tảng.</p>
+              
+              <div class="stats-overview-grid">
+                <div class="stat-box">
+                  <span class="stat-box-val">5,314,752</span>
+                  <span class="stat-box-lbl">Tham số Thích ứng Bộ nhớ</span>
+                  <span class="stat-box-sub">3 Tầng MLP x 1,771,584 ($d=576$)</span>
+                </div>
+                <div class="stat-box">
+                  <span class="stat-box-val">100%</span>
+                  <span class="stat-box-lbl">Đóng băng Mô hình Nền tảng</span>
+                  <span class="stat-box-sub">SmolLM2-135M (Zero Local Training)</span>
+                </div>
+                <div class="stat-box">
+                  <span class="stat-box-val">41.7%</span>
+                  <span class="stat-box-lbl">Tăng tốc TTFT (Token Đầu)</span>
+                  <span class="stat-box-sub">58.89 ms TTFT (P2) vs 101.08 ms (B2)</span>
+                </div>
+                <div class="stat-box">
+                  <span class="stat-box-val">76.6%</span>
+                  <span class="stat-box-lbl">Cắt giảm Ngân sách Input</span>
+                  <span class="stat-box-sub">Giảm nén Context Prompt</span>
+                </div>
+                <div class="stat-box">
+                  <span class="stat-box-val">56.2%</span>
+                  <span class="stat-box-lbl">Cắt giảm Ngân sách Output</span>
+                  <span class="stat-box-sub">Thiết kế trần Concise Template</span>
+                </div>
+                <div class="stat-box">
+                  <span class="stat-box-val">357 MB</span>
+                  <span class="stat-box-lbl">Tiêu thụ Peak VRAM</span>
+                  <span class="stat-box-sub">Tối ưu trên GTX 1650 Ti (4GB)</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="dash-grid-2col">
+              <div class="dash-card">
+                <div class="card-badge-header">
+                  <span class="badge-tag badge-phase4">🔒 KẾT QUẢ PHASE 4 (FROZEN)</span>
+                </div>
+                <h5>Điểm chuẩn Chính thức Đã Khóa</h5>
+                <ul class="dash-bullet-list">
+                  <li><strong>Giao thức chuẩn:</strong> Khóa công bằng Phase 4.0.2 ($\tau=3.0$, Coverage $\ge 0.35$).</li>
+                  <li><strong>Bộ dữ liệu:</strong> QASPER, LongHealth, MK-NIAH và 100 câu hỏi Tiếng Việt chuẩn hóa.</li>
+                  <li><strong>Nguyên tắc:</strong> Không sửa đổi số liệu đã công bố, lưu trữ bất biến tại <code>results/phase4_1/</code>.</li>
+                </ul>
+              </div>
+              <div class="dash-card">
+                <div class="card-badge-header">
+                  <span class="badge-tag badge-round2">⚡ MỞ RỘNG VÒNG 2 (EXTENSION)</span>
+                </div>
+                <h5>Mở rộng Phân tích & Sản phẩm</h5>
+                <ul class="dash-bullet-list">
+                  <li><strong>Phân tích cơ chế:</strong> Đo lường $||\mathbf{M}_t||$, độ lệch trạng thái ẩn $\Delta \mathbf{H}_t$, phân rã 3 cấp độ.</li>
+                  <li><strong>Bộ kiểm thử bền vững:</strong> 8 điều kiện kiểm soát (Tài liệu dài, Nhiễu, Mâu thuẫn, Trích dẫn đa tài liệu).</li>
+                  <li><strong>Giao diện 2.0:</strong> Trải nghiệm Chat-first ChatGPT-style kèm chip đính kèm tài liệu trực quan.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- TRANG 2: ĐIỂM CHUẨN (BENCHMARK) -->
+          <div class="dash-tab-pane" id="dash-tab-2">
+            <div class="dash-card">
+              <div class="card-badge-header">
+                <span class="badge-tag badge-phase4">🔒 OFFICIAL PHASE 4 BENCHMARK RESULTS</span>
+              </div>
+              <h4>Bảng Kết quả Điểm chuẩn Master (Master Benchmark Matrix)</h4>
+              <p class="dash-desc">So sánh hiệu năng đa hạt nhân trung bình qua 3 hạt ngẫu nhiên (Seeds 42, 43, 44):</p>
+              <div class="table-responsive">
+                <table class="dash-table">
+                  <thead>
+                    <tr>
+                      <th>Phương pháp</th>
+                      <th>Cơ chế</th>
+                      <th>QASPER (F1)</th>
+                      <th>LongHealth (Acc)</th>
+                      <th>MK-NIAH (Acc)</th>
+                      <th>VN QA (F1)</th>
+                      <th>VN Faithfulness</th>
+                      <th>Refusal Acc</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>B1</strong></td>
+                      <td>Full Context</td>
+                      <td>0.124</td>
+                      <td>28.5%</td>
+                      <td>2.0%</td>
+                      <td>0.005</td>
+                      <td>0.0%</td>
+                      <td>0.0% (100% Ảo giác)</td>
+                    </tr>
+                    <tr>
+                      <td><strong>B2</strong></td>
+                      <td>Standard RAG</td>
+                      <td>0.285</td>
+                      <td>42.0%</td>
+                      <td>18.0%</td>
+                      <td>0.298</td>
+                      <td>94.0%</td>
+                      <td>76.0%</td>
+                    </tr>
+                    <tr>
+                      <td><strong>B4</strong></td>
+                      <td>Fixed Memory (1-Lvl)</td>
+                      <td>0.165</td>
+                      <td>22.0%</td>
+                      <td>8.0%</td>
+                      <td>0.120</td>
+                      <td>18.0%</td>
+                      <td>0.0% (100% Ảo giác)</td>
+                    </tr>
+                    <tr>
+                      <td><strong>B5</strong></td>
+                      <td>Fixed Memory (3-Lvl)</td>
+                      <td>0.210</td>
+                      <td>26.5%</td>
+                      <td>12.0%</td>
+                      <td>0.165</td>
+                      <td>22.0%</td>
+                      <td>0.0% (100% Ảo giác)</td>
+                    </tr>
+                    <tr>
+                      <td><strong>P1</strong></td>
+                      <td>SA-CMS Memory-Only</td>
+                      <td>0.245</td>
+                      <td>30.0%</td>
+                      <td>14.0%</td>
+                      <td>0.195</td>
+                      <td>26.0%</td>
+                      <td>0.0% (100% Ảo giác)</td>
+                    </tr>
+                    <tr class="highlight-row">
+                      <td><strong>P2</strong></td>
+                      <td>SA-CMS Gated Hybrid</td>
+                      <td><strong>0.312</strong></td>
+                      <td><strong>46.5%</strong></td>
+                      <td><strong>24.0%</strong></td>
+                      <td><strong>0.334</strong></td>
+                      <td><strong>94.0%</strong></td>
+                      <td><strong>76.0% (38/50 An toàn)</strong></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- TRANG 3: ĐỘNG LỰC BỘ NHỚ (MEMORY) -->
+          <div class="dash-tab-pane" id="dash-tab-3">
+            <div class="dash-card">
+              <div class="card-badge-header">
+                <span class="badge-tag badge-round2">⚡ ROUND 2 MECHANISTIC PROBING</span>
+              </div>
+              <h4>Động lực học và Phân rã 3 Cấp độ Bộ nhớ SA-CMS</h4>
+              <p class="dash-desc">Đo đạc độ lớn phần dư $||\mathbf{M}_t||_2$ và mức độ đóng góp theo từng quy mô thời gian:</p>
+              
+              <div class="memory-levels-grid">
+                <div class="memory-level-card level-1-card">
+                  <div class="level-header">
+                    <span class="level-pill">CẤP ĐỘ 1: ĐOẠN VĂN (PARAGRAPH)</span>
+                    <span class="level-share">42.5% Đóng góp</span>
+                  </div>
+                  <p class="level-text">Chu kỳ thời gian mịn (High Frequency) · Cập nhật tại ranh giới kết thúc đoạn</p>
+                  <div class="level-stats-row">
+                    <span>Tham số: <strong>1,771,584</strong></span>
+                    <span>Nhiệm vụ: <strong>Thực thể cục bộ & Cú pháp vi mô</strong></span>
+                  </div>
+                </div>
+
+                <div class="memory-level-card level-2-card">
+                  <div class="level-header">
+                    <span class="level-pill">CẤP ĐỘ 2: CHƯƠNG MỤC (SECTION)</span>
+                    <span class="level-share">36.2% Đóng góp</span>
+                  </div>
+                  <p class="level-text">Chu kỳ thời gian trung bình (Intermediate) · Cập nhật tại ranh giới phần mục</p>
+                  <div class="level-stats-row">
+                    <span>Tham số: <strong>1,771,584</strong></span>
+                    <span>Nhiệm vụ: <strong>Mạch lạc chủ đề con & Ngữ cảnh mục</strong></span>
+                  </div>
+                </div>
+
+                <div class="memory-level-card level-3-card">
+                  <div class="level-header">
+                    <span class="level-pill">CẤP ĐỘ 3: TOÀN VĂN (DOCUMENT)</span>
+                    <span class="level-share">21.3% Đóng góp</span>
+                  </div>
+                  <p class="level-text">Chu kỳ thời gian thô (Slow Frequency) · Mỏ neo tham số bền vững</p>
+                  <div class="level-stats-row">
+                    <span>Tham số: <strong>1,771,584</strong></span>
+                    <span>Nhiệm vụ: <strong>Neo giữ bất biến toàn cục (Invariants)</strong></span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="dash-grid-2col" style="margin-top: 1rem;">
+                <div class="dash-card">
+                  <h5>Độ lớn Phần dư $||\mathbf{M}_t||$ theo Ngữ cảnh</h5>
+                  <div class="norm-compare-box">
+                    <div class="norm-item">
+                      <span class="norm-label">Xóa Ngữ cảnh (Context Evicted):</span>
+                      <strong class="norm-val high">1.842</strong>
+                      <span class="norm-desc">Bộ nhớ hoạt động mạnh để bù đắp ngữ cảnh</span>
+                    </div>
+                    <div class="norm-item">
+                      <span class="norm-label">Có Ngữ cảnh (Context Present):</span>
+                      <strong class="norm-val low">0.945</strong>
+                      <span class="norm-desc">Bộ nhớ hoạt động tinh chỉnh liên kết tầm xa</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="dash-card">
+                  <h5>Ma trận Kích hoạt Token x Tầng Bộ nhớ (Heatmap)</h5>
+                  <div class="heatmap-sample-grid" id="dash-heatmap-grid">
+                    <!-- Render động qua JS -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TRANG 4: TRUY XUẤT BM25 (RETRIEVAL) -->
+          <div class="dash-tab-pane" id="dash-tab-4">
+            <div class="dash-card">
+              <div class="card-badge-header">
+                <span class="badge-tag badge-phase4">🔒 PHASE 4.0.2 FAIRNESS RETRIEVAL LOCK</span>
+              </div>
+              <h4>Thông số Kỹ thuật & Hiệu năng Truy xuất BM25</h4>
+              <p class="dash-desc">Bộ truy xuất từ vựng được hiệu chuẩn khóa cứng để đảm bảo tính nhất quán khoa học:</p>
+              
+              <div class="retrieval-params-grid">
+                <div class="param-card">
+                  <span class="param-title">Tham số k1</span>
+                  <span class="param-val">1.50</span>
+                  <span class="param-desc">Điều tiết độ bão hòa tần suất từ</span>
+                </div>
+                <div class="param-card">
+                  <span class="param-title">Tham số b</span>
+                  <span class="param-val">0.75</span>
+                  <span class="param-desc">Chuẩn hóa độ dài văn bản</span>
+                </div>
+                <div class="param-card">
+                  <span class="param-title">Ngưỡng Bằng chứng (tau)</span>
+                  <span class="param-val">3.00</span>
+                  <span class="param-desc">Ngưỡng lọc bằng chứng tối thiểu</span>
+                </div>
+                <div class="param-card">
+                  <span class="param-title">Độ phủ Câu hỏi (Coverage)</span>
+                  <span class="param-val">0.35</span>
+                  <span class="param-desc">Tỷ lệ từ khóa tối thiểu bắt buộc</span>
+                </div>
+                <div class="param-card">
+                  <span class="param-title">Độ trễ Truy xuất</span>
+                  <span class="param-val">11.39 ms</span>
+                  <span class="param-desc">Tốc độ tìm kiếm trung bình</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TRANG 5: KINH TẾ TOKEN (TOKEN EFFICIENCY) -->
+          <div class="dash-tab-pane" id="dash-tab-5">
+            <div class="dash-card">
+              <div class="card-badge-header">
+                <span class="badge-tag badge-round2">⚡ ROUND 2 EFFICIENCY SCORECARD</span>
+              </div>
+              <h4>Bảng điểm Kinh tế Token & Tối ưu Hóa Chi phí Đầu ra</h4>
+              <p class="dash-desc">Hiện thực hóa yêu cầu của Giảng viên: <strong>Giảm tối đa số lượng token đầu ra</strong> mà không làm giảm độ tin cậy trích dẫn.</p>
+              
+              <div class="table-responsive">
+                <table class="dash-table">
+                  <thead>
+                    <tr>
+                      <th>Phương pháp</th>
+                      <th>Token Đầu vào</th>
+                      <th>Token Sinh ra</th>
+                      <th>Tổng Token</th>
+                      <th>Tiết kiệm Input</th>
+                      <th>Tiết kiệm Output vs B2</th>
+                      <th>Độ trễ (ms)</th>
+                      <th>VRAM Đỉnh (MB)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>B1 (Full Context)</td>
+                      <td>512</td>
+                      <td>35</td>
+                      <td>547</td>
+                      <td>0.0%</td>
+                      <td>-9.4%</td>
+                      <td>108.81 ms</td>
+                      <td>294.94 MB</td>
+                    </tr>
+                    <tr>
+                      <td>B2 (Standard RAG)</td>
+                      <td>280</td>
+                      <td>32</td>
+                      <td>312</td>
+                      <td>45.3%</td>
+                      <td>0.0%</td>
+                      <td>101.08 ms</td>
+                      <td>296.38 MB</td>
+                    </tr>
+                    <tr>
+                      <td>P1 (Memory-Only)</td>
+                      <td>48</td>
+                      <td>26</td>
+                      <td>74</td>
+                      <td>90.6%</td>
+                      <td>18.8%</td>
+                      <td>47.09 ms</td>
+                      <td>357.14 MB</td>
+                    </tr>
+                    <tr>
+                      <td>P2 (Balanced)</td>
+                      <td>120</td>
+                      <td>25</td>
+                      <td>145</td>
+                      <td>76.6%</td>
+                      <td>21.9%</td>
+                      <td>58.89 ms</td>
+                      <td>357.14 MB</td>
+                    </tr>
+                    <tr class="highlight-row">
+                      <td><strong>P2 (Concise Evidence)</strong></td>
+                      <td><strong>85</strong></td>
+                      <td><strong>14</strong></td>
+                      <td><strong>99</strong></td>
+                      <td><strong>83.4%</strong></td>
+                      <td><strong>56.2%</strong></td>
+                      <td><strong>45.93 ms</strong></td>
+                      <td><strong>357.14 MB</strong></td>
+                    </tr>
+                    <tr class="highlight-row">
+                      <td><strong>P2 (Minimal Direct)</strong></td>
+                      <td><strong>65</strong></td>
+                      <td><strong>6</strong></td>
+                      <td><strong>71</strong></td>
+                      <td><strong>87.3%</strong></td>
+                      <td><strong>81.2%</strong></td>
+                      <td><strong>36.51 ms</strong></td>
+                      <td><strong>357.14 MB</strong></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- TRANG 6: HỌC LIÊN TỤC (CONTINUAL LEARNING) -->
+          <div class="dash-tab-pane" id="dash-tab-6">
+            <div class="dash-card">
+              <div class="card-badge-header">
+                <span class="badge-tag" style="background: rgba(147, 51, 234, 0.15); color: #c084fc; border: 1px solid rgba(147, 51, 234, 0.3);">⏳ PENDING EXTERNAL GPU</span>
+              </div>
+              <h4>Đường cong Chống Quên Thảm họa Khi Nạp Tài liệu Liên tục (RQ4)</h4>
+              <p class="dash-desc">Đánh giá độ ổn định của bộ nhớ tham số khi nạp tuần tự 20 tài liệu liên tục ($D_0 \to D_0+5 \to D_0+10 \to D_0+20$):</p>
+              
+              <div style="background: rgba(147, 51, 234, 0.05); border: 1px dashed rgba(147, 51, 234, 0.3); border-radius: 8px; padding: 1.5rem; text-align: center; margin: 1rem 0;">
+                <div style="font-size: 2rem; margin-bottom: 0.5rem;">🖥️ ⏳</div>
+                <h5 style="color: #c084fc; margin-bottom: 0.5rem;">Trạng thái: Chưa có dữ liệu thực nghiệm (External GPU Required)</h5>
+                <p style="color: var(--text-muted); font-size: 0.85rem; max-width: 600px; margin: 0 auto; line-height: 1.5;">
+                  Thực nghiệm nạp tuần tự 20 tài liệu dài vào adapter SA-CMS đòi hỏi huấn luyện gradient lặp trên nhiều tài liệu, vượt quá dung lượng 4GB VRAM của card đồ họa cục bộ (GTX 1650 Ti). 
+                  Toàn bộ mã nguồn thực thi đã được kiểm thử tính đúng và đóng gói độc lập tại <code>external_gpu/round2_rq4/</code> sẵn sàng chạy trên GPU ngoài.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- TRANG 7: TIẾNG VIỆT (VIETNAMESE QA) -->
+          <div class="dash-tab-pane" id="dash-tab-7">
+            <div class="dash-card">
+              <div class="card-badge-header">
+                <span class="badge-tag badge-phase4">🔒 VIETNAMESE FINAL 100-QA AUDIT</span>
+              </div>
+              <h4>Đánh giá Nghiệm thu Tập Dữ liệu Tiếng Việt (100 Câu hỏi)</h4>
+              <p class="dash-desc">Bộ câu hỏi kiểm soát chặt chẽ 3 nhóm: 50 Answerable, 25 Unanswerable, 25 Insufficient Evidence:</p>
+              
+              <div class="vn-stats-grid">
+                <div class="vn-stat-card">
+                  <span class="vn-stat-num">76.0%</span>
+                  <span class="vn-stat-title">Tỷ lệ Từ chối Đúng (P2)</span>
+                  <span class="vn-stat-desc">38/50 câu không thể trả lời</span>
+                </div>
+                <div class="vn-stat-card">
+                  <span class="vn-stat-num">0.0%</span>
+                  <span class="vn-stat-title">Tỷ lệ Từ chối Sai (P2)</span>
+                  <span class="vn-stat-desc">Không từ chối nhầm câu có bằng chứng</span>
+                </div>
+                <div class="vn-stat-card">
+                  <span class="vn-stat-num">76.0%</span>
+                  <span class="vn-stat-title">Độ Căn cứ (Faithfulness)</span>
+                  <span class="vn-stat-desc">Câu trả lời được bảo chứng bởi trích dẫn</span>
+                </div>
+                <div class="vn-stat-card">
+                  <span class="vn-stat-num">100%</span>
+                  <span class="vn-stat-title">Ảo giác ở Mô hình B1</span>
+                  <span class="vn-stat-desc">B1 trả lời bừa khi thiếu dữ kiện</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TRANG 8: ĐỐI SÁNH MÔ HÌNH (COMPARISON) -->
+          <div class="dash-tab-pane" id="dash-tab-8">
+            <div class="dash-card">
+              <div class="card-badge-header">
+                <span class="badge-tag badge-round2">⚡ MULTI-CRITERIA COMPARATIVE RADAR</span>
+              </div>
+              <h4>Đối sánh Toàn diện 6 Chiều (B1, B2, B4, B5, P1, P2)</h4>
+              <p class="dash-desc">Tổng hợp đánh giá tính khả thi và tính ứng dụng thực tiễn của từng phương pháp:</p>
+              
+              <div class="table-responsive">
+                <table class="dash-table">
+                  <thead>
+                    <tr>
+                      <th>Phương pháp</th>
+                      <th>Chính xác F1</th>
+                      <th>Độ trễ Suy luận</th>
+                      <th>Tiết kiệm Token</th>
+                      <th>An toàn Từ chối</th>
+                      <th>Chống Quên</th>
+                      <th>Khả năng Trích dẫn</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>B1: Full-Context</strong></td>
+                      <td>⭐ Thấp (dài hạn)</td>
+                      <td>❌ Chậm (108 ms)</td>
+                      <td>❌ 0% (Tốn kém)</td>
+                      <td>❌ Kém (100% ảo giác)</td>
+                      <td>N/A</td>
+                      <td>❌ Không có trích dẫn</td>
+                    </tr>
+                    <tr>
+                      <td><strong>B2: Standard RAG</strong></td>
+                      <td>⭐⭐⭐ Khá</td>
+                      <td>⚠️ Trung bình (101 ms)</td>
+                      <td>⭐⭐ Khá (~43%)</td>
+                      <td>⭐⭐⭐ Khá tốt (76%)</td>
+                      <td>N/A</td>
+                      <td>⭐⭐⭐⭐ Có trích dẫn đoạn</td>
+                    </tr>
+                    <tr>
+                      <td><strong>B4: Memory (1-Lvl)</strong></td>
+                      <td>⭐ Thấp</td>
+                      <td>⭐⭐⭐⭐ Nhanh (46 ms)</td>
+                      <td>⭐⭐⭐⭐ Rất cao (>85%)</td>
+                      <td>❌ 0% (Không từ chối)</td>
+                      <td>⏳ Chờ GPU ngoài</td>
+                      <td>❌ Không thể trích dẫn</td>
+                    </tr>
+                    <tr>
+                      <td><strong>B5: Memory (3-Lvl)</strong></td>
+                      <td>⭐⭐ Trung bình</td>
+                      <td>⭐⭐⭐⭐ Nhanh (45 ms)</td>
+                      <td>⭐⭐⭐⭐ Rất cao (>85%)</td>
+                      <td>❌ 0% (Không từ chối)</td>
+                      <td>⏳ Chờ GPU ngoài</td>
+                      <td>❌ Không thể trích dẫn</td>
+                    </tr>
+                    <tr>
+                      <td><strong>P1: SA-CMS Memory</strong></td>
+                      <td>⭐⭐ Khá</td>
+                      <td>⭐⭐⭐⭐ Nhanh (47 ms)</td>
+                      <td>⭐⭐⭐⭐ Rất cao (>85%)</td>
+                      <td>❌ 0% (Không từ chối)</td>
+                      <td>⏳ Chờ GPU ngoài</td>
+                      <td>❌ Không thể trích dẫn</td>
+                    </tr>
+                    <tr class="highlight-row">
+                      <td><strong>P2: SA-CMS Gated Hybrid</strong></td>
+                      <td>⭐⭐⭐⭐ <strong>Cao nhất</strong></td>
+                      <td>⭐⭐⭐⭐ <strong>Rất nhanh (45-58 ms)</strong></td>
+                      <td>⭐⭐⭐⭐ <strong>Tối ưu (>75-87%)</strong></td>
+                      <td>⭐⭐⭐ <strong>76% An toàn</strong></td>
+                      <td>⏳ <strong>Chờ GPU ngoài</strong></td>
+                      <td>⭐⭐⭐⭐ <strong>Trích dẫn minh bạch [1], [2]</strong></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- PHÂN HỆ 2: DEMO SA-CMS 10 BƯỚC (Step 12) -->
+          <div class="lab-main-pane" id="lab-section-demo" style="display: none;">
+            <div class="dash-card">
+              <div class="card-badge-header">
+                <span class="badge-tag badge-round2">⚡ GUIDED INTERACTIVE RESEARCH DEMO</span>
+              </div>
+              <h4>▶ Demo Trực quan Quy trình Bộ nhớ SA-CMS (10 Bước)</h4>
+              <p class="dash-desc">Minh họa trực quan từng bước vận hành thực tế của hệ thống lưu trữ và bộ nhớ ngoại tuyến theo bài báo Nested Learning:</p>
+
+              <div class="demo-stepper-container">
+                <div class="demo-stepper-header">
+                  <div class="stepper-progress-bar">
+                    <div class="stepper-progress-fill" id="demo-stepper-fill" style="width: 10%;"></div>
+                  </div>
+                  <div class="stepper-step-indicator">
+                    <span id="demo-step-badge">Bước 1 / 10</span>: <strong id="demo-step-title">Nạp tài liệu (Load Document)</strong>
+                  </div>
+                </div>
+
+                <div class="demo-step-content-card" id="demo-step-content-card">
+                  <!-- Render động qua JS -->
+                </div>
+
+                <div class="demo-stepper-controls">
+                  <button class="btn btn-secondary btn-sm" id="btn-demo-prev" disabled>◀ Bước trước</button>
+                  <button class="btn btn-primary btn-sm" id="btn-demo-next">Bước tiếp theo ▶</button>
+                  <button class="btn btn-outline btn-sm" id="btn-demo-auto">▶ Chạy tự động</button>
+                  <button class="btn btn-ghost btn-sm" id="btn-demo-reset">↺ Đặt lại</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- PHÂN HỆ 3: SƠ ĐỒ NGUYÊN LÝ CỐT LÕI (Step 13) -->
+          <div class="lab-main-pane" id="lab-section-diagram" style="display: none;">
+            <div class="dash-card">
+              <div class="card-badge-header">
+                <span class="badge-tag badge-phase4">🔒 SA-CMS CORE ARCHITECTURE FLOW</span>
+              </div>
+              <h4>Sơ đồ Kiến trúc &amp; Luồng Dữ liệu Cốt lõi SA-CMS</h4>
+              <p class="dash-desc">Quy trình xử lý ngoại tuyến từ tài liệu gốc, phân tích cấu trúc đa cấp độ đến bộ nhớ tham số và câu trả lời có căn cứ trích dẫn:</p>
+
+              <div class="core-idea-ascii-box">
+<pre class="ascii-diagram">
+                 DOCUMENT
+                     ↓
+              STRUCTURE PARSER
+                     ↓
+        ┌────────────┼────────────┐
+        ↓            ↓            ↓
+       L1           L2           L3
+     ĐOẠN          MỤC        TÀI LIỆU
+        └────────────┼────────────┘
+                     ↓
+                 SA-CMS
+                     ↓
+              LOCAL KNOWLEDGE
+                     ↓
+                  QUESTION
+                     ↓
+                EVIDENCE
+                     ↓
+                  ANSWER
+</pre>
+              </div>
+
+              <div class="diagram-explanation-grid">
+                <div class="diagram-step-box">
+                  <div class="diag-step-header">
+                    <span class="diag-step-num">1</span>
+                    <h5>Bóc tách Cấu trúc (Structure Parser)</h5>
+                  </div>
+                  <p>Tài liệu được phân tích phân cấp thành 3 mức ranh giới tự nhiên: Đoạn văn (Paragraph), Chương mục (Section) và Toàn văn bản (Document).</p>
+                </div>
+
+                <div class="diagram-step-box">
+                  <div class="diag-step-header">
+                    <span class="diag-step-num">2</span>
+                    <h5>Bộ nhớ Tham số 3 Cấp độ (L1/L2/L3)</h5>
+                  </div>
+                  <p>L1 nắm bắt vi cú pháp và thực thể cục bộ; L2 duy trì tính mạch lạc chủ đề; L3 neo giữ trạng thái toàn cục với tổng cộng 5,314,752 tham số ($d=576$).</p>
+                </div>
+
+                <div class="diagram-step-box">
+                  <div class="diag-step-header">
+                    <span class="diag-step-num">3</span>
+                    <h5>Tri thức Cục bộ (Local Knowledge)</h5>
+                  </div>
+                  <p>Trọng số bộ nhớ được lưu trữ và nạp trực tiếp từ đĩa cục bộ, cho phép hoạt động 100% ngoại tuyến không phụ thuộc Internet.</p>
+                </div>
+
+                <div class="diagram-step-box">
+                  <div class="diag-step-header">
+                    <span class="diag-step-num">4</span>
+                    <h5>Hỏi đáp có Căn cứ (Evidence-Grounded QA)</h5>
+                  </div>
+                  <p>Khi người dùng hỏi, hệ thống kích hoạt cơ chế Gated Hybrid: kết hợp biểu diễn bộ nhớ với trích xuất BM25 để sinh câu trả lời kèm trích dẫn [1], [2].</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- PHÂN HỆ 4: 7 KỊCH BẢN THỰC NGHIỆM NCKH (Step 10 & 11) -->
+          <div class="lab-main-pane" id="lab-section-scenarios" style="display: none;">
+            <div class="dash-card">
+              <div class="card-badge-header">
+                <span class="badge-tag badge-round2">🎯 BENCHMARK SCENARIOS</span>
+              </div>
+              <h4>7 Kịch bản Thực nghiệm NCKH Minh họa</h4>
+              <p class="dash-desc">Nhấp vào bất kỳ kịch bản nào bên dưới để hệ thống tự động nạp tài liệu, đưa câu hỏi vào khung chat và thực thi quy trình hỏi đáp:</p>
+              <div class="demo-cards-list" id="lab-scenarios-list">
+                <!-- Render động qua JS -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- MODAL 7 KỊCH BẢN DEMO NCKH (DEMO SCENARIOS MODAL)               -->
+    <!-- ============================================================== -->
+    <div class="modal-backdrop" id="modal-demos" style="display: none;">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-header">
+          <div class="modal-title">
+            <span class="icon">🎯</span>
+            <h3>7 Kịch bản Thực nghiệm NCKH Minh họa</h3>
+          </div>
+          <button class="btn-icon" id="btn-close-demos-modal">✕</button>
+        </div>
+
+        <div class="modal-body">
+          <p class="dash-desc">Nhấp vào bất kỳ kịch bản nào bên dưới để hệ thống tự động nạp tài liệu, đưa câu hỏi vào khung chat và thực thi quy trình hỏi đáp:</p>
+          <div class="demo-cards-list" id="demo-scenarios-list">
+            <!-- Render động qua JS -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- MODAL CÀI ĐẶT HỆ THỐNG (SETTINGS MODAL)                         -->
+    <!-- ============================================================== -->
+    <div class="modal-backdrop" id="modal-settings" style="display: none;">
+      <div class="modal-dialog">
+        <div class="modal-header">
+          <div class="modal-title">
+            <span class="icon">⚙️</span>
+            <h3>Cài đặt Hệ thống SA-CMS</h3>
+          </div>
+          <button class="btn-icon" id="btn-close-settings-modal">✕</button>
+        </div>
+
+        <div class="modal-body">
+          <div class="settings-group">
+            <label class="settings-label">Độ dài câu trả lời mặc định:</label>
+            <select class="settings-select" id="setting-answer-mode">
+              <option value="concise">Ngắn gọn (Concise — Tiết kiệm token tối đa)</option>
+              <option value="balanced" selected>Cân bằng (Balanced — Đầy đủ & dẫn chứng)</option>
+              <option value="detailed">Chi tiết (Detailed — Phân tích sâu)</option>
+            </select>
+          </div>
+
+          <div class="settings-group">
+            <label class="settings-label">Chế độ Mô hình:</label>
+            <select class="settings-select" id="setting-qa-mode">
+              <option value="hybrid" selected>P2: Gated Hybrid (Bộ nhớ SA-CMS + Truy xuất RAG)</option>
+              <option value="memory">P1: Parametric Memory-Only (Chỉ dùng bộ nhớ nén)</option>
+              <option value="context">B1: In-Context Feeding (Truyền văn bản vào prompt)</option>
+            </select>
+          </div>
+
+          <div class="settings-group">
+            <label class="settings-label">Số lượng đoạn trích Top-k:</label>
+            <input type="number" class="settings-input" id="setting-top-k" value="5" min="1" max="10">
+          </div>
+
+          <div class="settings-group">
+            <label class="settings-label">Ngôn ngữ phản hồi:</label>
+            <select class="settings-select" id="setting-language">
+              <option value="vi" selected>Tiếng Việt</option>
+              <option value="en">English</option>
+            </select>
+          </div>
+
+          <div class="settings-actions">
+            <button class="btn btn-primary w-100" id="btn-save-settings">Lưu cấu hình</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- MODAL TRẠNG THÁI TÀI NGUYÊN (SYSTEM STATUS MODAL)               -->
+    <!-- ============================================================== -->
+    <div class="modal-backdrop" id="modal-system-status" style="display: none;">
+      <div class="modal-dialog">
+        <div class="modal-header">
+          <div class="modal-title">
+            <span class="icon">💻</span>
+            <h3>Trạng thái Tài nguyên Ngoại tuyến (Offline Status)</h3>
+          </div>
+          <button class="btn-icon" id="btn-close-system-status-modal">✕</button>
+        </div>
+
+        <div class="modal-body">
+          <div class="system-status-grid">
+            <div class="status-card">
+              <span class="status-card-label">MODEL</span>
+              <span class="status-card-value text-success" id="status-card-model">✓ READY</span>
+            </div>
+            <div class="status-card">
+              <span class="status-card-label">TOKENIZER</span>
+              <span class="status-card-value text-success" id="status-card-tokenizer">✓ READY</span>
+            </div>
+            <div class="status-card highlight-card">
+              <span class="status-card-label">SA-CMS MEMORY</span>
+              <span class="status-card-value text-info" id="status-card-checkpoint">✓ READY</span>
+            </div>
+            <div class="status-card">
+              <span class="status-card-label">DOCUMENT INDEX</span>
+              <span class="status-card-value text-success" id="status-card-index">✓ READY</span>
+            </div>
+            <div class="status-card">
+              <span class="status-card-label">LOCAL EVIDENCE</span>
+              <span class="status-card-value text-success" id="status-card-evidence">✓ READY</span>
+            </div>
+            <div class="status-card">
+              <span class="status-card-label">INTERNET</span>
+              <span class="status-card-value text-success" id="status-card-network">NOT REQUIRED</span>
+            </div>
+          </div>
+
+          <div class="status-footer-note" id="status-footer-note">
+            Đang tải thông tin cấu hình tài nguyên cục bộ...
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Backdrop lớp phủ khi mở modal hoặc side drawer trên màn hình nhỏ -->
+    <div class="backdrop-overlay" id="backdrop-overlay" style="display: none;"></div>
+  </div>
+
+  <script src="/static/js/app.js"></script>
+</body>
+</html>

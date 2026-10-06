@@ -1,0 +1,148 @@
+{
+  "document_id": "DOC_1791118847",
+  "version": 1,
+  "title": "Bao Cao Sa Cms",
+  "raw_text": "# Báo cáo Nghiên cứu SA-CMS\n## Phần 1: Giới thiệu tổng quan\nHệ thống SA-CMS (Structure-Aligned Continual Memory Snapshots) là kiến trúc nén tri thức đa quy mô.\nSA-CMS giúp mô hình ghi nhớ văn bản dài mà không làm bùng nổ token ngữ cảnh.\n\n## Phần 2: Nguyên nhân và Động lực\nNguyên nhân chính của vấn đề chi phí ngữ cảnh là độ phức tạp bậc hai O(N^2) của cơ chế Attention truyền thống.\nRAG truyền thống gặp hiện tượng mất mát ngữ cảnh toàn cục (Lost in the Middle) khi ghép nhiều mảnh rời rạc.\nHệ thống giải quyết bằng 3 cấp độ bộ nhớ: Đoạn văn, Chương mục và Toàn bộ tài liệu.\n\n## Phần 3: Kết quả thực nghiệm\nSA-CMS đạt mức tiết kiệm hơn 75% token đầu vào so với Full-Context RAG và duy trì độ trung thực cao.",
+  "passages": [
+    {
+      "passage_id": "DOC_1791118847::P000",
+      "document_id": "DOC_1791118847",
+      "text": "# Báo cáo Nghiên cứu SA-CMS\n## Phần 1: Giới thiệu tổng quan\nHệ thống SA-CMS (Structure-Aligned Continual Memory Snapshots) là kiến trúc nén tri thức đa quy mô. SA-CMS giúp mô hình ghi nhớ văn bản dài mà không làm bùng nổ token ngữ cảnh.",
+      "start_char": 0,
+      "end_char": 237,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "Báo cáo Nghiên cứu SA-CMS",
+      "metadata": {
+        "section_id": "SEC001",
+        "paragraph_id": "PARA001",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "bao_cao_sa_cms.md",
+          "extension": ".md",
+          "size_bytes": 895,
+          "word_count": 146,
+          "approx_tokens": 197
+        },
+        "file_name": "bao_cao_sa_cms.md",
+        "file_size": "0.9 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791118847::P001",
+      "document_id": "DOC_1791118847",
+      "text": "SA-CMS giúp mô hình ghi nhớ văn bản dài mà không làm bùng nổ token ngữ cảnh. ## Phần 2: Nguyên nhân và Động lực\nNguyên nhân chính của vấn đề chi phí ngữ cảnh là độ phức tạp bậc hai O(N^2) của cơ chế Attention truyền thống.",
+      "start_char": 160,
+      "end_char": 383,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "Phần 1: Giới thiệu tổng quan",
+      "metadata": {
+        "section_id": "SEC002",
+        "paragraph_id": "PARA001",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "bao_cao_sa_cms.md",
+          "extension": ".md",
+          "size_bytes": 895,
+          "word_count": 146,
+          "approx_tokens": 197
+        },
+        "file_name": "bao_cao_sa_cms.md",
+        "file_size": "0.9 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791118847::P002",
+      "document_id": "DOC_1791118847",
+      "text": "## Phần 2: Nguyên nhân và Động lực\nNguyên nhân chính của vấn đề chi phí ngữ cảnh là độ phức tạp bậc hai O(N^2) của cơ chế Attention truyền thống. RAG truyền thống gặp hiện tượng mất mát ngữ cảnh toàn cục (Lost in the Middle) khi ghép nhiều mảnh rời rạc.",
+      "start_char": 238,
+      "end_char": 491,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "Phần 2: Nguyên nhân và Động lực",
+      "metadata": {
+        "section_id": "SEC003",
+        "paragraph_id": "PARA001",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "bao_cao_sa_cms.md",
+          "extension": ".md",
+          "size_bytes": 895,
+          "word_count": 146,
+          "approx_tokens": 197
+        },
+        "file_name": "bao_cao_sa_cms.md",
+        "file_size": "0.9 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791118847::P003",
+      "document_id": "DOC_1791118847",
+      "text": "RAG truyền thống gặp hiện tượng mất mát ngữ cảnh toàn cục (Lost in the Middle) khi ghép nhiều mảnh rời rạc. Hệ thống giải quyết bằng 3 cấp độ bộ nhớ: Đoạn văn, Chương mục và Toàn bộ tài liệu.",
+      "start_char": 384,
+      "end_char": 576,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "Phần 2: Nguyên nhân và Động lực",
+      "metadata": {
+        "section_id": "SEC003",
+        "paragraph_id": "PARA002",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "bao_cao_sa_cms.md",
+          "extension": ".md",
+          "size_bytes": 895,
+          "word_count": 146,
+          "approx_tokens": 197
+        },
+        "file_name": "bao_cao_sa_cms.md",
+        "file_size": "0.9 KB"
+      }
+    },
+    {
+      "passage_id": "DOC_1791118847::P004",
+      "document_id": "DOC_1791118847",
+      "text": "Hệ thống giải quyết bằng 3 cấp độ bộ nhớ: Đoạn văn, Chương mục và Toàn bộ tài liệu. ## Phần 3: Kết quả thực nghiệm\nSA-CMS đạt mức tiết kiệm hơn 75% token đầu vào so với Full-Context RAG và duy trì độ trung thực cao.",
+      "start_char": 492,
+      "end_char": 708,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "Phần 2: Nguyên nhân và Động lực",
+      "metadata": {
+        "section_id": "SEC003",
+        "paragraph_id": "PARA002",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "bao_cao_sa_cms.md",
+          "extension": ".md",
+          "size_bytes": 895,
+          "word_count": 146,
+          "approx_tokens": 197
+        },
+        "file_name": "bao_cao_sa_cms.md",
+        "file_size": "0.9 KB"
+      }
+    }
+  ],
+  "structural_metadata": {},
+  "content_hash": "abd4d44d57a21d61",
+  "created_at": 1791118847.284604,
+  "metadata": {
+    "category": "Uploaded",
+    "upload_meta": {
+      "original_filename": "bao_cao_sa_cms.md",
+      "extension": ".md",
+      "size_bytes": 895,
+      "word_count": 146,
+      "approx_tokens": 197
+    },
+    "file_name": "bao_cao_sa_cms.md",
+    "file_size": "0.9 KB"
+  }
+}

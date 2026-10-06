@@ -1,0 +1,38 @@
+{
+  "document_id": "DOC_1791280773091_734fb4",
+  "sections": [
+    {
+      "title": "# Chương 1: Kiến trúc Bộ nhớ",
+      "start": 0,
+      "end": 153
+    },
+    {
+      "title": "# Chương 2: Hiệu năng Thực nghiệm",
+      "start": 153,
+      "end": 282
+    }
+  ],
+  "paragraphs": [
+    {
+      "text": "# Chương 1: Kiến trúc Bộ nhớ",
+      "start": 0,
+      "end": 28
+    },
+    {
+      "text": "Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục ",
+      "start": 30,
+      "end": 151
+    },
+    {
+      "text": "# Chương 2: Hiệu năng Thực nghiệm",
+      "start": 153,
+      "end": 186
+    },
+    {
+      "text": "Hiệu năng thu hồi logit trên bài toán needle MK-NIAH tăng 175% dưới điều kiện không truy xuất.",
+      "start": 188,
+      "end": 282
+    }
+  ],
+  "total_tokens": 221
+}

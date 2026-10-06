@@ -1,0 +1,33 @@
+{
+  "document_id": "LIFECYCLE_DOC_1791278803",
+  "sections": [
+    {
+      "title": "Root",
+      "start": 0,
+      "end": 236
+    }
+  ],
+  "paragraphs": [
+    {
+      "text": "# Phân đoạn 1: Khái niệm SA-CMS",
+      "start": 0,
+      "end": 31
+    },
+    {
+      "text": "Bộ nhớ Continuum căn chỉnh cấu trúc hoạt động ở 3 cấp độ: đoạn văn, chương mục, và toàn văn.",
+      "start": 0,
+      "end": 92
+    },
+    {
+      "text": "# Phân đoạn 2: Kết quả Thực nghiệm",
+      "start": 0,
+      "end": 34
+    },
+    {
+      "text": "Độ trễ truy xuất cục bộ đạt dưới 5ms và không phụ thuộc vào kết nối mạng.",
+      "start": 0,
+      "end": 73
+    }
+  ],
+  "total_tokens": 70
+}

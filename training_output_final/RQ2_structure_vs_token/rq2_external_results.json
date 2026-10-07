@@ -1,0 +1,9149 @@
+{
+  "experiment": "RQ2_Structure_vs_Fixed_Token",
+  "sample_size_N": 1140,
+  "seeds": [
+    42,
+    43,
+    44
+  ],
+  "runs": [],
+  "item_level_pairs": [
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_001",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_002",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_003",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_004",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_005",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_006",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_007",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_008",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_009",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_010",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_011",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_012",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_013",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_014",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_015",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_016",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_017",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_018",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_019",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_020",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_021",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_022",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_023",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_024",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_025",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_026",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_027",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_028",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_029",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_030",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_031",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_032",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_033",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_034",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_035",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_036",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_037",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_038",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_039",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_040",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_041",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_042",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_043",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_044",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_045",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_046",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_047",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_048",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_049",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_050",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_051",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_052",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_053",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_054",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_055",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_056",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_057",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_058",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_059",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_060",
+      "seed": 42,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_061",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_062",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_063",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_064",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_065",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_066",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_067",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_068",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_069",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_070",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_071",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_072",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_073",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_074",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_075",
+      "seed": 42,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_076",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_077",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_078",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_079",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_080",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_081",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_082",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_083",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_084",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_085",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_086",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_087",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_088",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_089",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_090",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_091",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_092",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_093",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_094",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_095",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_096",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_097",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_098",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_099",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_100",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_101",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_102",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_103",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_104",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_105",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_106",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_107",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_108",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_109",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_110",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_111",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_112",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_113",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_114",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_115",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_116",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_117",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_118",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_119",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_120",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_121",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_122",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_123",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_124",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_125",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_126",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_127",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_128",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_129",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_130",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_131",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_132",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_133",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_134",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_135",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_136",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 1.0,
+      "diff": -1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_137",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_138",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_139",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_140",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_141",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 1.0,
+      "diff": -1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_142",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_143",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_144",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_145",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_146",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_147",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_148",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_149",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_150",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_151",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_152",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_153",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_154",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_155",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_156",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_157",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_158",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_159",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_160",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_161",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_162",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_163",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_164",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_165",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_166",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 1.0,
+      "diff": -1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_167",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_168",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_169",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_170",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_171",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 1.0,
+      "diff": -1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_172",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_173",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_174",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_175",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_176",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_177",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_178",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_179",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_180",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_181",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_182",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_183",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_184",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_185",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_186",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_187",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_188",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_189",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_190",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_191",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_192",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_193",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_194",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_195",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_196",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_197",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_198",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_199",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_200",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_201",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_202",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_203",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_204",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_205",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_206",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_207",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_208",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_209",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_210",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_211",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_212",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_213",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_214",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_215",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_216",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_217",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_218",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_219",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_220",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_221",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_222",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_223",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_224",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_225",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_226",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_227",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_228",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_229",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_230",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_231",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_232",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_233",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_234",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_235",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_236",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_237",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_238",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_239",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_240",
+      "seed": 42,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_241",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_242",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_243",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_244",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_245",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_246",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_247",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_248",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_249",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_250",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_251",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_252",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_253",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_254",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_255",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_256",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_257",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_258",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_259",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_260",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_261",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_262",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_263",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_264",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_265",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_266",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_267",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_268",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_269",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_270",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_271",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_272",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_273",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_274",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_275",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_276",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_277",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_278",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_279",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_280",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_281",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_282",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_283",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_284",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_285",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_286",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_287",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_288",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_289",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_290",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_291",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_292",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_293",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_294",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_295",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_296",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_297",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_298",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_299",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_300",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_UNANS_001",
+      "seed": 42,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_UNANS_002",
+      "seed": 42,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_UNANS_003",
+      "seed": 42,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_UNANS_004",
+      "seed": 42,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_UNANS_005",
+      "seed": 42,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_UNANS_006",
+      "seed": 42,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_UNANS_007",
+      "seed": 42,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_UNANS_008",
+      "seed": 42,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_UNANS_009",
+      "seed": 42,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_UNANS_010",
+      "seed": 42,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_UNANS_011",
+      "seed": 42,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_UNANS_012",
+      "seed": 42,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_UNANS_013",
+      "seed": 42,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_UNANS_014",
+      "seed": 42,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_UNANS_015",
+      "seed": 42,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_UNANS_016",
+      "seed": 42,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_UNANS_017",
+      "seed": 42,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_UNANS_018",
+      "seed": 42,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_UNANS_019",
+      "seed": 42,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_UNANS_020",
+      "seed": 42,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_UNANS_021",
+      "seed": 42,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_UNANS_022",
+      "seed": 42,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_UNANS_023",
+      "seed": 42,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_UNANS_024",
+      "seed": 42,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_UNANS_025",
+      "seed": 42,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_INSUFF_001",
+      "seed": 42,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_INSUFF_002",
+      "seed": 42,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_INSUFF_003",
+      "seed": 42,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_INSUFF_004",
+      "seed": 42,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_INSUFF_005",
+      "seed": 42,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_INSUFF_006",
+      "seed": 42,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_INSUFF_007",
+      "seed": 42,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_INSUFF_008",
+      "seed": 42,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_INSUFF_009",
+      "seed": 42,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_INSUFF_010",
+      "seed": 42,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_INSUFF_011",
+      "seed": 42,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_INSUFF_012",
+      "seed": 42,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_INSUFF_013",
+      "seed": 42,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_INSUFF_014",
+      "seed": 42,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_INSUFF_015",
+      "seed": 42,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_INSUFF_016",
+      "seed": 42,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_INSUFF_017",
+      "seed": 42,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_INSUFF_018",
+      "seed": 42,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_INSUFF_019",
+      "seed": 42,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_INSUFF_020",
+      "seed": 42,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_INSUFF_021",
+      "seed": 42,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_INSUFF_022",
+      "seed": 42,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_INSUFF_023",
+      "seed": 42,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_INSUFF_024",
+      "seed": 42,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_INSUFF_025",
+      "seed": 42,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_DOC_001_Q0",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_DOC_001_Q1",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 1.0,
+      "diff": -1.0
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_DOC_001_Q2",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 1.0,
+      "diff": -1.0
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_DOC_001_Q3",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_DOC_002_Q0",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_DOC_002_Q1",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_DOC_002_Q2",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_DOC_002_Q3",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_DOC_003_Q0",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_DOC_003_Q1",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 1.0,
+      "diff": -1.0
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_DOC_003_Q2",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_DOC_003_Q3",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_DOC_004_Q0",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_DOC_004_Q1",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_DOC_004_Q2",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_DOC_004_Q3",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_DOC_005_Q0",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_DOC_005_Q1",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_DOC_005_Q2",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_DOC_005_Q3",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "QASPER",
+      "item_id": "QASPER_DOC_0",
+      "seed": 42,
+      "p1_score": 0.25,
+      "b5_score": 0.2143,
+      "diff": 0.0357
+    },
+    {
+      "dataset": "QASPER",
+      "item_id": "QASPER_DOC_1",
+      "seed": 42,
+      "p1_score": 0.1481,
+      "b5_score": 0.1333,
+      "diff": 0.0148
+    },
+    {
+      "dataset": "QASPER",
+      "item_id": "QASPER_DOC_2",
+      "seed": 42,
+      "p1_score": 0.0909,
+      "b5_score": 0.1739,
+      "diff": -0.083
+    },
+    {
+      "dataset": "QASPER",
+      "item_id": "QASPER_DOC_3",
+      "seed": 42,
+      "p1_score": 0.5217,
+      "b5_score": 0.5217,
+      "diff": 0.0
+    },
+    {
+      "dataset": "QASPER",
+      "item_id": "QASPER_DOC_4",
+      "seed": 42,
+      "p1_score": 0.0741,
+      "b5_score": 0.1429,
+      "diff": -0.0688
+    },
+    {
+      "dataset": "QASPER",
+      "item_id": "QASPER_DOC_5",
+      "seed": 42,
+      "p1_score": 0.2,
+      "b5_score": 0.2222,
+      "diff": -0.0222
+    },
+    {
+      "dataset": "QASPER",
+      "item_id": "QASPER_DOC_6",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "QASPER",
+      "item_id": "QASPER_DOC_7",
+      "seed": 42,
+      "p1_score": 0.0,
+      "b5_score": 0.2308,
+      "diff": -0.2308
+    },
+    {
+      "dataset": "QASPER",
+      "item_id": "QASPER_DOC_8",
+      "seed": 42,
+      "p1_score": 0.1538,
+      "b5_score": 0.6154,
+      "diff": -0.4615
+    },
+    {
+      "dataset": "QASPER",
+      "item_id": "QASPER_DOC_9",
+      "seed": 42,
+      "p1_score": 0.0741,
+      "b5_score": 0.0,
+      "diff": 0.0741
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_001",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_002",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_003",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_004",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_005",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_006",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_007",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_008",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_009",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_010",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_011",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_012",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_013",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_014",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_015",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_016",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_017",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_018",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_019",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_020",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_021",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_022",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_023",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_024",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_025",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_026",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_027",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_028",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_029",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_030",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_031",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_032",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_033",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_034",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_035",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_036",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_037",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_038",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_039",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_040",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_041",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_042",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_043",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_044",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_045",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_046",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_047",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_048",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_049",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_050",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_051",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_052",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_053",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_054",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_055",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_056",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_057",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_058",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_059",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_060",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_061",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_062",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_063",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_064",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_065",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_066",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_067",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_068",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_069",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_070",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_071",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_072",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_073",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_074",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_075",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_076",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_077",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_078",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_079",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_080",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_081",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_082",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_083",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_084",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_085",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_086",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_087",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_088",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_089",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_090",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_091",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_092",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_093",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_094",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_095",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_096",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_097",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_098",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_099",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_100",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_101",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_102",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_103",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_104",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_105",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_106",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_107",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_108",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_109",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_110",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_111",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_112",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_113",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_114",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_115",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_116",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_117",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_118",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_119",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_120",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_121",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_122",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_123",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_124",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_125",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_126",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_127",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_128",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_129",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_130",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_131",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_132",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_133",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_134",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_135",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_136",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_137",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_138",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_139",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_140",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_141",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_142",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_143",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_144",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_145",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_146",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_147",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_148",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_149",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_150",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_151",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_152",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_153",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_154",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_155",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_156",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_157",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_158",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_159",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_160",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_161",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_162",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_163",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_164",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_165",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_166",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_167",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_168",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_169",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_170",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_171",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_172",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_173",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_174",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_175",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_176",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_177",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_178",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_179",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_180",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_181",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_182",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_183",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_184",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_185",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_186",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_187",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_188",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_189",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_190",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_191",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_192",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_193",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_194",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_195",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_196",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_197",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_198",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_199",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_200",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_201",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_202",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_203",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_204",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_205",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_206",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_207",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_208",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_209",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_210",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_211",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_212",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_213",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_214",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_215",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_216",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_217",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_218",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_219",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_220",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_221",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_222",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_223",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_224",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_225",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_226",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_227",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_228",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_229",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_230",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_231",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_232",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_233",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_234",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_235",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_236",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_237",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_238",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_239",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_240",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_241",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_242",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_243",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_244",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_245",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_246",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_247",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_248",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_249",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_250",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_251",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_252",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_253",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_254",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_255",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_256",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_257",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_258",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_259",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_260",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_261",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_262",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_263",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_264",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_265",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_266",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_267",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_268",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_269",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_270",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_271",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_272",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_273",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_274",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_275",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_276",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_277",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_278",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_279",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_280",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_281",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_282",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_283",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_284",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_285",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_286",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_287",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_288",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_289",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_290",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_291",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_292",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_293",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_294",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_295",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_296",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_297",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_298",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_299",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_300",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_UNANS_001",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_UNANS_002",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_UNANS_003",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_UNANS_004",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_UNANS_005",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_UNANS_006",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_UNANS_007",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_UNANS_008",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_UNANS_009",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_UNANS_010",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_UNANS_011",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_UNANS_012",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_UNANS_013",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_UNANS_014",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_UNANS_015",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_UNANS_016",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_UNANS_017",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_UNANS_018",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_UNANS_019",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_UNANS_020",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_UNANS_021",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_UNANS_022",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_UNANS_023",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_UNANS_024",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_UNANS_025",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_INSUFF_001",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_INSUFF_002",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_INSUFF_003",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_INSUFF_004",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_INSUFF_005",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_INSUFF_006",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_INSUFF_007",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_INSUFF_008",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_INSUFF_009",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_INSUFF_010",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_INSUFF_011",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_INSUFF_012",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_INSUFF_013",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_INSUFF_014",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_INSUFF_015",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_INSUFF_016",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_INSUFF_017",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_INSUFF_018",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_INSUFF_019",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_INSUFF_020",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_INSUFF_021",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_INSUFF_022",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_INSUFF_023",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_INSUFF_024",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_INSUFF_025",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_DOC_001_Q0",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 1.0,
+      "diff": -1.0
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_DOC_001_Q1",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_DOC_001_Q2",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_DOC_001_Q3",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 1.0,
+      "diff": -1.0
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_DOC_002_Q0",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 1.0,
+      "diff": -1.0
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_DOC_002_Q1",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 1.0,
+      "diff": -1.0
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_DOC_002_Q2",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 1.0,
+      "diff": -1.0
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_DOC_002_Q3",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_DOC_003_Q0",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 1.0,
+      "diff": -1.0
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_DOC_003_Q1",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_DOC_003_Q2",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_DOC_003_Q3",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 1.0,
+      "diff": -1.0
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_DOC_004_Q0",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_DOC_004_Q1",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 1.0,
+      "diff": -1.0
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_DOC_004_Q2",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 1.0,
+      "diff": -1.0
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_DOC_004_Q3",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 1.0,
+      "diff": -1.0
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_DOC_005_Q0",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_DOC_005_Q1",
+      "seed": 43,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_DOC_005_Q2",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_DOC_005_Q3",
+      "seed": 43,
+      "p1_score": 0.0,
+      "b5_score": 1.0,
+      "diff": -1.0
+    },
+    {
+      "dataset": "QASPER",
+      "item_id": "QASPER_DOC_0",
+      "seed": 43,
+      "p1_score": 0.1875,
+      "b5_score": 0.1935,
+      "diff": -0.006
+    },
+    {
+      "dataset": "QASPER",
+      "item_id": "QASPER_DOC_1",
+      "seed": 43,
+      "p1_score": 0.1333,
+      "b5_score": 0.2759,
+      "diff": -0.1425
+    },
+    {
+      "dataset": "QASPER",
+      "item_id": "QASPER_DOC_2",
+      "seed": 43,
+      "p1_score": 0.0833,
+      "b5_score": 0.087,
+      "diff": -0.0036
+    },
+    {
+      "dataset": "QASPER",
+      "item_id": "QASPER_DOC_3",
+      "seed": 43,
+      "p1_score": 0.4167,
+      "b5_score": 0.4348,
+      "diff": -0.0181
+    },
+    {
+      "dataset": "QASPER",
+      "item_id": "QASPER_DOC_4",
+      "seed": 43,
+      "p1_score": 0.0741,
+      "b5_score": 0.0,
+      "diff": 0.0741
+    },
+    {
+      "dataset": "QASPER",
+      "item_id": "QASPER_DOC_5",
+      "seed": 43,
+      "p1_score": 0.8276,
+      "b5_score": 0.7742,
+      "diff": 0.0534
+    },
+    {
+      "dataset": "QASPER",
+      "item_id": "QASPER_DOC_6",
+      "seed": 43,
+      "p1_score": 0.16,
+      "b5_score": 0.1429,
+      "diff": 0.0171
+    },
+    {
+      "dataset": "QASPER",
+      "item_id": "QASPER_DOC_7",
+      "seed": 43,
+      "p1_score": 0.1538,
+      "b5_score": 0.0,
+      "diff": 0.1538
+    },
+    {
+      "dataset": "QASPER",
+      "item_id": "QASPER_DOC_8",
+      "seed": 43,
+      "p1_score": 0.48,
+      "b5_score": 0.08,
+      "diff": 0.4
+    },
+    {
+      "dataset": "QASPER",
+      "item_id": "QASPER_DOC_9",
+      "seed": 43,
+      "p1_score": 0.1333,
+      "b5_score": 0.0714,
+      "diff": 0.0619
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_001",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_002",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_003",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_004",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_005",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_006",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_007",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_008",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_009",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_010",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_011",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_012",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_013",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_014",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_015",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_016",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_017",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_018",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_019",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_020",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_021",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_022",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_023",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_024",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_025",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_026",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_027",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_028",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_029",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_030",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_031",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_032",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_033",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_034",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_035",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_036",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_037",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_038",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_039",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_040",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_041",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_042",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_043",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_044",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_045",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_046",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_047",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_048",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_049",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_050",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_051",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_052",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_053",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_054",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_055",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_056",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_057",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_058",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_059",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_060",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_061",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_062",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_063",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_064",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_065",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_066",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_067",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_068",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_069",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_070",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_071",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_072",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_073",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_074",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_075",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_076",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_077",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_078",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_079",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_080",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_081",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_082",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_083",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_084",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_085",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_086",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_087",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_088",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_089",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_090",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_091",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_092",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_093",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_094",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_095",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_096",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_097",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_098",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_099",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_100",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_101",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_102",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_103",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_104",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_105",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_106",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_107",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_108",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_109",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_110",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_111",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_112",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_113",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_114",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_115",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_116",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_117",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_118",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_119",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_120",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_121",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_122",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_123",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_124",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_125",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_126",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_127",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_128",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_129",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_130",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_131",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_132",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_133",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_134",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_135",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_136",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_137",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_138",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_139",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_140",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_141",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_142",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_143",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_144",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_145",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_146",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_147",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_148",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_149",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_150",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_151",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_152",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_153",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_154",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_155",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_156",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_157",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_158",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_159",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_160",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_161",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_162",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_163",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_164",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_165",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_166",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_167",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_168",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_169",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_170",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_171",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_172",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_173",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_174",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_175",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_176",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_177",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_178",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_179",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_180",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_181",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_182",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_183",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_184",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_185",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_186",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_187",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_188",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_189",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_190",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_191",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_192",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_193",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_194",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_195",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_196",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_197",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_198",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_199",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_200",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_201",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_202",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_203",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_204",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_205",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_206",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_207",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_208",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_209",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_210",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_211",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_212",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_213",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_214",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_215",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_216",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_217",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_218",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_219",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_220",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_221",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_222",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_223",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_224",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_225",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_226",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_227",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_228",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_229",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_230",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_231",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_232",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_233",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_234",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_235",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_236",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_237",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_238",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_239",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_240",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_241",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_242",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_243",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_244",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_245",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_246",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_247",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_248",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_249",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_250",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_251",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_252",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_253",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_254",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_255",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_256",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_257",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_258",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_259",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_260",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_261",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_262",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_263",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_264",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_265",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_266",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_267",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_268",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_269",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_270",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_271",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_272",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_273",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_274",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_275",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_276",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_277",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_278",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_279",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_280",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_281",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_282",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_283",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_284",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_285",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_286",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_287",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_288",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_289",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_290",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_291",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_292",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_293",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_294",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_295",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_296",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_297",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_298",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_299",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_ANS_300",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_UNANS_001",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_UNANS_002",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_UNANS_003",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_UNANS_004",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_UNANS_005",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_UNANS_006",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_UNANS_007",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_UNANS_008",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_UNANS_009",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_UNANS_010",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_UNANS_011",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_UNANS_012",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_UNANS_013",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_UNANS_014",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_UNANS_015",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_UNANS_016",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_UNANS_017",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_UNANS_018",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_UNANS_019",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_UNANS_020",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_UNANS_021",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_UNANS_022",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_UNANS_023",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_UNANS_024",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_UNANS_025",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_INSUFF_001",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_INSUFF_002",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_INSUFF_003",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_INSUFF_004",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_INSUFF_005",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_INSUFF_006",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_INSUFF_007",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_INSUFF_008",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_INSUFF_009",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_INSUFF_010",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_INSUFF_011",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_INSUFF_012",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_INSUFF_013",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_INSUFF_014",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_INSUFF_015",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_INSUFF_016",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_INSUFF_017",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_INSUFF_018",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_INSUFF_019",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_INSUFF_020",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_INSUFF_021",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_INSUFF_022",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_INSUFF_023",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_INSUFF_024",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "VietnameseQA",
+      "item_id": "VN_FINAL_INSUFF_025",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_DOC_001_Q0",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_DOC_001_Q1",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_DOC_001_Q2",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_DOC_001_Q3",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_DOC_002_Q0",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 1.0,
+      "diff": -1.0
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_DOC_002_Q1",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_DOC_002_Q2",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 1.0,
+      "diff": -1.0
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_DOC_002_Q3",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_DOC_003_Q0",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 1.0,
+      "diff": -1.0
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_DOC_003_Q1",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_DOC_003_Q2",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_DOC_003_Q3",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_DOC_004_Q0",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_DOC_004_Q1",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_DOC_004_Q2",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 1.0,
+      "diff": -1.0
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_DOC_004_Q3",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 1.0,
+      "diff": -1.0
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_DOC_005_Q0",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_DOC_005_Q1",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_DOC_005_Q2",
+      "seed": 44,
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_DOC_005_Q3",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "QASPER",
+      "item_id": "QASPER_DOC_0",
+      "seed": 44,
+      "p1_score": 0.3226,
+      "b5_score": 0.2581,
+      "diff": 0.0645
+    },
+    {
+      "dataset": "QASPER",
+      "item_id": "QASPER_DOC_1",
+      "seed": 44,
+      "p1_score": 0.0714,
+      "b5_score": 0.1429,
+      "diff": -0.0714
+    },
+    {
+      "dataset": "QASPER",
+      "item_id": "QASPER_DOC_2",
+      "seed": 44,
+      "p1_score": 0.08,
+      "b5_score": 0.0,
+      "diff": 0.08
+    },
+    {
+      "dataset": "QASPER",
+      "item_id": "QASPER_DOC_3",
+      "seed": 44,
+      "p1_score": 0.5,
+      "b5_score": 0.4348,
+      "diff": 0.0652
+    },
+    {
+      "dataset": "QASPER",
+      "item_id": "QASPER_DOC_4",
+      "seed": 44,
+      "p1_score": 0.2143,
+      "b5_score": 0.2069,
+      "diff": 0.0074
+    },
+    {
+      "dataset": "QASPER",
+      "item_id": "QASPER_DOC_5",
+      "seed": 44,
+      "p1_score": 0.2,
+      "b5_score": 0.1935,
+      "diff": 0.0065
+    },
+    {
+      "dataset": "QASPER",
+      "item_id": "QASPER_DOC_6",
+      "seed": 44,
+      "p1_score": 0.0714,
+      "b5_score": 0.3333,
+      "diff": -0.2619
+    },
+    {
+      "dataset": "QASPER",
+      "item_id": "QASPER_DOC_7",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0714,
+      "diff": -0.0714
+    },
+    {
+      "dataset": "QASPER",
+      "item_id": "QASPER_DOC_8",
+      "seed": 44,
+      "p1_score": 0.6667,
+      "b5_score": 0.48,
+      "diff": 0.1867
+    },
+    {
+      "dataset": "QASPER",
+      "item_id": "QASPER_DOC_9",
+      "seed": 44,
+      "p1_score": 0.1379,
+      "b5_score": 0.069,
+      "diff": 0.069
+    }
+  ],
+  "statistics": {
+    "N_items": 1140,
+    "mean_p1": 0.3776,
+    "mean_b5": 0.1776,
+    "mean_difference": 0.1999,
+    "std_difference": 0.4485,
+    "t_statistic": 15.0527,
+    "t_pvalue": 7.72570261259953e-47,
+    "wilcoxon_statistic": 3993.5,
+    "wilcoxon_pvalue": 3.429245752681375e-43,
+    "bootstrap_95_ci": [
+      0.1735,
+      0.2253
+    ],
+    "cohens_d": 0.4458,
+    "update_budget_equal": true
+  }
+}

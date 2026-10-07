@@ -1,0 +1,74 @@
+{
+  "benchmark": "A1_Evaluation",
+  "runs": [
+    {
+      "seed": 42,
+      "qasper": {
+        "f1": 0.2107597774903769,
+        "perplexity": 89.35150854403881,
+        "avg_loss": 4.492578125,
+        "exact_match": 0.0
+      },
+      "longhealth": {
+        "accuracy": 10.0,
+        "perplexity": 21.514992119259983,
+        "avg_loss": 3.06875,
+        "avg_target_prob": 0.16412811279296874
+      },
+      "mkniah": {
+        "accuracy": 0.0,
+        "avg_target_prob": 0.12410888671875
+      },
+      "performance": {
+        "latency_seconds": 34.67,
+        "peak_vram_mb": 493.43
+      }
+    },
+    {
+      "seed": 43,
+      "qasper": {
+        "f1": 0.27072510822510826,
+        "perplexity": 91.30977189619456,
+        "avg_loss": 4.5142578125,
+        "exact_match": 0.0
+      },
+      "longhealth": {
+        "accuracy": 15.0,
+        "perplexity": 21.54021977959489,
+        "avg_loss": 3.069921875,
+        "avg_target_prob": 0.08873672485351562
+      },
+      "mkniah": {
+        "accuracy": 0.0,
+        "avg_target_prob": 0.157025146484375
+      },
+      "performance": {
+        "latency_seconds": 32.55,
+        "peak_vram_mb": 591.36
+      }
+    },
+    {
+      "seed": 44,
+      "qasper": {
+        "f1": 0.22647109312431896,
+        "perplexity": 89.15974847841947,
+        "avg_loss": 4.4904296875,
+        "exact_match": 0.0
+      },
+      "longhealth": {
+        "accuracy": 30.0,
+        "perplexity": 21.760102337787384,
+        "avg_loss": 3.080078125,
+        "avg_target_prob": 0.209283447265625
+      },
+      "mkniah": {
+        "accuracy": 0.0,
+        "avg_target_prob": 0.2038330078125
+      },
+      "performance": {
+        "latency_seconds": 32.91,
+        "peak_vram_mb": 591.36
+      }
+    }
+  ]
+}

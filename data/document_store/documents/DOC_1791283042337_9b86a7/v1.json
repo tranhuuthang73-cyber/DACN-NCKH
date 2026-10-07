@@ -1,0 +1,46 @@
+{
+  "document_id": "DOC_1791283042337_9b86a7",
+  "version": 1,
+  "title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+  "raw_text": "# Chương 1: Kiến trúc Bộ nhớ\n\nKiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu.\n\n# Chương 2: Hiệu năng Thực nghiệm\n\nHiệu năng thu hồi logit trên bài toán needle MK-NIAH tăng 175% dưới điều kiện không truy xuất.",
+  "passages": [
+    {
+      "passage_id": "DOC_1791283042337_9b86a7::P000",
+      "document_id": "DOC_1791283042337_9b86a7",
+      "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+      "start_char": 0,
+      "end_char": 187,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+      "metadata": {
+        "section_id": "SEC001",
+        "paragraph_id": "PARA001",
+        "document_version": 1,
+        "category": "Research"
+      }
+    },
+    {
+      "passage_id": "DOC_1791283042337_9b86a7::P001",
+      "document_id": "DOC_1791283042337_9b86a7",
+      "text": "# Chương 2: Hiệu năng Thực nghiệm Hiệu năng thu hồi logit trên bài toán needle MK-NIAH tăng 175% dưới điều kiện không truy xuất.",
+      "start_char": 153,
+      "end_char": 282,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "Chương 2: Hiệu năng Thực nghiệm",
+      "metadata": {
+        "section_id": "SEC002",
+        "paragraph_id": "PARA002",
+        "document_version": 1,
+        "category": "Research"
+      }
+    }
+  ],
+  "structural_metadata": {},
+  "content_hash": "e8447bf31b29e43a",
+  "created_at": 1791283042.3374202,
+  "metadata": {
+    "category": "Research"
+  }
+}

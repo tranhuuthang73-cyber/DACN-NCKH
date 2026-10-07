@@ -17971,5 +17971,3995 @@
         }
       }
     ]
+  },
+  {
+    "session_id": "chat_afb0cd67d14f",
+    "title": "Chat: Kiến trúc SA-CMS gồm mấy cấp đ",
+    "document_ids": [],
+    "created_at": 1791283042.436861,
+    "updated_at": 1791283042.4659157,
+    "messages": [
+      {
+        "id": "msg_92dedbc203",
+        "role": "user",
+        "content": "Kiến trúc SA-CMS gồm mấy cấp độ?",
+        "timestamp": 1791283042.456243,
+        "citations": [],
+        "evidence": [],
+        "telemetry": {},
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {}
+      },
+      {
+        "id": "msg_2f2172db54",
+        "role": "assistant",
+        "content": "Dựa trên tài liệu đã cung cấp, Kiến trúc 3 cấp độ SA-CMS. [1]\n\n### Nguồn tham khảo\n[1] **Nghiên cứu Hệ thống Bộ nhớ Đa quy mô SA-CMS trong Mô hình Ngôn ngữ** — Phần nội dung — Đoạn 1\n\n[2] **Tài liệu Nghiên cứu SA-CMS Mẫu Offline** — Chương 1: Kiến trúc Bộ nhớ — Đoạn 2\n\n[3] **Tài liệu Nghiên cứu SA-CMS Mẫu Offline** — Chương 1: Kiến trúc Bộ nhớ — Đoạn 3\n\n[4] **Tài liệu Nghiên cứu SA-CMS Mẫu Offline** — Chương 1: Kiến trúc Bộ nhớ — Đoạn 4\n\n[5] **Tài liệu Nghiên cứu SA-CMS Mẫu Offline** — Chương 1: Kiến trúc Bộ nhớ — Đoạn 5",
+        "timestamp": 1791283042.4659157,
+        "citations": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "VN_DOC_001::P003",
+            "document_id": "VN_DOC_001",
+            "document_title": "Nghiên cứu Hệ thống Bộ nhớ Đa quy mô SA-CMS trong Mô hình Ngôn ngữ",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 1,
+            "score": 20.649,
+            "text": "## 2. Kiến trúc 3 cấp độ SA-CMS",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 2,
+            "citation_label": "[2]",
+            "passage_id": "DOC_1791271048929_45bf10::P000",
+            "document_id": "DOC_1791271048929_45bf10",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 2,
+            "score": 18.8978,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 3,
+            "citation_label": "[3]",
+            "passage_id": "DOC_1791271306897_51a76d::P000",
+            "document_id": "DOC_1791271306897_51a76d",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 3,
+            "score": 18.8978,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 4,
+            "citation_label": "[4]",
+            "passage_id": "DOC_1791271682090_2ca48d::P000",
+            "document_id": "DOC_1791271682090_2ca48d",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 4,
+            "score": 18.8978,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 5,
+            "citation_label": "[5]",
+            "passage_id": "DOC_1791271952866_dc50af::P000",
+            "document_id": "DOC_1791271952866_dc50af",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 5,
+            "score": 18.8978,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "evidence": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "VN_DOC_001::P003",
+            "document_id": "VN_DOC_001",
+            "document_title": "Nghiên cứu Hệ thống Bộ nhớ Đa quy mô SA-CMS trong Mô hình Ngôn ngữ",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 1,
+            "score": 20.649,
+            "text": "## 2. Kiến trúc 3 cấp độ SA-CMS",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 2,
+            "citation_label": "[2]",
+            "passage_id": "DOC_1791271048929_45bf10::P000",
+            "document_id": "DOC_1791271048929_45bf10",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 2,
+            "score": 18.8978,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 3,
+            "citation_label": "[3]",
+            "passage_id": "DOC_1791271306897_51a76d::P000",
+            "document_id": "DOC_1791271306897_51a76d",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 3,
+            "score": 18.8978,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 4,
+            "citation_label": "[4]",
+            "passage_id": "DOC_1791271682090_2ca48d::P000",
+            "document_id": "DOC_1791271682090_2ca48d",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 4,
+            "score": 18.8978,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 5,
+            "citation_label": "[5]",
+            "passage_id": "DOC_1791271952866_dc50af::P000",
+            "document_id": "DOC_1791271952866_dc50af",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 5,
+            "score": 18.8978,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "telemetry": {
+          "input_tokens": 259,
+          "output_tokens": 152,
+          "total_tokens": 411,
+          "total_latency_ms": 7.28,
+          "retrieval_ms": 4.82,
+          "generation_ms": 0.01
+        },
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {
+          "routing": "DIRECT_LOOKUP",
+          "route_explanation": "Đã tìm thấy bằng chứng xác thực trong tài liệu.",
+          "effective_query": "Kiến trúc SA-CMS gồm mấy cấp độ?",
+          "is_follow_up": false,
+          "attached_document_count": 0,
+          "evidence_count": 5,
+          "refusal_reason": null,
+          "memory_level": "Level 3 (SA-CMS Gated Multi-Level)"
+        }
+      }
+    ]
+  },
+  {
+    "session_id": "chat_9eb90717f795",
+    "title": "Chat: Thời tiết ngày mai tại thủ đô ",
+    "document_ids": [],
+    "created_at": 1791283042.4892743,
+    "updated_at": 1791283042.5092409,
+    "messages": [
+      {
+        "id": "msg_841e601e88",
+        "role": "user",
+        "content": "Thời tiết ngày mai tại thủ đô Paris dự báo thế nào?",
+        "timestamp": 1791283042.5092409,
+        "citations": [],
+        "evidence": [],
+        "telemetry": {},
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {}
+      },
+      {
+        "id": "msg_c19cf159fa",
+        "role": "assistant",
+        "content": "Tài liệu chưa đủ thông tin. Không tìm thấy đủ thông tin trong tài liệu để trả lời chắc chắn.",
+        "timestamp": 1791283042.5092409,
+        "citations": [],
+        "evidence": [],
+        "telemetry": {
+          "input_tokens": 46,
+          "output_tokens": 27,
+          "total_tokens": 73,
+          "total_latency_ms": 0.11,
+          "retrieval_ms": 0.0,
+          "generation_ms": 0.0
+        },
+        "routing": "UNANSWERABLE",
+        "refused": true,
+        "refusal_reason": "UNANSWERABLE",
+        "diagnostics": {
+          "routing": "UNANSWERABLE",
+          "route_explanation": "Tài liệu bạn cung cấp không có thông tin để trả lời câu hỏi này.",
+          "effective_query": "Thời tiết ngày mai tại thủ đô Paris dự báo thế nào?",
+          "is_follow_up": false,
+          "attached_document_count": 0,
+          "evidence_count": 0,
+          "refusal_reason": "UNANSWERABLE",
+          "memory_level": "Level 3 (SA-CMS Gated Multi-Level)"
+        }
+      }
+    ]
+  },
+  {
+    "session_id": "chat_c9d572b4c683",
+    "title": "Kiểm thử Phiên Offline",
+    "document_ids": [],
+    "created_at": 1791283042.532352,
+    "updated_at": 1791283042.5876405,
+    "messages": [
+      {
+        "id": "msg_cf7dff8fef",
+        "role": "user",
+        "content": "Hiệu năng trên bài toán MK-NIAH tăng bao nhiêu phần trăm?",
+        "timestamp": 1791283042.5731437,
+        "citations": [],
+        "evidence": [],
+        "telemetry": {},
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {}
+      },
+      {
+        "id": "msg_f1243b8d1e",
+        "role": "assistant",
+        "content": "Dựa trên tài liệu đã cung cấp, # Chương 2: Hiệu năng Thực nghiệm Hiệu năng thu hồi logit trên bài toán needle MK-NIAH tăng 175% dưới điều kiện không truy xuất. [1]\n\n### Nguồn tham khảo\n[1] **Tài liệu Nghiên cứu SA-CMS Mẫu Offline** — Chương 2: Hiệu năng Thực nghiệm — Đoạn 1\n\n[2] **Tài liệu Nghiên cứu SA-CMS Mẫu Offline** — Chương 2: Hiệu năng Thực nghiệm — Đoạn 2\n\n[3] **Tài liệu Nghiên cứu SA-CMS Mẫu Offline** — Chương 2: Hiệu năng Thực nghiệm — Đoạn 3\n\n[4] **Tài liệu Nghiên cứu SA-CMS Mẫu Offline** — Chương 2: Hiệu năng Thực nghiệm — Đoạn 4\n\n[5] **Tài liệu Nghiên cứu SA-CMS Mẫu Offline** — Chương 2: Hiệu năng Thực nghiệm — Đoạn 5",
+        "timestamp": 1791283042.5876405,
+        "citations": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "DOC_1791271048929_45bf10::P001",
+            "document_id": "DOC_1791271048929_45bf10",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 2: Hiệu năng Thực nghiệm",
+            "paragraph_index": 1,
+            "score": 31.6464,
+            "text": "# Chương 2: Hiệu năng Thực nghiệm Hiệu năng thu hồi logit trên bài toán needle MK-NIAH tăng 175% dưới điều kiện không truy xuất.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 2,
+            "citation_label": "[2]",
+            "passage_id": "DOC_1791271306897_51a76d::P001",
+            "document_id": "DOC_1791271306897_51a76d",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 2: Hiệu năng Thực nghiệm",
+            "paragraph_index": 2,
+            "score": 31.6464,
+            "text": "# Chương 2: Hiệu năng Thực nghiệm Hiệu năng thu hồi logit trên bài toán needle MK-NIAH tăng 175% dưới điều kiện không truy xuất.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 3,
+            "citation_label": "[3]",
+            "passage_id": "DOC_1791271682090_2ca48d::P001",
+            "document_id": "DOC_1791271682090_2ca48d",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 2: Hiệu năng Thực nghiệm",
+            "paragraph_index": 3,
+            "score": 31.6464,
+            "text": "# Chương 2: Hiệu năng Thực nghiệm Hiệu năng thu hồi logit trên bài toán needle MK-NIAH tăng 175% dưới điều kiện không truy xuất.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 4,
+            "citation_label": "[4]",
+            "passage_id": "DOC_1791271952866_dc50af::P001",
+            "document_id": "DOC_1791271952866_dc50af",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 2: Hiệu năng Thực nghiệm",
+            "paragraph_index": 4,
+            "score": 31.6464,
+            "text": "# Chương 2: Hiệu năng Thực nghiệm Hiệu năng thu hồi logit trên bài toán needle MK-NIAH tăng 175% dưới điều kiện không truy xuất.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 5,
+            "citation_label": "[5]",
+            "passage_id": "DOC_1791272033915_0080c3::P001",
+            "document_id": "DOC_1791272033915_0080c3",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 2: Hiệu năng Thực nghiệm",
+            "paragraph_index": 5,
+            "score": 31.6464,
+            "text": "# Chương 2: Hiệu năng Thực nghiệm Hiệu năng thu hồi logit trên bài toán needle MK-NIAH tăng 175% dưới điều kiện không truy xuất.",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "evidence": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "DOC_1791271048929_45bf10::P001",
+            "document_id": "DOC_1791271048929_45bf10",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 2: Hiệu năng Thực nghiệm",
+            "paragraph_index": 1,
+            "score": 31.6464,
+            "text": "# Chương 2: Hiệu năng Thực nghiệm Hiệu năng thu hồi logit trên bài toán needle MK-NIAH tăng 175% dưới điều kiện không truy xuất.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 2,
+            "citation_label": "[2]",
+            "passage_id": "DOC_1791271306897_51a76d::P001",
+            "document_id": "DOC_1791271306897_51a76d",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 2: Hiệu năng Thực nghiệm",
+            "paragraph_index": 2,
+            "score": 31.6464,
+            "text": "# Chương 2: Hiệu năng Thực nghiệm Hiệu năng thu hồi logit trên bài toán needle MK-NIAH tăng 175% dưới điều kiện không truy xuất.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 3,
+            "citation_label": "[3]",
+            "passage_id": "DOC_1791271682090_2ca48d::P001",
+            "document_id": "DOC_1791271682090_2ca48d",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 2: Hiệu năng Thực nghiệm",
+            "paragraph_index": 3,
+            "score": 31.6464,
+            "text": "# Chương 2: Hiệu năng Thực nghiệm Hiệu năng thu hồi logit trên bài toán needle MK-NIAH tăng 175% dưới điều kiện không truy xuất.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 4,
+            "citation_label": "[4]",
+            "passage_id": "DOC_1791271952866_dc50af::P001",
+            "document_id": "DOC_1791271952866_dc50af",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 2: Hiệu năng Thực nghiệm",
+            "paragraph_index": 4,
+            "score": 31.6464,
+            "text": "# Chương 2: Hiệu năng Thực nghiệm Hiệu năng thu hồi logit trên bài toán needle MK-NIAH tăng 175% dưới điều kiện không truy xuất.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 5,
+            "citation_label": "[5]",
+            "passage_id": "DOC_1791272033915_0080c3::P001",
+            "document_id": "DOC_1791272033915_0080c3",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 2: Hiệu năng Thực nghiệm",
+            "paragraph_index": 5,
+            "score": 31.6464,
+            "text": "# Chương 2: Hiệu năng Thực nghiệm Hiệu năng thu hồi logit trên bài toán needle MK-NIAH tăng 175% dưới điều kiện không truy xuất.",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "telemetry": {
+          "input_tokens": 264,
+          "output_tokens": 171,
+          "total_tokens": 435,
+          "total_latency_ms": 13.02,
+          "retrieval_ms": 11.28,
+          "generation_ms": 0.01
+        },
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {
+          "routing": "DIRECT_LOOKUP",
+          "route_explanation": "Đã tìm thấy bằng chứng xác thực trong tài liệu.",
+          "effective_query": "Hiệu năng trên bài toán MK-NIAH tăng bao nhiêu phần trăm?",
+          "is_follow_up": false,
+          "attached_document_count": 0,
+          "evidence_count": 5,
+          "refusal_reason": null,
+          "memory_level": "Level 3 (SA-CMS Gated Multi-Level)"
+        }
+      }
+    ]
+  },
+  {
+    "session_id": "chat_e8ae198335dc",
+    "title": "Phiên Lưu Trữ Bền Vững",
+    "document_ids": [],
+    "created_at": 1791283042.6451337,
+    "updated_at": 1791283042.6786654,
+    "messages": [
+      {
+        "id": "msg_02ec6c9c1d",
+        "role": "user",
+        "content": "Tin nhắn thử nghiệm kiểm tra tính bền vững.",
+        "timestamp": 1791283042.6650174,
+        "citations": [],
+        "evidence": [],
+        "telemetry": {},
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {}
+      },
+      {
+        "id": "msg_d8555457e2",
+        "role": "assistant",
+        "content": "Dựa trên tài liệu đã cung cấp, Đề tài nghiên cứu sinh ra nhằm giải quyết hiện tượng suy giảm ngữ cảnh của mô hình ngôn ngữ khi xử lý văn bản dài. [1] Cụ thể: Khung kiến trúc Continuum Memory System (CMS) phân tách các tầng bộ nhớ thành nhiều thang thời gian khác nhau để ghi nhớ thông tin một cách bền vững.\n\n### Nguồn tham khảo\n[1] **Nghiên cứu Hệ thống Bộ nhớ Đa quy mô SA-CMS trong Mô hình Ngôn ngữ** — Phần nội dung — Đoạn 1\n\n[2] **Tài liệu Nghiên cứu Lưu trữ Bền vững** — Mục 1: Tri thức Cốt lõi — Đoạn 2\n\n[3] **Tài liệu Nghiên cứu Lưu trữ Bền vững** — Mục 1: Tri thức Cốt lõi — Đoạn 3\n\n[4] **Tài liệu Nghiên cứu Lưu trữ Bền vững** — Mục 1: Tri thức Cốt lõi — Đoạn 4\n\n[5] **Tài liệu Nghiên cứu Lưu trữ Bền vững** — Mục 1: Tri thức Cốt lõi — Đoạn 5",
+        "timestamp": 1791283042.6786654,
+        "citations": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "VN_DOC_001::P001",
+            "document_id": "VN_DOC_001",
+            "document_title": "Nghiên cứu Hệ thống Bộ nhớ Đa quy mô SA-CMS trong Mô hình Ngôn ngữ",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 1,
+            "score": 13.1298,
+            "text": "Đề tài nghiên cứu sinh ra nhằm giải quyết hiện tượng suy giảm ngữ cảnh của mô hình ngôn ngữ khi xử lý văn bản dài. Khung kiến trúc Continuum Memory System (CMS) phân tách các tầng bộ nhớ thành nhiều thang thời gian khác nhau để ghi nhớ thông tin một cách bền vững.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 2,
+            "citation_label": "[2]",
+            "passage_id": "DOC_1791273529914_47066c::P000",
+            "document_id": "DOC_1791273529914_47066c",
+            "document_title": "Tài liệu Nghiên cứu Lưu trữ Bền vững",
+            "section_title": "Mục 1: Tri thức Cốt lõi",
+            "paragraph_index": 2,
+            "score": 9.7801,
+            "text": "# Mục 1: Tri thức Cốt lõi Đặc tính quan trọng của SA-CMS là lưu trữ tri thức tham số hóa cục bộ ngay cả khi ngắt kết nối mạng. # Mục 2: Kiểm thử",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 3,
+            "citation_label": "[3]",
+            "passage_id": "DOC_1791273624201_8c7163::P000",
+            "document_id": "DOC_1791273624201_8c7163",
+            "document_title": "Tài liệu Nghiên cứu Lưu trữ Bền vững",
+            "section_title": "Mục 1: Tri thức Cốt lõi",
+            "paragraph_index": 3,
+            "score": 9.7801,
+            "text": "# Mục 1: Tri thức Cốt lõi Đặc tính quan trọng của SA-CMS là lưu trữ tri thức tham số hóa cục bộ ngay cả khi ngắt kết nối mạng. # Mục 2: Kiểm thử",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 4,
+            "citation_label": "[4]",
+            "passage_id": "DOC_1791274450135_c31b43::P000",
+            "document_id": "DOC_1791274450135_c31b43",
+            "document_title": "Tài liệu Nghiên cứu Lưu trữ Bền vững",
+            "section_title": "Mục 1: Tri thức Cốt lõi",
+            "paragraph_index": 4,
+            "score": 9.7801,
+            "text": "# Mục 1: Tri thức Cốt lõi Đặc tính quan trọng của SA-CMS là lưu trữ tri thức tham số hóa cục bộ ngay cả khi ngắt kết nối mạng. # Mục 2: Kiểm thử",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 5,
+            "citation_label": "[5]",
+            "passage_id": "DOC_1791274542551_d13cb6::P000",
+            "document_id": "DOC_1791274542551_d13cb6",
+            "document_title": "Tài liệu Nghiên cứu Lưu trữ Bền vững",
+            "section_title": "Mục 1: Tri thức Cốt lõi",
+            "paragraph_index": 5,
+            "score": 9.7801,
+            "text": "# Mục 1: Tri thức Cốt lõi Đặc tính quan trọng của SA-CMS là lưu trữ tri thức tham số hóa cục bộ ngay cả khi ngắt kết nối mạng. # Mục 2: Kiểm thử",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "evidence": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "VN_DOC_001::P001",
+            "document_id": "VN_DOC_001",
+            "document_title": "Nghiên cứu Hệ thống Bộ nhớ Đa quy mô SA-CMS trong Mô hình Ngôn ngữ",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 1,
+            "score": 13.1298,
+            "text": "Đề tài nghiên cứu sinh ra nhằm giải quyết hiện tượng suy giảm ngữ cảnh của mô hình ngôn ngữ khi xử lý văn bản dài. Khung kiến trúc Continuum Memory System (CMS) phân tách các tầng bộ nhớ thành nhiều thang thời gian khác nhau để ghi nhớ thông tin một cách bền vững.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 2,
+            "citation_label": "[2]",
+            "passage_id": "DOC_1791273529914_47066c::P000",
+            "document_id": "DOC_1791273529914_47066c",
+            "document_title": "Tài liệu Nghiên cứu Lưu trữ Bền vững",
+            "section_title": "Mục 1: Tri thức Cốt lõi",
+            "paragraph_index": 2,
+            "score": 9.7801,
+            "text": "# Mục 1: Tri thức Cốt lõi Đặc tính quan trọng của SA-CMS là lưu trữ tri thức tham số hóa cục bộ ngay cả khi ngắt kết nối mạng. # Mục 2: Kiểm thử",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 3,
+            "citation_label": "[3]",
+            "passage_id": "DOC_1791273624201_8c7163::P000",
+            "document_id": "DOC_1791273624201_8c7163",
+            "document_title": "Tài liệu Nghiên cứu Lưu trữ Bền vững",
+            "section_title": "Mục 1: Tri thức Cốt lõi",
+            "paragraph_index": 3,
+            "score": 9.7801,
+            "text": "# Mục 1: Tri thức Cốt lõi Đặc tính quan trọng của SA-CMS là lưu trữ tri thức tham số hóa cục bộ ngay cả khi ngắt kết nối mạng. # Mục 2: Kiểm thử",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 4,
+            "citation_label": "[4]",
+            "passage_id": "DOC_1791274450135_c31b43::P000",
+            "document_id": "DOC_1791274450135_c31b43",
+            "document_title": "Tài liệu Nghiên cứu Lưu trữ Bền vững",
+            "section_title": "Mục 1: Tri thức Cốt lõi",
+            "paragraph_index": 4,
+            "score": 9.7801,
+            "text": "# Mục 1: Tri thức Cốt lõi Đặc tính quan trọng của SA-CMS là lưu trữ tri thức tham số hóa cục bộ ngay cả khi ngắt kết nối mạng. # Mục 2: Kiểm thử",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 5,
+            "citation_label": "[5]",
+            "passage_id": "DOC_1791274542551_d13cb6::P000",
+            "document_id": "DOC_1791274542551_d13cb6",
+            "document_title": "Tài liệu Nghiên cứu Lưu trữ Bền vững",
+            "section_title": "Mục 1: Tri thức Cốt lõi",
+            "paragraph_index": 5,
+            "score": 9.7801,
+            "text": "# Mục 1: Tri thức Cốt lõi Đặc tính quan trọng của SA-CMS là lưu trữ tri thức tham số hóa cục bộ ngay cả khi ngắt kết nối mạng. # Mục 2: Kiểm thử",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "telemetry": {
+          "input_tokens": 262,
+          "output_tokens": 226,
+          "total_tokens": 488,
+          "total_latency_ms": 11.72,
+          "retrieval_ms": 4.59,
+          "generation_ms": 0.01
+        },
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {
+          "routing": "DIRECT_LOOKUP",
+          "route_explanation": "Đã tìm thấy bằng chứng xác thực trong tài liệu.",
+          "effective_query": "Tin nhắn thử nghiệm kiểm tra tính bền vững.",
+          "is_follow_up": false,
+          "attached_document_count": 0,
+          "evidence_count": 5,
+          "refusal_reason": null,
+          "memory_level": "Level 3 (SA-CMS Gated Multi-Level)"
+        }
+      }
+    ]
+  },
+  {
+    "session_id": "chat_c02a87e7a232",
+    "title": "Session Without Document Context",
+    "document_ids": [],
+    "created_at": 1791283043.1133265,
+    "updated_at": 1791283043.142192,
+    "messages": [
+      {
+        "id": "msg_2c2e4b3f7c",
+        "role": "user",
+        "content": "Đặc tính quan trọng của SA-CMS là gì?",
+        "timestamp": 1791283043.1360223,
+        "citations": [],
+        "evidence": [],
+        "telemetry": {},
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {}
+      },
+      {
+        "id": "msg_38edf8c95e",
+        "role": "assistant",
+        "content": "Dựa trên tài liệu đã cung cấp, # Mục 1: Tri thức Cốt lõi Đặc tính quan trọng của SA-CMS là lưu trữ tri thức tham số hóa cục bộ ngay cả khi ngắt kết nối mạng. [1] Cụ thể: # Mục 2: Kiểm thử.\n\n### Nguồn tham khảo\n[1] **Tài liệu Nghiên cứu Lưu trữ Bền vững** — Mục 1: Tri thức Cốt lõi — Đoạn 1\n\n[2] **Tài liệu Nghiên cứu Lưu trữ Bền vững** — Mục 1: Tri thức Cốt lõi — Đoạn 2\n\n[3] **Tài liệu Nghiên cứu Lưu trữ Bền vững** — Mục 1: Tri thức Cốt lõi — Đoạn 3\n\n[4] **Tài liệu Nghiên cứu Lưu trữ Bền vững** — Mục 1: Tri thức Cốt lõi — Đoạn 4\n\n[5] **Tài liệu Nghiên cứu Lưu trữ Bền vững** — Mục 1: Tri thức Cốt lõi — Đoạn 5",
+        "timestamp": 1791283043.142192,
+        "citations": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "DOC_1791273529914_47066c::P000",
+            "document_id": "DOC_1791273529914_47066c",
+            "document_title": "Tài liệu Nghiên cứu Lưu trữ Bền vững",
+            "section_title": "Mục 1: Tri thức Cốt lõi",
+            "paragraph_index": 1,
+            "score": 19.0567,
+            "text": "# Mục 1: Tri thức Cốt lõi Đặc tính quan trọng của SA-CMS là lưu trữ tri thức tham số hóa cục bộ ngay cả khi ngắt kết nối mạng. # Mục 2: Kiểm thử",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 2,
+            "citation_label": "[2]",
+            "passage_id": "DOC_1791273624201_8c7163::P000",
+            "document_id": "DOC_1791273624201_8c7163",
+            "document_title": "Tài liệu Nghiên cứu Lưu trữ Bền vững",
+            "section_title": "Mục 1: Tri thức Cốt lõi",
+            "paragraph_index": 2,
+            "score": 19.0567,
+            "text": "# Mục 1: Tri thức Cốt lõi Đặc tính quan trọng của SA-CMS là lưu trữ tri thức tham số hóa cục bộ ngay cả khi ngắt kết nối mạng. # Mục 2: Kiểm thử",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 3,
+            "citation_label": "[3]",
+            "passage_id": "DOC_1791274450135_c31b43::P000",
+            "document_id": "DOC_1791274450135_c31b43",
+            "document_title": "Tài liệu Nghiên cứu Lưu trữ Bền vững",
+            "section_title": "Mục 1: Tri thức Cốt lõi",
+            "paragraph_index": 3,
+            "score": 19.0567,
+            "text": "# Mục 1: Tri thức Cốt lõi Đặc tính quan trọng của SA-CMS là lưu trữ tri thức tham số hóa cục bộ ngay cả khi ngắt kết nối mạng. # Mục 2: Kiểm thử",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 4,
+            "citation_label": "[4]",
+            "passage_id": "DOC_1791274542551_d13cb6::P000",
+            "document_id": "DOC_1791274542551_d13cb6",
+            "document_title": "Tài liệu Nghiên cứu Lưu trữ Bền vững",
+            "section_title": "Mục 1: Tri thức Cốt lõi",
+            "paragraph_index": 4,
+            "score": 19.0567,
+            "text": "# Mục 1: Tri thức Cốt lõi Đặc tính quan trọng của SA-CMS là lưu trữ tri thức tham số hóa cục bộ ngay cả khi ngắt kết nối mạng. # Mục 2: Kiểm thử",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 5,
+            "citation_label": "[5]",
+            "passage_id": "DOC_1791276830784_3a2ad9::P000",
+            "document_id": "DOC_1791276830784_3a2ad9",
+            "document_title": "Tài liệu Nghiên cứu Lưu trữ Bền vững",
+            "section_title": "Mục 1: Tri thức Cốt lõi",
+            "paragraph_index": 5,
+            "score": 19.0567,
+            "text": "# Mục 1: Tri thức Cốt lõi Đặc tính quan trọng của SA-CMS là lưu trữ tri thức tham số hóa cục bộ ngay cả khi ngắt kết nối mạng. # Mục 2: Kiểm thử",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "evidence": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "DOC_1791273529914_47066c::P000",
+            "document_id": "DOC_1791273529914_47066c",
+            "document_title": "Tài liệu Nghiên cứu Lưu trữ Bền vững",
+            "section_title": "Mục 1: Tri thức Cốt lõi",
+            "paragraph_index": 1,
+            "score": 19.0567,
+            "text": "# Mục 1: Tri thức Cốt lõi Đặc tính quan trọng của SA-CMS là lưu trữ tri thức tham số hóa cục bộ ngay cả khi ngắt kết nối mạng. # Mục 2: Kiểm thử",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 2,
+            "citation_label": "[2]",
+            "passage_id": "DOC_1791273624201_8c7163::P000",
+            "document_id": "DOC_1791273624201_8c7163",
+            "document_title": "Tài liệu Nghiên cứu Lưu trữ Bền vững",
+            "section_title": "Mục 1: Tri thức Cốt lõi",
+            "paragraph_index": 2,
+            "score": 19.0567,
+            "text": "# Mục 1: Tri thức Cốt lõi Đặc tính quan trọng của SA-CMS là lưu trữ tri thức tham số hóa cục bộ ngay cả khi ngắt kết nối mạng. # Mục 2: Kiểm thử",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 3,
+            "citation_label": "[3]",
+            "passage_id": "DOC_1791274450135_c31b43::P000",
+            "document_id": "DOC_1791274450135_c31b43",
+            "document_title": "Tài liệu Nghiên cứu Lưu trữ Bền vững",
+            "section_title": "Mục 1: Tri thức Cốt lõi",
+            "paragraph_index": 3,
+            "score": 19.0567,
+            "text": "# Mục 1: Tri thức Cốt lõi Đặc tính quan trọng của SA-CMS là lưu trữ tri thức tham số hóa cục bộ ngay cả khi ngắt kết nối mạng. # Mục 2: Kiểm thử",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 4,
+            "citation_label": "[4]",
+            "passage_id": "DOC_1791274542551_d13cb6::P000",
+            "document_id": "DOC_1791274542551_d13cb6",
+            "document_title": "Tài liệu Nghiên cứu Lưu trữ Bền vững",
+            "section_title": "Mục 1: Tri thức Cốt lõi",
+            "paragraph_index": 4,
+            "score": 19.0567,
+            "text": "# Mục 1: Tri thức Cốt lõi Đặc tính quan trọng của SA-CMS là lưu trữ tri thức tham số hóa cục bộ ngay cả khi ngắt kết nối mạng. # Mục 2: Kiểm thử",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 5,
+            "citation_label": "[5]",
+            "passage_id": "DOC_1791276830784_3a2ad9::P000",
+            "document_id": "DOC_1791276830784_3a2ad9",
+            "document_title": "Tài liệu Nghiên cứu Lưu trữ Bền vững",
+            "section_title": "Mục 1: Tri thức Cốt lõi",
+            "paragraph_index": 5,
+            "score": 19.0567,
+            "text": "# Mục 1: Tri thức Cốt lõi Đặc tính quan trọng của SA-CMS là lưu trữ tri thức tham số hóa cục bộ ngay cả khi ngắt kết nối mạng. # Mục 2: Kiểm thử",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "telemetry": {
+          "input_tokens": 260,
+          "output_tokens": 194,
+          "total_tokens": 454,
+          "total_latency_ms": 5.73,
+          "retrieval_ms": 4.88,
+          "generation_ms": 0.01
+        },
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {
+          "routing": "DIRECT_LOOKUP",
+          "route_explanation": "Đã tìm thấy bằng chứng xác thực trong tài liệu.",
+          "effective_query": "Đặc tính quan trọng của SA-CMS là gì?",
+          "is_follow_up": false,
+          "attached_document_count": 0,
+          "evidence_count": 5,
+          "refusal_reason": null,
+          "memory_level": "Level 3 (SA-CMS Gated Multi-Level)"
+        }
+      }
+    ]
+  },
+  {
+    "session_id": "chat_2272ef3db555",
+    "title": "Phiên Thử Nghiệm Khởi Động Lại",
+    "document_ids": [],
+    "created_at": 1791283043.1657517,
+    "updated_at": 1791283043.2826166,
+    "messages": [
+      {
+        "id": "msg_5a910f0332",
+        "role": "user",
+        "content": "Kiến trúc SA-CMS áp dụng mấy cấp độ bộ nhớ?",
+        "timestamp": 1791283043.1993015,
+        "citations": [],
+        "evidence": [],
+        "telemetry": {},
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {}
+      },
+      {
+        "id": "msg_76aa9d9912",
+        "role": "assistant",
+        "content": "Dựa trên tài liệu đã cung cấp, # Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. [1] Cụ thể: # Chương 2: Hiệu năng Thực nghiệm.\n\n### Nguồn tham khảo\n[1] **Tài liệu Nghiên cứu SA-CMS Mẫu Offline** — Chương 1: Kiến trúc Bộ nhớ — Đoạn 1\n\n[2] **Tài liệu Nghiên cứu SA-CMS Mẫu Offline** — Chương 1: Kiến trúc Bộ nhớ — Đoạn 2\n\n[3] **Tài liệu Nghiên cứu SA-CMS Mẫu Offline** — Chương 1: Kiến trúc Bộ nhớ — Đoạn 3\n\n[4] **Tài liệu Nghiên cứu SA-CMS Mẫu Offline** — Chương 1: Kiến trúc Bộ nhớ — Đoạn 4\n\n[5] **Tài liệu Nghiên cứu SA-CMS Mẫu Offline** — Chương 1: Kiến trúc Bộ nhớ — Đoạn 5",
+        "timestamp": 1791283043.2062528,
+        "citations": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "DOC_1791271048929_45bf10::P000",
+            "document_id": "DOC_1791271048929_45bf10",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 1,
+            "score": 25.6597,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 2,
+            "citation_label": "[2]",
+            "passage_id": "DOC_1791271306897_51a76d::P000",
+            "document_id": "DOC_1791271306897_51a76d",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 2,
+            "score": 25.6597,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 3,
+            "citation_label": "[3]",
+            "passage_id": "DOC_1791271682090_2ca48d::P000",
+            "document_id": "DOC_1791271682090_2ca48d",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 3,
+            "score": 25.6597,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 4,
+            "citation_label": "[4]",
+            "passage_id": "DOC_1791271952866_dc50af::P000",
+            "document_id": "DOC_1791271952866_dc50af",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 4,
+            "score": 25.6597,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 5,
+            "citation_label": "[5]",
+            "passage_id": "DOC_1791272033915_0080c3::P000",
+            "document_id": "DOC_1791272033915_0080c3",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 5,
+            "score": 25.6597,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "evidence": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "DOC_1791271048929_45bf10::P000",
+            "document_id": "DOC_1791271048929_45bf10",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 1,
+            "score": 25.6597,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 2,
+            "citation_label": "[2]",
+            "passage_id": "DOC_1791271306897_51a76d::P000",
+            "document_id": "DOC_1791271306897_51a76d",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 2,
+            "score": 25.6597,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 3,
+            "citation_label": "[3]",
+            "passage_id": "DOC_1791271682090_2ca48d::P000",
+            "document_id": "DOC_1791271682090_2ca48d",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 3,
+            "score": 25.6597,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 4,
+            "citation_label": "[4]",
+            "passage_id": "DOC_1791271952866_dc50af::P000",
+            "document_id": "DOC_1791271952866_dc50af",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 4,
+            "score": 25.6597,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 5,
+            "citation_label": "[5]",
+            "passage_id": "DOC_1791272033915_0080c3::P000",
+            "document_id": "DOC_1791272033915_0080c3",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 5,
+            "score": 25.6597,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "telemetry": {
+          "input_tokens": 263,
+          "output_tokens": 195,
+          "total_tokens": 458,
+          "total_latency_ms": 6.27,
+          "retrieval_ms": 5.42,
+          "generation_ms": 0.01
+        },
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {
+          "routing": "DIRECT_LOOKUP",
+          "route_explanation": "Đã tìm thấy bằng chứng xác thực trong tài liệu.",
+          "effective_query": "Kiến trúc SA-CMS áp dụng mấy cấp độ bộ nhớ?",
+          "is_follow_up": false,
+          "attached_document_count": 0,
+          "evidence_count": 5,
+          "refusal_reason": null,
+          "memory_level": "Level 3 (SA-CMS Gated Multi-Level)"
+        }
+      },
+      {
+        "id": "msg_4934197773",
+        "role": "user",
+        "content": "Kiến trúc SA-CMS áp dụng mấy cấp độ bộ nhớ?",
+        "timestamp": 1791283043.275687,
+        "citations": [],
+        "evidence": [],
+        "telemetry": {},
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {}
+      },
+      {
+        "id": "msg_43198ef2ad",
+        "role": "assistant",
+        "content": "Dựa trên tài liệu đã cung cấp, # Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. [1] Cụ thể: # Chương 2: Hiệu năng Thực nghiệm.\n\n### Nguồn tham khảo\n[1] **Tài liệu Nghiên cứu SA-CMS Mẫu Offline** — Chương 1: Kiến trúc Bộ nhớ — Đoạn 1\n\n[2] **Tài liệu Nghiên cứu SA-CMS Mẫu Offline** — Chương 1: Kiến trúc Bộ nhớ — Đoạn 2\n\n[3] **Tài liệu Nghiên cứu SA-CMS Mẫu Offline** — Chương 1: Kiến trúc Bộ nhớ — Đoạn 3\n\n[4] **Tài liệu Nghiên cứu SA-CMS Mẫu Offline** — Chương 1: Kiến trúc Bộ nhớ — Đoạn 4\n\n[5] **Tài liệu Nghiên cứu SA-CMS Mẫu Offline** — Chương 1: Kiến trúc Bộ nhớ — Đoạn 5",
+        "timestamp": 1791283043.2826166,
+        "citations": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "DOC_1791271048929_45bf10::P000",
+            "document_id": "DOC_1791271048929_45bf10",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 1,
+            "score": 25.6597,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 2,
+            "citation_label": "[2]",
+            "passage_id": "DOC_1791271306897_51a76d::P000",
+            "document_id": "DOC_1791271306897_51a76d",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 2,
+            "score": 25.6597,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 3,
+            "citation_label": "[3]",
+            "passage_id": "DOC_1791271682090_2ca48d::P000",
+            "document_id": "DOC_1791271682090_2ca48d",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 3,
+            "score": 25.6597,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 4,
+            "citation_label": "[4]",
+            "passage_id": "DOC_1791271952866_dc50af::P000",
+            "document_id": "DOC_1791271952866_dc50af",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 4,
+            "score": 25.6597,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 5,
+            "citation_label": "[5]",
+            "passage_id": "DOC_1791272033915_0080c3::P000",
+            "document_id": "DOC_1791272033915_0080c3",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 5,
+            "score": 25.6597,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "evidence": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "DOC_1791271048929_45bf10::P000",
+            "document_id": "DOC_1791271048929_45bf10",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 1,
+            "score": 25.6597,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 2,
+            "citation_label": "[2]",
+            "passage_id": "DOC_1791271306897_51a76d::P000",
+            "document_id": "DOC_1791271306897_51a76d",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 2,
+            "score": 25.6597,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 3,
+            "citation_label": "[3]",
+            "passage_id": "DOC_1791271682090_2ca48d::P000",
+            "document_id": "DOC_1791271682090_2ca48d",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 3,
+            "score": 25.6597,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 4,
+            "citation_label": "[4]",
+            "passage_id": "DOC_1791271952866_dc50af::P000",
+            "document_id": "DOC_1791271952866_dc50af",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 4,
+            "score": 25.6597,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 5,
+            "citation_label": "[5]",
+            "passage_id": "DOC_1791272033915_0080c3::P000",
+            "document_id": "DOC_1791272033915_0080c3",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 5,
+            "score": 25.6597,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "telemetry": {
+          "input_tokens": 263,
+          "output_tokens": 195,
+          "total_tokens": 458,
+          "total_latency_ms": 6.61,
+          "retrieval_ms": 5.38,
+          "generation_ms": 0.02
+        },
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {
+          "routing": "DIRECT_LOOKUP",
+          "route_explanation": "Đã tìm thấy bằng chứng xác thực trong tài liệu.",
+          "effective_query": "Kiến trúc SA-CMS áp dụng mấy cấp độ bộ nhớ?",
+          "is_follow_up": false,
+          "attached_document_count": 0,
+          "evidence_count": 5,
+          "refusal_reason": null,
+          "memory_level": "Level 3 (SA-CMS Gated Multi-Level)"
+        }
+      }
+    ]
+  },
+  {
+    "session_id": "chat_62e2c75b6995",
+    "title": "Session Multi-doc",
+    "document_ids": [],
+    "created_at": 1791283057.3701437,
+    "updated_at": 1791283057.579504,
+    "messages": []
+  },
+  {
+    "session_id": "chat_82fec2942f1e",
+    "title": "Session QA",
+    "document_ids": [],
+    "created_at": 1791283057.6342285,
+    "updated_at": 1791283057.665334,
+    "messages": [
+      {
+        "id": "msg_c10b88cc79",
+        "role": "user",
+        "content": "Kiến trúc SA-CMS là gì?",
+        "timestamp": 1791283057.6575122,
+        "citations": [],
+        "evidence": [],
+        "telemetry": {},
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {}
+      },
+      {
+        "id": "msg_4292336c6a",
+        "role": "assistant",
+        "content": "Dựa trên tài liệu đã cung cấp, Kiến trúc 3 cấp độ SA-CMS. [1]\n\n### Nguồn tham khảo\n[1] **Nghiên cứu Hệ thống Bộ nhớ Đa quy mô SA-CMS trong Mô hình Ngôn ngữ** — Phần nội dung — Đoạn 1\n\n[2] **Tài liệu Nghiên cứu SA-CMS Mẫu Offline** — Chương 1: Kiến trúc Bộ nhớ — Đoạn 2\n\n[3] **Tài liệu Nghiên cứu SA-CMS Mẫu Offline** — Chương 1: Kiến trúc Bộ nhớ — Đoạn 3\n\n[4] **Tài liệu Nghiên cứu SA-CMS Mẫu Offline** — Chương 1: Kiến trúc Bộ nhớ — Đoạn 4\n\n[5] **Tài liệu Nghiên cứu SA-CMS Mẫu Offline** — Chương 1: Kiến trúc Bộ nhớ — Đoạn 5",
+        "timestamp": 1791283057.665334,
+        "citations": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "VN_DOC_001::P003",
+            "document_id": "VN_DOC_001",
+            "document_title": "Nghiên cứu Hệ thống Bộ nhớ Đa quy mô SA-CMS trong Mô hình Ngôn ngữ",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 1,
+            "score": 14.0101,
+            "text": "## 2. Kiến trúc 3 cấp độ SA-CMS",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 2,
+            "citation_label": "[2]",
+            "passage_id": "DOC_1791271048929_45bf10::P000",
+            "document_id": "DOC_1791271048929_45bf10",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 2,
+            "score": 11.8669,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 3,
+            "citation_label": "[3]",
+            "passage_id": "DOC_1791271306897_51a76d::P000",
+            "document_id": "DOC_1791271306897_51a76d",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 3,
+            "score": 11.8669,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 4,
+            "citation_label": "[4]",
+            "passage_id": "DOC_1791271682090_2ca48d::P000",
+            "document_id": "DOC_1791271682090_2ca48d",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 4,
+            "score": 11.8669,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 5,
+            "citation_label": "[5]",
+            "passage_id": "DOC_1791271952866_dc50af::P000",
+            "document_id": "DOC_1791271952866_dc50af",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 5,
+            "score": 11.8669,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "evidence": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "VN_DOC_001::P003",
+            "document_id": "VN_DOC_001",
+            "document_title": "Nghiên cứu Hệ thống Bộ nhớ Đa quy mô SA-CMS trong Mô hình Ngôn ngữ",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 1,
+            "score": 14.0101,
+            "text": "## 2. Kiến trúc 3 cấp độ SA-CMS",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 2,
+            "citation_label": "[2]",
+            "passage_id": "DOC_1791271048929_45bf10::P000",
+            "document_id": "DOC_1791271048929_45bf10",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 2,
+            "score": 11.8669,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 3,
+            "citation_label": "[3]",
+            "passage_id": "DOC_1791271306897_51a76d::P000",
+            "document_id": "DOC_1791271306897_51a76d",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 3,
+            "score": 11.8669,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 4,
+            "citation_label": "[4]",
+            "passage_id": "DOC_1791271682090_2ca48d::P000",
+            "document_id": "DOC_1791271682090_2ca48d",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 4,
+            "score": 11.8669,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 5,
+            "citation_label": "[5]",
+            "passage_id": "DOC_1791271952866_dc50af::P000",
+            "document_id": "DOC_1791271952866_dc50af",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 5,
+            "score": 11.8669,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "telemetry": {
+          "input_tokens": 256,
+          "output_tokens": 152,
+          "total_tokens": 408,
+          "total_latency_ms": 8.02,
+          "retrieval_ms": 6.97,
+          "generation_ms": 0.01
+        },
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {
+          "routing": "DIRECT_LOOKUP",
+          "route_explanation": "Đã tìm thấy bằng chứng xác thực trong tài liệu.",
+          "effective_query": "Kiến trúc SA-CMS là gì?",
+          "is_follow_up": false,
+          "attached_document_count": 0,
+          "evidence_count": 5,
+          "refusal_reason": null,
+          "memory_level": "Level 3 (SA-CMS Gated Multi-Level)"
+        }
+      }
+    ]
+  },
+  {
+    "session_id": "chat_566e5c9bf7d9",
+    "title": "Session Refusal",
+    "document_ids": [],
+    "created_at": 1791283057.7132125,
+    "updated_at": 1791283057.728511,
+    "messages": [
+      {
+        "id": "msg_d987e17505",
+        "role": "user",
+        "content": "Thủ đô của Nhật Bản là thành phố nào?",
+        "timestamp": 1791283057.728511,
+        "citations": [],
+        "evidence": [],
+        "telemetry": {},
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {}
+      },
+      {
+        "id": "msg_b9947653d7",
+        "role": "assistant",
+        "content": "Tài liệu chưa đủ thông tin. Không tìm thấy đủ thông tin trong tài liệu để trả lời chắc chắn.",
+        "timestamp": 1791283057.728511,
+        "citations": [],
+        "evidence": [],
+        "telemetry": {
+          "input_tokens": 42,
+          "output_tokens": 27,
+          "total_tokens": 69,
+          "total_latency_ms": 0.09,
+          "retrieval_ms": 0.0,
+          "generation_ms": 0.0
+        },
+        "routing": "UNANSWERABLE",
+        "refused": true,
+        "refusal_reason": "UNANSWERABLE",
+        "diagnostics": {
+          "routing": "UNANSWERABLE",
+          "route_explanation": "Tài liệu bạn cung cấp không có thông tin để trả lời câu hỏi này.",
+          "effective_query": "Thủ đô của Nhật Bản là thành phố nào?",
+          "is_follow_up": false,
+          "attached_document_count": 0,
+          "evidence_count": 0,
+          "refusal_reason": "UNANSWERABLE",
+          "memory_level": "Level 3 (SA-CMS Gated Multi-Level)"
+        }
+      }
+    ]
+  },
+  {
+    "session_id": "chat_de1e17b8d5ed",
+    "title": "Session Lengths",
+    "document_ids": [],
+    "created_at": 1791283057.7626894,
+    "updated_at": 1791283057.827698,
+    "messages": [
+      {
+        "id": "msg_37fa4da9c4",
+        "role": "user",
+        "content": "SA-CMS hoạt động như thế nào?",
+        "timestamp": 1791283057.7775137,
+        "citations": [],
+        "evidence": [],
+        "telemetry": {},
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {}
+      },
+      {
+        "id": "msg_61baca908a",
+        "role": "assistant",
+        "content": "Cấp độ 2 là Section Memory hoạt động ở thang thời gian trung bình, thực hiện tích lũy và cập nhật gradient tại ranh giới kết thúc mỗi đề mục của tài liệu. [1]\n\n### Nguồn tham khảo\n[1] **Nghiên cứu Hệ thống Bộ nhớ Đa quy mô SA-CMS trong Mô hình Ngôn ngữ** — Phần nội dung — Đoạn 1\n\n[2] **Nghiên cứu Hệ thống Bộ nhớ Đa quy mô SA-CMS trong Mô hình Ngôn ngữ** — Phần nội dung — Đoạn 2\n\n[3] **Pldc Da Xoa Abc Du Thua** — Phần nội dung — Đoạn 3\n\n[4] **Cơ chế Bộ nhớ Đa quy mô và Khối Giao tiếp Liên cấp trong Mô hình Ngôn ngữ** — 1. Giới thiệu Kiến trúc Bộ nhớ Đa quy mô — Đoạn 4\n\n[5] **Cơ chế Bộ nhớ Đa quy mô và Khối Giao tiếp Liên cấp trong Mô hình Ngôn ngữ** — 1. Giới thiệu Kiến trúc Bộ nhớ Đa quy mô — Đoạn 5",
+        "timestamp": 1791283057.7949898,
+        "citations": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "VN_DOC_001::P005",
+            "document_id": "VN_DOC_001",
+            "document_title": "Nghiên cứu Hệ thống Bộ nhớ Đa quy mô SA-CMS trong Mô hình Ngôn ngữ",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 1,
+            "score": 8.9187,
+            "text": "Cấp độ 2 là Section Memory hoạt động ở thang thời gian trung bình, thực hiện tích lũy và cập nhật gradient tại ranh giới kết thúc mỗi đề mục của tài liệu.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 2,
+            "citation_label": "[2]",
+            "passage_id": "VN_DOC_001::P006",
+            "document_id": "VN_DOC_001",
+            "document_title": "Nghiên cứu Hệ thống Bộ nhớ Đa quy mô SA-CMS trong Mô hình Ngôn ngữ",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 2,
+            "score": 8.8143,
+            "text": "Cấp độ 3 là Document Memory hoạt động ở thang thời gian chậm nhất, ghi lại biểu diễn trừu tượng bất biến toàn cục của toàn bộ tài liệu khi hoàn thành lượt đọc.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 3,
+            "citation_label": "[3]",
+            "passage_id": "DOC_1791119854::P181",
+            "document_id": "DOC_1791119854",
+            "document_title": "Pldc Da Xoa Abc Du Thua",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 3,
+            "score": 8.244,
+            "text": "Nguyên nhân cốt lõi của sự ra đời nhà nước là: A.Kết quả của nền sản xuất hàng hoá cùng những hoạt động thương nghiệp. B.Kết quả của 03 lần phân công lao động trong lịch sử. C.Nhu cầu về sự cần thiết phải có một tổ chức để dập tắt xung đột giai cấp.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 4,
+            "citation_label": "[4]",
+            "passage_id": "DEMO_DOC_001::P002",
+            "document_id": "DEMO_DOC_001",
+            "document_title": "Cơ chế Bộ nhớ Đa quy mô và Khối Giao tiếp Liên cấp trong Mô hình Ngôn ngữ",
+            "section_title": "1. Giới thiệu Kiến trúc Bộ nhớ Đa quy mô",
+            "paragraph_index": 4,
+            "score": 8.1726,
+            "text": "Hệ thống bộ nhớ liên tục (Continuum Memory System - CMS) giải quyết vấn đề này bằng cách thiết lập nhiều tầng bộ nhớ tham số hoạt động ở các chu kỳ thời gian khác nhau. Tầng 1 (Level 1) chịu trách nhiệm thích ứng ở cấp độ đoạn văn (paragraph), bắt giữ các chuyển tiếp cục bộ và từ vựng ngắn hạn.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 5,
+            "citation_label": "[5]",
+            "passage_id": "DEMO_DOC_001::P001",
+            "document_id": "DEMO_DOC_001",
+            "document_title": "Cơ chế Bộ nhớ Đa quy mô và Khối Giao tiếp Liên cấp trong Mô hình Ngôn ngữ",
+            "section_title": "1. Giới thiệu Kiến trúc Bộ nhớ Đa quy mô",
+            "paragraph_index": 5,
+            "score": 7.6894,
+            "text": "Trong các mô hình ngôn ngữ hiện đại, việc xử lý văn bản dài thường gặp thách thức lớn về chi phí bộ nhớ và sự suy giảm chú ý (attention dilution). Hệ thống bộ nhớ liên tục (Continuum Memory System - CMS) giải quyết vấn đề này bằng cách thiết lập nhiều tầng bộ nhớ tham số hoạt động ở các chu kỳ thời gian khác nhau.",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "evidence": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "VN_DOC_001::P005",
+            "document_id": "VN_DOC_001",
+            "document_title": "Nghiên cứu Hệ thống Bộ nhớ Đa quy mô SA-CMS trong Mô hình Ngôn ngữ",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 1,
+            "score": 8.9187,
+            "text": "Cấp độ 2 là Section Memory hoạt động ở thang thời gian trung bình, thực hiện tích lũy và cập nhật gradient tại ranh giới kết thúc mỗi đề mục của tài liệu.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 2,
+            "citation_label": "[2]",
+            "passage_id": "VN_DOC_001::P006",
+            "document_id": "VN_DOC_001",
+            "document_title": "Nghiên cứu Hệ thống Bộ nhớ Đa quy mô SA-CMS trong Mô hình Ngôn ngữ",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 2,
+            "score": 8.8143,
+            "text": "Cấp độ 3 là Document Memory hoạt động ở thang thời gian chậm nhất, ghi lại biểu diễn trừu tượng bất biến toàn cục của toàn bộ tài liệu khi hoàn thành lượt đọc.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 3,
+            "citation_label": "[3]",
+            "passage_id": "DOC_1791119854::P181",
+            "document_id": "DOC_1791119854",
+            "document_title": "Pldc Da Xoa Abc Du Thua",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 3,
+            "score": 8.244,
+            "text": "Nguyên nhân cốt lõi của sự ra đời nhà nước là: A.Kết quả của nền sản xuất hàng hoá cùng những hoạt động thương nghiệp. B.Kết quả của 03 lần phân công lao động trong lịch sử. C.Nhu cầu về sự cần thiết phải có một tổ chức để dập tắt xung đột giai cấp.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 4,
+            "citation_label": "[4]",
+            "passage_id": "DEMO_DOC_001::P002",
+            "document_id": "DEMO_DOC_001",
+            "document_title": "Cơ chế Bộ nhớ Đa quy mô và Khối Giao tiếp Liên cấp trong Mô hình Ngôn ngữ",
+            "section_title": "1. Giới thiệu Kiến trúc Bộ nhớ Đa quy mô",
+            "paragraph_index": 4,
+            "score": 8.1726,
+            "text": "Hệ thống bộ nhớ liên tục (Continuum Memory System - CMS) giải quyết vấn đề này bằng cách thiết lập nhiều tầng bộ nhớ tham số hoạt động ở các chu kỳ thời gian khác nhau. Tầng 1 (Level 1) chịu trách nhiệm thích ứng ở cấp độ đoạn văn (paragraph), bắt giữ các chuyển tiếp cục bộ và từ vựng ngắn hạn.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 5,
+            "citation_label": "[5]",
+            "passage_id": "DEMO_DOC_001::P001",
+            "document_id": "DEMO_DOC_001",
+            "document_title": "Cơ chế Bộ nhớ Đa quy mô và Khối Giao tiếp Liên cấp trong Mô hình Ngôn ngữ",
+            "section_title": "1. Giới thiệu Kiến trúc Bộ nhớ Đa quy mô",
+            "paragraph_index": 5,
+            "score": 7.6894,
+            "text": "Trong các mô hình ngôn ngữ hiện đại, việc xử lý văn bản dài thường gặp thách thức lớn về chi phí bộ nhớ và sự suy giảm chú ý (attention dilution). Hệ thống bộ nhớ liên tục (Continuum Memory System - CMS) giải quyết vấn đề này bằng cách thiết lập nhiều tầng bộ nhớ tham số hoạt động ở các chu kỳ thời gian khác nhau.",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "telemetry": {
+          "input_tokens": 258,
+          "output_tokens": 221,
+          "total_tokens": 479,
+          "total_latency_ms": 8.88,
+          "retrieval_ms": 5.66,
+          "generation_ms": 0.01
+        },
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {
+          "routing": "DIRECT_LOOKUP",
+          "route_explanation": "Đã tìm thấy bằng chứng xác thực trong tài liệu.",
+          "effective_query": "SA-CMS hoạt động như thế nào?",
+          "is_follow_up": false,
+          "attached_document_count": 0,
+          "evidence_count": 5,
+          "refusal_reason": null,
+          "memory_level": "Level 3 (SA-CMS Gated Multi-Level)"
+        }
+      },
+      {
+        "id": "msg_6a97926ff2",
+        "role": "user",
+        "content": "SA-CMS hoạt động như thế nào?",
+        "timestamp": 1791283057.8171237,
+        "citations": [],
+        "evidence": [],
+        "telemetry": {},
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {}
+      },
+      {
+        "id": "msg_b1cd303b52",
+        "role": "assistant",
+        "content": "Trong tài liệu, Cấp độ 2 là Section Memory hoạt động ở thang thời gian trung bình, thực hiện tích lũy và cập nhật gradient tại ranh giới kết thúc mỗi đề mục của tài liệu. [1]\n\nBên cạnh đó, Cấp độ 3 là Document Memory hoạt động ở thang thời gian chậm nhất, ghi lại biểu diễn trừu tượng bất biến toàn cục của toàn bộ tài liệu khi hoàn thành lượt đọc. [2]\n\n### Nguồn tham khảo\n[1] **Nghiên cứu Hệ thống Bộ nhớ Đa quy mô SA-CMS trong Mô hình Ngôn ngữ** — Phần nội dung — Đoạn 1\n\n[2] **Nghiên cứu Hệ thống Bộ nhớ Đa quy mô SA-CMS trong Mô hình Ngôn ngữ** — Phần nội dung — Đoạn 2\n\n[3] **Pldc Da Xoa Abc Du Thua** — Phần nội dung — Đoạn 3\n\n[4] **Cơ chế Bộ nhớ Đa quy mô và Khối Giao tiếp Liên cấp trong Mô hình Ngôn ngữ** — 1. Giới thiệu Kiến trúc Bộ nhớ Đa quy mô — Đoạn 4\n\n[5] **Cơ chế Bộ nhớ Đa quy mô và Khối Giao tiếp Liên cấp trong Mô hình Ngôn ngữ** — 1. Giới thiệu Kiến trúc Bộ nhớ Đa quy mô — Đoạn 5",
+        "timestamp": 1791283057.827698,
+        "citations": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "VN_DOC_001::P005",
+            "document_id": "VN_DOC_001",
+            "document_title": "Nghiên cứu Hệ thống Bộ nhớ Đa quy mô SA-CMS trong Mô hình Ngôn ngữ",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 1,
+            "score": 8.9187,
+            "text": "Cấp độ 2 là Section Memory hoạt động ở thang thời gian trung bình, thực hiện tích lũy và cập nhật gradient tại ranh giới kết thúc mỗi đề mục của tài liệu.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 2,
+            "citation_label": "[2]",
+            "passage_id": "VN_DOC_001::P006",
+            "document_id": "VN_DOC_001",
+            "document_title": "Nghiên cứu Hệ thống Bộ nhớ Đa quy mô SA-CMS trong Mô hình Ngôn ngữ",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 2,
+            "score": 8.8143,
+            "text": "Cấp độ 3 là Document Memory hoạt động ở thang thời gian chậm nhất, ghi lại biểu diễn trừu tượng bất biến toàn cục của toàn bộ tài liệu khi hoàn thành lượt đọc.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 3,
+            "citation_label": "[3]",
+            "passage_id": "DOC_1791119854::P181",
+            "document_id": "DOC_1791119854",
+            "document_title": "Pldc Da Xoa Abc Du Thua",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 3,
+            "score": 8.244,
+            "text": "Nguyên nhân cốt lõi của sự ra đời nhà nước là: A.Kết quả của nền sản xuất hàng hoá cùng những hoạt động thương nghiệp. B.Kết quả của 03 lần phân công lao động trong lịch sử. C.Nhu cầu về sự cần thiết phải có một tổ chức để dập tắt xung đột giai cấp.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 4,
+            "citation_label": "[4]",
+            "passage_id": "DEMO_DOC_001::P002",
+            "document_id": "DEMO_DOC_001",
+            "document_title": "Cơ chế Bộ nhớ Đa quy mô và Khối Giao tiếp Liên cấp trong Mô hình Ngôn ngữ",
+            "section_title": "1. Giới thiệu Kiến trúc Bộ nhớ Đa quy mô",
+            "paragraph_index": 4,
+            "score": 8.1726,
+            "text": "Hệ thống bộ nhớ liên tục (Continuum Memory System - CMS) giải quyết vấn đề này bằng cách thiết lập nhiều tầng bộ nhớ tham số hoạt động ở các chu kỳ thời gian khác nhau. Tầng 1 (Level 1) chịu trách nhiệm thích ứng ở cấp độ đoạn văn (paragraph), bắt giữ các chuyển tiếp cục bộ và từ vựng ngắn hạn.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 5,
+            "citation_label": "[5]",
+            "passage_id": "DEMO_DOC_001::P001",
+            "document_id": "DEMO_DOC_001",
+            "document_title": "Cơ chế Bộ nhớ Đa quy mô và Khối Giao tiếp Liên cấp trong Mô hình Ngôn ngữ",
+            "section_title": "1. Giới thiệu Kiến trúc Bộ nhớ Đa quy mô",
+            "paragraph_index": 5,
+            "score": 7.6894,
+            "text": "Trong các mô hình ngôn ngữ hiện đại, việc xử lý văn bản dài thường gặp thách thức lớn về chi phí bộ nhớ và sự suy giảm chú ý (attention dilution). Hệ thống bộ nhớ liên tục (Continuum Memory System - CMS) giải quyết vấn đề này bằng cách thiết lập nhiều tầng bộ nhớ tham số hoạt động ở các chu kỳ thời gian khác nhau.",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "evidence": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "VN_DOC_001::P005",
+            "document_id": "VN_DOC_001",
+            "document_title": "Nghiên cứu Hệ thống Bộ nhớ Đa quy mô SA-CMS trong Mô hình Ngôn ngữ",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 1,
+            "score": 8.9187,
+            "text": "Cấp độ 2 là Section Memory hoạt động ở thang thời gian trung bình, thực hiện tích lũy và cập nhật gradient tại ranh giới kết thúc mỗi đề mục của tài liệu.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 2,
+            "citation_label": "[2]",
+            "passage_id": "VN_DOC_001::P006",
+            "document_id": "VN_DOC_001",
+            "document_title": "Nghiên cứu Hệ thống Bộ nhớ Đa quy mô SA-CMS trong Mô hình Ngôn ngữ",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 2,
+            "score": 8.8143,
+            "text": "Cấp độ 3 là Document Memory hoạt động ở thang thời gian chậm nhất, ghi lại biểu diễn trừu tượng bất biến toàn cục của toàn bộ tài liệu khi hoàn thành lượt đọc.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 3,
+            "citation_label": "[3]",
+            "passage_id": "DOC_1791119854::P181",
+            "document_id": "DOC_1791119854",
+            "document_title": "Pldc Da Xoa Abc Du Thua",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 3,
+            "score": 8.244,
+            "text": "Nguyên nhân cốt lõi của sự ra đời nhà nước là: A.Kết quả của nền sản xuất hàng hoá cùng những hoạt động thương nghiệp. B.Kết quả của 03 lần phân công lao động trong lịch sử. C.Nhu cầu về sự cần thiết phải có một tổ chức để dập tắt xung đột giai cấp.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 4,
+            "citation_label": "[4]",
+            "passage_id": "DEMO_DOC_001::P002",
+            "document_id": "DEMO_DOC_001",
+            "document_title": "Cơ chế Bộ nhớ Đa quy mô và Khối Giao tiếp Liên cấp trong Mô hình Ngôn ngữ",
+            "section_title": "1. Giới thiệu Kiến trúc Bộ nhớ Đa quy mô",
+            "paragraph_index": 4,
+            "score": 8.1726,
+            "text": "Hệ thống bộ nhớ liên tục (Continuum Memory System - CMS) giải quyết vấn đề này bằng cách thiết lập nhiều tầng bộ nhớ tham số hoạt động ở các chu kỳ thời gian khác nhau. Tầng 1 (Level 1) chịu trách nhiệm thích ứng ở cấp độ đoạn văn (paragraph), bắt giữ các chuyển tiếp cục bộ và từ vựng ngắn hạn.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 5,
+            "citation_label": "[5]",
+            "passage_id": "DEMO_DOC_001::P001",
+            "document_id": "DEMO_DOC_001",
+            "document_title": "Cơ chế Bộ nhớ Đa quy mô và Khối Giao tiếp Liên cấp trong Mô hình Ngôn ngữ",
+            "section_title": "1. Giới thiệu Kiến trúc Bộ nhớ Đa quy mô",
+            "paragraph_index": 5,
+            "score": 7.6894,
+            "text": "Trong các mô hình ngôn ngữ hiện đại, việc xử lý văn bản dài thường gặp thách thức lớn về chi phí bộ nhớ và sự suy giảm chú ý (attention dilution). Hệ thống bộ nhớ liên tục (Continuum Memory System - CMS) giải quyết vấn đề này bằng cách thiết lập nhiều tầng bộ nhớ tham số hoạt động ở các chu kỳ thời gian khác nhau.",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "telemetry": {
+          "input_tokens": 258,
+          "output_tokens": 276,
+          "total_tokens": 534,
+          "total_latency_ms": 10.61,
+          "retrieval_ms": 7.43,
+          "generation_ms": 0.02
+        },
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {
+          "routing": "DIRECT_LOOKUP",
+          "route_explanation": "Đã tìm thấy bằng chứng xác thực trong tài liệu.",
+          "effective_query": "SA-CMS hoạt động như thế nào?",
+          "is_follow_up": false,
+          "attached_document_count": 0,
+          "evidence_count": 5,
+          "refusal_reason": null,
+          "memory_level": "Level 3 (SA-CMS Gated Multi-Level)"
+        }
+      }
+    ]
+  },
+  {
+    "session_id": "chat_931ca131e8be",
+    "title": "Chat: Kiến trúc SA-CMS là gì?",
+    "document_ids": [],
+    "created_at": 1791283058.1336064,
+    "updated_at": 1791283058.161894,
+    "messages": [
+      {
+        "id": "msg_d3aef31924",
+        "role": "user",
+        "content": "Kiến trúc SA-CMS là gì?",
+        "timestamp": 1791283058.155082,
+        "citations": [],
+        "evidence": [],
+        "telemetry": {},
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {}
+      },
+      {
+        "id": "msg_0f7ae74512",
+        "role": "assistant",
+        "content": "Kiến trúc 3 cấp độ SA-CMS. [1]\n\n### Nguồn tham khảo\n[1] **Nghiên cứu Hệ thống Bộ nhớ Đa quy mô SA-CMS trong Mô hình Ngôn ngữ** — Phần nội dung — Đoạn 1\n\n[2] **Tài liệu Nghiên cứu SA-CMS Mẫu Offline** — Chương 1: Kiến trúc Bộ nhớ — Đoạn 2\n\n[3] **Tài liệu Nghiên cứu SA-CMS Mẫu Offline** — Chương 1: Kiến trúc Bộ nhớ — Đoạn 3\n\n[4] **Tài liệu Nghiên cứu SA-CMS Mẫu Offline** — Chương 1: Kiến trúc Bộ nhớ — Đoạn 4\n\n[5] **Tài liệu Nghiên cứu SA-CMS Mẫu Offline** — Chương 1: Kiến trúc Bộ nhớ — Đoạn 5",
+        "timestamp": 1791283058.161894,
+        "citations": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "VN_DOC_001::P003",
+            "document_id": "VN_DOC_001",
+            "document_title": "Nghiên cứu Hệ thống Bộ nhớ Đa quy mô SA-CMS trong Mô hình Ngôn ngữ",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 1,
+            "score": 14.0101,
+            "text": "## 2. Kiến trúc 3 cấp độ SA-CMS",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 2,
+            "citation_label": "[2]",
+            "passage_id": "DOC_1791271048929_45bf10::P000",
+            "document_id": "DOC_1791271048929_45bf10",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 2,
+            "score": 11.8669,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 3,
+            "citation_label": "[3]",
+            "passage_id": "DOC_1791271306897_51a76d::P000",
+            "document_id": "DOC_1791271306897_51a76d",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 3,
+            "score": 11.8669,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 4,
+            "citation_label": "[4]",
+            "passage_id": "DOC_1791271682090_2ca48d::P000",
+            "document_id": "DOC_1791271682090_2ca48d",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 4,
+            "score": 11.8669,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 5,
+            "citation_label": "[5]",
+            "passage_id": "DOC_1791271952866_dc50af::P000",
+            "document_id": "DOC_1791271952866_dc50af",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 5,
+            "score": 11.8669,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "evidence": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "VN_DOC_001::P003",
+            "document_id": "VN_DOC_001",
+            "document_title": "Nghiên cứu Hệ thống Bộ nhớ Đa quy mô SA-CMS trong Mô hình Ngôn ngữ",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 1,
+            "score": 14.0101,
+            "text": "## 2. Kiến trúc 3 cấp độ SA-CMS",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 2,
+            "citation_label": "[2]",
+            "passage_id": "DOC_1791271048929_45bf10::P000",
+            "document_id": "DOC_1791271048929_45bf10",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 2,
+            "score": 11.8669,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 3,
+            "citation_label": "[3]",
+            "passage_id": "DOC_1791271306897_51a76d::P000",
+            "document_id": "DOC_1791271306897_51a76d",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 3,
+            "score": 11.8669,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 4,
+            "citation_label": "[4]",
+            "passage_id": "DOC_1791271682090_2ca48d::P000",
+            "document_id": "DOC_1791271682090_2ca48d",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 4,
+            "score": 11.8669,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 5,
+            "citation_label": "[5]",
+            "passage_id": "DOC_1791271952866_dc50af::P000",
+            "document_id": "DOC_1791271952866_dc50af",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 5,
+            "score": 11.8669,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "telemetry": {
+          "input_tokens": 256,
+          "output_tokens": 143,
+          "total_tokens": 399,
+          "total_latency_ms": 5.08,
+          "retrieval_ms": 4.14,
+          "generation_ms": 0.01
+        },
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {
+          "routing": "DIRECT_LOOKUP",
+          "route_explanation": "Đã tìm thấy bằng chứng xác thực trong tài liệu.",
+          "effective_query": "Kiến trúc SA-CMS là gì?",
+          "is_follow_up": false,
+          "attached_document_count": 0,
+          "evidence_count": 5,
+          "refusal_reason": null,
+          "memory_level": "Level 3 (SA-CMS Gated Multi-Level)"
+        }
+      }
+    ]
+  },
+  {
+    "session_id": "chat_baa9eea8d168",
+    "title": "Chat: Kiến trúc SA-CMS gồm mấy cấp đ",
+    "document_ids": [],
+    "created_at": 1791283100.269452,
+    "updated_at": 1791283100.3030286,
+    "messages": [
+      {
+        "id": "msg_0b03a05565",
+        "role": "user",
+        "content": "Kiến trúc SA-CMS gồm mấy cấp độ?",
+        "timestamp": 1791283100.2961385,
+        "citations": [],
+        "evidence": [],
+        "telemetry": {},
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {}
+      },
+      {
+        "id": "msg_d8a65c2d83",
+        "role": "assistant",
+        "content": "Dựa trên tài liệu đã cung cấp, Kiến trúc 3 cấp độ SA-CMS. [1]\n\n### Nguồn tham khảo\n[1] **Nghiên cứu Hệ thống Bộ nhớ Đa quy mô SA-CMS trong Mô hình Ngôn ngữ** — Phần nội dung — Đoạn 1\n\n[2] **Tài liệu Nghiên cứu SA-CMS Mẫu Offline** — Chương 1: Kiến trúc Bộ nhớ — Đoạn 2\n\n[3] **Tài liệu Nghiên cứu SA-CMS Mẫu Offline** — Chương 1: Kiến trúc Bộ nhớ — Đoạn 3\n\n[4] **Tài liệu Nghiên cứu SA-CMS Mẫu Offline** — Chương 1: Kiến trúc Bộ nhớ — Đoạn 4\n\n[5] **Tài liệu Nghiên cứu SA-CMS Mẫu Offline** — Chương 1: Kiến trúc Bộ nhớ — Đoạn 5",
+        "timestamp": 1791283100.3030286,
+        "citations": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "VN_DOC_001::P003",
+            "document_id": "VN_DOC_001",
+            "document_title": "Nghiên cứu Hệ thống Bộ nhớ Đa quy mô SA-CMS trong Mô hình Ngôn ngữ",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 1,
+            "score": 20.537,
+            "text": "## 2. Kiến trúc 3 cấp độ SA-CMS",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 2,
+            "citation_label": "[2]",
+            "passage_id": "DOC_1791271048929_45bf10::P000",
+            "document_id": "DOC_1791271048929_45bf10",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 2,
+            "score": 18.7927,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 3,
+            "citation_label": "[3]",
+            "passage_id": "DOC_1791271306897_51a76d::P000",
+            "document_id": "DOC_1791271306897_51a76d",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 3,
+            "score": 18.7927,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 4,
+            "citation_label": "[4]",
+            "passage_id": "DOC_1791271682090_2ca48d::P000",
+            "document_id": "DOC_1791271682090_2ca48d",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 4,
+            "score": 18.7927,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 5,
+            "citation_label": "[5]",
+            "passage_id": "DOC_1791271952866_dc50af::P000",
+            "document_id": "DOC_1791271952866_dc50af",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 5,
+            "score": 18.7927,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "evidence": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "VN_DOC_001::P003",
+            "document_id": "VN_DOC_001",
+            "document_title": "Nghiên cứu Hệ thống Bộ nhớ Đa quy mô SA-CMS trong Mô hình Ngôn ngữ",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 1,
+            "score": 20.537,
+            "text": "## 2. Kiến trúc 3 cấp độ SA-CMS",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 2,
+            "citation_label": "[2]",
+            "passage_id": "DOC_1791271048929_45bf10::P000",
+            "document_id": "DOC_1791271048929_45bf10",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 2,
+            "score": 18.7927,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 3,
+            "citation_label": "[3]",
+            "passage_id": "DOC_1791271306897_51a76d::P000",
+            "document_id": "DOC_1791271306897_51a76d",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 3,
+            "score": 18.7927,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 4,
+            "citation_label": "[4]",
+            "passage_id": "DOC_1791271682090_2ca48d::P000",
+            "document_id": "DOC_1791271682090_2ca48d",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 4,
+            "score": 18.7927,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 5,
+            "citation_label": "[5]",
+            "passage_id": "DOC_1791271952866_dc50af::P000",
+            "document_id": "DOC_1791271952866_dc50af",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 5,
+            "score": 18.7927,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "telemetry": {
+          "input_tokens": 259,
+          "output_tokens": 152,
+          "total_tokens": 411,
+          "total_latency_ms": 7.65,
+          "retrieval_ms": 4.83,
+          "generation_ms": 0.01
+        },
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {
+          "routing": "DIRECT_LOOKUP",
+          "route_explanation": "Đã tìm thấy bằng chứng xác thực trong tài liệu.",
+          "effective_query": "Kiến trúc SA-CMS gồm mấy cấp độ?",
+          "is_follow_up": false,
+          "attached_document_count": 0,
+          "evidence_count": 5,
+          "refusal_reason": null,
+          "memory_level": "Level 3 (SA-CMS Gated Multi-Level)"
+        }
+      }
+    ]
+  },
+  {
+    "session_id": "chat_34d87c07b7b6",
+    "title": "Chat: Thời tiết ngày mai tại thủ đô ",
+    "document_ids": [],
+    "created_at": 1791283100.3424482,
+    "updated_at": 1791283100.362929,
+    "messages": [
+      {
+        "id": "msg_8ab61f5340",
+        "role": "user",
+        "content": "Thời tiết ngày mai tại thủ đô Paris dự báo thế nào?",
+        "timestamp": 1791283100.362929,
+        "citations": [],
+        "evidence": [],
+        "telemetry": {},
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {}
+      },
+      {
+        "id": "msg_c953c7a4dd",
+        "role": "assistant",
+        "content": "Tài liệu chưa đủ thông tin. Không tìm thấy đủ thông tin trong tài liệu để trả lời chắc chắn.",
+        "timestamp": 1791283100.362929,
+        "citations": [],
+        "evidence": [],
+        "telemetry": {
+          "input_tokens": 46,
+          "output_tokens": 27,
+          "total_tokens": 73,
+          "total_latency_ms": 0.1,
+          "retrieval_ms": 0.0,
+          "generation_ms": 0.0
+        },
+        "routing": "UNANSWERABLE",
+        "refused": true,
+        "refusal_reason": "UNANSWERABLE",
+        "diagnostics": {
+          "routing": "UNANSWERABLE",
+          "route_explanation": "Tài liệu bạn cung cấp không có thông tin để trả lời câu hỏi này.",
+          "effective_query": "Thời tiết ngày mai tại thủ đô Paris dự báo thế nào?",
+          "is_follow_up": false,
+          "attached_document_count": 0,
+          "evidence_count": 0,
+          "refusal_reason": "UNANSWERABLE",
+          "memory_level": "Level 3 (SA-CMS Gated Multi-Level)"
+        }
+      }
+    ]
+  },
+  {
+    "session_id": "chat_9d16f82dde70",
+    "title": "Kiểm thử Phiên Offline",
+    "document_ids": [],
+    "created_at": 1791283100.3901398,
+    "updated_at": 1791283100.4226718,
+    "messages": [
+      {
+        "id": "msg_d3516b9df7",
+        "role": "user",
+        "content": "Hiệu năng trên bài toán MK-NIAH tăng bao nhiêu phần trăm?",
+        "timestamp": 1791283100.4179049,
+        "citations": [],
+        "evidence": [],
+        "telemetry": {},
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {}
+      },
+      {
+        "id": "msg_c6b3d4bde3",
+        "role": "assistant",
+        "content": "Dựa trên tài liệu đã cung cấp, # Chương 2: Hiệu năng Thực nghiệm Hiệu năng thu hồi logit trên bài toán needle MK-NIAH tăng 175% dưới điều kiện không truy xuất. [1]\n\n### Nguồn tham khảo\n[1] **Tài liệu Nghiên cứu SA-CMS Mẫu Offline** — Chương 2: Hiệu năng Thực nghiệm — Đoạn 1\n\n[2] **Tài liệu Nghiên cứu SA-CMS Mẫu Offline** — Chương 2: Hiệu năng Thực nghiệm — Đoạn 2\n\n[3] **Tài liệu Nghiên cứu SA-CMS Mẫu Offline** — Chương 2: Hiệu năng Thực nghiệm — Đoạn 3\n\n[4] **Tài liệu Nghiên cứu SA-CMS Mẫu Offline** — Chương 2: Hiệu năng Thực nghiệm — Đoạn 4\n\n[5] **Tài liệu Nghiên cứu SA-CMS Mẫu Offline** — Chương 2: Hiệu năng Thực nghiệm — Đoạn 5",
+        "timestamp": 1791283100.4226718,
+        "citations": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "DOC_1791271048929_45bf10::P001",
+            "document_id": "DOC_1791271048929_45bf10",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 2: Hiệu năng Thực nghiệm",
+            "paragraph_index": 1,
+            "score": 31.2949,
+            "text": "# Chương 2: Hiệu năng Thực nghiệm Hiệu năng thu hồi logit trên bài toán needle MK-NIAH tăng 175% dưới điều kiện không truy xuất.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 2,
+            "citation_label": "[2]",
+            "passage_id": "DOC_1791271306897_51a76d::P001",
+            "document_id": "DOC_1791271306897_51a76d",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 2: Hiệu năng Thực nghiệm",
+            "paragraph_index": 2,
+            "score": 31.2949,
+            "text": "# Chương 2: Hiệu năng Thực nghiệm Hiệu năng thu hồi logit trên bài toán needle MK-NIAH tăng 175% dưới điều kiện không truy xuất.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 3,
+            "citation_label": "[3]",
+            "passage_id": "DOC_1791271682090_2ca48d::P001",
+            "document_id": "DOC_1791271682090_2ca48d",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 2: Hiệu năng Thực nghiệm",
+            "paragraph_index": 3,
+            "score": 31.2949,
+            "text": "# Chương 2: Hiệu năng Thực nghiệm Hiệu năng thu hồi logit trên bài toán needle MK-NIAH tăng 175% dưới điều kiện không truy xuất.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 4,
+            "citation_label": "[4]",
+            "passage_id": "DOC_1791271952866_dc50af::P001",
+            "document_id": "DOC_1791271952866_dc50af",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 2: Hiệu năng Thực nghiệm",
+            "paragraph_index": 4,
+            "score": 31.2949,
+            "text": "# Chương 2: Hiệu năng Thực nghiệm Hiệu năng thu hồi logit trên bài toán needle MK-NIAH tăng 175% dưới điều kiện không truy xuất.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 5,
+            "citation_label": "[5]",
+            "passage_id": "DOC_1791272033915_0080c3::P001",
+            "document_id": "DOC_1791272033915_0080c3",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 2: Hiệu năng Thực nghiệm",
+            "paragraph_index": 5,
+            "score": 31.2949,
+            "text": "# Chương 2: Hiệu năng Thực nghiệm Hiệu năng thu hồi logit trên bài toán needle MK-NIAH tăng 175% dưới điều kiện không truy xuất.",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "evidence": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "DOC_1791271048929_45bf10::P001",
+            "document_id": "DOC_1791271048929_45bf10",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 2: Hiệu năng Thực nghiệm",
+            "paragraph_index": 1,
+            "score": 31.2949,
+            "text": "# Chương 2: Hiệu năng Thực nghiệm Hiệu năng thu hồi logit trên bài toán needle MK-NIAH tăng 175% dưới điều kiện không truy xuất.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 2,
+            "citation_label": "[2]",
+            "passage_id": "DOC_1791271306897_51a76d::P001",
+            "document_id": "DOC_1791271306897_51a76d",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 2: Hiệu năng Thực nghiệm",
+            "paragraph_index": 2,
+            "score": 31.2949,
+            "text": "# Chương 2: Hiệu năng Thực nghiệm Hiệu năng thu hồi logit trên bài toán needle MK-NIAH tăng 175% dưới điều kiện không truy xuất.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 3,
+            "citation_label": "[3]",
+            "passage_id": "DOC_1791271682090_2ca48d::P001",
+            "document_id": "DOC_1791271682090_2ca48d",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 2: Hiệu năng Thực nghiệm",
+            "paragraph_index": 3,
+            "score": 31.2949,
+            "text": "# Chương 2: Hiệu năng Thực nghiệm Hiệu năng thu hồi logit trên bài toán needle MK-NIAH tăng 175% dưới điều kiện không truy xuất.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 4,
+            "citation_label": "[4]",
+            "passage_id": "DOC_1791271952866_dc50af::P001",
+            "document_id": "DOC_1791271952866_dc50af",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 2: Hiệu năng Thực nghiệm",
+            "paragraph_index": 4,
+            "score": 31.2949,
+            "text": "# Chương 2: Hiệu năng Thực nghiệm Hiệu năng thu hồi logit trên bài toán needle MK-NIAH tăng 175% dưới điều kiện không truy xuất.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 5,
+            "citation_label": "[5]",
+            "passage_id": "DOC_1791272033915_0080c3::P001",
+            "document_id": "DOC_1791272033915_0080c3",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 2: Hiệu năng Thực nghiệm",
+            "paragraph_index": 5,
+            "score": 31.2949,
+            "text": "# Chương 2: Hiệu năng Thực nghiệm Hiệu năng thu hồi logit trên bài toán needle MK-NIAH tăng 175% dưới điều kiện không truy xuất.",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "telemetry": {
+          "input_tokens": 264,
+          "output_tokens": 171,
+          "total_tokens": 435,
+          "total_latency_ms": 7.05,
+          "retrieval_ms": 6.13,
+          "generation_ms": 0.01
+        },
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {
+          "routing": "DIRECT_LOOKUP",
+          "route_explanation": "Đã tìm thấy bằng chứng xác thực trong tài liệu.",
+          "effective_query": "Hiệu năng trên bài toán MK-NIAH tăng bao nhiêu phần trăm?",
+          "is_follow_up": false,
+          "attached_document_count": 0,
+          "evidence_count": 5,
+          "refusal_reason": null,
+          "memory_level": "Level 3 (SA-CMS Gated Multi-Level)"
+        }
+      }
+    ]
+  },
+  {
+    "session_id": "chat_bf4ca85a97da",
+    "title": "Phiên Lưu Trữ Bền Vững",
+    "document_ids": [],
+    "created_at": 1791283100.465032,
+    "updated_at": 1791283100.4941819,
+    "messages": [
+      {
+        "id": "msg_1ad2775d07",
+        "role": "user",
+        "content": "Tin nhắn thử nghiệm kiểm tra tính bền vững.",
+        "timestamp": 1791283100.4841,
+        "citations": [],
+        "evidence": [],
+        "telemetry": {},
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {}
+      },
+      {
+        "id": "msg_a284ced706",
+        "role": "assistant",
+        "content": "Dựa trên tài liệu đã cung cấp, Đề tài nghiên cứu sinh ra nhằm giải quyết hiện tượng suy giảm ngữ cảnh của mô hình ngôn ngữ khi xử lý văn bản dài. [1] Cụ thể: Khung kiến trúc Continuum Memory System (CMS) phân tách các tầng bộ nhớ thành nhiều thang thời gian khác nhau để ghi nhớ thông tin một cách bền vững.\n\n### Nguồn tham khảo\n[1] **Nghiên cứu Hệ thống Bộ nhớ Đa quy mô SA-CMS trong Mô hình Ngôn ngữ** — Phần nội dung — Đoạn 1\n\n[2] **Tài liệu Nghiên cứu Lưu trữ Bền vững** — Mục 1: Tri thức Cốt lõi — Đoạn 2\n\n[3] **Tài liệu Nghiên cứu Lưu trữ Bền vững** — Mục 1: Tri thức Cốt lõi — Đoạn 3\n\n[4] **Tài liệu Nghiên cứu Lưu trữ Bền vững** — Mục 1: Tri thức Cốt lõi — Đoạn 4\n\n[5] **Tài liệu Nghiên cứu Lưu trữ Bền vững** — Mục 1: Tri thức Cốt lõi — Đoạn 5",
+        "timestamp": 1791283100.4941819,
+        "citations": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "VN_DOC_001::P001",
+            "document_id": "VN_DOC_001",
+            "document_title": "Nghiên cứu Hệ thống Bộ nhớ Đa quy mô SA-CMS trong Mô hình Ngôn ngữ",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 1,
+            "score": 13.1303,
+            "text": "Đề tài nghiên cứu sinh ra nhằm giải quyết hiện tượng suy giảm ngữ cảnh của mô hình ngôn ngữ khi xử lý văn bản dài. Khung kiến trúc Continuum Memory System (CMS) phân tách các tầng bộ nhớ thành nhiều thang thời gian khác nhau để ghi nhớ thông tin một cách bền vững.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 2,
+            "citation_label": "[2]",
+            "passage_id": "DOC_1791273529914_47066c::P000",
+            "document_id": "DOC_1791273529914_47066c",
+            "document_title": "Tài liệu Nghiên cứu Lưu trữ Bền vững",
+            "section_title": "Mục 1: Tri thức Cốt lõi",
+            "paragraph_index": 2,
+            "score": 9.7094,
+            "text": "# Mục 1: Tri thức Cốt lõi Đặc tính quan trọng của SA-CMS là lưu trữ tri thức tham số hóa cục bộ ngay cả khi ngắt kết nối mạng. # Mục 2: Kiểm thử",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 3,
+            "citation_label": "[3]",
+            "passage_id": "DOC_1791273624201_8c7163::P000",
+            "document_id": "DOC_1791273624201_8c7163",
+            "document_title": "Tài liệu Nghiên cứu Lưu trữ Bền vững",
+            "section_title": "Mục 1: Tri thức Cốt lõi",
+            "paragraph_index": 3,
+            "score": 9.7094,
+            "text": "# Mục 1: Tri thức Cốt lõi Đặc tính quan trọng của SA-CMS là lưu trữ tri thức tham số hóa cục bộ ngay cả khi ngắt kết nối mạng. # Mục 2: Kiểm thử",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 4,
+            "citation_label": "[4]",
+            "passage_id": "DOC_1791274450135_c31b43::P000",
+            "document_id": "DOC_1791274450135_c31b43",
+            "document_title": "Tài liệu Nghiên cứu Lưu trữ Bền vững",
+            "section_title": "Mục 1: Tri thức Cốt lõi",
+            "paragraph_index": 4,
+            "score": 9.7094,
+            "text": "# Mục 1: Tri thức Cốt lõi Đặc tính quan trọng của SA-CMS là lưu trữ tri thức tham số hóa cục bộ ngay cả khi ngắt kết nối mạng. # Mục 2: Kiểm thử",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 5,
+            "citation_label": "[5]",
+            "passage_id": "DOC_1791274542551_d13cb6::P000",
+            "document_id": "DOC_1791274542551_d13cb6",
+            "document_title": "Tài liệu Nghiên cứu Lưu trữ Bền vững",
+            "section_title": "Mục 1: Tri thức Cốt lõi",
+            "paragraph_index": 5,
+            "score": 9.7094,
+            "text": "# Mục 1: Tri thức Cốt lõi Đặc tính quan trọng của SA-CMS là lưu trữ tri thức tham số hóa cục bộ ngay cả khi ngắt kết nối mạng. # Mục 2: Kiểm thử",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "evidence": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "VN_DOC_001::P001",
+            "document_id": "VN_DOC_001",
+            "document_title": "Nghiên cứu Hệ thống Bộ nhớ Đa quy mô SA-CMS trong Mô hình Ngôn ngữ",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 1,
+            "score": 13.1303,
+            "text": "Đề tài nghiên cứu sinh ra nhằm giải quyết hiện tượng suy giảm ngữ cảnh của mô hình ngôn ngữ khi xử lý văn bản dài. Khung kiến trúc Continuum Memory System (CMS) phân tách các tầng bộ nhớ thành nhiều thang thời gian khác nhau để ghi nhớ thông tin một cách bền vững.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 2,
+            "citation_label": "[2]",
+            "passage_id": "DOC_1791273529914_47066c::P000",
+            "document_id": "DOC_1791273529914_47066c",
+            "document_title": "Tài liệu Nghiên cứu Lưu trữ Bền vững",
+            "section_title": "Mục 1: Tri thức Cốt lõi",
+            "paragraph_index": 2,
+            "score": 9.7094,
+            "text": "# Mục 1: Tri thức Cốt lõi Đặc tính quan trọng của SA-CMS là lưu trữ tri thức tham số hóa cục bộ ngay cả khi ngắt kết nối mạng. # Mục 2: Kiểm thử",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 3,
+            "citation_label": "[3]",
+            "passage_id": "DOC_1791273624201_8c7163::P000",
+            "document_id": "DOC_1791273624201_8c7163",
+            "document_title": "Tài liệu Nghiên cứu Lưu trữ Bền vững",
+            "section_title": "Mục 1: Tri thức Cốt lõi",
+            "paragraph_index": 3,
+            "score": 9.7094,
+            "text": "# Mục 1: Tri thức Cốt lõi Đặc tính quan trọng của SA-CMS là lưu trữ tri thức tham số hóa cục bộ ngay cả khi ngắt kết nối mạng. # Mục 2: Kiểm thử",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 4,
+            "citation_label": "[4]",
+            "passage_id": "DOC_1791274450135_c31b43::P000",
+            "document_id": "DOC_1791274450135_c31b43",
+            "document_title": "Tài liệu Nghiên cứu Lưu trữ Bền vững",
+            "section_title": "Mục 1: Tri thức Cốt lõi",
+            "paragraph_index": 4,
+            "score": 9.7094,
+            "text": "# Mục 1: Tri thức Cốt lõi Đặc tính quan trọng của SA-CMS là lưu trữ tri thức tham số hóa cục bộ ngay cả khi ngắt kết nối mạng. # Mục 2: Kiểm thử",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 5,
+            "citation_label": "[5]",
+            "passage_id": "DOC_1791274542551_d13cb6::P000",
+            "document_id": "DOC_1791274542551_d13cb6",
+            "document_title": "Tài liệu Nghiên cứu Lưu trữ Bền vững",
+            "section_title": "Mục 1: Tri thức Cốt lõi",
+            "paragraph_index": 5,
+            "score": 9.7094,
+            "text": "# Mục 1: Tri thức Cốt lõi Đặc tính quan trọng của SA-CMS là lưu trữ tri thức tham số hóa cục bộ ngay cả khi ngắt kết nối mạng. # Mục 2: Kiểm thử",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "telemetry": {
+          "input_tokens": 262,
+          "output_tokens": 226,
+          "total_tokens": 488,
+          "total_latency_ms": 5.73,
+          "retrieval_ms": 4.8,
+          "generation_ms": 0.01
+        },
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {
+          "routing": "DIRECT_LOOKUP",
+          "route_explanation": "Đã tìm thấy bằng chứng xác thực trong tài liệu.",
+          "effective_query": "Tin nhắn thử nghiệm kiểm tra tính bền vững.",
+          "is_follow_up": false,
+          "attached_document_count": 0,
+          "evidence_count": 5,
+          "refusal_reason": null,
+          "memory_level": "Level 3 (SA-CMS Gated Multi-Level)"
+        }
+      }
+    ]
+  },
+  {
+    "session_id": "chat_aee2320d9f7f",
+    "title": "Session Without Document Context",
+    "document_ids": [],
+    "created_at": 1791283101.6523404,
+    "updated_at": 1791283101.698861,
+    "messages": [
+      {
+        "id": "msg_030a6bd435",
+        "role": "user",
+        "content": "Đặc tính quan trọng của SA-CMS là gì?",
+        "timestamp": 1791283101.698861,
+        "citations": [],
+        "evidence": [],
+        "telemetry": {},
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {}
+      },
+      {
+        "id": "msg_b420b20d7f",
+        "role": "assistant",
+        "content": "Dựa trên tài liệu đã cung cấp, # Mục 1: Tri thức Cốt lõi Đặc tính quan trọng của SA-CMS là lưu trữ tri thức tham số hóa cục bộ ngay cả khi ngắt kết nối mạng. [1] Cụ thể: # Mục 2: Kiểm thử.\n\n### Nguồn tham khảo\n[1] **Tài liệu Nghiên cứu Lưu trữ Bền vững** — Mục 1: Tri thức Cốt lõi — Đoạn 1\n\n[2] **Tài liệu Nghiên cứu Lưu trữ Bền vững** — Mục 1: Tri thức Cốt lõi — Đoạn 2\n\n[3] **Tài liệu Nghiên cứu Lưu trữ Bền vững** — Mục 1: Tri thức Cốt lõi — Đoạn 3\n\n[4] **Tài liệu Nghiên cứu Lưu trữ Bền vững** — Mục 1: Tri thức Cốt lõi — Đoạn 4\n\n[5] **Tài liệu Nghiên cứu Lưu trữ Bền vững** — Mục 1: Tri thức Cốt lõi — Đoạn 5",
+        "timestamp": 1791283101.698861,
+        "citations": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "DOC_1791273529914_47066c::P000",
+            "document_id": "DOC_1791273529914_47066c",
+            "document_title": "Tài liệu Nghiên cứu Lưu trữ Bền vững",
+            "section_title": "Mục 1: Tri thức Cốt lõi",
+            "paragraph_index": 1,
+            "score": 18.9149,
+            "text": "# Mục 1: Tri thức Cốt lõi Đặc tính quan trọng của SA-CMS là lưu trữ tri thức tham số hóa cục bộ ngay cả khi ngắt kết nối mạng. # Mục 2: Kiểm thử",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 2,
+            "citation_label": "[2]",
+            "passage_id": "DOC_1791273624201_8c7163::P000",
+            "document_id": "DOC_1791273624201_8c7163",
+            "document_title": "Tài liệu Nghiên cứu Lưu trữ Bền vững",
+            "section_title": "Mục 1: Tri thức Cốt lõi",
+            "paragraph_index": 2,
+            "score": 18.9149,
+            "text": "# Mục 1: Tri thức Cốt lõi Đặc tính quan trọng của SA-CMS là lưu trữ tri thức tham số hóa cục bộ ngay cả khi ngắt kết nối mạng. # Mục 2: Kiểm thử",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 3,
+            "citation_label": "[3]",
+            "passage_id": "DOC_1791274450135_c31b43::P000",
+            "document_id": "DOC_1791274450135_c31b43",
+            "document_title": "Tài liệu Nghiên cứu Lưu trữ Bền vững",
+            "section_title": "Mục 1: Tri thức Cốt lõi",
+            "paragraph_index": 3,
+            "score": 18.9149,
+            "text": "# Mục 1: Tri thức Cốt lõi Đặc tính quan trọng của SA-CMS là lưu trữ tri thức tham số hóa cục bộ ngay cả khi ngắt kết nối mạng. # Mục 2: Kiểm thử",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 4,
+            "citation_label": "[4]",
+            "passage_id": "DOC_1791274542551_d13cb6::P000",
+            "document_id": "DOC_1791274542551_d13cb6",
+            "document_title": "Tài liệu Nghiên cứu Lưu trữ Bền vững",
+            "section_title": "Mục 1: Tri thức Cốt lõi",
+            "paragraph_index": 4,
+            "score": 18.9149,
+            "text": "# Mục 1: Tri thức Cốt lõi Đặc tính quan trọng của SA-CMS là lưu trữ tri thức tham số hóa cục bộ ngay cả khi ngắt kết nối mạng. # Mục 2: Kiểm thử",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 5,
+            "citation_label": "[5]",
+            "passage_id": "DOC_1791276830784_3a2ad9::P000",
+            "document_id": "DOC_1791276830784_3a2ad9",
+            "document_title": "Tài liệu Nghiên cứu Lưu trữ Bền vững",
+            "section_title": "Mục 1: Tri thức Cốt lõi",
+            "paragraph_index": 5,
+            "score": 18.9149,
+            "text": "# Mục 1: Tri thức Cốt lõi Đặc tính quan trọng của SA-CMS là lưu trữ tri thức tham số hóa cục bộ ngay cả khi ngắt kết nối mạng. # Mục 2: Kiểm thử",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "evidence": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "DOC_1791273529914_47066c::P000",
+            "document_id": "DOC_1791273529914_47066c",
+            "document_title": "Tài liệu Nghiên cứu Lưu trữ Bền vững",
+            "section_title": "Mục 1: Tri thức Cốt lõi",
+            "paragraph_index": 1,
+            "score": 18.9149,
+            "text": "# Mục 1: Tri thức Cốt lõi Đặc tính quan trọng của SA-CMS là lưu trữ tri thức tham số hóa cục bộ ngay cả khi ngắt kết nối mạng. # Mục 2: Kiểm thử",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 2,
+            "citation_label": "[2]",
+            "passage_id": "DOC_1791273624201_8c7163::P000",
+            "document_id": "DOC_1791273624201_8c7163",
+            "document_title": "Tài liệu Nghiên cứu Lưu trữ Bền vững",
+            "section_title": "Mục 1: Tri thức Cốt lõi",
+            "paragraph_index": 2,
+            "score": 18.9149,
+            "text": "# Mục 1: Tri thức Cốt lõi Đặc tính quan trọng của SA-CMS là lưu trữ tri thức tham số hóa cục bộ ngay cả khi ngắt kết nối mạng. # Mục 2: Kiểm thử",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 3,
+            "citation_label": "[3]",
+            "passage_id": "DOC_1791274450135_c31b43::P000",
+            "document_id": "DOC_1791274450135_c31b43",
+            "document_title": "Tài liệu Nghiên cứu Lưu trữ Bền vững",
+            "section_title": "Mục 1: Tri thức Cốt lõi",
+            "paragraph_index": 3,
+            "score": 18.9149,
+            "text": "# Mục 1: Tri thức Cốt lõi Đặc tính quan trọng của SA-CMS là lưu trữ tri thức tham số hóa cục bộ ngay cả khi ngắt kết nối mạng. # Mục 2: Kiểm thử",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 4,
+            "citation_label": "[4]",
+            "passage_id": "DOC_1791274542551_d13cb6::P000",
+            "document_id": "DOC_1791274542551_d13cb6",
+            "document_title": "Tài liệu Nghiên cứu Lưu trữ Bền vững",
+            "section_title": "Mục 1: Tri thức Cốt lõi",
+            "paragraph_index": 4,
+            "score": 18.9149,
+            "text": "# Mục 1: Tri thức Cốt lõi Đặc tính quan trọng của SA-CMS là lưu trữ tri thức tham số hóa cục bộ ngay cả khi ngắt kết nối mạng. # Mục 2: Kiểm thử",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 5,
+            "citation_label": "[5]",
+            "passage_id": "DOC_1791276830784_3a2ad9::P000",
+            "document_id": "DOC_1791276830784_3a2ad9",
+            "document_title": "Tài liệu Nghiên cứu Lưu trữ Bền vững",
+            "section_title": "Mục 1: Tri thức Cốt lõi",
+            "paragraph_index": 5,
+            "score": 18.9149,
+            "text": "# Mục 1: Tri thức Cốt lõi Đặc tính quan trọng của SA-CMS là lưu trữ tri thức tham số hóa cục bộ ngay cả khi ngắt kết nối mạng. # Mục 2: Kiểm thử",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "telemetry": {
+          "input_tokens": 260,
+          "output_tokens": 194,
+          "total_tokens": 454,
+          "total_latency_ms": 5.77,
+          "retrieval_ms": 4.89,
+          "generation_ms": 0.01
+        },
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {
+          "routing": "DIRECT_LOOKUP",
+          "route_explanation": "Đã tìm thấy bằng chứng xác thực trong tài liệu.",
+          "effective_query": "Đặc tính quan trọng của SA-CMS là gì?",
+          "is_follow_up": false,
+          "attached_document_count": 0,
+          "evidence_count": 5,
+          "refusal_reason": null,
+          "memory_level": "Level 3 (SA-CMS Gated Multi-Level)"
+        }
+      }
+    ]
+  },
+  {
+    "session_id": "chat_c2d2a46aaff1",
+    "title": "Phiên Thử Nghiệm Khởi Động Lại",
+    "document_ids": [],
+    "created_at": 1791283101.7373295,
+    "updated_at": 1791283101.8724983,
+    "messages": [
+      {
+        "id": "msg_97c1bc6ea6",
+        "role": "user",
+        "content": "Kiến trúc SA-CMS áp dụng mấy cấp độ bộ nhớ?",
+        "timestamp": 1791283101.7679422,
+        "citations": [],
+        "evidence": [],
+        "telemetry": {},
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {}
+      },
+      {
+        "id": "msg_fd3506f392",
+        "role": "assistant",
+        "content": "Dựa trên tài liệu đã cung cấp, # Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. [1] Cụ thể: # Chương 2: Hiệu năng Thực nghiệm.\n\n### Nguồn tham khảo\n[1] **Tài liệu Nghiên cứu SA-CMS Mẫu Offline** — Chương 1: Kiến trúc Bộ nhớ — Đoạn 1\n\n[2] **Tài liệu Nghiên cứu SA-CMS Mẫu Offline** — Chương 1: Kiến trúc Bộ nhớ — Đoạn 2\n\n[3] **Tài liệu Nghiên cứu SA-CMS Mẫu Offline** — Chương 1: Kiến trúc Bộ nhớ — Đoạn 3\n\n[4] **Tài liệu Nghiên cứu SA-CMS Mẫu Offline** — Chương 1: Kiến trúc Bộ nhớ — Đoạn 4\n\n[5] **Tài liệu Nghiên cứu SA-CMS Mẫu Offline** — Chương 1: Kiến trúc Bộ nhớ — Đoạn 5",
+        "timestamp": 1791283101.782203,
+        "citations": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "DOC_1791271048929_45bf10::P000",
+            "document_id": "DOC_1791271048929_45bf10",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 1,
+            "score": 25.5149,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 2,
+            "citation_label": "[2]",
+            "passage_id": "DOC_1791271306897_51a76d::P000",
+            "document_id": "DOC_1791271306897_51a76d",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 2,
+            "score": 25.5149,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 3,
+            "citation_label": "[3]",
+            "passage_id": "DOC_1791271682090_2ca48d::P000",
+            "document_id": "DOC_1791271682090_2ca48d",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 3,
+            "score": 25.5149,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 4,
+            "citation_label": "[4]",
+            "passage_id": "DOC_1791271952866_dc50af::P000",
+            "document_id": "DOC_1791271952866_dc50af",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 4,
+            "score": 25.5149,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 5,
+            "citation_label": "[5]",
+            "passage_id": "DOC_1791272033915_0080c3::P000",
+            "document_id": "DOC_1791272033915_0080c3",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 5,
+            "score": 25.5149,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "evidence": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "DOC_1791271048929_45bf10::P000",
+            "document_id": "DOC_1791271048929_45bf10",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 1,
+            "score": 25.5149,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 2,
+            "citation_label": "[2]",
+            "passage_id": "DOC_1791271306897_51a76d::P000",
+            "document_id": "DOC_1791271306897_51a76d",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 2,
+            "score": 25.5149,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 3,
+            "citation_label": "[3]",
+            "passage_id": "DOC_1791271682090_2ca48d::P000",
+            "document_id": "DOC_1791271682090_2ca48d",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 3,
+            "score": 25.5149,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 4,
+            "citation_label": "[4]",
+            "passage_id": "DOC_1791271952866_dc50af::P000",
+            "document_id": "DOC_1791271952866_dc50af",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 4,
+            "score": 25.5149,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 5,
+            "citation_label": "[5]",
+            "passage_id": "DOC_1791272033915_0080c3::P000",
+            "document_id": "DOC_1791272033915_0080c3",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 5,
+            "score": 25.5149,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "telemetry": {
+          "input_tokens": 263,
+          "output_tokens": 195,
+          "total_tokens": 458,
+          "total_latency_ms": 14.03,
+          "retrieval_ms": 12.6,
+          "generation_ms": 0.01
+        },
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {
+          "routing": "DIRECT_LOOKUP",
+          "route_explanation": "Đã tìm thấy bằng chứng xác thực trong tài liệu.",
+          "effective_query": "Kiến trúc SA-CMS áp dụng mấy cấp độ bộ nhớ?",
+          "is_follow_up": false,
+          "attached_document_count": 0,
+          "evidence_count": 5,
+          "refusal_reason": null,
+          "memory_level": "Level 3 (SA-CMS Gated Multi-Level)"
+        }
+      },
+      {
+        "id": "msg_e2888859ca",
+        "role": "user",
+        "content": "Kiến trúc SA-CMS áp dụng mấy cấp độ bộ nhớ?",
+        "timestamp": 1791283101.858607,
+        "citations": [],
+        "evidence": [],
+        "telemetry": {},
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {}
+      },
+      {
+        "id": "msg_a6d7c1f188",
+        "role": "assistant",
+        "content": "Dựa trên tài liệu đã cung cấp, # Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. [1] Cụ thể: # Chương 2: Hiệu năng Thực nghiệm.\n\n### Nguồn tham khảo\n[1] **Tài liệu Nghiên cứu SA-CMS Mẫu Offline** — Chương 1: Kiến trúc Bộ nhớ — Đoạn 1\n\n[2] **Tài liệu Nghiên cứu SA-CMS Mẫu Offline** — Chương 1: Kiến trúc Bộ nhớ — Đoạn 2\n\n[3] **Tài liệu Nghiên cứu SA-CMS Mẫu Offline** — Chương 1: Kiến trúc Bộ nhớ — Đoạn 3\n\n[4] **Tài liệu Nghiên cứu SA-CMS Mẫu Offline** — Chương 1: Kiến trúc Bộ nhớ — Đoạn 4\n\n[5] **Tài liệu Nghiên cứu SA-CMS Mẫu Offline** — Chương 1: Kiến trúc Bộ nhớ — Đoạn 5",
+        "timestamp": 1791283101.8724983,
+        "citations": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "DOC_1791271048929_45bf10::P000",
+            "document_id": "DOC_1791271048929_45bf10",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 1,
+            "score": 25.5149,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 2,
+            "citation_label": "[2]",
+            "passage_id": "DOC_1791271306897_51a76d::P000",
+            "document_id": "DOC_1791271306897_51a76d",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 2,
+            "score": 25.5149,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 3,
+            "citation_label": "[3]",
+            "passage_id": "DOC_1791271682090_2ca48d::P000",
+            "document_id": "DOC_1791271682090_2ca48d",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 3,
+            "score": 25.5149,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 4,
+            "citation_label": "[4]",
+            "passage_id": "DOC_1791271952866_dc50af::P000",
+            "document_id": "DOC_1791271952866_dc50af",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 4,
+            "score": 25.5149,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 5,
+            "citation_label": "[5]",
+            "passage_id": "DOC_1791272033915_0080c3::P000",
+            "document_id": "DOC_1791272033915_0080c3",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 5,
+            "score": 25.5149,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "evidence": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "DOC_1791271048929_45bf10::P000",
+            "document_id": "DOC_1791271048929_45bf10",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 1,
+            "score": 25.5149,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 2,
+            "citation_label": "[2]",
+            "passage_id": "DOC_1791271306897_51a76d::P000",
+            "document_id": "DOC_1791271306897_51a76d",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 2,
+            "score": 25.5149,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 3,
+            "citation_label": "[3]",
+            "passage_id": "DOC_1791271682090_2ca48d::P000",
+            "document_id": "DOC_1791271682090_2ca48d",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 3,
+            "score": 25.5149,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 4,
+            "citation_label": "[4]",
+            "passage_id": "DOC_1791271952866_dc50af::P000",
+            "document_id": "DOC_1791271952866_dc50af",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 4,
+            "score": 25.5149,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 5,
+            "citation_label": "[5]",
+            "passage_id": "DOC_1791272033915_0080c3::P000",
+            "document_id": "DOC_1791272033915_0080c3",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 5,
+            "score": 25.5149,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "telemetry": {
+          "input_tokens": 263,
+          "output_tokens": 195,
+          "total_tokens": 458,
+          "total_latency_ms": 10.2,
+          "retrieval_ms": 7.09,
+          "generation_ms": 0.03
+        },
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {
+          "routing": "DIRECT_LOOKUP",
+          "route_explanation": "Đã tìm thấy bằng chứng xác thực trong tài liệu.",
+          "effective_query": "Kiến trúc SA-CMS áp dụng mấy cấp độ bộ nhớ?",
+          "is_follow_up": false,
+          "attached_document_count": 0,
+          "evidence_count": 5,
+          "refusal_reason": null,
+          "memory_level": "Level 3 (SA-CMS Gated Multi-Level)"
+        }
+      }
+    ]
+  },
+  {
+    "session_id": "chat_23b27792554f",
+    "title": "Session Multi-doc",
+    "document_ids": [],
+    "created_at": 1791283205.0836573,
+    "updated_at": 1791283205.4817562,
+    "messages": []
+  },
+  {
+    "session_id": "chat_a54b8e84adac",
+    "title": "Session QA",
+    "document_ids": [],
+    "created_at": 1791283205.535789,
+    "updated_at": 1791283205.5581083,
+    "messages": [
+      {
+        "id": "msg_5547152428",
+        "role": "user",
+        "content": "Kiến trúc SA-CMS là gì?",
+        "timestamp": 1791283205.5581083,
+        "citations": [],
+        "evidence": [],
+        "telemetry": {},
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {}
+      },
+      {
+        "id": "msg_b7b269127a",
+        "role": "assistant",
+        "content": "Dựa trên tài liệu đã cung cấp, Kiến trúc 3 cấp độ SA-CMS. [1]\n\n### Nguồn tham khảo\n[1] **Nghiên cứu Hệ thống Bộ nhớ Đa quy mô SA-CMS trong Mô hình Ngôn ngữ** — Phần nội dung — Đoạn 1\n\n[2] **Tài liệu Nghiên cứu SA-CMS Mẫu Offline** — Chương 1: Kiến trúc Bộ nhớ — Đoạn 2\n\n[3] **Tài liệu Nghiên cứu SA-CMS Mẫu Offline** — Chương 1: Kiến trúc Bộ nhớ — Đoạn 3\n\n[4] **Tài liệu Nghiên cứu SA-CMS Mẫu Offline** — Chương 1: Kiến trúc Bộ nhớ — Đoạn 4\n\n[5] **Tài liệu Nghiên cứu SA-CMS Mẫu Offline** — Chương 1: Kiến trúc Bộ nhớ — Đoạn 5",
+        "timestamp": 1791283205.5581083,
+        "citations": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "VN_DOC_001::P003",
+            "document_id": "VN_DOC_001",
+            "document_title": "Nghiên cứu Hệ thống Bộ nhớ Đa quy mô SA-CMS trong Mô hình Ngôn ngữ",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 1,
+            "score": 13.9154,
+            "text": "## 2. Kiến trúc 3 cấp độ SA-CMS",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 2,
+            "citation_label": "[2]",
+            "passage_id": "DOC_1791271048929_45bf10::P000",
+            "document_id": "DOC_1791271048929_45bf10",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 2,
+            "score": 11.7884,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 3,
+            "citation_label": "[3]",
+            "passage_id": "DOC_1791271306897_51a76d::P000",
+            "document_id": "DOC_1791271306897_51a76d",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 3,
+            "score": 11.7884,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 4,
+            "citation_label": "[4]",
+            "passage_id": "DOC_1791271682090_2ca48d::P000",
+            "document_id": "DOC_1791271682090_2ca48d",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 4,
+            "score": 11.7884,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 5,
+            "citation_label": "[5]",
+            "passage_id": "DOC_1791271952866_dc50af::P000",
+            "document_id": "DOC_1791271952866_dc50af",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 5,
+            "score": 11.7884,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "evidence": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "VN_DOC_001::P003",
+            "document_id": "VN_DOC_001",
+            "document_title": "Nghiên cứu Hệ thống Bộ nhớ Đa quy mô SA-CMS trong Mô hình Ngôn ngữ",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 1,
+            "score": 13.9154,
+            "text": "## 2. Kiến trúc 3 cấp độ SA-CMS",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 2,
+            "citation_label": "[2]",
+            "passage_id": "DOC_1791271048929_45bf10::P000",
+            "document_id": "DOC_1791271048929_45bf10",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 2,
+            "score": 11.7884,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 3,
+            "citation_label": "[3]",
+            "passage_id": "DOC_1791271306897_51a76d::P000",
+            "document_id": "DOC_1791271306897_51a76d",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 3,
+            "score": 11.7884,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 4,
+            "citation_label": "[4]",
+            "passage_id": "DOC_1791271682090_2ca48d::P000",
+            "document_id": "DOC_1791271682090_2ca48d",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 4,
+            "score": 11.7884,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 5,
+            "citation_label": "[5]",
+            "passage_id": "DOC_1791271952866_dc50af::P000",
+            "document_id": "DOC_1791271952866_dc50af",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 5,
+            "score": 11.7884,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "telemetry": {
+          "input_tokens": 256,
+          "output_tokens": 152,
+          "total_tokens": 408,
+          "total_latency_ms": 4.88,
+          "retrieval_ms": 4.04,
+          "generation_ms": 0.01
+        },
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {
+          "routing": "DIRECT_LOOKUP",
+          "route_explanation": "Đã tìm thấy bằng chứng xác thực trong tài liệu.",
+          "effective_query": "Kiến trúc SA-CMS là gì?",
+          "is_follow_up": false,
+          "attached_document_count": 0,
+          "evidence_count": 5,
+          "refusal_reason": null,
+          "memory_level": "Level 3 (SA-CMS Gated Multi-Level)"
+        }
+      }
+    ]
+  },
+  {
+    "session_id": "chat_9923a410286b",
+    "title": "Session Refusal",
+    "document_ids": [],
+    "created_at": 1791283205.6083484,
+    "updated_at": 1791283205.627655,
+    "messages": [
+      {
+        "id": "msg_278225976f",
+        "role": "user",
+        "content": "Thủ đô của Nhật Bản là thành phố nào?",
+        "timestamp": 1791283205.627655,
+        "citations": [],
+        "evidence": [],
+        "telemetry": {},
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {}
+      },
+      {
+        "id": "msg_e425bf1e22",
+        "role": "assistant",
+        "content": "Tài liệu chưa đủ thông tin. Không tìm thấy đủ thông tin trong tài liệu để trả lời chắc chắn.",
+        "timestamp": 1791283205.627655,
+        "citations": [],
+        "evidence": [],
+        "telemetry": {
+          "input_tokens": 42,
+          "output_tokens": 27,
+          "total_tokens": 69,
+          "total_latency_ms": 0.09,
+          "retrieval_ms": 0.0,
+          "generation_ms": 0.0
+        },
+        "routing": "UNANSWERABLE",
+        "refused": true,
+        "refusal_reason": "UNANSWERABLE",
+        "diagnostics": {
+          "routing": "UNANSWERABLE",
+          "route_explanation": "Tài liệu bạn cung cấp không có thông tin để trả lời câu hỏi này.",
+          "effective_query": "Thủ đô của Nhật Bản là thành phố nào?",
+          "is_follow_up": false,
+          "attached_document_count": 0,
+          "evidence_count": 0,
+          "refusal_reason": "UNANSWERABLE",
+          "memory_level": "Level 3 (SA-CMS Gated Multi-Level)"
+        }
+      }
+    ]
+  },
+  {
+    "session_id": "chat_200a4f42b2a9",
+    "title": "Session Lengths",
+    "document_ids": [],
+    "created_at": 1791283205.6581368,
+    "updated_at": 1791283205.7197273,
+    "messages": [
+      {
+        "id": "msg_2502580ee3",
+        "role": "user",
+        "content": "SA-CMS hoạt động như thế nào?",
+        "timestamp": 1791283205.681541,
+        "citations": [],
+        "evidence": [],
+        "telemetry": {},
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {}
+      },
+      {
+        "id": "msg_11f2ea5a91",
+        "role": "assistant",
+        "content": "Cấp độ 2 là Section Memory hoạt động ở thang thời gian trung bình, thực hiện tích lũy và cập nhật gradient tại ranh giới kết thúc mỗi đề mục của tài liệu. [1]\n\n### Nguồn tham khảo\n[1] **Nghiên cứu Hệ thống Bộ nhớ Đa quy mô SA-CMS trong Mô hình Ngôn ngữ** — Phần nội dung — Đoạn 1\n\n[2] **Nghiên cứu Hệ thống Bộ nhớ Đa quy mô SA-CMS trong Mô hình Ngôn ngữ** — Phần nội dung — Đoạn 2\n\n[3] **Pldc Da Xoa Abc Du Thua** — Phần nội dung — Đoạn 3\n\n[4] **Cơ chế Bộ nhớ Đa quy mô và Khối Giao tiếp Liên cấp trong Mô hình Ngôn ngữ** — 1. Giới thiệu Kiến trúc Bộ nhớ Đa quy mô — Đoạn 4\n\n[5] **Cơ chế Bộ nhớ Đa quy mô và Khối Giao tiếp Liên cấp trong Mô hình Ngôn ngữ** — 1. Giới thiệu Kiến trúc Bộ nhớ Đa quy mô — Đoạn 5",
+        "timestamp": 1791283205.6891708,
+        "citations": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "VN_DOC_001::P005",
+            "document_id": "VN_DOC_001",
+            "document_title": "Nghiên cứu Hệ thống Bộ nhớ Đa quy mô SA-CMS trong Mô hình Ngôn ngữ",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 1,
+            "score": 8.9237,
+            "text": "Cấp độ 2 là Section Memory hoạt động ở thang thời gian trung bình, thực hiện tích lũy và cập nhật gradient tại ranh giới kết thúc mỗi đề mục của tài liệu.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 2,
+            "citation_label": "[2]",
+            "passage_id": "VN_DOC_001::P006",
+            "document_id": "VN_DOC_001",
+            "document_title": "Nghiên cứu Hệ thống Bộ nhớ Đa quy mô SA-CMS trong Mô hình Ngôn ngữ",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 2,
+            "score": 8.8191,
+            "text": "Cấp độ 3 là Document Memory hoạt động ở thang thời gian chậm nhất, ghi lại biểu diễn trừu tượng bất biến toàn cục của toàn bộ tài liệu khi hoàn thành lượt đọc.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 3,
+            "citation_label": "[3]",
+            "passage_id": "DOC_1791119854::P181",
+            "document_id": "DOC_1791119854",
+            "document_title": "Pldc Da Xoa Abc Du Thua",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 3,
+            "score": 8.248,
+            "text": "Nguyên nhân cốt lõi của sự ra đời nhà nước là: A.Kết quả của nền sản xuất hàng hoá cùng những hoạt động thương nghiệp. B.Kết quả của 03 lần phân công lao động trong lịch sử. C.Nhu cầu về sự cần thiết phải có một tổ chức để dập tắt xung đột giai cấp.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 4,
+            "citation_label": "[4]",
+            "passage_id": "DEMO_DOC_001::P002",
+            "document_id": "DEMO_DOC_001",
+            "document_title": "Cơ chế Bộ nhớ Đa quy mô và Khối Giao tiếp Liên cấp trong Mô hình Ngôn ngữ",
+            "section_title": "1. Giới thiệu Kiến trúc Bộ nhớ Đa quy mô",
+            "paragraph_index": 4,
+            "score": 8.1611,
+            "text": "Hệ thống bộ nhớ liên tục (Continuum Memory System - CMS) giải quyết vấn đề này bằng cách thiết lập nhiều tầng bộ nhớ tham số hoạt động ở các chu kỳ thời gian khác nhau. Tầng 1 (Level 1) chịu trách nhiệm thích ứng ở cấp độ đoạn văn (paragraph), bắt giữ các chuyển tiếp cục bộ và từ vựng ngắn hạn.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 5,
+            "citation_label": "[5]",
+            "passage_id": "DEMO_DOC_001::P001",
+            "document_id": "DEMO_DOC_001",
+            "document_title": "Cơ chế Bộ nhớ Đa quy mô và Khối Giao tiếp Liên cấp trong Mô hình Ngôn ngữ",
+            "section_title": "1. Giới thiệu Kiến trúc Bộ nhớ Đa quy mô",
+            "paragraph_index": 5,
+            "score": 7.6782,
+            "text": "Trong các mô hình ngôn ngữ hiện đại, việc xử lý văn bản dài thường gặp thách thức lớn về chi phí bộ nhớ và sự suy giảm chú ý (attention dilution). Hệ thống bộ nhớ liên tục (Continuum Memory System - CMS) giải quyết vấn đề này bằng cách thiết lập nhiều tầng bộ nhớ tham số hoạt động ở các chu kỳ thời gian khác nhau.",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "evidence": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "VN_DOC_001::P005",
+            "document_id": "VN_DOC_001",
+            "document_title": "Nghiên cứu Hệ thống Bộ nhớ Đa quy mô SA-CMS trong Mô hình Ngôn ngữ",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 1,
+            "score": 8.9237,
+            "text": "Cấp độ 2 là Section Memory hoạt động ở thang thời gian trung bình, thực hiện tích lũy và cập nhật gradient tại ranh giới kết thúc mỗi đề mục của tài liệu.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 2,
+            "citation_label": "[2]",
+            "passage_id": "VN_DOC_001::P006",
+            "document_id": "VN_DOC_001",
+            "document_title": "Nghiên cứu Hệ thống Bộ nhớ Đa quy mô SA-CMS trong Mô hình Ngôn ngữ",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 2,
+            "score": 8.8191,
+            "text": "Cấp độ 3 là Document Memory hoạt động ở thang thời gian chậm nhất, ghi lại biểu diễn trừu tượng bất biến toàn cục của toàn bộ tài liệu khi hoàn thành lượt đọc.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 3,
+            "citation_label": "[3]",
+            "passage_id": "DOC_1791119854::P181",
+            "document_id": "DOC_1791119854",
+            "document_title": "Pldc Da Xoa Abc Du Thua",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 3,
+            "score": 8.248,
+            "text": "Nguyên nhân cốt lõi của sự ra đời nhà nước là: A.Kết quả của nền sản xuất hàng hoá cùng những hoạt động thương nghiệp. B.Kết quả của 03 lần phân công lao động trong lịch sử. C.Nhu cầu về sự cần thiết phải có một tổ chức để dập tắt xung đột giai cấp.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 4,
+            "citation_label": "[4]",
+            "passage_id": "DEMO_DOC_001::P002",
+            "document_id": "DEMO_DOC_001",
+            "document_title": "Cơ chế Bộ nhớ Đa quy mô và Khối Giao tiếp Liên cấp trong Mô hình Ngôn ngữ",
+            "section_title": "1. Giới thiệu Kiến trúc Bộ nhớ Đa quy mô",
+            "paragraph_index": 4,
+            "score": 8.1611,
+            "text": "Hệ thống bộ nhớ liên tục (Continuum Memory System - CMS) giải quyết vấn đề này bằng cách thiết lập nhiều tầng bộ nhớ tham số hoạt động ở các chu kỳ thời gian khác nhau. Tầng 1 (Level 1) chịu trách nhiệm thích ứng ở cấp độ đoạn văn (paragraph), bắt giữ các chuyển tiếp cục bộ và từ vựng ngắn hạn.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 5,
+            "citation_label": "[5]",
+            "passage_id": "DEMO_DOC_001::P001",
+            "document_id": "DEMO_DOC_001",
+            "document_title": "Cơ chế Bộ nhớ Đa quy mô và Khối Giao tiếp Liên cấp trong Mô hình Ngôn ngữ",
+            "section_title": "1. Giới thiệu Kiến trúc Bộ nhớ Đa quy mô",
+            "paragraph_index": 5,
+            "score": 7.6782,
+            "text": "Trong các mô hình ngôn ngữ hiện đại, việc xử lý văn bản dài thường gặp thách thức lớn về chi phí bộ nhớ và sự suy giảm chú ý (attention dilution). Hệ thống bộ nhớ liên tục (Continuum Memory System - CMS) giải quyết vấn đề này bằng cách thiết lập nhiều tầng bộ nhớ tham số hoạt động ở các chu kỳ thời gian khác nhau.",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "telemetry": {
+          "input_tokens": 258,
+          "output_tokens": 221,
+          "total_tokens": 479,
+          "total_latency_ms": 7.46,
+          "retrieval_ms": 4.3,
+          "generation_ms": 0.01
+        },
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {
+          "routing": "DIRECT_LOOKUP",
+          "route_explanation": "Đã tìm thấy bằng chứng xác thực trong tài liệu.",
+          "effective_query": "SA-CMS hoạt động như thế nào?",
+          "is_follow_up": false,
+          "attached_document_count": 0,
+          "evidence_count": 5,
+          "refusal_reason": null,
+          "memory_level": "Level 3 (SA-CMS Gated Multi-Level)"
+        }
+      },
+      {
+        "id": "msg_e1078d8e3b",
+        "role": "user",
+        "content": "SA-CMS hoạt động như thế nào?",
+        "timestamp": 1791283205.709635,
+        "citations": [],
+        "evidence": [],
+        "telemetry": {},
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {}
+      },
+      {
+        "id": "msg_3fafb00bb9",
+        "role": "assistant",
+        "content": "Trong tài liệu, Cấp độ 2 là Section Memory hoạt động ở thang thời gian trung bình, thực hiện tích lũy và cập nhật gradient tại ranh giới kết thúc mỗi đề mục của tài liệu. [1]\n\nBên cạnh đó, Cấp độ 3 là Document Memory hoạt động ở thang thời gian chậm nhất, ghi lại biểu diễn trừu tượng bất biến toàn cục của toàn bộ tài liệu khi hoàn thành lượt đọc. [2]\n\n### Nguồn tham khảo\n[1] **Nghiên cứu Hệ thống Bộ nhớ Đa quy mô SA-CMS trong Mô hình Ngôn ngữ** — Phần nội dung — Đoạn 1\n\n[2] **Nghiên cứu Hệ thống Bộ nhớ Đa quy mô SA-CMS trong Mô hình Ngôn ngữ** — Phần nội dung — Đoạn 2\n\n[3] **Pldc Da Xoa Abc Du Thua** — Phần nội dung — Đoạn 3\n\n[4] **Cơ chế Bộ nhớ Đa quy mô và Khối Giao tiếp Liên cấp trong Mô hình Ngôn ngữ** — 1. Giới thiệu Kiến trúc Bộ nhớ Đa quy mô — Đoạn 4\n\n[5] **Cơ chế Bộ nhớ Đa quy mô và Khối Giao tiếp Liên cấp trong Mô hình Ngôn ngữ** — 1. Giới thiệu Kiến trúc Bộ nhớ Đa quy mô — Đoạn 5",
+        "timestamp": 1791283205.7197273,
+        "citations": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "VN_DOC_001::P005",
+            "document_id": "VN_DOC_001",
+            "document_title": "Nghiên cứu Hệ thống Bộ nhớ Đa quy mô SA-CMS trong Mô hình Ngôn ngữ",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 1,
+            "score": 8.9237,
+            "text": "Cấp độ 2 là Section Memory hoạt động ở thang thời gian trung bình, thực hiện tích lũy và cập nhật gradient tại ranh giới kết thúc mỗi đề mục của tài liệu.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 2,
+            "citation_label": "[2]",
+            "passage_id": "VN_DOC_001::P006",
+            "document_id": "VN_DOC_001",
+            "document_title": "Nghiên cứu Hệ thống Bộ nhớ Đa quy mô SA-CMS trong Mô hình Ngôn ngữ",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 2,
+            "score": 8.8191,
+            "text": "Cấp độ 3 là Document Memory hoạt động ở thang thời gian chậm nhất, ghi lại biểu diễn trừu tượng bất biến toàn cục của toàn bộ tài liệu khi hoàn thành lượt đọc.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 3,
+            "citation_label": "[3]",
+            "passage_id": "DOC_1791119854::P181",
+            "document_id": "DOC_1791119854",
+            "document_title": "Pldc Da Xoa Abc Du Thua",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 3,
+            "score": 8.248,
+            "text": "Nguyên nhân cốt lõi của sự ra đời nhà nước là: A.Kết quả của nền sản xuất hàng hoá cùng những hoạt động thương nghiệp. B.Kết quả của 03 lần phân công lao động trong lịch sử. C.Nhu cầu về sự cần thiết phải có một tổ chức để dập tắt xung đột giai cấp.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 4,
+            "citation_label": "[4]",
+            "passage_id": "DEMO_DOC_001::P002",
+            "document_id": "DEMO_DOC_001",
+            "document_title": "Cơ chế Bộ nhớ Đa quy mô và Khối Giao tiếp Liên cấp trong Mô hình Ngôn ngữ",
+            "section_title": "1. Giới thiệu Kiến trúc Bộ nhớ Đa quy mô",
+            "paragraph_index": 4,
+            "score": 8.1611,
+            "text": "Hệ thống bộ nhớ liên tục (Continuum Memory System - CMS) giải quyết vấn đề này bằng cách thiết lập nhiều tầng bộ nhớ tham số hoạt động ở các chu kỳ thời gian khác nhau. Tầng 1 (Level 1) chịu trách nhiệm thích ứng ở cấp độ đoạn văn (paragraph), bắt giữ các chuyển tiếp cục bộ và từ vựng ngắn hạn.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 5,
+            "citation_label": "[5]",
+            "passage_id": "DEMO_DOC_001::P001",
+            "document_id": "DEMO_DOC_001",
+            "document_title": "Cơ chế Bộ nhớ Đa quy mô và Khối Giao tiếp Liên cấp trong Mô hình Ngôn ngữ",
+            "section_title": "1. Giới thiệu Kiến trúc Bộ nhớ Đa quy mô",
+            "paragraph_index": 5,
+            "score": 7.6782,
+            "text": "Trong các mô hình ngôn ngữ hiện đại, việc xử lý văn bản dài thường gặp thách thức lớn về chi phí bộ nhớ và sự suy giảm chú ý (attention dilution). Hệ thống bộ nhớ liên tục (Continuum Memory System - CMS) giải quyết vấn đề này bằng cách thiết lập nhiều tầng bộ nhớ tham số hoạt động ở các chu kỳ thời gian khác nhau.",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "evidence": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "VN_DOC_001::P005",
+            "document_id": "VN_DOC_001",
+            "document_title": "Nghiên cứu Hệ thống Bộ nhớ Đa quy mô SA-CMS trong Mô hình Ngôn ngữ",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 1,
+            "score": 8.9237,
+            "text": "Cấp độ 2 là Section Memory hoạt động ở thang thời gian trung bình, thực hiện tích lũy và cập nhật gradient tại ranh giới kết thúc mỗi đề mục của tài liệu.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 2,
+            "citation_label": "[2]",
+            "passage_id": "VN_DOC_001::P006",
+            "document_id": "VN_DOC_001",
+            "document_title": "Nghiên cứu Hệ thống Bộ nhớ Đa quy mô SA-CMS trong Mô hình Ngôn ngữ",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 2,
+            "score": 8.8191,
+            "text": "Cấp độ 3 là Document Memory hoạt động ở thang thời gian chậm nhất, ghi lại biểu diễn trừu tượng bất biến toàn cục của toàn bộ tài liệu khi hoàn thành lượt đọc.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 3,
+            "citation_label": "[3]",
+            "passage_id": "DOC_1791119854::P181",
+            "document_id": "DOC_1791119854",
+            "document_title": "Pldc Da Xoa Abc Du Thua",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 3,
+            "score": 8.248,
+            "text": "Nguyên nhân cốt lõi của sự ra đời nhà nước là: A.Kết quả của nền sản xuất hàng hoá cùng những hoạt động thương nghiệp. B.Kết quả của 03 lần phân công lao động trong lịch sử. C.Nhu cầu về sự cần thiết phải có một tổ chức để dập tắt xung đột giai cấp.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 4,
+            "citation_label": "[4]",
+            "passage_id": "DEMO_DOC_001::P002",
+            "document_id": "DEMO_DOC_001",
+            "document_title": "Cơ chế Bộ nhớ Đa quy mô và Khối Giao tiếp Liên cấp trong Mô hình Ngôn ngữ",
+            "section_title": "1. Giới thiệu Kiến trúc Bộ nhớ Đa quy mô",
+            "paragraph_index": 4,
+            "score": 8.1611,
+            "text": "Hệ thống bộ nhớ liên tục (Continuum Memory System - CMS) giải quyết vấn đề này bằng cách thiết lập nhiều tầng bộ nhớ tham số hoạt động ở các chu kỳ thời gian khác nhau. Tầng 1 (Level 1) chịu trách nhiệm thích ứng ở cấp độ đoạn văn (paragraph), bắt giữ các chuyển tiếp cục bộ và từ vựng ngắn hạn.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 5,
+            "citation_label": "[5]",
+            "passage_id": "DEMO_DOC_001::P001",
+            "document_id": "DEMO_DOC_001",
+            "document_title": "Cơ chế Bộ nhớ Đa quy mô và Khối Giao tiếp Liên cấp trong Mô hình Ngôn ngữ",
+            "section_title": "1. Giới thiệu Kiến trúc Bộ nhớ Đa quy mô",
+            "paragraph_index": 5,
+            "score": 7.6782,
+            "text": "Trong các mô hình ngôn ngữ hiện đại, việc xử lý văn bản dài thường gặp thách thức lớn về chi phí bộ nhớ và sự suy giảm chú ý (attention dilution). Hệ thống bộ nhớ liên tục (Continuum Memory System - CMS) giải quyết vấn đề này bằng cách thiết lập nhiều tầng bộ nhớ tham số hoạt động ở các chu kỳ thời gian khác nhau.",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "telemetry": {
+          "input_tokens": 258,
+          "output_tokens": 276,
+          "total_tokens": 534,
+          "total_latency_ms": 7.84,
+          "retrieval_ms": 4.28,
+          "generation_ms": 0.01
+        },
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {
+          "routing": "DIRECT_LOOKUP",
+          "route_explanation": "Đã tìm thấy bằng chứng xác thực trong tài liệu.",
+          "effective_query": "SA-CMS hoạt động như thế nào?",
+          "is_follow_up": false,
+          "attached_document_count": 0,
+          "evidence_count": 5,
+          "refusal_reason": null,
+          "memory_level": "Level 3 (SA-CMS Gated Multi-Level)"
+        }
+      }
+    ]
+  },
+  {
+    "session_id": "chat_008fe1ea6977",
+    "title": "Chat: Kiến trúc SA-CMS là gì?",
+    "document_ids": [],
+    "created_at": 1791283206.352533,
+    "updated_at": 1791377043.2466953,
+    "messages": [
+      {
+        "id": "msg_98833d22fd",
+        "role": "user",
+        "content": "Kiến trúc SA-CMS là gì?",
+        "timestamp": 1791283206.3769443,
+        "citations": [],
+        "evidence": [],
+        "telemetry": {},
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {}
+      },
+      {
+        "id": "msg_bb2d39a76f",
+        "role": "assistant",
+        "content": "Kiến trúc 3 cấp độ SA-CMS. [1]\n\n### Nguồn tham khảo\n[1] **Nghiên cứu Hệ thống Bộ nhớ Đa quy mô SA-CMS trong Mô hình Ngôn ngữ** — Phần nội dung — Đoạn 1\n\n[2] **Tài liệu Nghiên cứu SA-CMS Mẫu Offline** — Chương 1: Kiến trúc Bộ nhớ — Đoạn 2\n\n[3] **Tài liệu Nghiên cứu SA-CMS Mẫu Offline** — Chương 1: Kiến trúc Bộ nhớ — Đoạn 3\n\n[4] **Tài liệu Nghiên cứu SA-CMS Mẫu Offline** — Chương 1: Kiến trúc Bộ nhớ — Đoạn 4\n\n[5] **Tài liệu Nghiên cứu SA-CMS Mẫu Offline** — Chương 1: Kiến trúc Bộ nhớ — Đoạn 5",
+        "timestamp": 1791283206.3820782,
+        "citations": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "VN_DOC_001::P003",
+            "document_id": "VN_DOC_001",
+            "document_title": "Nghiên cứu Hệ thống Bộ nhớ Đa quy mô SA-CMS trong Mô hình Ngôn ngữ",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 1,
+            "score": 13.9154,
+            "text": "## 2. Kiến trúc 3 cấp độ SA-CMS",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 2,
+            "citation_label": "[2]",
+            "passage_id": "DOC_1791271048929_45bf10::P000",
+            "document_id": "DOC_1791271048929_45bf10",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 2,
+            "score": 11.7884,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 3,
+            "citation_label": "[3]",
+            "passage_id": "DOC_1791271306897_51a76d::P000",
+            "document_id": "DOC_1791271306897_51a76d",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 3,
+            "score": 11.7884,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 4,
+            "citation_label": "[4]",
+            "passage_id": "DOC_1791271682090_2ca48d::P000",
+            "document_id": "DOC_1791271682090_2ca48d",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 4,
+            "score": 11.7884,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 5,
+            "citation_label": "[5]",
+            "passage_id": "DOC_1791271952866_dc50af::P000",
+            "document_id": "DOC_1791271952866_dc50af",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 5,
+            "score": 11.7884,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "evidence": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "VN_DOC_001::P003",
+            "document_id": "VN_DOC_001",
+            "document_title": "Nghiên cứu Hệ thống Bộ nhớ Đa quy mô SA-CMS trong Mô hình Ngôn ngữ",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 1,
+            "score": 13.9154,
+            "text": "## 2. Kiến trúc 3 cấp độ SA-CMS",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 2,
+            "citation_label": "[2]",
+            "passage_id": "DOC_1791271048929_45bf10::P000",
+            "document_id": "DOC_1791271048929_45bf10",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 2,
+            "score": 11.7884,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 3,
+            "citation_label": "[3]",
+            "passage_id": "DOC_1791271306897_51a76d::P000",
+            "document_id": "DOC_1791271306897_51a76d",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 3,
+            "score": 11.7884,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 4,
+            "citation_label": "[4]",
+            "passage_id": "DOC_1791271682090_2ca48d::P000",
+            "document_id": "DOC_1791271682090_2ca48d",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 4,
+            "score": 11.7884,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 5,
+            "citation_label": "[5]",
+            "passage_id": "DOC_1791271952866_dc50af::P000",
+            "document_id": "DOC_1791271952866_dc50af",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 5,
+            "score": 11.7884,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "telemetry": {
+          "input_tokens": 256,
+          "output_tokens": 143,
+          "total_tokens": 399,
+          "total_latency_ms": 5.23,
+          "retrieval_ms": 4.27,
+          "generation_ms": 0.01
+        },
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {
+          "routing": "DIRECT_LOOKUP",
+          "route_explanation": "Đã tìm thấy bằng chứng xác thực trong tài liệu.",
+          "effective_query": "Kiến trúc SA-CMS là gì?",
+          "is_follow_up": false,
+          "attached_document_count": 0,
+          "evidence_count": 5,
+          "refusal_reason": null,
+          "memory_level": "Level 3 (SA-CMS Gated Multi-Level)"
+        }
+      },
+      {
+        "id": "msg_081a1536e9",
+        "role": "user",
+        "content": "rút gọn lại ý trong file và tôi thắc mắc những gì thì phải trả lời đúng trọng tâm phần đó",
+        "timestamp": 1791376973.9235816,
+        "citations": [],
+        "evidence": [],
+        "telemetry": {},
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {}
+      },
+      {
+        "id": "msg_dabb750247",
+        "role": "assistant",
+        "content": "Tài liệu chưa đủ thông tin. Không tìm thấy đủ thông tin trong tài liệu để trả lời chắc chắn.",
+        "timestamp": 1791376973.9473743,
+        "citations": [],
+        "evidence": [],
+        "telemetry": {
+          "input_tokens": 58,
+          "output_tokens": 27,
+          "total_tokens": 85,
+          "total_latency_ms": 22.26,
+          "retrieval_ms": 17.04,
+          "generation_ms": 0.0
+        },
+        "routing": "UNANSWERABLE",
+        "refused": true,
+        "refusal_reason": "UNANSWERABLE",
+        "diagnostics": {
+          "routing": "UNANSWERABLE",
+          "route_explanation": "Tài liệu không đề cập đến thông tin này.",
+          "effective_query": "rút gọn lại ý trong file và tôi thắc mắc những gì thì phải trả lời đúng trọng tâm phần đó",
+          "is_follow_up": false,
+          "attached_document_count": 1,
+          "evidence_count": 0,
+          "refusal_reason": "UNANSWERABLE",
+          "memory_level": "Level 3 (SA-CMS Gated Multi-Level)"
+        }
+      },
+      {
+        "id": "msg_2b99915193",
+        "role": "user",
+        "content": "tcp là gì",
+        "timestamp": 1791376991.2526078,
+        "citations": [],
+        "evidence": [],
+        "telemetry": {},
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {}
+      },
+      {
+        "id": "msg_338c1c7412",
+        "role": "assistant",
+        "content": "Client chủ động mở kết nối (khác với server là ServerSocket. [1]\n\n### Nguồn tham khảo\n[1] **Nhom05-Bai05** — 05.\tMSSV: — Đoạn 1\n\n[2] **Nhom05-Bai05** — 05.\tMSSV: — Đoạn 2\n\n[3] **Nhom05-Bai05** — 05.\tMSSV: — Đoạn 3\n\n[4] **Nhom05-Bai05** — 05.\tMSSV: — Đoạn 4",
+        "timestamp": 1791376991.2601228,
+        "citations": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "DOC_1791376866::P030",
+            "document_id": "DOC_1791376866",
+            "document_title": "Nhom05-Bai05",
+            "section_title": "05.\tMSSV:",
+            "paragraph_index": 1,
+            "score": 6.7562,
+            "text": "Client chủ động mở kết nối (khác với server là ServerSocket.accept()). new Socket(host, port) : Kết nối TCP tới web server. socket.getOutputStream() : Lấy luồng ghi request. socket.getInputStream() : Lấy luồng đọc response.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 2,
+            "citation_label": "[2]",
+            "passage_id": "DOC_1791376866::P029",
+            "document_id": "DOC_1791376866",
+            "document_title": "Nhom05-Bai05",
+            "section_title": "05.\tMSSV:",
+            "paragraph_index": 2,
+            "score": 6.5792,
+            "text": "Đại diện cho kết nối TCP hai chiều giữa client và web server. Cách dùng: new Socket(host, port) — kết nối tới server. Ý nghĩa: Là điểm khởi đầu của mọi request HTTP. Client chủ động mở kết nối (khác với server là ServerSocket.accept()).",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 3,
+            "citation_label": "[3]",
+            "passage_id": "DOC_1791376866::P001",
+            "document_id": "DOC_1791376866",
+            "document_title": "Nhom05-Bai05",
+            "section_title": "05.\tMSSV:",
+            "paragraph_index": 3,
+            "score": 5.6732,
+            "text": "BAI05_BT21: Web Server ĐỐI TƯỢNG MẠNG 1 Serversocket Vai trò: Đại diện cho socket phía server, làm nhiệm vụ lắng nghe kết nối TCP trên một cổng cố định (8080). 2 Socket",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 4,
+            "citation_label": "[4]",
+            "passage_id": "DOC_1791376866::P003",
+            "document_id": "DOC_1791376866",
+            "document_title": "Nhom05-Bai05",
+            "section_title": "05.\tMSSV:",
+            "paragraph_index": 4,
+            "score": 5.1739,
+            "text": "Mỗi client kết nối → tạo 1 Socket mới. Phương thức: new ServerSocket(PORT) : Tạo socket server lắng nghe kết nối TCP trên cổng 8080. serverSocket.accept() : Chờ và nhận kết nối từ client (blocking), trả về đối tượng Socket.",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "evidence": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "DOC_1791376866::P030",
+            "document_id": "DOC_1791376866",
+            "document_title": "Nhom05-Bai05",
+            "section_title": "05.\tMSSV:",
+            "paragraph_index": 1,
+            "score": 6.7562,
+            "text": "Client chủ động mở kết nối (khác với server là ServerSocket.accept()). new Socket(host, port) : Kết nối TCP tới web server. socket.getOutputStream() : Lấy luồng ghi request. socket.getInputStream() : Lấy luồng đọc response.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 2,
+            "citation_label": "[2]",
+            "passage_id": "DOC_1791376866::P029",
+            "document_id": "DOC_1791376866",
+            "document_title": "Nhom05-Bai05",
+            "section_title": "05.\tMSSV:",
+            "paragraph_index": 2,
+            "score": 6.5792,
+            "text": "Đại diện cho kết nối TCP hai chiều giữa client và web server. Cách dùng: new Socket(host, port) — kết nối tới server. Ý nghĩa: Là điểm khởi đầu của mọi request HTTP. Client chủ động mở kết nối (khác với server là ServerSocket.accept()).",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 3,
+            "citation_label": "[3]",
+            "passage_id": "DOC_1791376866::P001",
+            "document_id": "DOC_1791376866",
+            "document_title": "Nhom05-Bai05",
+            "section_title": "05.\tMSSV:",
+            "paragraph_index": 3,
+            "score": 5.6732,
+            "text": "BAI05_BT21: Web Server ĐỐI TƯỢNG MẠNG 1 Serversocket Vai trò: Đại diện cho socket phía server, làm nhiệm vụ lắng nghe kết nối TCP trên một cổng cố định (8080). 2 Socket",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 4,
+            "citation_label": "[4]",
+            "passage_id": "DOC_1791376866::P003",
+            "document_id": "DOC_1791376866",
+            "document_title": "Nhom05-Bai05",
+            "section_title": "05.\tMSSV:",
+            "paragraph_index": 4,
+            "score": 5.1739,
+            "text": "Mỗi client kết nối → tạo 1 Socket mới. Phương thức: new ServerSocket(PORT) : Tạo socket server lắng nghe kết nối TCP trên cổng 8080. serverSocket.accept() : Chờ và nhận kết nối từ client (blocking), trả về đối tượng Socket.",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "telemetry": {
+          "input_tokens": 254,
+          "output_tokens": 64,
+          "total_tokens": 318,
+          "total_latency_ms": 11.01,
+          "retrieval_ms": 6.88,
+          "generation_ms": 0.02
+        },
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {
+          "routing": "DIRECT_LOOKUP",
+          "route_explanation": "Đã tìm thấy bằng chứng xác thực trong tài liệu.",
+          "effective_query": "tcp là gì",
+          "is_follow_up": false,
+          "attached_document_count": 1,
+          "evidence_count": 4,
+          "refusal_reason": null,
+          "memory_level": "Level 3 (SA-CMS Gated Multi-Level)"
+        }
+      },
+      {
+        "id": "msg_160060d451",
+        "role": "user",
+        "content": "socket là gì",
+        "timestamp": 1791377030.2374482,
+        "citations": [],
+        "evidence": [],
+        "telemetry": {},
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {}
+      },
+      {
+        "id": "msg_0d7333c631",
+        "role": "assistant",
+        "content": "Trong tài liệu, Client chủ động mở kết nối (khác với server là ServerSocket. new Socket(host, port) : Kết nối TCP tới web server. [1]\n\nBên cạnh đó, getInputStream() : Lấy luồng đọc response. [2]\n\n### Nguồn tham khảo\n[1] **Nhom05-Bai05** — 05.\tMSSV: — Đoạn 1\n\n[2] **Nhom05-Bai05** — 05.\tMSSV: — Đoạn 2\n\n[3] **Nhom05-Bai05** — 05.\tMSSV: — Đoạn 3\n\n[4] **Nhom05-Bai05** — 05.\tMSSV: — Đoạn 4\n\n[5] **Nhom05-Bai05** — 05.\tMSSV: — Đoạn 5",
+        "timestamp": 1791377030.2523153,
+        "citations": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "DOC_1791376866::P030",
+            "document_id": "DOC_1791376866",
+            "document_title": "Nhom05-Bai05",
+            "section_title": "05.\tMSSV:",
+            "paragraph_index": 1,
+            "score": 8.1134,
+            "text": "Client chủ động mở kết nối (khác với server là ServerSocket.accept()). new Socket(host, port) : Kết nối TCP tới web server. socket.getOutputStream() : Lấy luồng ghi request. socket.getInputStream() : Lấy luồng đọc response.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 2,
+            "citation_label": "[2]",
+            "passage_id": "DOC_1791376866::P031",
+            "document_id": "DOC_1791376866",
+            "document_title": "Nhom05-Bai05",
+            "section_title": "05.\tMSSV:",
+            "paragraph_index": 2,
+            "score": 6.8108,
+            "text": "socket.getInputStream() : Lấy luồng đọc response. socket.close() : Đóng kết nối (tự động nhờ try-with-resources). Đối tượng I/O 1 OutputStream (từ socket.getOutputStream()) Vai trò: Luồng ghi byte request HTTP gửi lên server.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 3,
+            "citation_label": "[3]",
+            "passage_id": "DOC_1791376866::P003",
+            "document_id": "DOC_1791376866",
+            "document_title": "Nhom05-Bai05",
+            "section_title": "05.\tMSSV:",
+            "paragraph_index": 3,
+            "score": 6.6079,
+            "text": "Mỗi client kết nối → tạo 1 Socket mới. Phương thức: new ServerSocket(PORT) : Tạo socket server lắng nghe kết nối TCP trên cổng 8080. serverSocket.accept() : Chờ và nhận kết nối từ client (blocking), trả về đối tượng Socket.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 4,
+            "citation_label": "[4]",
+            "passage_id": "DOC_1791376866::P002",
+            "document_id": "DOC_1791376866",
+            "document_title": "Nhom05-Bai05",
+            "section_title": "05.\tMSSV:",
+            "paragraph_index": 4,
+            "score": 6.2015,
+            "text": "Vai trò: Đại diện cho socket phía server, làm nhiệm vụ lắng nghe kết nối TCP trên một cổng cố định (8080). 2 Socket Vai trò: Đại diện cho một kết nối cụ thể giữa server và một client (trình duyệt, curl, Postman...). Mỗi client kết nối → tạo 1 Socket mới.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 5,
+            "citation_label": "[5]",
+            "passage_id": "DOC_1791376866::P001",
+            "document_id": "DOC_1791376866",
+            "document_title": "Nhom05-Bai05",
+            "section_title": "05.\tMSSV:",
+            "paragraph_index": 5,
+            "score": 6.092,
+            "text": "BAI05_BT21: Web Server ĐỐI TƯỢNG MẠNG 1 Serversocket Vai trò: Đại diện cho socket phía server, làm nhiệm vụ lắng nghe kết nối TCP trên một cổng cố định (8080). 2 Socket",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "evidence": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "DOC_1791376866::P030",
+            "document_id": "DOC_1791376866",
+            "document_title": "Nhom05-Bai05",
+            "section_title": "05.\tMSSV:",
+            "paragraph_index": 1,
+            "score": 8.1134,
+            "text": "Client chủ động mở kết nối (khác với server là ServerSocket.accept()). new Socket(host, port) : Kết nối TCP tới web server. socket.getOutputStream() : Lấy luồng ghi request. socket.getInputStream() : Lấy luồng đọc response.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 2,
+            "citation_label": "[2]",
+            "passage_id": "DOC_1791376866::P031",
+            "document_id": "DOC_1791376866",
+            "document_title": "Nhom05-Bai05",
+            "section_title": "05.\tMSSV:",
+            "paragraph_index": 2,
+            "score": 6.8108,
+            "text": "socket.getInputStream() : Lấy luồng đọc response. socket.close() : Đóng kết nối (tự động nhờ try-with-resources). Đối tượng I/O 1 OutputStream (từ socket.getOutputStream()) Vai trò: Luồng ghi byte request HTTP gửi lên server.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 3,
+            "citation_label": "[3]",
+            "passage_id": "DOC_1791376866::P003",
+            "document_id": "DOC_1791376866",
+            "document_title": "Nhom05-Bai05",
+            "section_title": "05.\tMSSV:",
+            "paragraph_index": 3,
+            "score": 6.6079,
+            "text": "Mỗi client kết nối → tạo 1 Socket mới. Phương thức: new ServerSocket(PORT) : Tạo socket server lắng nghe kết nối TCP trên cổng 8080. serverSocket.accept() : Chờ và nhận kết nối từ client (blocking), trả về đối tượng Socket.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 4,
+            "citation_label": "[4]",
+            "passage_id": "DOC_1791376866::P002",
+            "document_id": "DOC_1791376866",
+            "document_title": "Nhom05-Bai05",
+            "section_title": "05.\tMSSV:",
+            "paragraph_index": 4,
+            "score": 6.2015,
+            "text": "Vai trò: Đại diện cho socket phía server, làm nhiệm vụ lắng nghe kết nối TCP trên một cổng cố định (8080). 2 Socket Vai trò: Đại diện cho một kết nối cụ thể giữa server và một client (trình duyệt, curl, Postman...). Mỗi client kết nối → tạo 1 Socket mới.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 5,
+            "citation_label": "[5]",
+            "passage_id": "DOC_1791376866::P001",
+            "document_id": "DOC_1791376866",
+            "document_title": "Nhom05-Bai05",
+            "section_title": "05.\tMSSV:",
+            "paragraph_index": 5,
+            "score": 6.092,
+            "text": "BAI05_BT21: Web Server ĐỐI TƯỢNG MẠNG 1 Serversocket Vai trò: Đại diện cho socket phía server, làm nhiệm vụ lắng nghe kết nối TCP trên một cổng cố định (8080). 2 Socket",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "telemetry": {
+          "input_tokens": 254,
+          "output_tokens": 106,
+          "total_tokens": 360,
+          "total_latency_ms": 12.61,
+          "retrieval_ms": 6.88,
+          "generation_ms": 0.03
+        },
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {
+          "routing": "DIRECT_LOOKUP",
+          "route_explanation": "Đã tìm thấy bằng chứng xác thực trong tài liệu.",
+          "effective_query": "socket là gì",
+          "is_follow_up": false,
+          "attached_document_count": 1,
+          "evidence_count": 5,
+          "refusal_reason": null,
+          "memory_level": "Level 3 (SA-CMS Gated Multi-Level)"
+        }
+      }
+    ]
   }
 ]

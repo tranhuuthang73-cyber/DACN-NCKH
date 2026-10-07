@@ -1,0 +1,883 @@
+{
+  "document_id": "DOC_1791376866",
+  "sections": [
+    {
+      "title": "05.\tMSSV:",
+      "start": 220,
+      "end": 271
+    },
+    {
+      "title": "1 Serversocket",
+      "start": 271,
+      "end": 395
+    },
+    {
+      "title": "2 Socket",
+      "start": 395,
+      "end": 1013
+    },
+    {
+      "title": "1 InputStreamReader + BufferedReader",
+      "start": 1013,
+      "end": 1418
+    },
+    {
+      "title": "2 OutputStream",
+      "start": 1418,
+      "end": 2033
+    },
+    {
+      "title": "1 Paths + Path",
+      "start": 2033,
+      "end": 2991
+    },
+    {
+      "title": "1 Executors + ExecutorService",
+      "start": 2991,
+      "end": 3320
+    },
+    {
+      "title": "2 Handle(Socket client)",
+      "start": 3320,
+      "end": 4695
+    },
+    {
+      "title": "1 Socket",
+      "start": 4695,
+      "end": 5191
+    },
+    {
+      "title": "1 OutputStream (từ socket.getOutputStream())",
+      "start": 5191,
+      "end": 5382
+    },
+    {
+      "title": "2 InputStream (từ socket.getInputStream())",
+      "start": 5382,
+      "end": 5954
+    },
+    {
+      "title": "2 String + charset (ISO_8859_1 và UTF-8)",
+      "start": 5954,
+      "end": 6184
+    },
+    {
+      "title": "3 Arrays.copyOfRange(byte[], from, to)",
+      "start": 6184,
+      "end": 7407
+    },
+    {
+      "title": "1 Paths + Path + Files",
+      "start": 7407,
+      "end": 8516
+    }
+  ],
+  "paragraphs": [
+    {
+      "text": "Mã nhóm: 05(sửa xx thành mã nhóm trong danh sách)",
+      "start": 0,
+      "end": 49
+    },
+    {
+      "text": "Lớp:23DTHB4",
+      "start": 51,
+      "end": 62
+    },
+    {
+      "text": "Thành viên nhóm:",
+      "start": 64,
+      "end": 80
+    },
+    {
+      "text": "01.Đỗ Tiến Dũng \tMSSV:2380600292",
+      "start": 82,
+      "end": 114
+    },
+    {
+      "text": "02.Trần Thái Dương \tMSSV:230600401",
+      "start": 116,
+      "end": 150
+    },
+    {
+      "text": "03.Nguyễn Tấn Kiệt\tMSSV:2380601152",
+      "start": 152,
+      "end": 186
+    },
+    {
+      "text": "04.Tô Thế Kiệt\tMSSV:2380601161",
+      "start": 188,
+      "end": 218
+    },
+    {
+      "text": "05.\tMSSV:",
+      "start": 220,
+      "end": 229
+    },
+    {
+      "text": "BAI05_BT21: Web Server",
+      "start": 231,
+      "end": 253
+    },
+    {
+      "text": "ĐỐI TƯỢNG MẠNG",
+      "start": 255,
+      "end": 269
+    },
+    {
+      "text": "1 Serversocket",
+      "start": 271,
+      "end": 285
+    },
+    {
+      "text": "Vai trò: Đại diện cho socket phía server, làm nhiệm vụ lắng nghe kết nối TCP trên một cổng cố định (",
+      "start": 287,
+      "end": 393
+    },
+    {
+      "text": "2 Socket",
+      "start": 395,
+      "end": 403
+    },
+    {
+      "text": "Vai trò: Đại diện cho một kết nối cụ thể giữa server và một client (trình duyệt, curl, Postman...). ",
+      "start": 405,
+      "end": 543
+    },
+    {
+      "text": "Phương thức:",
+      "start": 545,
+      "end": 557
+    },
+    {
+      "text": "new ServerSocket(PORT) : Tạo socket server lắng nghe kết nối TCP trên cổng 8080.",
+      "start": 559,
+      "end": 639
+    },
+    {
+      "text": "serverSocket.accept() : Chờ và nhận kết nối từ client (blocking), trả về đối tượng Socket.",
+      "start": 641,
+      "end": 731
+    },
+    {
+      "text": "serverSocket.close() : Đóng server socket, giải phóng cổng.",
+      "start": 733,
+      "end": 792
+    },
+    {
+      "text": "client.getInputStream() : Lấy luồng đọc dữ liệu client gửi lên (HTTP request).",
+      "start": 794,
+      "end": 872
+    },
+    {
+      "text": "client.getOutputStream() : Lấy luồng ghi dữ liệu trả về client (HTTP response).",
+      "start": 874,
+      "end": 953
+    },
+    {
+      "text": "client.close() : Đóng kết nối với client.",
+      "start": 955,
+      "end": 996
+    },
+    {
+      "text": "Đối tượng I/O",
+      "start": 998,
+      "end": 1011
+    },
+    {
+      "text": "1 InputStreamReader + BufferedReader",
+      "start": 1013,
+      "end": 1049
+    },
+    {
+      "text": "Code khai báo trong bài:",
+      "start": 1051,
+      "end": 1075
+    },
+    {
+      "text": "BufferedReader in = new BufferedReader(",
+      "start": 1077,
+      "end": 1116
+    },
+    {
+      "text": "New InputStreamReader(client.getInputStream(), StandardCharsets.UTF_8));",
+      "start": 1118,
+      "end": 1190
+    },
+    {
+      "text": "Vai trò — giải thích theo tầng (decorator pattern):",
+      "start": 1192,
+      "end": 1243
+    },
+    {
+      "text": "client.getInputStream() → luồng byte thô từ socket.",
+      "start": 1245,
+      "end": 1296
+    },
+    {
+      "text": "InputStreamReader → chuyển byte → ký tự (theo charset UTF-8).",
+      "start": 1298,
+      "end": 1359
+    },
+    {
+      "text": "BufferedReader → đệm dữ liệu để đọc theo dòng hiệu quả.",
+      "start": 1361,
+      "end": 1416
+    },
+    {
+      "text": "2 OutputStream",
+      "start": 1418,
+      "end": 1432
+    },
+    {
+      "text": "Code khai báo trong bài :",
+      "start": 1434,
+      "end": 1459
+    },
+    {
+      "text": "OutputStream out = client.getOutputStream();",
+      "start": 1461,
+      "end": 1505
+    },
+    {
+      "text": "Vai trò: Luồng ghi byte ra socket để gửi response về client.",
+      "start": 1507,
+      "end": 1567
+    },
+    {
+      "text": "Phương thức :",
+      "start": 1569,
+      "end": 1582
+    },
+    {
+      "text": "new InputStreamReader(inputStream, UTF_8) : Chuyển luồng byte thành luồng ký tự theo charset UTF-8.",
+      "start": 1584,
+      "end": 1683
+    },
+    {
+      "text": "new BufferedReader(reader) : Bọc luồng để đọc theo dòng hiệu quả.",
+      "start": 1685,
+      "end": 1750
+    },
+    {
+      "text": "in.readLine() : Đọc 1 dòng HTTP (request line, header), trả về null nếu hết.",
+      "start": 1752,
+      "end": 1828
+    },
+    {
+      "text": "in.read(char[], 0, n) : Đọc n ký tự body của POST/PUT vào mảng.",
+      "start": 1830,
+      "end": 1893
+    },
+    {
+      "text": "out.write(byte[]) : Ghi mảng byte response xuống socket.",
+      "start": 1895,
+      "end": 1951
+    },
+    {
+      "text": "out.flush() : Đẩy dữ liệu trong buffer đi ngay (bắt buộc gọi).",
+      "start": 1953,
+      "end": 2015
+    },
+    {
+      "text": "Đối tượng File",
+      "start": 2017,
+      "end": 2031
+    },
+    {
+      "text": "1 Paths + Path",
+      "start": 2033,
+      "end": 2047
+    },
+    {
+      "text": "Code khai báo trong bài:",
+      "start": 2049,
+      "end": 2073
+    },
+    {
+      "text": "private static final Path WEB_ROOT = Paths.get(\"www\").toAbsolutePath().normalize();",
+      "start": 2075,
+      "end": 2158
+    },
+    {
+      "text": "Vai trò:",
+      "start": 2160,
+      "end": 2168
+    },
+    {
+      "text": "Paths.get(\"www\") → tạo đường dẫn tương đối tới thư mục www.",
+      "start": 2170,
+      "end": 2229
+    },
+    {
+      "text": ".toAbsolutePath() → chuyển thành đường dẫn tuyệt đối (ví dụ C:\\project\\www).",
+      "start": 2231,
+      "end": 2307
+    },
+    {
+      "text": ".normalize() → loại bỏ .. và . trong đường dẫn, phục vụ việc chống path traversal.",
+      "start": 2309,
+      "end": 2391
+    },
+    {
+      "text": "Phương thức:",
+      "start": 2393,
+      "end": 2405
+    },
+    {
+      "text": "Paths.get(\"www\") : Tạo đối tượng Path trỏ tới thư mục www.",
+      "start": 2407,
+      "end": 2465
+    },
+    {
+      "text": "path.toAbsolutePath() : Chuyển path tương đối thành tuyệt đối.",
+      "start": 2467,
+      "end": 2529
+    },
+    {
+      "text": "path.normalize() : Chuẩn hóa path, loại bỏ .. và . (chống path traversal).",
+      "start": 2531,
+      "end": 2605
+    },
+    {
+      "text": "path.resolve(String) : Ghép đường dẫn con vào đường dẫn cha.",
+      "start": 2607,
+      "end": 2667
+    },
+    {
+      "text": "path.startsWith(WEB_ROOT) : Kiểm tra path có nằm trong thư mục gốc không (chặn ../).",
+      "start": 2669,
+      "end": 2753
+    },
+    {
+      "text": "Files.isRegularFile(path) : Kiểm tra path có phải file thường không.",
+      "start": 2755,
+      "end": 2823
+    },
+    {
+      "text": "Files.readAllBytes(path) : Đọc toàn bộ nội dung file thành mảng byte.",
+      "start": 2825,
+      "end": 2894
+    },
+    {
+      "text": "Files.write(path, bytes) : Ghi mảng byte vào file (dùng khi mở rộng PUT).",
+      "start": 2896,
+      "end": 2969
+    },
+    {
+      "text": "Đối Tượng đa luồng",
+      "start": 2971,
+      "end": 2989
+    },
+    {
+      "text": "1 Executors + ExecutorService",
+      "start": 2991,
+      "end": 3020
+    },
+    {
+      "text": "Code khai báo trong bài:",
+      "start": 3022,
+      "end": 3046
+    },
+    {
+      "text": "ExecutorService pool = Executors.newFixedThreadPool(10);",
+      "start": 3048,
+      "end": 3104
+    },
+    {
+      "text": "...",
+      "start": 3106,
+      "end": 3109
+    },
+    {
+      "text": "pool.execute(() -> handle(client));",
+      "start": 3111,
+      "end": 3146
+    },
+    {
+      "text": "Vai trò:",
+      "start": 3148,
+      "end": 3156
+    },
+    {
+      "text": "Executors.newFixedThreadPool(10) → tạo thread pool cố định 10 luồng.",
+      "start": 3158,
+      "end": 3226
+    },
+    {
+      "text": "pool.execute(Runnable) → đẩy một nhiệm vụ vào hàng đợi; pool sẽ chọn 1 luồng rảnh để chạy.",
+      "start": 3228,
+      "end": 3318
+    },
+    {
+      "text": "2 Handle(Socket client)",
+      "start": 3320,
+      "end": 3343
+    },
+    {
+      "text": "Vai trò: Hàm trung tâm xử lý 1 kết nối — chạy trong 1 luồng riêng.",
+      "start": 3345,
+      "end": 3411
+    },
+    {
+      "text": "Luồng xử lý:",
+      "start": 3413,
+      "end": 3425
+    },
+    {
+      "text": "Đọc request line → tách method, path.",
+      "start": 3427,
+      "end": 3464
+    },
+    {
+      "text": "Đọc headers → lấy Content-Length.",
+      "start": 3466,
+      "end": 3499
+    },
+    {
+      "text": "Đọc body nếu có.",
+      "start": 3501,
+      "end": 3517
+    },
+    {
+      "text": "switch(method) → gọi hàm xử lý phù hợp (GET/POST/PUT/default).",
+      "start": 3519,
+      "end": 3581
+    },
+    {
+      "text": "3 serveFile(OutputStream out, String path)",
+      "start": 3583,
+      "end": 3625
+    },
+    {
+      "text": "Vai trò: Xử lý riêng cho GET — đọc file HTML tĩnh và trả về.",
+      "start": 3627,
+      "end": 3687
+    },
+    {
+      "text": "Luồng xử lý:",
+      "start": 3689,
+      "end": 3701
+    },
+    {
+      "text": "Nếu path là / → đổi thành /index.html (trang mặc định).",
+      "start": 3703,
+      "end": 3758
+    },
+    {
+      "text": "Ghép path vào WEB_ROOT, chuẩn hóa.",
+      "start": 3760,
+      "end": 3794
+    },
+    {
+      "text": "Kiểm tra path traversal → nếu sai, trả 403 Forbidden.",
+      "start": 3796,
+      "end": 3849
+    },
+    {
+      "text": "Nếu file tồn tại → đọc và trả về 200 OK.",
+      "start": 3851,
+      "end": 3891
+    },
+    {
+      "text": "Nếu không → trả 404 Not Found.",
+      "start": 3893,
+      "end": 3923
+    },
+    {
+      "text": "Phương thức:",
+      "start": 3925,
+      "end": 3937
+    },
+    {
+      "text": "Executors.newFixedThreadPool(10) : Tạo thread pool cố định 10 luồng.",
+      "start": 3939,
+      "end": 4007
+    },
+    {
+      "text": "pool.execute(Runnable) : Giao nhiệm vụ cho 1 luồng rảnh trong pool chạy.",
+      "start": 4009,
+      "end": 4081
+    },
+    {
+      "text": "Thread.currentThread().getName() : Lấy tên luồng hiện tại (dùng để log).",
+      "start": 4083,
+      "end": 4155
+    },
+    {
+      "text": "handle(Socket client) : Xử lý toàn bộ 1 kết nối client (đọc request → xử lý → gửi response).",
+      "start": 4157,
+      "end": 4249
+    },
+    {
+      "text": "serveFile(out, path) : Xử lý GET — đọc file HTML tĩnh trong www/ và trả về.",
+      "start": 4251,
+      "end": 4326
+    },
+    {
+      "text": "send(out, code, status, type, body) : Tạo và gửi HTTP response chuẩn (status line + header + body).",
+      "start": 4328,
+      "end": 4427
+    },
+    {
+      "text": "contentType(String name) : Xác định MIME type dựa vào đuôi file (.html, .css, .png...).",
+      "start": 4429,
+      "end": 4516
+    },
+    {
+      "text": "escape(String s) : Thay thế &, <, > để chống XSS.",
+      "start": 4518,
+      "end": 4567
+    },
+    {
+      "text": "page(String content) : Bọc nội dung vào khung HTML hoàn chỉnh (<!DOCTYPE html>...)",
+      "start": 4569,
+      "end": 4651
+    },
+    {
+      "text": "BAI05_BT22: Web Client",
+      "start": 4653,
+      "end": 4675
+    },
+    {
+      "text": "Đối tượng mạng :",
+      "start": 4677,
+      "end": 4693
+    },
+    {
+      "text": "1 Socket",
+      "start": 4695,
+      "end": 4703
+    },
+    {
+      "text": "Vai trò:",
+      "start": 4705,
+      "end": 4713
+    },
+    {
+      "text": "Đại diện cho kết nối TCP hai chiều giữa client và web server.",
+      "start": 4715,
+      "end": 4776
+    },
+    {
+      "text": "Cách dùng: new Socket(host, port) — kết nối tới server.",
+      "start": 4778,
+      "end": 4833
+    },
+    {
+      "text": "Ý nghĩa: Là điểm khởi đầu của mọi request HTTP. Client chủ động mở kết nối (khác với server là Serve",
+      "start": 4835,
+      "end": 4953
+    },
+    {
+      "text": "new Socket(host, port) : Kết nối TCP tới web server.",
+      "start": 4955,
+      "end": 5007
+    },
+    {
+      "text": "socket.getOutputStream() : Lấy luồng ghi request.",
+      "start": 5009,
+      "end": 5058
+    },
+    {
+      "text": "socket.getInputStream() : Lấy luồng đọc response.",
+      "start": 5060,
+      "end": 5109
+    },
+    {
+      "text": "socket.close() : Đóng kết nối (tự động nhờ try-with-resources).",
+      "start": 5111,
+      "end": 5174
+    },
+    {
+      "text": "Đối tượng I/O",
+      "start": 5176,
+      "end": 5189
+    },
+    {
+      "text": "1 OutputStream (từ socket.getOutputStream())",
+      "start": 5191,
+      "end": 5235
+    },
+    {
+      "text": "Vai trò: Luồng ghi byte request HTTP gửi lên server.",
+      "start": 5237,
+      "end": 5289
+    },
+    {
+      "text": "Ý nghĩa: Chuyển chuỗi request (\"GET / HTTP/1.0\\r\\n...\") thành byte UTF-8 và gửi qua mạng.",
+      "start": 5291,
+      "end": 5380
+    },
+    {
+      "text": "2 InputStream (từ socket.getInputStream())",
+      "start": 5382,
+      "end": 5424
+    },
+    {
+      "text": "Vai trò: Luồng đọc byte response từ server trả về.",
+      "start": 5426,
+      "end": 5476
+    },
+    {
+      "text": "Ý nghĩa: Đọc toàn bộ response (header + body) dưới dạng mảng byte thô.",
+      "start": 5478,
+      "end": 5548
+    },
+    {
+      "text": "Phương Thức:",
+      "start": 5550,
+      "end": 5562
+    },
+    {
+      "text": "out.write(byte[]) : Ghi mảng byte request xuống socket.",
+      "start": 5564,
+      "end": 5619
+    },
+    {
+      "text": "out.flush() : Đẩy dữ liệu trong buffer đi ngay.",
+      "start": 5621,
+      "end": 5668
+    },
+    {
+      "text": "inputStream.readAllBytes() : Đọc toàn bộ response thành mảng byte.",
+      "start": 5670,
+      "end": 5736
+    },
+    {
+      "text": "Xử lý dữ liệu:",
+      "start": 5738,
+      "end": 5752
+    },
+    {
+      "text": "1 byte[] — Mảng byte",
+      "start": 5754,
+      "end": 5774
+    },
+    {
+      "text": "Vai trò: Lưu response thô dưới dạng byte.",
+      "start": 5776,
+      "end": 5817
+    },
+    {
+      "text": "Tại sao dùng byte thay vì String? Vì body có thể là ảnh, PDF, ZIP... (dữ liệu nhị phân). Nếu đọc thẳ",
+      "start": 5819,
+      "end": 5952
+    },
+    {
+      "text": "2 String + charset (ISO_8859_1 và UTF-8)",
+      "start": 5954,
+      "end": 5994
+    },
+    {
+      "text": "Vai trò: Chuyển byte → chuỗi.",
+      "start": 5996,
+      "end": 6025
+    },
+    {
+      "text": "Quy tắc quan trọng:",
+      "start": 6027,
+      "end": 6046
+    },
+    {
+      "text": "Header dùng ISO_8859_1 (đúng chuẩn HTTP, vì header chỉ chứa ký tự ASCII mở rộng).",
+      "start": 6048,
+      "end": 6129
+    },
+    {
+      "text": "Body HTML dùng UTF-8 (để hiển thị tiếng Việt đúng).",
+      "start": 6131,
+      "end": 6182
+    },
+    {
+      "text": "3 Arrays.copyOfRange(byte[], from, to)",
+      "start": 6184,
+      "end": 6222
+    },
+    {
+      "text": "Vai trò: Cắt mảng byte — tách body ra khỏi response sau khi đã xác định vị trí \\r\\n\\r\\n.",
+      "start": 6224,
+      "end": 6312
+    },
+    {
+      "text": "Map<String, String> + HashMap",
+      "start": 6314,
+      "end": 6343
+    },
+    {
+      "text": "Vai trò: Lưu các header dưới dạng cặp key-value (ví dụ content-type → text/html).",
+      "start": 6345,
+      "end": 6426
+    },
+    {
+      "text": "Ý nghĩa: Cho phép tra cứu header nhanh bằng headers.get(\"location\") thay vì duyệt mảng.",
+      "start": 6428,
+      "end": 6515
+    },
+    {
+      "text": "Phương thức:",
+      "start": 6517,
+      "end": 6529
+    },
+    {
+      "text": "new String(byte[], charset) : Chuyển byte → chuỗi theo charset.",
+      "start": 6531,
+      "end": 6594
+    },
+    {
+      "text": "Arrays.copyOfRange(arr, from, to) : Cắt mảng byte lấy body.",
+      "start": 6596,
+      "end": 6655
+    },
+    {
+      "text": "split(\"\\r\\n\") : Tách response thành các dòng.",
+      "start": 6657,
+      "end": 6702
+    },
+    {
+      "text": "indexOf(':') : Tìm dấu : để tách tên header / giá trị header.",
+      "start": 6704,
+      "end": 6765
+    },
+    {
+      "text": "substring(int, int) : Cắt chuỗi con (lấy tên header, giá trị header, status code).",
+      "start": 6767,
+      "end": 6849
+    },
+    {
+      "text": "trim() : Xóa khoảng trắng đầu/cuối chuỗi.",
+      "start": 6851,
+      "end": 6892
+    },
+    {
+      "text": "toLowerCase() : Chuẩn hóa tên header về chữ thường.",
+      "start": 6894,
+      "end": 6945
+    },
+    {
+      "text": "Integer.parseInt(String) : Chuyển chuỗi port / status code thành số nguyên.",
+      "start": 6947,
+      "end": 7022
+    },
+    {
+      "text": "headers.get(key) : Lấy giá trị header theo tên.",
+      "start": 7024,
+      "end": 7071
+    },
+    {
+      "text": "headers.getOrDefault(key, default) : Lấy header an toàn, tránh NullPointerException.",
+      "start": 7073,
+      "end": 7157
+    },
+    {
+      "text": "headers.put(key, value) : Lưu header vào Map.",
+      "start": 7159,
+      "end": 7204
+    },
+    {
+      "text": "type.startsWith(\"text/\") : Kiểm tra Content-Type có phải văn bản không.",
+      "start": 7206,
+      "end": 7277
+    },
+    {
+      "text": "path.lastIndexOf('/') : Tìm vị trí dấu / cuối cùng để lấy tên file.",
+      "start": 7279,
+      "end": 7346
+    },
+    {
+      "text": "name.isEmpty() : Kiểm tra tên file rỗng.",
+      "start": 7348,
+      "end": 7388
+    },
+    {
+      "text": "Đối tượng File:",
+      "start": 7390,
+      "end": 7405
+    },
+    {
+      "text": "1 Paths + Path + Files",
+      "start": 7407,
+      "end": 7429
+    },
+    {
+      "text": "Vai trò: Tạo thư mục downloads/, ghi file nhị phân (ảnh, PDF) xuống ổ đĩa.",
+      "start": 7431,
+      "end": 7505
+    },
+    {
+      "text": "Ý nghĩa: Hiện thực hóa yêu cầu nâng cao \"tải tệp tin và lưu trữ vào ổ đĩa\".",
+      "start": 7507,
+      "end": 7582
+    },
+    {
+      "text": "2 handleOk(byte[] body, Map headers, String path)",
+      "start": 7584,
+      "end": 7633
+    },
+    {
+      "text": "Vai trò: Xử lý response khi status = 200 OK.",
+      "start": 7635,
+      "end": 7679
+    },
+    {
+      "text": "Logic: Nếu Content-Type bắt đầu bằng text/ → in HTML ra màn hình; ngược lại → lưu file nhị phân.",
+      "start": 7681,
+      "end": 7777
+    },
+    {
+      "text": "3 indexOf(byte[] data, byte[] pattern)",
+      "start": 7779,
+      "end": 7817
+    },
+    {
+      "text": "Vai trò: Tìm vị trí chuỗi \\r\\n\\r\\n trong mảng byte (không phải String).",
+      "start": 7819,
+      "end": 7890
+    },
+    {
+      "text": "Tại sao tự viết? Vì String.indexOf() chỉ hoạt động trên chuỗi — mà chuỗi có thể làm hỏng dữ liệu nhị",
+      "start": 7892,
+      "end": 7998
+    },
+    {
+      "text": "Phương thức:",
+      "start": 8000,
+      "end": 8012
+    },
+    {
+      "text": "Paths.get(\"downloads\") : Tạo đường dẫn thư mục downloads.",
+      "start": 8014,
+      "end": 8071
+    },
+    {
+      "text": "Files.createDirectories(dir) : Tạo thư mục (và các thư mục cha nếu thiếu).",
+      "start": 8073,
+      "end": 8147
+    },
+    {
+      "text": "dir.resolve(name) : Ghép tên file vào thư mục.",
+      "start": 8149,
+      "end": 8195
+    },
+    {
+      "text": "Files.write(path, bytes) : Ghi mảng byte vào file.",
+      "start": 8197,
+      "end": 8247
+    },
+    {
+      "text": "target.toAbsolutePath() : Lấy đường dẫn tuyệt đối để in ra màn hình.",
+      "start": 8249,
+      "end": 8317
+    },
+    {
+      "text": "handleOk(body, headers, path) : Xử lý response 200 — in HTML hoặc lưu file nhị phân.",
+      "start": 8319,
+      "end": 8403
+    },
+    {
+      "text": "indexOf(data, pattern) : Tìm chuỗi byte trong mảng byte (tự viết vì String không an toàn với dữ liệu",
+      "start": 8405,
+      "end": 8516
+    }
+  ],
+  "total_tokens": 4797
+}

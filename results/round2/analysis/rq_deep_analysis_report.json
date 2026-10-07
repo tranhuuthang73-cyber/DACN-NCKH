@@ -4,9 +4,9 @@
   "rq1": {
     "question": "Does hierarchical memory improve long-context handling?",
     "benchmarks_profiled": [
-      "MK-NIAH",
+      "LongHealth",
       "QASPER",
-      "LongHealth"
+      "MK-NIAH"
     ],
     "summary_by_method": {
       "MK-NIAH::B1": {

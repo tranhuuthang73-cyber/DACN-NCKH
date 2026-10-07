@@ -20,8 +20,8 @@
   "precision": "float32",
   "random_seed": 42,
   "device": "cuda",
-  "wall_clock_time_sec": 25.11,
-  "token_throughput_tps": 2617.34,
+  "wall_clock_time_sec": 24.2,
+  "token_throughput_tps": 2715.55,
   "peak_vram_mb": 828.59,
   "checkpoint_size_mb": 13.52,
   "epoch_train_losses": [

@@ -1,7 +1,7 @@
 """
-Phase 4.4 Master One-Command External GPU Runner
+Phase 4.4 / 4.5 Master One-Command External GPU Runner
 Executes sequential pipeline:
-Preflight -> A1 -> Validate A1 -> A3 -> Validate A3 -> RQ4 -> Validate RQ4 -> Ingest Results
+Preflight -> A1 -> Validate A1 -> A3 -> Validate A3 -> RQ4 -> Validate RQ4 -> RQ2 -> Validate RQ2 -> Ingest Results & Build Package
 
 If any stage fails, execution halts immediately with error code.
 """
@@ -27,7 +27,7 @@ def run_step(step_name, cmd):
     print(f"[PIPELINE STEP PASSED] '{step_name}' completed successfully.")
 
 def main():
-    parser = argparse.ArgumentParser(description="Phase 4.4 One-Command External Runner")
+    parser = argparse.ArgumentParser(description="Phase 4.4 / 4.5 One-Command External Runner")
     parser.add_argument("--dry-run", action="store_true", help="Run entire pipeline in static verification mode without training")
     parser.add_argument("--allow-non-3050", action="store_true", help="Allow running on GPUs other than RTX 3050")
     args = parser.parse_args()
@@ -37,7 +37,7 @@ def main():
     allow_flag = ["--allow-non-3050"] if args.allow_non_3050 else []
 
     print("=" * 75)
-    print("PHASE 4.4 MASTER EXTERNAL GPU PIPELINE")
+    print("PHASE 4.5 MASTER EXTERNAL GPU PIPELINE")
     print(f"Execution Mode: {'DRY RUN (STATIC VALIDATION)' if args.dry_run else 'PRODUCTION GPU RUN'}")
     print("=" * 75)
 
@@ -62,11 +62,17 @@ def main():
     # Step 7: Verify RQ4
     run_step("7. RQ4 Result Verification", [python_bin, str(PHASE_4_4_DIR / "verify_results.py"), "--target", "RQ4"] + dry_flag)
 
-    # Step 8: Result Ingestion
-    run_step("8. Result Collection & Ingestion", [python_bin, str(PHASE_4_4_DIR / "collect_results.py")] + dry_flag)
+    # Step 8: RQ2 Execution
+    run_step("8. RQ2 Structure vs Fixed-Token Execution", [python_bin, str(PHASE_4_4_DIR / "run_rq2.py")] + dry_flag)
+
+    # Step 9: Verify RQ2
+    run_step("9. RQ2 Result Verification", [python_bin, str(PHASE_4_4_DIR / "verify_results.py"), "--target", "RQ2"] + dry_flag)
+
+    # Step 10: Result Ingestion & Package Creation
+    run_step("10. Result Collection & Package Creation", [python_bin, str(PHASE_4_4_DIR / "collect_results.py")] + dry_flag)
 
     print("\n" + "=" * 75)
-    print("[MASTER PIPELINE COMPLETED] All stages executed and verified successfully.")
+    print("[MASTER PIPELINE COMPLETED] All 10 stages executed and verified successfully.")
     print("=" * 75)
 
 if __name__ == "__main__":

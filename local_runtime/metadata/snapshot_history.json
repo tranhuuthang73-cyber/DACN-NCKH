@@ -2287,7 +2287,549 @@
       "timestamp": "2026-10-06T10:10:41Z",
       "snapshot_path": "local_runtime/snapshots/snap_1791281441_5ffe3a.pt",
       "description": "Post-ingestion snapshot for DOC_1791281440"
+    },
+    {
+      "snapshot_id": "snap_1791283042_d2c9d2",
+      "previous_snapshot_id": "snap_1791281441_5ffe3a",
+      "document_ids_before": [
+        "DOC_1791281440"
+      ],
+      "document_ids_after": [
+        "DOC_1791283042337_9b86a7"
+      ],
+      "checkpoint_sha256": "1eb1d286f040178721f388d054936f26edbfffbf3676b97394d10e1b1d7fbcd8",
+      "config_hash": "cfg_snap_snap_1791283",
+      "timestamp": "2026-10-06T10:37:22Z",
+      "snapshot_path": "local_runtime/snapshots/snap_1791283042_d2c9d2.pt",
+      "description": "Pre-ingestion snapshot for DOC_1791283042337_9b86a7"
+    },
+    {
+      "snapshot_id": "snap_1791283042_613ff6",
+      "previous_snapshot_id": "snap_1791283042_d2c9d2",
+      "document_ids_before": [
+        "DOC_1791283042337_9b86a7"
+      ],
+      "document_ids_after": [
+        "DOC_1791283042337_9b86a7"
+      ],
+      "checkpoint_sha256": "9826dddfe475413adddff93ea33e4d3e6aae72c98d8dd5a14f2c969ceb244d79",
+      "config_hash": "cfg_snap_snap_1791283",
+      "timestamp": "2026-10-06T10:37:22Z",
+      "snapshot_path": "local_runtime/snapshots/snap_1791283042_613ff6.pt",
+      "description": "Post-ingestion snapshot for DOC_1791283042337_9b86a7"
+    },
+    {
+      "snapshot_id": "snap_1791283042_2e4217",
+      "previous_snapshot_id": "snap_1791283042_613ff6",
+      "document_ids_before": [
+        "DOC_1791283042337_9b86a7"
+      ],
+      "document_ids_after": [
+        "DOC_A"
+      ],
+      "checkpoint_sha256": "ca7a0469eb22e875639dbd0304d0a779369cbc94b9daa5769079b7a409b09903",
+      "config_hash": "cfg_snap_snap_1791283",
+      "timestamp": "2026-10-06T10:37:22Z",
+      "snapshot_path": "local_runtime/snapshots/snap_1791283042_2e4217.pt",
+      "description": "Initial Baseline"
+    },
+    {
+      "snapshot_id": "snap_1791283042_cd7483",
+      "previous_snapshot_id": "snap_1791283042_2e4217",
+      "document_ids_before": [
+        "DOC_A"
+      ],
+      "document_ids_after": [
+        "DOC_A",
+        "DOC_B"
+      ],
+      "checkpoint_sha256": "59ae4d5333be50bad19457c0afb71c3bb318fc931f34e5b8cb82a243b5cfedd8",
+      "config_hash": "cfg_snap_snap_1791283",
+      "timestamp": "2026-10-06T10:37:22Z",
+      "snapshot_path": "local_runtime/snapshots/snap_1791283042_cd7483.pt",
+      "description": "Mutated State"
+    },
+    {
+      "snapshot_id": "snap_1791283042_4ae276",
+      "previous_snapshot_id": "snap_1791283042_2e4217",
+      "document_ids_before": [
+        "DOC_A"
+      ],
+      "document_ids_after": [
+        "LIFECYCLE_DOC_1791283042"
+      ],
+      "checkpoint_sha256": "49ebb6eeb7e029b3c924a678dad964ba8846c0b6346fe59d44d11155902e527d",
+      "config_hash": "cfg_snap_snap_1791283",
+      "timestamp": "2026-10-06T10:37:22Z",
+      "snapshot_path": "local_runtime/snapshots/snap_1791283042_4ae276.pt",
+      "description": "Pre-ingestion snapshot for LIFECYCLE_DOC_1791283042"
+    },
+    {
+      "snapshot_id": "snap_1791283042_297e79",
+      "previous_snapshot_id": "snap_1791283042_4ae276",
+      "document_ids_before": [
+        "LIFECYCLE_DOC_1791283042"
+      ],
+      "document_ids_after": [
+        "LIFECYCLE_DOC_1791283042"
+      ],
+      "checkpoint_sha256": "55e2f58b4e09d517ca819a2f48894ca85afb2399446821fe31a7a514d540fa4c",
+      "config_hash": "cfg_snap_snap_1791283",
+      "timestamp": "2026-10-06T10:37:22Z",
+      "snapshot_path": "local_runtime/snapshots/snap_1791283042_297e79.pt",
+      "description": "Post-ingestion snapshot for LIFECYCLE_DOC_1791283042"
+    },
+    {
+      "snapshot_id": "snap_1791283043_0f76d5",
+      "previous_snapshot_id": "snap_1791283042_297e79",
+      "document_ids_before": [
+        "LIFECYCLE_DOC_1791283042"
+      ],
+      "document_ids_after": [
+        "DOC_1791283042968_18bef2"
+      ],
+      "checkpoint_sha256": "a2b9145dd8f2e6a93dace3309e5f8c8a56d1c01c57c06c16bafad3cc070c5af8",
+      "config_hash": "cfg_snap_snap_1791283",
+      "timestamp": "2026-10-06T10:37:23Z",
+      "snapshot_path": "local_runtime/snapshots/snap_1791283043_0f76d5.pt",
+      "description": "Pre-ingestion snapshot for DOC_1791283042968_18bef2"
+    },
+    {
+      "snapshot_id": "snap_1791283043_6667cc",
+      "previous_snapshot_id": "snap_1791283043_0f76d5",
+      "document_ids_before": [
+        "DOC_1791283042968_18bef2"
+      ],
+      "document_ids_after": [
+        "DOC_1791283042968_18bef2"
+      ],
+      "checkpoint_sha256": "98149abf3d7dd221316f0757e0c7c75d5d65de5e3bb591d948daa1f1783598ad",
+      "config_hash": "cfg_snap_snap_1791283",
+      "timestamp": "2026-10-06T10:37:23Z",
+      "snapshot_path": "local_runtime/snapshots/snap_1791283043_6667cc.pt",
+      "description": "Post-ingestion snapshot for DOC_1791283042968_18bef2"
+    },
+    {
+      "snapshot_id": "snap_1791283043_eb79bc",
+      "previous_snapshot_id": "snap_1791283043_6667cc",
+      "document_ids_before": [
+        "DOC_1791283042968_18bef2"
+      ],
+      "document_ids_after": [
+        "DOC_1791283042968_18bef2"
+      ],
+      "checkpoint_sha256": "d2a2be5032e8c0307bfc0c9ec3f72e2c8f5dd93c49b7d12a382c12b66ee0632d",
+      "config_hash": "cfg_snap_snap_1791283",
+      "timestamp": "2026-10-06T10:37:23Z",
+      "snapshot_path": "local_runtime/snapshots/snap_1791283043_eb79bc.pt",
+      "description": "Snapshot prior to removal"
+    },
+    {
+      "snapshot_id": "snap_1791283043_75024a",
+      "previous_snapshot_id": "snap_1791283043_eb79bc",
+      "document_ids_before": [
+        "DOC_1791283042968_18bef2"
+      ],
+      "document_ids_after": [
+        "DOC_ALPHA"
+      ],
+      "checkpoint_sha256": "06815d3fda9701a32c5e8ff7ba653594ceb4c790aa32b323e2f0186314d884b4",
+      "config_hash": "cfg_snap_snap_1791283",
+      "timestamp": "2026-10-06T10:37:23Z",
+      "snapshot_path": "local_runtime/snapshots/snap_1791283043_75024a.pt",
+      "description": "Doc Alpha v1"
+    },
+    {
+      "snapshot_id": "snap_1791283043_67682f",
+      "previous_snapshot_id": "snap_1791283043_75024a",
+      "document_ids_before": [
+        "DOC_ALPHA"
+      ],
+      "document_ids_after": [
+        "DOC_ALPHA"
+      ],
+      "checkpoint_sha256": "34f21f3ab1e2ccb39911e1b0d18ce5a69ac9f51781723a34e22527eed2d87fff",
+      "config_hash": "cfg_snap_snap_1791283",
+      "timestamp": "2026-10-06T10:37:23Z",
+      "snapshot_path": "local_runtime/snapshots/snap_1791283043_67682f.pt",
+      "description": "Doc Alpha v2"
+    },
+    {
+      "snapshot_id": "snap_1791283056_b0cd5f",
+      "previous_snapshot_id": "snap_1791283043_67682f",
+      "document_ids_before": [
+        "DOC_ALPHA"
+      ],
+      "document_ids_after": [
+        "TEST_DOC_911"
+      ],
+      "checkpoint_sha256": "92c3e4cb4393c20d18f0194110040074087f85271e079f9ef9ab5aee872ee6c4",
+      "config_hash": "cfg_snap_snap_1791283",
+      "timestamp": "2026-10-06T10:37:36Z",
+      "snapshot_path": "local_runtime/snapshots/snap_1791283056_b0cd5f.pt",
+      "description": "Pre-ingestion snapshot for TEST_DOC_911"
+    },
+    {
+      "snapshot_id": "snap_1791283056_9fcaf7",
+      "previous_snapshot_id": "snap_1791283056_b0cd5f",
+      "document_ids_before": [
+        "TEST_DOC_911"
+      ],
+      "document_ids_after": [
+        "TEST_DOC_911"
+      ],
+      "checkpoint_sha256": "96be606d60cdf186c10e76587eb955e7b95fbeac68fb01bb4c60d0a0b888b3ce",
+      "config_hash": "cfg_snap_snap_1791283",
+      "timestamp": "2026-10-06T10:37:36Z",
+      "snapshot_path": "local_runtime/snapshots/snap_1791283056_9fcaf7.pt",
+      "description": "Post-ingestion snapshot for TEST_DOC_911"
+    },
+    {
+      "snapshot_id": "snap_1791283057_62b3b2",
+      "previous_snapshot_id": "snap_1791283056_9fcaf7",
+      "document_ids_before": [
+        "TEST_DOC_911"
+      ],
+      "document_ids_after": [
+        "DOC_1791283057"
+      ],
+      "checkpoint_sha256": "5a7be011f0edcb4bfd460d6df49705d4d38a4a0db3fa97b92c3977a26621e98c",
+      "config_hash": "cfg_snap_snap_1791283",
+      "timestamp": "2026-10-06T10:37:37Z",
+      "snapshot_path": "local_runtime/snapshots/snap_1791283057_62b3b2.pt",
+      "description": "Pre-ingestion snapshot for DOC_1791283057"
+    },
+    {
+      "snapshot_id": "snap_1791283057_2884de",
+      "previous_snapshot_id": "snap_1791283057_62b3b2",
+      "document_ids_before": [
+        "DOC_1791283057"
+      ],
+      "document_ids_after": [
+        "DOC_1791283057"
+      ],
+      "checkpoint_sha256": "4531117b9747f5dd8c566d42bdd0ccc58184b82c6f0f01c57184b5b619564d50",
+      "config_hash": "cfg_snap_snap_1791283",
+      "timestamp": "2026-10-06T10:37:37Z",
+      "snapshot_path": "local_runtime/snapshots/snap_1791283057_2884de.pt",
+      "description": "Post-ingestion snapshot for DOC_1791283057"
+    },
+    {
+      "snapshot_id": "snap_1791283057_e89d53",
+      "previous_snapshot_id": "snap_1791283057_2884de",
+      "document_ids_before": [
+        "DOC_1791283057"
+      ],
+      "document_ids_after": [
+        "DOC_1791283057937_0958a8"
+      ],
+      "checkpoint_sha256": "1982e81c3d4e18215294ca774dcdfc5106c2013f2f7335e54c5ffb550c874011",
+      "config_hash": "cfg_snap_snap_1791283",
+      "timestamp": "2026-10-06T10:37:37Z",
+      "snapshot_path": "local_runtime/snapshots/snap_1791283057_e89d53.pt",
+      "description": "Pre-ingestion snapshot for DOC_1791283057937_0958a8"
+    },
+    {
+      "snapshot_id": "snap_1791283058_3f5a7c",
+      "previous_snapshot_id": "snap_1791283057_e89d53",
+      "document_ids_before": [
+        "DOC_1791283057937_0958a8"
+      ],
+      "document_ids_after": [
+        "DOC_1791283057937_0958a8"
+      ],
+      "checkpoint_sha256": "042eb4840e9b72a260fda9b954a023f11660ad80ec539cee271700a35630aac5",
+      "config_hash": "cfg_snap_snap_1791283",
+      "timestamp": "2026-10-06T10:37:38Z",
+      "snapshot_path": "local_runtime/snapshots/snap_1791283058_3f5a7c.pt",
+      "description": "Post-ingestion snapshot for DOC_1791283057937_0958a8"
+    },
+    {
+      "snapshot_id": "snap_1791283098_eb687b",
+      "previous_snapshot_id": "snap_1791283058_3f5a7c",
+      "document_ids_before": [
+        "DOC_1791283057937_0958a8"
+      ],
+      "document_ids_after": [
+        "DOC_1791283098620_4bf746"
+      ],
+      "checkpoint_sha256": "7a6d69e280cb8f16988401e197088f7e9ee76af71b8b6619046434b464d3c85c",
+      "config_hash": "cfg_snap_snap_1791283",
+      "timestamp": "2026-10-06T10:38:18Z",
+      "snapshot_path": "local_runtime/snapshots/snap_1791283098_eb687b.pt",
+      "description": "Pre-ingestion snapshot for DOC_1791283098620_4bf746"
+    },
+    {
+      "snapshot_id": "snap_1791283100_927af0",
+      "previous_snapshot_id": "snap_1791283098_eb687b",
+      "document_ids_before": [
+        "DOC_1791283098620_4bf746"
+      ],
+      "document_ids_after": [
+        "DOC_1791283098620_4bf746"
+      ],
+      "checkpoint_sha256": "ffa145cfaae9d17e18045ba37e93f2699610401a3a3191ee4491f3e3a4e66ada",
+      "config_hash": "cfg_snap_snap_1791283",
+      "timestamp": "2026-10-06T10:38:20Z",
+      "snapshot_path": "local_runtime/snapshots/snap_1791283100_927af0.pt",
+      "description": "Post-ingestion snapshot for DOC_1791283098620_4bf746"
+    },
+    {
+      "snapshot_id": "snap_1791283100_fee8d3",
+      "previous_snapshot_id": "snap_1791283100_927af0",
+      "document_ids_before": [
+        "DOC_1791283098620_4bf746"
+      ],
+      "document_ids_after": [
+        "DOC_A"
+      ],
+      "checkpoint_sha256": "11ed18d2987eca0a4d34c01fb487f25362029853444065df5e680cd1ab143a86",
+      "config_hash": "cfg_snap_snap_1791283",
+      "timestamp": "2026-10-06T10:38:20Z",
+      "snapshot_path": "local_runtime/snapshots/snap_1791283100_fee8d3.pt",
+      "description": "Initial Baseline"
+    },
+    {
+      "snapshot_id": "snap_1791283100_1557cb",
+      "previous_snapshot_id": "snap_1791283100_fee8d3",
+      "document_ids_before": [
+        "DOC_A"
+      ],
+      "document_ids_after": [
+        "DOC_A",
+        "DOC_B"
+      ],
+      "checkpoint_sha256": "35716ce9ef417c290a604e2876a55389301d77913c33dadefb7a4de95e84eb25",
+      "config_hash": "cfg_snap_snap_1791283",
+      "timestamp": "2026-10-06T10:38:20Z",
+      "snapshot_path": "local_runtime/snapshots/snap_1791283100_1557cb.pt",
+      "description": "Mutated State"
+    },
+    {
+      "snapshot_id": "snap_1791283100_3cf6be",
+      "previous_snapshot_id": "snap_1791283100_fee8d3",
+      "document_ids_before": [
+        "DOC_A"
+      ],
+      "document_ids_after": [
+        "LIFECYCLE_DOC_1791283100"
+      ],
+      "checkpoint_sha256": "ed3265fc9393af98b4fc00116d5979c3d9d3ad71b27ad0292ef881ebaf160e80",
+      "config_hash": "cfg_snap_snap_1791283",
+      "timestamp": "2026-10-06T10:38:20Z",
+      "snapshot_path": "local_runtime/snapshots/snap_1791283100_3cf6be.pt",
+      "description": "Pre-ingestion snapshot for LIFECYCLE_DOC_1791283100"
+    },
+    {
+      "snapshot_id": "snap_1791283100_09c3bd",
+      "previous_snapshot_id": "snap_1791283100_3cf6be",
+      "document_ids_before": [
+        "LIFECYCLE_DOC_1791283100"
+      ],
+      "document_ids_after": [
+        "LIFECYCLE_DOC_1791283100"
+      ],
+      "checkpoint_sha256": "a7376e952019fa8794ee7090373d07d9b3cd83280125e3b96778cb4d720b6d12",
+      "config_hash": "cfg_snap_snap_1791283",
+      "timestamp": "2026-10-06T10:38:20Z",
+      "snapshot_path": "local_runtime/snapshots/snap_1791283100_09c3bd.pt",
+      "description": "Post-ingestion snapshot for LIFECYCLE_DOC_1791283100"
+    },
+    {
+      "snapshot_id": "snap_1791283100_f611a9",
+      "previous_snapshot_id": "snap_1791283100_09c3bd",
+      "document_ids_before": [
+        "LIFECYCLE_DOC_1791283100"
+      ],
+      "document_ids_after": [
+        "DOC_1791283100781_bbd126"
+      ],
+      "checkpoint_sha256": "eb85eea6ffe6bbcd760411a3d8355c019fe99f989c3a8708206216aead437992",
+      "config_hash": "cfg_snap_snap_1791283",
+      "timestamp": "2026-10-06T10:38:20Z",
+      "snapshot_path": "local_runtime/snapshots/snap_1791283100_f611a9.pt",
+      "description": "Pre-ingestion snapshot for DOC_1791283100781_bbd126"
+    },
+    {
+      "snapshot_id": "snap_1791283101_4da12b",
+      "previous_snapshot_id": "snap_1791283100_f611a9",
+      "document_ids_before": [
+        "DOC_1791283100781_bbd126"
+      ],
+      "document_ids_after": [
+        "DOC_1791283100781_bbd126"
+      ],
+      "checkpoint_sha256": "d5da89fc6c00a0c9d0d78571495136aa3070264eceb3f99459c76144a7f3c144",
+      "config_hash": "cfg_snap_snap_1791283",
+      "timestamp": "2026-10-06T10:38:21Z",
+      "snapshot_path": "local_runtime/snapshots/snap_1791283101_4da12b.pt",
+      "description": "Post-ingestion snapshot for DOC_1791283100781_bbd126"
+    },
+    {
+      "snapshot_id": "snap_1791283101_ad26ca",
+      "previous_snapshot_id": "snap_1791283101_4da12b",
+      "document_ids_before": [
+        "DOC_1791283100781_bbd126"
+      ],
+      "document_ids_after": [
+        "DOC_1791283100781_bbd126"
+      ],
+      "checkpoint_sha256": "7a42bbdfd564cb6817570bc4f1428d150d8f0045ace2d5911f06765ee1eb01bb",
+      "config_hash": "cfg_snap_snap_1791283",
+      "timestamp": "2026-10-06T10:38:21Z",
+      "snapshot_path": "local_runtime/snapshots/snap_1791283101_ad26ca.pt",
+      "description": "Snapshot prior to removal"
+    },
+    {
+      "snapshot_id": "snap_1791283101_e15759",
+      "previous_snapshot_id": "snap_1791283101_ad26ca",
+      "document_ids_before": [
+        "DOC_1791283100781_bbd126"
+      ],
+      "document_ids_after": [
+        "DOC_ALPHA"
+      ],
+      "checkpoint_sha256": "5436211b37f6973b5992c8a4bf89f5057243253dc05fad90800bc3284b1e0c54",
+      "config_hash": "cfg_snap_snap_1791283",
+      "timestamp": "2026-10-06T10:38:21Z",
+      "snapshot_path": "local_runtime/snapshots/snap_1791283101_e15759.pt",
+      "description": "Doc Alpha v1"
+    },
+    {
+      "snapshot_id": "snap_1791283101_67c8c6",
+      "previous_snapshot_id": "snap_1791283101_e15759",
+      "document_ids_before": [
+        "DOC_ALPHA"
+      ],
+      "document_ids_after": [
+        "DOC_ALPHA"
+      ],
+      "checkpoint_sha256": "59497ff565dc8076fe110ffebce6817b160784357d491322c29a0a7b30bd741f",
+      "config_hash": "cfg_snap_snap_1791283",
+      "timestamp": "2026-10-06T10:38:21Z",
+      "snapshot_path": "local_runtime/snapshots/snap_1791283101_67c8c6.pt",
+      "description": "Doc Alpha v2"
+    },
+    {
+      "snapshot_id": "snap_1791283115_baaf96",
+      "previous_snapshot_id": "snap_1791283101_67c8c6",
+      "document_ids_before": [
+        "DOC_ALPHA"
+      ],
+      "document_ids_after": [
+        "TEST_DOC_911"
+      ],
+      "checkpoint_sha256": "93db45ab79ad9e8c3ed357f84c7c54660e1c712de6cae2300308e8d6a27ba448",
+      "config_hash": "cfg_snap_snap_1791283",
+      "timestamp": "2026-10-06T10:38:35Z",
+      "snapshot_path": "local_runtime/snapshots/snap_1791283115_baaf96.pt",
+      "description": "Pre-ingestion snapshot for TEST_DOC_911"
+    },
+    {
+      "snapshot_id": "snap_1791283116_ffde69",
+      "previous_snapshot_id": "snap_1791283115_baaf96",
+      "document_ids_before": [
+        "TEST_DOC_911"
+      ],
+      "document_ids_after": [
+        "TEST_DOC_911"
+      ],
+      "checkpoint_sha256": "ae4df45c04febfe5683d72f2927375a2deafc0ef73002beca902858c1a9679fe",
+      "config_hash": "cfg_snap_snap_1791283",
+      "timestamp": "2026-10-06T10:38:36Z",
+      "snapshot_path": "local_runtime/snapshots/snap_1791283116_ffde69.pt",
+      "description": "Post-ingestion snapshot for TEST_DOC_911"
+    },
+    {
+      "snapshot_id": "snap_1791283205_3d3db4",
+      "previous_snapshot_id": "snap_1791283116_ffde69",
+      "document_ids_before": [
+        "TEST_DOC_911"
+      ],
+      "document_ids_after": [
+        "DOC_1791283205"
+      ],
+      "checkpoint_sha256": "0c9c539fb121b8107ecb2820602741a25a0273aab17a45bc00e716e8ebfb92fe",
+      "config_hash": "cfg_snap_snap_1791283",
+      "timestamp": "2026-10-06T10:40:05Z",
+      "snapshot_path": "local_runtime/snapshots/snap_1791283205_3d3db4.pt",
+      "description": "Pre-ingestion snapshot for DOC_1791283205"
+    },
+    {
+      "snapshot_id": "snap_1791283205_5412ec",
+      "previous_snapshot_id": "snap_1791283205_3d3db4",
+      "document_ids_before": [
+        "DOC_1791283205"
+      ],
+      "document_ids_after": [
+        "DOC_1791283205"
+      ],
+      "checkpoint_sha256": "7e56ff5b048e594cebefe0894cf8101fc56acaf743b38d5bf700c88f92aae27c",
+      "config_hash": "cfg_snap_snap_1791283",
+      "timestamp": "2026-10-06T10:40:05Z",
+      "snapshot_path": "local_runtime/snapshots/snap_1791283205_5412ec.pt",
+      "description": "Post-ingestion snapshot for DOC_1791283205"
+    },
+    {
+      "snapshot_id": "snap_1791283205_697e3e",
+      "previous_snapshot_id": "snap_1791283205_5412ec",
+      "document_ids_before": [
+        "DOC_1791283205"
+      ],
+      "document_ids_after": [
+        "DOC_1791283205834_afe706"
+      ],
+      "checkpoint_sha256": "4e75eff0c6f87d781703480166d1c5fb30ea797027f8c3d68373aeaf00d0aa40",
+      "config_hash": "cfg_snap_snap_1791283",
+      "timestamp": "2026-10-06T10:40:05Z",
+      "snapshot_path": "local_runtime/snapshots/snap_1791283205_697e3e.pt",
+      "description": "Pre-ingestion snapshot for DOC_1791283205834_afe706"
+    },
+    {
+      "snapshot_id": "snap_1791283206_cdd91b",
+      "previous_snapshot_id": "snap_1791283205_697e3e",
+      "document_ids_before": [
+        "DOC_1791283205834_afe706"
+      ],
+      "document_ids_after": [
+        "DOC_1791283205834_afe706"
+      ],
+      "checkpoint_sha256": "a72fa9219d69410d151a36bbcf87658664691c4b01292d712b79bb1b43153d96",
+      "config_hash": "cfg_snap_snap_1791283",
+      "timestamp": "2026-10-06T10:40:06Z",
+      "snapshot_path": "local_runtime/snapshots/snap_1791283206_cdd91b.pt",
+      "description": "Post-ingestion snapshot for DOC_1791283205834_afe706"
+    },
+    {
+      "snapshot_id": "snap_1791376866_262d64",
+      "previous_snapshot_id": "snap_1791283206_cdd91b",
+      "document_ids_before": [
+        "DOC_1791283205834_afe706"
+      ],
+      "document_ids_after": [
+        "DOC_1791376866"
+      ],
+      "checkpoint_sha256": "4561e722b9b3f6fc520183e97073a74a6966a78aefd9fcb04c15a7c51dd501d1",
+      "config_hash": "cfg_snap_snap_1791376",
+      "timestamp": "2026-10-07T12:41:06Z",
+      "snapshot_path": "local_runtime/snapshots/snap_1791376866_262d64.pt",
+      "description": "Pre-ingestion snapshot for DOC_1791376866"
+    },
+    {
+      "snapshot_id": "snap_1791376891_ee56a4",
+      "previous_snapshot_id": "snap_1791376866_262d64",
+      "document_ids_before": [
+        "DOC_1791376866"
+      ],
+      "document_ids_after": [
+        "DOC_1791376866"
+      ],
+      "checkpoint_sha256": "8da4f37ab67fbd57bcc1561a5244478501d7519025d96ec4870b39cb22642fb0",
+      "config_hash": "cfg_snap_snap_1791376",
+      "timestamp": "2026-10-07T12:41:31Z",
+      "snapshot_path": "local_runtime/snapshots/snap_1791376891_ee56a4.pt",
+      "description": "Post-ingestion snapshot for DOC_1791376866"
     }
   ],
-  "current_snapshot_id": "snap_1791281441_5ffe3a"
+  "current_snapshot_id": "snap_1791376891_ee56a4"
 }

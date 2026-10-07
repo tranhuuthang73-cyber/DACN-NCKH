@@ -252,3 +252,21 @@
 2026-10-04 14:15:07,564 [INFO] All raw outputs successfully written to results/phase4_1/
 2026-10-04 14:15:07,564 [INFO] Ready for statistical aggregation and report generation.
 2026-10-04 14:15:07,564 [INFO] ================================================================================
+2026-10-06 16:29:21,125 [INFO] ================================================================================
+2026-10-06 16:29:21,125 [INFO] PHASE 4.1: FULL CONTROLLED BENCHMARK — OFFICIAL RESEARCH EXPERIMENT
+2026-10-06 16:29:21,125 [INFO] ================================================================================
+2026-10-06 16:29:21,125 [INFO] Backbone: HuggingFaceTB/SmolLM2-135M | Device: cuda | Precision: torch.float16
+2026-10-06 16:29:21,125 [INFO] Seeds: [42, 43, 44] | Training Samples: Exactly 200 samples
+2026-10-06 16:29:21,125 [INFO] Protocol: Locked (Phase 4.0 - 4.0.3)
+2026-10-06 16:29:21,125 [INFO] ================================================================================
+2026-10-06 16:29:21,125 [INFO] RQ1 raw results already exist at D:\DACN-NCKH\results\phase4_1\rq1\rq1_raw_results.json, skipping execution.
+2026-10-06 16:29:21,138 [INFO] RQ2 raw results already exist at D:\DACN-NCKH\results\phase4_1\rq2\rq2_raw_results.json, skipping execution.
+2026-10-06 16:29:21,149 [INFO] RQ3 raw results already exist at D:\DACN-NCKH\results\phase4_1\rq3\rq3_raw_results.json, skipping execution.
+2026-10-06 16:29:21,165 [INFO] RQ4 raw results already exist at D:\DACN-NCKH\results\phase4_1\rq4\rq4_raw_results.json, skipping execution.
+2026-10-06 16:29:21,171 [INFO] RQ5 raw results already exist at D:\DACN-NCKH\results\phase4_1\rq5\rq5_raw_results.json, skipping execution.
+2026-10-06 16:29:21,199 [INFO] Vietnamese raw results already 100% complete at D:\DACN-NCKH\results\phase4_1\vietnamese\vietnamese_raw_results.json, skipping execution.
+2026-10-06 16:29:21,199 [INFO] ================================================================================
+2026-10-06 16:29:21,199 [INFO] PHASE 4.1 BENCHMARK EXECUTION COMPLETE in 0.07 seconds (0.00 mins)
+2026-10-06 16:29:21,199 [INFO] All raw outputs successfully written to results/phase4_1/
+2026-10-06 16:29:21,199 [INFO] Ready for statistical aggregation and report generation.
+2026-10-06 16:29:21,199 [INFO] ================================================================================

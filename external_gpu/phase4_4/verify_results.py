@@ -100,18 +100,34 @@ def verify_target(target, dry_run=False):
             print(f"[!] Missing RQ4 evaluation results: {res_file}")
             return 1
 
+    elif target == "RQ2":
+        res_file = ROOT_DIR / "results" / "phase4_2" / "rq2_external_results.json"
+        if not res_file.exists():
+            print(f"[!] Missing RQ2 evaluation results: {res_file}")
+            return 1
+        with open(res_file, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        n = data.get("sample_size_N", 0)
+        if n < 500:
+            print(f"[!] RQ2 sample size N={n} < 500!")
+            return 1
+        if "statistics" not in data:
+            print("[!] RQ2 missing statistics summary!")
+            return 1
+
     print(f"[SUCCESS] Target {target} verification PASSED.")
     return 0
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Phase 4.4 Result Verifier")
-    parser.add_argument("--target", choices=["A1", "A3", "RQ4", "ALL"], default="ALL", help="Target to verify")
+    parser.add_argument("--target", choices=["A1", "A3", "RQ4", "RQ2", "ALL"], default="ALL", help="Target to verify")
     parser.add_argument("--dry-run", action="store_true", help="Perform verification dry run")
     args = parser.parse_args()
 
-    targets = ["A1", "A3", "RQ4"] if args.target == "ALL" else [args.target]
+    targets = ["A1", "A3", "RQ4", "RQ2"] if args.target == "ALL" else [args.target]
     for t in targets:
         code = verify_target(t, dry_run=args.dry_run)
         if code != 0:
             sys.exit(code)
     sys.exit(0)
+

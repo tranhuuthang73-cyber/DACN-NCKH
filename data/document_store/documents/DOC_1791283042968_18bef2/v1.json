@@ -1,0 +1,30 @@
+{
+  "document_id": "DOC_1791283042968_18bef2",
+  "version": 1,
+  "title": "Tài liệu Nghiên cứu Lưu trữ Bền vững",
+  "raw_text": "# Mục 1: Tri thức Cốt lõi\n\nĐặc tính quan trọng của SA-CMS là lưu trữ tri thức tham số hóa cục bộ ngay cả khi ngắt kết nối mạng.\n\n# Mục 2: Kiểm thử",
+  "passages": [
+    {
+      "passage_id": "DOC_1791283042968_18bef2::P000",
+      "document_id": "DOC_1791283042968_18bef2",
+      "text": "# Mục 1: Tri thức Cốt lõi Đặc tính quan trọng của SA-CMS là lưu trữ tri thức tham số hóa cục bộ ngay cả khi ngắt kết nối mạng. # Mục 2: Kiểm thử",
+      "start_char": 0,
+      "end_char": 146,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "Mục 1: Tri thức Cốt lõi",
+      "metadata": {
+        "section_id": "SEC001",
+        "paragraph_id": "PARA001",
+        "document_version": 1,
+        "category": "Persistence"
+      }
+    }
+  ],
+  "structural_metadata": {},
+  "content_hash": "c18e299f867f1520",
+  "created_at": 1791283042.9683058,
+  "metadata": {
+    "category": "Persistence"
+  }
+}

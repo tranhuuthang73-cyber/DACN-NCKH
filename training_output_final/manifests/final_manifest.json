@@ -1,0 +1,23 @@
+{
+  "title": "Phase 4.5 Full External GPU Execution Manifest",
+  "date": "2026-10-06",
+  "dry_run": false,
+  "ingested_artifacts": {
+    "A1": {
+      "status": "INGESTED",
+      "file": "a1_external_results.json"
+    },
+    "A3": {
+      "status": "INGESTED",
+      "file": "a3_external_results.json"
+    },
+    "RQ4": {
+      "status": "INGESTED",
+      "file": "rq4_external_results.json"
+    },
+    "RQ2": {
+      "status": "INGESTED",
+      "file": "rq2_external_results.json"
+    }
+  }
+}

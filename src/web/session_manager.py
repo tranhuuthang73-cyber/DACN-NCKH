@@ -172,6 +172,32 @@ class ChatSession:
 
         return msg
 
+    def add_system_event(
+        self,
+        event_type: str,
+        content: str,
+        metadata: Optional[Dict[str, Any]] = None,
+    ) -> Dict[str, Any]:
+        msg_id = f"msg_{uuid.uuid4().hex[:10]}"
+        msg = {
+            "id": msg_id,
+            "role": "system",
+            "type": event_type,
+            "content": content,
+            "timestamp": time.time(),
+            "metadata": metadata or {},
+            "citations": [],
+            "evidence": [],
+            "telemetry": {},
+            "routing": "SYSTEM_EVENT",
+            "refused": False,
+            "refusal_reason": None,
+            "diagnostics": {},
+        }
+        self.messages.append(msg)
+        self.updated_at = time.time()
+        return msg
+
     def attach_document(self, doc_id: str) -> bool:
         if doc_id not in self.document_ids:
             self.document_ids.append(doc_id)
@@ -293,6 +319,35 @@ class SessionManager:
                 self._save_sessions()
             return True
         return False
+
+    def record_document_event(
+        self,
+        session_id: str,
+        doc_id: str,
+        title: str,
+        file_name: Optional[str] = None,
+        file_size: Optional[str] = None,
+        source: str = "upload",
+    ) -> Optional[Dict[str, Any]]:
+        session = self.get_session(session_id)
+        if not session:
+            return None
+
+        display_title = title or file_name or doc_id
+        content = f"Đã thêm tài liệu \"{display_title}\" vào cuộc trò chuyện."
+        event = session.add_system_event(
+            event_type="document_attached",
+            content=content,
+            metadata={
+                "document_id": doc_id,
+                "title": display_title,
+                "file_name": file_name or display_title,
+                "file_size": file_size,
+                "source": source,
+            },
+        )
+        self._save_sessions()
+        return event
 
     def detach_document(self, session_id: str, doc_id: str) -> bool:
         session = self.get_session(session_id)

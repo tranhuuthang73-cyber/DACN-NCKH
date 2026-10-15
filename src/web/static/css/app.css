@@ -691,13 +691,10 @@ input:checked + .slider:before {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.5rem 0.6rem;
-  background-color: var(--bg-input);
-  border: 1px solid var(--border-subtle);
-  border-bottom: none;
-  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  padding: 0 0.2rem 0.5rem 0.2rem;
+  background-color: transparent;
+  border: none;
   flex-wrap: wrap;
-  min-height: 44px;
   transition: all var(--transition-fast);
 }
 
@@ -860,11 +857,7 @@ input:checked + .slider:before {
   background-color: var(--accent-subtle);
 }
 
-/* Composer có attachment → input-form bo tròn chỉ phía dưới */
-.composer-attachments + .input-form {
-  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
-  border-top: none;
-}
+/* Removed .composer-attachments + .input-form style */
 
 .btn-primary {
   background-color: var(--accent-primary);

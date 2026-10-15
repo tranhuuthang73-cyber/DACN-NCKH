@@ -1,0 +1,31 @@
+{
+  "method": "B4",
+  "num_levels": 1,
+  "seed": 44,
+  "hardware": {
+    "gpu_name": "NVIDIA GeForce RTX 3050 6GB Laptop GPU",
+    "vram_total_gb": 6.0,
+    "cuda_version": "12.1",
+    "pytorch_version": "2.3.0+cu121",
+    "python_version": "3.10.11"
+  },
+  "config_sha256": "3cba8b30f15a566425b85c806f1288e684c405f9399f3fc65c35098b57aa3023",
+  "train_dataset_sha256": "f79430a56b936723a634fdcb9e61421722198602fa7872a52b0ce1e6ef545131",
+  "training_sample_count": 200,
+  "total_tokens_processed": 65715,
+  "epochs": 3,
+  "train_losses_per_epoch": [
+    4.5163,
+    3.8247,
+    3.1992
+  ],
+  "final_train_loss": 3.1992,
+  "final_val_loss": 4.5211,
+  "final_val_ppl": 91.94,
+  "runtime_sec": 53.23,
+  "throughput_samples_per_sec": 11.27,
+  "throughput_tokens_per_sec": 1234.63,
+  "peak_vram_mb": 672.61,
+  "checkpoint_path": "output\\checkpoints\\seed44\\cms_1lvl_seed_44.pt",
+  "checkpoint_size_mb": 6.77
+}

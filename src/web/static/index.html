@@ -74,16 +74,7 @@
         </div>
 
         <div class="header-center">
-          <!-- Tài liệu đang đính kèm vào phiên chat -->
-          <div class="attached-docs-bar" id="attached-docs-bar">
-            <span class="attached-label">Tài liệu:</span>
-            <div class="attached-tags-list" id="attached-tags-list">
-              <!-- Render động qua JS -->
-            </div>
-            <button class="btn btn-sm btn-outline" id="btn-attach-more" title="Đính kèm thêm tài liệu">
-              <span>＋</span> Thêm tài liệu
-            </button>
-          </div>
+          <!-- Tài liệu đính kèm đã được di chuyển xuống khu vực chat input -->
         </div>
 
         <div class="header-right">
@@ -334,36 +325,36 @@
             </div>
           </div>
 
-          <!-- ===== COMPOSER ATTACHMENTS AREA (nằm NGAY TRÊN chat input) ===== -->
-          <div class="composer-attachments" id="composer-attachments" style="display: none;">
-            <div class="composer-attachments-list" id="composer-attachments-list">
-              <!-- File chips render động qua JS -->
-            </div>
-            <button class="composer-add-more-btn" id="composer-add-more-btn" title="Thêm tài liệu">
-              <span>＋</span> Thêm
-            </button>
-          </div>
-
           <!-- Form nhập câu hỏi -->
-          <form class="input-form" id="chat-input-form">
-            <!-- Nút đính kèm file -->
-            <label class="btn-attach" for="chat-file-attachment" title="Đính kèm tài liệu vào cuộc trò chuyện">
-              <span>📎</span>
-            </label>
-            <input type="file" id="chat-file-attachment" accept=".pdf,.docx,.txt,.md,.png,.jpg,.jpeg" style="display: none;" multiple>
+          <form class="input-form" id="chat-input-form" style="flex-direction: column; align-items: stretch;">
+            <!-- Vùng hiển thị file đã đính kèm (nằm gọn trên textbox) -->
+            <div class="composer-attachments" id="composer-attachments" style="display: none;">
+              <div class="composer-attachments-list" id="composer-attachments-list">
+                <!-- File chips render động qua JS -->
+              </div>
+            </div>
 
-            <!-- Ô nhập văn bản đa dòng -->
-            <textarea
-              id="chat-textarea"
-              placeholder="Hỏi điều gì về tài liệu này..."
-              rows="1"
-              autofocus
-            ></textarea>
+            <div style="display: flex; align-items: flex-end; gap: 0.5rem;">
+              <!-- Nút đính kèm file -->
+              <label class="btn-attach" for="chat-file-attachment" title="Đính kèm tài liệu vào cuộc trò chuyện">
+                <span>📎</span>
+              </label>
+              <input type="file" id="chat-file-attachment" accept=".pdf,.docx,.txt,.md,.png,.jpg,.jpeg" style="display: none;" multiple>
 
-            <!-- Nút gửi câu hỏi -->
-            <button type="submit" class="btn-send" id="btn-send-message" title="Gửi câu hỏi (Enter)">
-              <span>➤</span>
-            </button>
+              <!-- Ô nhập văn bản đa dòng -->
+              <textarea
+                id="chat-textarea"
+                placeholder="Hỏi điều gì về tài liệu này..."
+                rows="1"
+                autofocus
+                style="flex: 1;"
+              ></textarea>
+
+              <!-- Nút gửi câu hỏi -->
+              <button type="submit" class="btn-send" id="btn-send-message" title="Gửi câu hỏi (Enter)">
+                <span>➤</span>
+              </button>
+            </div>
           </form>
 
           <div class="input-disclaimer">

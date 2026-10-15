@@ -367,7 +367,18 @@ async def upload_document(
 
     # If session_id provided, attach to active conversation
     if session_id:
+        session = service.session_manager.get_session(session_id)
+        was_attached = bool(session and doc_id in session.document_ids)
         service.session_manager.attach_document(session_id, doc_id)
+        if session and not was_attached:
+            service.session_manager.record_document_event(
+                session_id=session_id,
+                doc_id=doc_id,
+                title=doc_title,
+                file_name=filename,
+                file_size=size_str,
+                source="upload",
+            )
 
     return {
         "success": True,
@@ -739,7 +750,26 @@ async def attach_document_to_session(session_id: str, req: AttachDocumentRequest
     session = service.session_manager.get_session(session_id)
     if not session:
         raise HTTPException(status_code=404, detail=f"Phiên chat '{session_id}' không tồn tại.")
+    was_attached = req.document_id in session.document_ids
     service.session_manager.attach_document(session_id, req.document_id)
+    if not was_attached:
+        try:
+            doc = service.store.get_document(req.document_id)
+            service.session_manager.record_document_event(
+                session_id=session_id,
+                doc_id=req.document_id,
+                title=doc.title,
+                file_name=doc.metadata.get("file_name", doc.title),
+                file_size=format_file_size(doc.metadata.get("file_size")),
+                source="library",
+            )
+        except Exception:
+            service.session_manager.record_document_event(
+                session_id=session_id,
+                doc_id=req.document_id,
+                title=req.document_id,
+                source="library",
+            )
     return {"success": True, "session_id": session_id, "document_ids": session.document_ids}
 
 

@@ -484,9 +484,9 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_060",
       "seed": 42,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -604,9 +604,9 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_075",
       "seed": 42,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -1093,8 +1093,8 @@
       "item_id": "VN_FINAL_ANS_136",
       "seed": 42,
       "p1_score": 0.0,
-      "b5_score": 1.0,
-      "diff": -1.0
+      "b5_score": 0.0,
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -1333,8 +1333,8 @@
       "item_id": "VN_FINAL_ANS_166",
       "seed": 42,
       "p1_score": 0.0,
-      "b5_score": 1.0,
-      "diff": -1.0
+      "b5_score": 0.0,
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -1924,9 +1924,9 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_240",
       "seed": 42,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -2821,8 +2821,8 @@
       "item_id": "LH_DOC_001_Q1",
       "seed": 42,
       "p1_score": 0.0,
-      "b5_score": 1.0,
-      "diff": -1.0
+      "b5_score": 0.0,
+      "diff": 0.0
     },
     {
       "dataset": "LongHealth",
@@ -2836,9 +2836,9 @@
       "dataset": "LongHealth",
       "item_id": "LH_DOC_001_Q3",
       "seed": 42,
-      "p1_score": 0.0,
+      "p1_score": 1.0,
       "b5_score": 0.0,
-      "diff": 0.0
+      "diff": 1.0
     },
     {
       "dataset": "LongHealth",
@@ -2852,17 +2852,17 @@
       "dataset": "LongHealth",
       "item_id": "LH_DOC_002_Q1",
       "seed": 42,
-      "p1_score": 0.0,
+      "p1_score": 1.0,
       "b5_score": 0.0,
-      "diff": 0.0
+      "diff": 1.0
     },
     {
       "dataset": "LongHealth",
       "item_id": "LH_DOC_002_Q2",
       "seed": 42,
-      "p1_score": 0.0,
+      "p1_score": 1.0,
       "b5_score": 0.0,
-      "diff": 0.0
+      "diff": 1.0
     },
     {
       "dataset": "LongHealth",
@@ -2876,9 +2876,9 @@
       "dataset": "LongHealth",
       "item_id": "LH_DOC_003_Q0",
       "seed": 42,
-      "p1_score": 0.0,
+      "p1_score": 1.0,
       "b5_score": 0.0,
-      "diff": 0.0
+      "diff": 1.0
     },
     {
       "dataset": "LongHealth",
@@ -2900,9 +2900,9 @@
       "dataset": "LongHealth",
       "item_id": "LH_DOC_003_Q3",
       "seed": 42,
-      "p1_score": 0.0,
+      "p1_score": 1.0,
       "b5_score": 0.0,
-      "diff": 0.0
+      "diff": 1.0
     },
     {
       "dataset": "LongHealth",
@@ -2924,9 +2924,9 @@
       "dataset": "LongHealth",
       "item_id": "LH_DOC_004_Q2",
       "seed": 42,
-      "p1_score": 0.0,
+      "p1_score": 1.0,
       "b5_score": 0.0,
-      "diff": 0.0
+      "diff": 1.0
     },
     {
       "dataset": "LongHealth",
@@ -2949,8 +2949,8 @@
       "item_id": "LH_DOC_005_Q1",
       "seed": 42,
       "p1_score": 0.0,
-      "b5_score": 0.0,
-      "diff": 0.0
+      "b5_score": 1.0,
+      "diff": -1.0
     },
     {
       "dataset": "LongHealth",
@@ -2972,81 +2972,81 @@
       "dataset": "QASPER",
       "item_id": "QASPER_DOC_0",
       "seed": 42,
-      "p1_score": 0.25,
-      "b5_score": 0.2143,
-      "diff": 0.0357
+      "p1_score": 0.3226,
+      "b5_score": 0.1875,
+      "diff": 0.1351
     },
     {
       "dataset": "QASPER",
       "item_id": "QASPER_DOC_1",
       "seed": 42,
-      "p1_score": 0.1481,
-      "b5_score": 0.1333,
-      "diff": 0.0148
+      "p1_score": 0.2069,
+      "b5_score": 0.2222,
+      "diff": -0.0153
     },
     {
       "dataset": "QASPER",
       "item_id": "QASPER_DOC_2",
       "seed": 42,
-      "p1_score": 0.0909,
-      "b5_score": 0.1739,
-      "diff": -0.083
+      "p1_score": 0.0833,
+      "b5_score": 0.0833,
+      "diff": 0.0
     },
     {
       "dataset": "QASPER",
       "item_id": "QASPER_DOC_3",
       "seed": 42,
-      "p1_score": 0.5217,
-      "b5_score": 0.5217,
-      "diff": 0.0
+      "p1_score": 0.4762,
+      "b5_score": 0.4348,
+      "diff": 0.0414
     },
     {
       "dataset": "QASPER",
       "item_id": "QASPER_DOC_4",
       "seed": 42,
-      "p1_score": 0.0741,
+      "p1_score": 0.1538,
       "b5_score": 0.1429,
-      "diff": -0.0688
+      "diff": 0.011
     },
     {
       "dataset": "QASPER",
       "item_id": "QASPER_DOC_5",
       "seed": 42,
-      "p1_score": 0.2,
-      "b5_score": 0.2222,
-      "diff": -0.0222
+      "p1_score": 0.6452,
+      "b5_score": 0.2,
+      "diff": 0.4452
     },
     {
       "dataset": "QASPER",
       "item_id": "QASPER_DOC_6",
       "seed": 42,
-      "p1_score": 0.0,
+      "p1_score": 0.08,
       "b5_score": 0.0,
-      "diff": 0.0
+      "diff": 0.08
     },
     {
       "dataset": "QASPER",
       "item_id": "QASPER_DOC_7",
       "seed": 42,
-      "p1_score": 0.0,
-      "b5_score": 0.2308,
-      "diff": -0.2308
+      "p1_score": 0.24,
+      "b5_score": 0.0,
+      "diff": 0.24
     },
     {
       "dataset": "QASPER",
       "item_id": "QASPER_DOC_8",
       "seed": 42,
-      "p1_score": 0.1538,
-      "b5_score": 0.6154,
-      "diff": -0.4615
+      "p1_score": 0.6667,
+      "b5_score": 0.6667,
+      "diff": 0.0
     },
     {
       "dataset": "QASPER",
       "item_id": "QASPER_DOC_9",
       "seed": 42,
-      "p1_score": 0.0741,
-      "b5_score": 0.0,
-      "diff": 0.0741
+      "p1_score": 0.0,
+      "b5_score": 0.069,
+      "diff": -0.069
     },
     {
       "dataset": "VietnameseQA",
@@ -3068,9 +3068,9 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_003",
       "seed": 43,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -3124,9 +3124,9 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_010",
       "seed": 43,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -3149,8 +3149,8 @@
       "item_id": "VN_FINAL_ANS_013",
       "seed": 43,
       "p1_score": 1.0,
-      "b5_score": 1.0,
-      "diff": 0.0
+      "b5_score": 0.0,
+      "diff": 1.0
     },
     {
       "dataset": "VietnameseQA",
@@ -3188,25 +3188,25 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_018",
       "seed": 43,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_019",
       "seed": 43,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_020",
       "seed": 43,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -3220,9 +3220,9 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_022",
       "seed": 43,
-      "p1_score": 0.0,
+      "p1_score": 1.0,
       "b5_score": 0.0,
-      "diff": 0.0
+      "diff": 1.0
     },
     {
       "dataset": "VietnameseQA",
@@ -3244,9 +3244,9 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_025",
       "seed": 43,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -3269,8 +3269,8 @@
       "item_id": "VN_FINAL_ANS_028",
       "seed": 43,
       "p1_score": 1.0,
-      "b5_score": 1.0,
-      "diff": 0.0
+      "b5_score": 0.0,
+      "diff": 1.0
     },
     {
       "dataset": "VietnameseQA",
@@ -3284,17 +3284,17 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_030",
       "seed": 43,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_031",
       "seed": 43,
-      "p1_score": 0.0,
+      "p1_score": 1.0,
       "b5_score": 0.0,
-      "diff": 0.0
+      "diff": 1.0
     },
     {
       "dataset": "VietnameseQA",
@@ -3308,9 +3308,9 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_033",
       "seed": 43,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -3340,9 +3340,9 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_037",
       "seed": 43,
-      "p1_score": 0.0,
+      "p1_score": 1.0,
       "b5_score": 0.0,
-      "diff": 0.0
+      "diff": 1.0
     },
     {
       "dataset": "VietnameseQA",
@@ -3364,9 +3364,9 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_040",
       "seed": 43,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -3389,8 +3389,8 @@
       "item_id": "VN_FINAL_ANS_043",
       "seed": 43,
       "p1_score": 1.0,
-      "b5_score": 1.0,
-      "diff": 0.0
+      "b5_score": 0.0,
+      "diff": 1.0
     },
     {
       "dataset": "VietnameseQA",
@@ -3428,9 +3428,9 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_048",
       "seed": 43,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -3460,9 +3460,9 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_052",
       "seed": 43,
-      "p1_score": 0.0,
+      "p1_score": 1.0,
       "b5_score": 0.0,
-      "diff": 0.0
+      "diff": 1.0
     },
     {
       "dataset": "VietnameseQA",
@@ -3509,8 +3509,8 @@
       "item_id": "VN_FINAL_ANS_058",
       "seed": 43,
       "p1_score": 1.0,
-      "b5_score": 1.0,
-      "diff": 0.0
+      "b5_score": 0.0,
+      "diff": 1.0
     },
     {
       "dataset": "VietnameseQA",
@@ -3548,9 +3548,9 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_063",
       "seed": 43,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -3580,9 +3580,9 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_067",
       "seed": 43,
-      "p1_score": 0.0,
+      "p1_score": 1.0,
       "b5_score": 0.0,
-      "diff": 0.0
+      "diff": 1.0
     },
     {
       "dataset": "VietnameseQA",
@@ -3629,8 +3629,8 @@
       "item_id": "VN_FINAL_ANS_073",
       "seed": 43,
       "p1_score": 1.0,
-      "b5_score": 1.0,
-      "diff": 0.0
+      "b5_score": 0.0,
+      "diff": 1.0
     },
     {
       "dataset": "VietnameseQA",
@@ -3668,9 +3668,9 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_078",
       "seed": 43,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -3700,9 +3700,9 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_082",
       "seed": 43,
-      "p1_score": 0.0,
+      "p1_score": 1.0,
       "b5_score": 0.0,
-      "diff": 0.0
+      "diff": 1.0
     },
     {
       "dataset": "VietnameseQA",
@@ -3749,8 +3749,8 @@
       "item_id": "VN_FINAL_ANS_088",
       "seed": 43,
       "p1_score": 1.0,
-      "b5_score": 1.0,
-      "diff": 0.0
+      "b5_score": 0.0,
+      "diff": 1.0
     },
     {
       "dataset": "VietnameseQA",
@@ -3788,9 +3788,9 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_093",
       "seed": 43,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -3820,9 +3820,9 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_097",
       "seed": 43,
-      "p1_score": 0.0,
+      "p1_score": 1.0,
       "b5_score": 0.0,
-      "diff": 0.0
+      "diff": 1.0
     },
     {
       "dataset": "VietnameseQA",
@@ -3869,8 +3869,8 @@
       "item_id": "VN_FINAL_ANS_103",
       "seed": 43,
       "p1_score": 1.0,
-      "b5_score": 1.0,
-      "diff": 0.0
+      "b5_score": 0.0,
+      "diff": 1.0
     },
     {
       "dataset": "VietnameseQA",
@@ -3908,9 +3908,9 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_108",
       "seed": 43,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -3940,9 +3940,9 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_112",
       "seed": 43,
-      "p1_score": 0.0,
+      "p1_score": 1.0,
       "b5_score": 0.0,
-      "diff": 0.0
+      "diff": 1.0
     },
     {
       "dataset": "VietnameseQA",
@@ -3964,9 +3964,9 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_115",
       "seed": 43,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -3989,8 +3989,8 @@
       "item_id": "VN_FINAL_ANS_118",
       "seed": 43,
       "p1_score": 1.0,
-      "b5_score": 1.0,
-      "diff": 0.0
+      "b5_score": 0.0,
+      "diff": 1.0
     },
     {
       "dataset": "VietnameseQA",
@@ -4028,17 +4028,17 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_123",
       "seed": 43,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_124",
       "seed": 43,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -4060,9 +4060,9 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_127",
       "seed": 43,
-      "p1_score": 0.0,
+      "p1_score": 1.0,
       "b5_score": 0.0,
-      "diff": 0.0
+      "diff": 1.0
     },
     {
       "dataset": "VietnameseQA",
@@ -4109,8 +4109,8 @@
       "item_id": "VN_FINAL_ANS_133",
       "seed": 43,
       "p1_score": 1.0,
-      "b5_score": 1.0,
-      "diff": 0.0
+      "b5_score": 0.0,
+      "diff": 1.0
     },
     {
       "dataset": "VietnameseQA",
@@ -4148,9 +4148,9 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_138",
       "seed": 43,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -4229,8 +4229,8 @@
       "item_id": "VN_FINAL_ANS_148",
       "seed": 43,
       "p1_score": 1.0,
-      "b5_score": 1.0,
-      "diff": 0.0
+      "b5_score": 0.0,
+      "diff": 1.0
     },
     {
       "dataset": "VietnameseQA",
@@ -4268,16 +4268,16 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_153",
       "seed": 43,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_154",
       "seed": 43,
-      "p1_score": 1.0,
-      "b5_score": 1.0,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
       "diff": 0.0
     },
     {
@@ -4300,9 +4300,9 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_157",
       "seed": 43,
-      "p1_score": 0.0,
+      "p1_score": 1.0,
       "b5_score": 0.0,
-      "diff": 0.0
+      "diff": 1.0
     },
     {
       "dataset": "VietnameseQA",
@@ -4324,9 +4324,9 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_160",
       "seed": 43,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -4349,8 +4349,8 @@
       "item_id": "VN_FINAL_ANS_163",
       "seed": 43,
       "p1_score": 1.0,
-      "b5_score": 1.0,
-      "diff": 0.0
+      "b5_score": 0.0,
+      "diff": 1.0
     },
     {
       "dataset": "VietnameseQA",
@@ -4364,9 +4364,9 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_165",
       "seed": 43,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -4388,9 +4388,9 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_168",
       "seed": 43,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -4469,8 +4469,8 @@
       "item_id": "VN_FINAL_ANS_178",
       "seed": 43,
       "p1_score": 1.0,
-      "b5_score": 1.0,
-      "diff": 0.0
+      "b5_score": 0.0,
+      "diff": 1.0
     },
     {
       "dataset": "VietnameseQA",
@@ -4508,9 +4508,9 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_183",
       "seed": 43,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -4540,9 +4540,9 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_187",
       "seed": 43,
-      "p1_score": 0.0,
+      "p1_score": 1.0,
       "b5_score": 0.0,
-      "diff": 0.0
+      "diff": 1.0
     },
     {
       "dataset": "VietnameseQA",
@@ -4564,9 +4564,9 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_190",
       "seed": 43,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -4589,8 +4589,8 @@
       "item_id": "VN_FINAL_ANS_193",
       "seed": 43,
       "p1_score": 1.0,
-      "b5_score": 1.0,
-      "diff": 0.0
+      "b5_score": 0.0,
+      "diff": 1.0
     },
     {
       "dataset": "VietnameseQA",
@@ -4628,9 +4628,9 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_198",
       "seed": 43,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -4684,9 +4684,9 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_205",
       "seed": 43,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -4709,8 +4709,8 @@
       "item_id": "VN_FINAL_ANS_208",
       "seed": 43,
       "p1_score": 1.0,
-      "b5_score": 1.0,
-      "diff": 0.0
+      "b5_score": 0.0,
+      "diff": 1.0
     },
     {
       "dataset": "VietnameseQA",
@@ -4748,17 +4748,17 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_213",
       "seed": 43,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_214",
       "seed": 43,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -4780,9 +4780,9 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_217",
       "seed": 43,
-      "p1_score": 0.0,
+      "p1_score": 1.0,
       "b5_score": 0.0,
-      "diff": 0.0
+      "diff": 1.0
     },
     {
       "dataset": "VietnameseQA",
@@ -4804,9 +4804,9 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_220",
       "seed": 43,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -4829,8 +4829,8 @@
       "item_id": "VN_FINAL_ANS_223",
       "seed": 43,
       "p1_score": 1.0,
-      "b5_score": 1.0,
-      "diff": 0.0
+      "b5_score": 0.0,
+      "diff": 1.0
     },
     {
       "dataset": "VietnameseQA",
@@ -4844,9 +4844,9 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_225",
       "seed": 43,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -4868,9 +4868,9 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_228",
       "seed": 43,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -4900,9 +4900,9 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_232",
       "seed": 43,
-      "p1_score": 0.0,
+      "p1_score": 1.0,
       "b5_score": 0.0,
-      "diff": 0.0
+      "diff": 1.0
     },
     {
       "dataset": "VietnameseQA",
@@ -4949,8 +4949,8 @@
       "item_id": "VN_FINAL_ANS_238",
       "seed": 43,
       "p1_score": 1.0,
-      "b5_score": 1.0,
-      "diff": 0.0
+      "b5_score": 0.0,
+      "diff": 1.0
     },
     {
       "dataset": "VietnameseQA",
@@ -4988,9 +4988,9 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_243",
       "seed": 43,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -5020,9 +5020,9 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_247",
       "seed": 43,
-      "p1_score": 0.0,
+      "p1_score": 1.0,
       "b5_score": 0.0,
-      "diff": 0.0
+      "diff": 1.0
     },
     {
       "dataset": "VietnameseQA",
@@ -5069,8 +5069,8 @@
       "item_id": "VN_FINAL_ANS_253",
       "seed": 43,
       "p1_score": 1.0,
-      "b5_score": 1.0,
-      "diff": 0.0
+      "b5_score": 0.0,
+      "diff": 1.0
     },
     {
       "dataset": "VietnameseQA",
@@ -5084,9 +5084,9 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_255",
       "seed": 43,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -5108,9 +5108,9 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_258",
       "seed": 43,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -5140,9 +5140,9 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_262",
       "seed": 43,
-      "p1_score": 0.0,
+      "p1_score": 1.0,
       "b5_score": 0.0,
-      "diff": 0.0
+      "diff": 1.0
     },
     {
       "dataset": "VietnameseQA",
@@ -5189,8 +5189,8 @@
       "item_id": "VN_FINAL_ANS_268",
       "seed": 43,
       "p1_score": 1.0,
-      "b5_score": 1.0,
-      "diff": 0.0
+      "b5_score": 0.0,
+      "diff": 1.0
     },
     {
       "dataset": "VietnameseQA",
@@ -5236,9 +5236,9 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_274",
       "seed": 43,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -5260,9 +5260,9 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_277",
       "seed": 43,
-      "p1_score": 0.0,
+      "p1_score": 1.0,
       "b5_score": 0.0,
-      "diff": 0.0
+      "diff": 1.0
     },
     {
       "dataset": "VietnameseQA",
@@ -5309,8 +5309,8 @@
       "item_id": "VN_FINAL_ANS_283",
       "seed": 43,
       "p1_score": 1.0,
-      "b5_score": 1.0,
-      "diff": 0.0
+      "b5_score": 0.0,
+      "diff": 1.0
     },
     {
       "dataset": "VietnameseQA",
@@ -5324,9 +5324,9 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_285",
       "seed": 43,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -5348,9 +5348,9 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_288",
       "seed": 43,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -5364,9 +5364,9 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_290",
       "seed": 43,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -5380,9 +5380,9 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_292",
       "seed": 43,
-      "p1_score": 0.0,
+      "p1_score": 1.0,
       "b5_score": 0.0,
-      "diff": 0.0
+      "diff": 1.0
     },
     {
       "dataset": "VietnameseQA",
@@ -5429,8 +5429,8 @@
       "item_id": "VN_FINAL_ANS_298",
       "seed": 43,
       "p1_score": 1.0,
-      "b5_score": 1.0,
-      "diff": 0.0
+      "b5_score": 0.0,
+      "diff": 1.0
     },
     {
       "dataset": "VietnameseQA",
@@ -5444,9 +5444,9 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_300",
       "seed": 43,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -5853,8 +5853,8 @@
       "item_id": "LH_DOC_001_Q0",
       "seed": 43,
       "p1_score": 0.0,
-      "b5_score": 1.0,
-      "diff": -1.0
+      "b5_score": 0.0,
+      "diff": 0.0
     },
     {
       "dataset": "LongHealth",
@@ -5868,41 +5868,41 @@
       "dataset": "LongHealth",
       "item_id": "LH_DOC_001_Q2",
       "seed": 43,
-      "p1_score": 1.0,
-      "b5_score": 0.0,
-      "diff": 1.0
+      "p1_score": 0.0,
+      "b5_score": 1.0,
+      "diff": -1.0
     },
     {
       "dataset": "LongHealth",
       "item_id": "LH_DOC_001_Q3",
       "seed": 43,
       "p1_score": 0.0,
-      "b5_score": 1.0,
-      "diff": -1.0
+      "b5_score": 0.0,
+      "diff": 0.0
     },
     {
       "dataset": "LongHealth",
       "item_id": "LH_DOC_002_Q0",
       "seed": 43,
       "p1_score": 0.0,
-      "b5_score": 1.0,
-      "diff": -1.0
+      "b5_score": 0.0,
+      "diff": 0.0
     },
     {
       "dataset": "LongHealth",
       "item_id": "LH_DOC_002_Q1",
       "seed": 43,
-      "p1_score": 0.0,
-      "b5_score": 1.0,
-      "diff": -1.0
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
     },
     {
       "dataset": "LongHealth",
       "item_id": "LH_DOC_002_Q2",
       "seed": 43,
-      "p1_score": 0.0,
-      "b5_score": 1.0,
-      "diff": -1.0
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
     },
     {
       "dataset": "LongHealth",
@@ -5916,17 +5916,17 @@
       "dataset": "LongHealth",
       "item_id": "LH_DOC_003_Q0",
       "seed": 43,
-      "p1_score": 0.0,
-      "b5_score": 1.0,
-      "diff": -1.0
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
     },
     {
       "dataset": "LongHealth",
       "item_id": "LH_DOC_003_Q1",
       "seed": 43,
-      "p1_score": 1.0,
-      "b5_score": 0.0,
-      "diff": 1.0
+      "p1_score": 0.0,
+      "b5_score": 1.0,
+      "diff": -1.0
     },
     {
       "dataset": "LongHealth",
@@ -5940,9 +5940,9 @@
       "dataset": "LongHealth",
       "item_id": "LH_DOC_003_Q3",
       "seed": 43,
-      "p1_score": 0.0,
-      "b5_score": 1.0,
-      "diff": -1.0
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
     },
     {
       "dataset": "LongHealth",
@@ -5957,24 +5957,24 @@
       "item_id": "LH_DOC_004_Q1",
       "seed": 43,
       "p1_score": 0.0,
-      "b5_score": 1.0,
-      "diff": -1.0
+      "b5_score": 0.0,
+      "diff": 0.0
     },
     {
       "dataset": "LongHealth",
       "item_id": "LH_DOC_004_Q2",
       "seed": 43,
       "p1_score": 0.0,
-      "b5_score": 1.0,
-      "diff": -1.0
+      "b5_score": 0.0,
+      "diff": 0.0
     },
     {
       "dataset": "LongHealth",
       "item_id": "LH_DOC_004_Q3",
       "seed": 43,
-      "p1_score": 0.0,
-      "b5_score": 1.0,
-      "diff": -1.0
+      "p1_score": 1.0,
+      "b5_score": 0.0,
+      "diff": 1.0
     },
     {
       "dataset": "LongHealth",
@@ -5988,9 +5988,9 @@
       "dataset": "LongHealth",
       "item_id": "LH_DOC_005_Q1",
       "seed": 43,
-      "p1_score": 1.0,
-      "b5_score": 0.0,
-      "diff": 1.0
+      "p1_score": 0.0,
+      "b5_score": 1.0,
+      "diff": -1.0
     },
     {
       "dataset": "LongHealth",
@@ -6005,72 +6005,72 @@
       "item_id": "LH_DOC_005_Q3",
       "seed": 43,
       "p1_score": 0.0,
-      "b5_score": 1.0,
-      "diff": -1.0
+      "b5_score": 0.0,
+      "diff": 0.0
     },
     {
       "dataset": "QASPER",
       "item_id": "QASPER_DOC_0",
       "seed": 43,
-      "p1_score": 0.1875,
-      "b5_score": 0.1935,
-      "diff": -0.006
+      "p1_score": 0.5517,
+      "b5_score": 0.375,
+      "diff": 0.1767
     },
     {
       "dataset": "QASPER",
       "item_id": "QASPER_DOC_1",
       "seed": 43,
-      "p1_score": 0.1333,
-      "b5_score": 0.2759,
-      "diff": -0.1425
+      "p1_score": 0.1481,
+      "b5_score": 0.1379,
+      "diff": 0.0102
     },
     {
       "dataset": "QASPER",
       "item_id": "QASPER_DOC_2",
       "seed": 43,
       "p1_score": 0.0833,
-      "b5_score": 0.087,
-      "diff": -0.0036
+      "b5_score": 0.08,
+      "diff": 0.0033
     },
     {
       "dataset": "QASPER",
       "item_id": "QASPER_DOC_3",
       "seed": 43,
-      "p1_score": 0.4167,
-      "b5_score": 0.4348,
-      "diff": -0.0181
+      "p1_score": 0.4545,
+      "b5_score": 0.4167,
+      "diff": 0.0379
     },
     {
       "dataset": "QASPER",
       "item_id": "QASPER_DOC_4",
       "seed": 43,
-      "p1_score": 0.0741,
-      "b5_score": 0.0,
-      "diff": 0.0741
+      "p1_score": 0.0,
+      "b5_score": 0.0741,
+      "diff": -0.0741
     },
     {
       "dataset": "QASPER",
       "item_id": "QASPER_DOC_5",
       "seed": 43,
-      "p1_score": 0.8276,
-      "b5_score": 0.7742,
-      "diff": 0.0534
+      "p1_score": 0.6897,
+      "b5_score": 0.7586,
+      "diff": -0.069
     },
     {
       "dataset": "QASPER",
       "item_id": "QASPER_DOC_6",
       "seed": 43,
-      "p1_score": 0.16,
-      "b5_score": 0.1429,
-      "diff": 0.0171
+      "p1_score": 0.1818,
+      "b5_score": 0.3077,
+      "diff": -0.1259
     },
     {
       "dataset": "QASPER",
       "item_id": "QASPER_DOC_7",
       "seed": 43,
-      "p1_score": 0.1538,
+      "p1_score": 0.1481,
       "b5_score": 0.0,
-      "diff": 0.1538
+      "diff": 0.1481
     },
     {
       "dataset": "QASPER",
@@ -6084,17 +6084,17 @@
       "dataset": "QASPER",
       "item_id": "QASPER_DOC_9",
       "seed": 43,
-      "p1_score": 0.1333,
-      "b5_score": 0.0714,
-      "diff": 0.0619
+      "p1_score": 0.1429,
+      "b5_score": 0.0,
+      "diff": 0.1429
     },
     {
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_001",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -6116,25 +6116,25 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_004",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_005",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_006",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -6204,17 +6204,17 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_015",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_016",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -6236,25 +6236,25 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_019",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_020",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_021",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -6324,9 +6324,9 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_030",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -6356,25 +6356,25 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_034",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_035",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_036",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -6452,9 +6452,9 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_046",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -6476,25 +6476,25 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_049",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_050",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_051",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -6524,9 +6524,9 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_055",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -6564,17 +6564,17 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_060",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_061",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -6596,25 +6596,25 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_064",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_065",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_066",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -6644,9 +6644,9 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_070",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -6684,17 +6684,17 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_075",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_076",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -6716,25 +6716,25 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_079",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_080",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_081",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -6804,9 +6804,9 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_090",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -6836,25 +6836,25 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_094",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_095",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_096",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -6924,17 +6924,17 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_105",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_106",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -6956,25 +6956,25 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_109",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_110",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_111",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -7044,17 +7044,17 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_120",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_121",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -7076,25 +7076,25 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_124",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_125",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_126",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -7124,9 +7124,9 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_130",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -7156,25 +7156,25 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_134",
       "seed": 44,
-      "p1_score": 0.0,
-      "b5_score": 0.0,
+      "p1_score": 1.0,
+      "b5_score": 1.0,
       "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_135",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_136",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -7188,33 +7188,33 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_138",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_139",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_140",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_141",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -7244,9 +7244,9 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_145",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -7268,9 +7268,9 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_148",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -7284,17 +7284,17 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_150",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_151",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -7324,17 +7324,17 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_155",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_156",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -7412,9 +7412,9 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_166",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -7428,33 +7428,33 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_168",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_169",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_170",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_171",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -7484,9 +7484,9 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_175",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -7508,9 +7508,9 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_178",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -7524,17 +7524,17 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_180",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_181",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -7572,9 +7572,9 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_186",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -7652,9 +7652,9 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_196",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -7676,25 +7676,25 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_199",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_200",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_201",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -7764,17 +7764,17 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_210",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_211",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -7796,25 +7796,25 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_214",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_215",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_216",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -7844,9 +7844,9 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_220",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -7884,9 +7884,9 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_225",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -7916,25 +7916,25 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_229",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_230",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_231",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -7964,9 +7964,9 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_235",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -8004,17 +8004,17 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_240",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_241",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -8036,25 +8036,25 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_244",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_245",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_246",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -8084,9 +8084,9 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_250",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -8124,17 +8124,17 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_255",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_256",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -8156,25 +8156,25 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_259",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_260",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_261",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -8204,9 +8204,9 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_265",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -8244,17 +8244,17 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_270",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_271",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -8276,25 +8276,25 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_274",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_275",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_276",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -8324,9 +8324,9 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_280",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -8364,17 +8364,17 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_285",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_286",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -8396,25 +8396,25 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_289",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_290",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_291",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -8444,9 +8444,9 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_295",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -8484,9 +8484,9 @@
       "dataset": "VietnameseQA",
       "item_id": "VN_FINAL_ANS_300",
       "seed": 44,
-      "p1_score": 1.0,
+      "p1_score": 0.0,
       "b5_score": 0.0,
-      "diff": 1.0
+      "diff": 0.0
     },
     {
       "dataset": "VietnameseQA",
@@ -8908,9 +8908,9 @@
       "dataset": "LongHealth",
       "item_id": "LH_DOC_001_Q2",
       "seed": 44,
-      "p1_score": 1.0,
-      "b5_score": 0.0,
-      "diff": 1.0
+      "p1_score": 0.0,
+      "b5_score": 1.0,
+      "diff": -1.0
     },
     {
       "dataset": "LongHealth",
@@ -8925,8 +8925,8 @@
       "item_id": "LH_DOC_002_Q0",
       "seed": 44,
       "p1_score": 0.0,
-      "b5_score": 1.0,
-      "diff": -1.0
+      "b5_score": 0.0,
+      "diff": 0.0
     },
     {
       "dataset": "LongHealth",
@@ -8941,20 +8941,28 @@
       "item_id": "LH_DOC_002_Q2",
       "seed": 44,
       "p1_score": 0.0,
-      "b5_score": 1.0,
-      "diff": -1.0
+      "b5_score": 0.0,
+      "diff": 0.0
     },
     {
       "dataset": "LongHealth",
       "item_id": "LH_DOC_002_Q3",
       "seed": 44,
       "p1_score": 1.0,
-      "b5_score": 0.0,
-      "diff": 1.0
+      "b5_score": 1.0,
+      "diff": 0.0
     },
     {
       "dataset": "LongHealth",
       "item_id": "LH_DOC_003_Q0",
+      "seed": 44,
+      "p1_score": 0.0,
+      "b5_score": 0.0,
+      "diff": 0.0
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_DOC_003_Q1",
       "seed": 44,
       "p1_score": 0.0,
       "b5_score": 1.0,
@@ -8962,19 +8970,11 @@
     },
     {
       "dataset": "LongHealth",
-      "item_id": "LH_DOC_003_Q1",
+      "item_id": "LH_DOC_003_Q2",
       "seed": 44,
       "p1_score": 1.0,
       "b5_score": 0.0,
       "diff": 1.0
-    },
-    {
-      "dataset": "LongHealth",
-      "item_id": "LH_DOC_003_Q2",
-      "seed": 44,
-      "p1_score": 0.0,
-      "b5_score": 0.0,
-      "diff": 0.0
     },
     {
       "dataset": "LongHealth",
@@ -9005,16 +9005,16 @@
       "item_id": "LH_DOC_004_Q2",
       "seed": 44,
       "p1_score": 0.0,
-      "b5_score": 1.0,
-      "diff": -1.0
+      "b5_score": 0.0,
+      "diff": 0.0
     },
     {
       "dataset": "LongHealth",
       "item_id": "LH_DOC_004_Q3",
       "seed": 44,
       "p1_score": 0.0,
-      "b5_score": 1.0,
-      "diff": -1.0
+      "b5_score": 0.0,
+      "diff": 0.0
     },
     {
       "dataset": "LongHealth",
@@ -9052,98 +9052,98 @@
       "dataset": "QASPER",
       "item_id": "QASPER_DOC_0",
       "seed": 44,
-      "p1_score": 0.3226,
+      "p1_score": 0.3871,
       "b5_score": 0.2581,
-      "diff": 0.0645
+      "diff": 0.129
     },
     {
       "dataset": "QASPER",
       "item_id": "QASPER_DOC_1",
       "seed": 44,
-      "p1_score": 0.0714,
-      "b5_score": 0.1429,
-      "diff": -0.0714
+      "p1_score": 0.1481,
+      "b5_score": 0.0667,
+      "diff": 0.0815
     },
     {
       "dataset": "QASPER",
       "item_id": "QASPER_DOC_2",
       "seed": 44,
-      "p1_score": 0.08,
-      "b5_score": 0.0,
-      "diff": 0.08
+      "p1_score": 0.0769,
+      "b5_score": 0.0833,
+      "diff": -0.0064
     },
     {
       "dataset": "QASPER",
       "item_id": "QASPER_DOC_3",
       "seed": 44,
-      "p1_score": 0.5,
-      "b5_score": 0.4348,
-      "diff": 0.0652
+      "p1_score": 0.5217,
+      "b5_score": 0.5,
+      "diff": 0.0217
     },
     {
       "dataset": "QASPER",
       "item_id": "QASPER_DOC_4",
       "seed": 44,
-      "p1_score": 0.2143,
-      "b5_score": 0.2069,
-      "diff": 0.0074
+      "p1_score": 0.2069,
+      "b5_score": 0.2222,
+      "diff": -0.0153
     },
     {
       "dataset": "QASPER",
       "item_id": "QASPER_DOC_5",
       "seed": 44,
-      "p1_score": 0.2,
-      "b5_score": 0.1935,
-      "diff": 0.0065
+      "p1_score": 0.4516,
+      "b5_score": 0.2667,
+      "diff": 0.1849
     },
     {
       "dataset": "QASPER",
       "item_id": "QASPER_DOC_6",
       "seed": 44,
-      "p1_score": 0.0714,
-      "b5_score": 0.3333,
-      "diff": -0.2619
+      "p1_score": 0.0,
+      "b5_score": 0.2222,
+      "diff": -0.2222
     },
     {
       "dataset": "QASPER",
       "item_id": "QASPER_DOC_7",
       "seed": 44,
       "p1_score": 0.0,
-      "b5_score": 0.0714,
-      "diff": -0.0714
+      "b5_score": 0.0769,
+      "diff": -0.0769
     },
     {
       "dataset": "QASPER",
       "item_id": "QASPER_DOC_8",
       "seed": 44,
       "p1_score": 0.6667,
-      "b5_score": 0.48,
-      "diff": 0.1867
+      "b5_score": 0.6154,
+      "diff": 0.0513
     },
     {
       "dataset": "QASPER",
       "item_id": "QASPER_DOC_9",
       "seed": 44,
-      "p1_score": 0.1379,
-      "b5_score": 0.069,
-      "diff": 0.069
+      "p1_score": 0.0,
+      "b5_score": 0.1429,
+      "diff": -0.1429
     }
   ],
   "statistics": {
     "N_items": 1140,
-    "mean_p1": 0.3776,
-    "mean_b5": 0.1776,
-    "mean_difference": 0.1999,
-    "std_difference": 0.4485,
-    "t_statistic": 15.0527,
-    "t_pvalue": 7.72570261259953e-47,
-    "wilcoxon_statistic": 3993.5,
-    "wilcoxon_pvalue": 3.429245752681375e-43,
+    "mean_p1": 0.2704,
+    "mean_b5": 0.1497,
+    "mean_difference": 0.1206,
+    "std_difference": 0.3507,
+    "t_statistic": 11.6138,
+    "t_pvalue": 1.5053407173397733e-29,
+    "wilcoxon_statistic": 1190.5,
+    "wilcoxon_pvalue": 4.6994724429627e-28,
     "bootstrap_95_ci": [
-      0.1735,
-      0.2253
+      0.1003,
+      0.1403
     ],
-    "cohens_d": 0.4458,
+    "cohens_d": 0.344,
     "update_budget_equal": true
   }
 }

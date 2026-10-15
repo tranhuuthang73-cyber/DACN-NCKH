@@ -21448,7 +21448,7 @@
     "title": "Chat: Kiến trúc SA-CMS là gì?",
     "document_ids": [],
     "created_at": 1791283206.352533,
-    "updated_at": 1791377043.2466953,
+    "updated_at": 1791382916.8279934,
     "messages": [
       {
         "id": "msg_98833d22fd",
@@ -21957,6 +21957,48 @@
           "attached_document_count": 1,
           "evidence_count": 5,
           "refusal_reason": null,
+          "memory_level": "Level 3 (SA-CMS Gated Multi-Level)"
+        }
+      },
+      {
+        "id": "msg_59666fc1b8",
+        "role": "user",
+        "content": "giúp tôi phân tích những gì bạn hiểu trong file này",
+        "timestamp": 1791382913.6334133,
+        "citations": [],
+        "evidence": [],
+        "telemetry": {},
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {}
+      },
+      {
+        "id": "msg_47415e1774",
+        "role": "assistant",
+        "content": "Tài liệu chưa đủ thông tin. Không tìm thấy đủ thông tin trong tài liệu để trả lời chắc chắn.",
+        "timestamp": 1791382913.648373,
+        "citations": [],
+        "evidence": [],
+        "telemetry": {
+          "input_tokens": 44,
+          "output_tokens": 27,
+          "total_tokens": 71,
+          "total_latency_ms": 16.03,
+          "retrieval_ms": 11.68,
+          "generation_ms": 0.0
+        },
+        "routing": "UNANSWERABLE",
+        "refused": true,
+        "refusal_reason": "UNANSWERABLE",
+        "diagnostics": {
+          "routing": "UNANSWERABLE",
+          "route_explanation": "Tài liệu không đề cập đến thông tin này.",
+          "effective_query": "giúp tôi phân tích những gì bạn hiểu trong file này",
+          "is_follow_up": false,
+          "attached_document_count": 1,
+          "evidence_count": 0,
+          "refusal_reason": "UNANSWERABLE",
           "memory_level": "Level 3 (SA-CMS Gated Multi-Level)"
         }
       }

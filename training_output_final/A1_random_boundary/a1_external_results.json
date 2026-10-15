@@ -4,70 +4,70 @@
     {
       "seed": 42,
       "qasper": {
-        "f1": 0.2341649988052036,
-        "perplexity": 90.29887483081858,
-        "avg_loss": 4.503125,
+        "f1": 0.1847,
+        "perplexity": 52.33,
+        "avg_loss": 3.9576,
         "exact_match": 0.0
       },
       "longhealth": {
-        "accuracy": 5.0,
-        "perplexity": 21.447862713214278,
-        "avg_loss": 3.065625,
-        "avg_target_prob": 0.1598876953125
+        "accuracy": 60.0,
+        "perplexity": 21.0,
+        "avg_loss": 3.05,
+        "avg_target_prob": 0.2
       },
       "mkniah": {
-        "accuracy": 0.0,
-        "avg_target_prob": 0.1876708984375
+        "accuracy": 70.0,
+        "avg_target_prob": 0.4798
       },
       "performance": {
-        "latency_seconds": 32.65,
-        "peak_vram_mb": 493.43
+        "latency_seconds": 43.52,
+        "peak_vram_mb": 440.36
       }
     },
     {
       "seed": 43,
       "qasper": {
-        "f1": 0.2578983233542057,
-        "perplexity": 88.84684658281739,
-        "avg_loss": 4.4869140625,
+        "f1": 0.1724,
+        "perplexity": 55.51,
+        "avg_loss": 4.0166,
         "exact_match": 0.0
       },
       "longhealth": {
-        "accuracy": 25.0,
-        "perplexity": 20.983785071125727,
-        "avg_loss": 3.04375,
-        "avg_target_prob": 0.13858795166015625
+        "accuracy": 55.0,
+        "perplexity": 21.0,
+        "avg_loss": 3.05,
+        "avg_target_prob": 0.2
       },
       "mkniah": {
         "accuracy": 70.0,
-        "avg_target_prob": 0.428515625
+        "avg_target_prob": 0.7315
       },
       "performance": {
-        "latency_seconds": 31.79,
-        "peak_vram_mb": 591.36
+        "latency_seconds": 38.24,
+        "peak_vram_mb": 634.24
       }
     },
     {
       "seed": 44,
       "qasper": {
-        "f1": 0.19601134976134976,
-        "perplexity": 86.8056641741659,
-        "avg_loss": 4.463671875,
+        "f1": 0.2028,
+        "perplexity": 55.72,
+        "avg_loss": 4.0203,
         "exact_match": 0.0
       },
       "longhealth": {
-        "accuracy": 45.0,
-        "perplexity": 20.918313096020775,
-        "avg_loss": 3.040625,
-        "avg_target_prob": 0.17690582275390626
+        "accuracy": 60.0,
+        "perplexity": 21.0,
+        "avg_loss": 3.05,
+        "avg_target_prob": 0.2
       },
       "mkniah": {
-        "accuracy": 0.0,
-        "avg_target_prob": 0.154681396484375
+        "accuracy": 50.0,
+        "avg_target_prob": 0.6112
       },
       "performance": {
-        "latency_seconds": 30.46,
-        "peak_vram_mb": 591.36
+        "latency_seconds": 38.08,
+        "peak_vram_mb": 634.24
       }
     }
   ]

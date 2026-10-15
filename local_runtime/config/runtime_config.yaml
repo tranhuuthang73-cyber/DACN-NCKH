@@ -38,7 +38,7 @@ retrieval:
   min_query_coverage: 0.35
 
 refusal:
-  standard_message: "Không tìm thấy đủ thông tin trong tài liệu để trả lời chắc chắn."
+  standard_message: "Tài liệu được cung cấp không chứa thông tin để trả lời câu hỏi này."
 
 chat_sessions:
   storage_dir: "data/chat_sessions"

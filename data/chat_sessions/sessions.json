@@ -22003,5 +22003,1217 @@
         }
       }
     ]
+  },
+  {
+    "session_id": "chat_3af806b9abc0",
+    "title": "Test Context Session",
+    "document_ids": [],
+    "created_at": 1792043650.4776359,
+    "updated_at": 1792043650.4776359,
+    "messages": []
+  },
+  {
+    "session_id": "chat_3d9a6569ef3e",
+    "title": "Session Multi-doc",
+    "document_ids": [],
+    "created_at": 1792043655.3266966,
+    "updated_at": 1792043656.150758,
+    "messages": [
+      {
+        "id": "msg_7a287d572a",
+        "role": "system",
+        "type": "document_attached",
+        "content": "Đã thêm tài liệu \"Test Multi A\" vào cuộc trò chuyện.",
+        "timestamp": 1792043656.106497,
+        "metadata": {
+          "document_id": "DOC_1792043655",
+          "title": "Test Multi A",
+          "file_name": "test_multi_a.md",
+          "file_size": "75 B",
+          "source": "upload"
+        },
+        "citations": [],
+        "evidence": [],
+        "telemetry": {},
+        "routing": "SYSTEM_EVENT",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {}
+      }
+    ]
+  },
+  {
+    "session_id": "chat_e7c39ed05b68",
+    "title": "Session QA",
+    "document_ids": [],
+    "created_at": 1792043656.1942394,
+    "updated_at": 1792043656.2503378,
+    "messages": [
+      {
+        "id": "msg_44b06a49f3",
+        "role": "user",
+        "content": "Kiến trúc SA-CMS là gì?",
+        "timestamp": 1792043656.2413611,
+        "citations": [],
+        "evidence": [],
+        "telemetry": {},
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {}
+      },
+      {
+        "id": "msg_1c75514317",
+        "role": "assistant",
+        "content": "Dựa trên tài liệu đã cung cấp, Kiến trúc 3 cấp độ SA-CMS. [1]\n\n### Nguồn tham khảo\n[1] **Nghiên cứu Hệ thống Bộ nhớ Đa quy mô SA-CMS trong Mô hình Ngôn ngữ** — Phần nội dung — Đoạn 1\n\n[2] **Tài liệu Nghiên cứu SA-CMS Mẫu Offline** — Chương 1: Kiến trúc Bộ nhớ — Đoạn 2\n\n[3] **Tài liệu Nghiên cứu SA-CMS Mẫu Offline** — Chương 1: Kiến trúc Bộ nhớ — Đoạn 3\n\n[4] **Tài liệu Nghiên cứu SA-CMS Mẫu Offline** — Chương 1: Kiến trúc Bộ nhớ — Đoạn 4\n\n[5] **Tài liệu Nghiên cứu SA-CMS Mẫu Offline** — Chương 1: Kiến trúc Bộ nhớ — Đoạn 5",
+        "timestamp": 1792043656.2503378,
+        "citations": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "VN_DOC_001::P003",
+            "document_id": "VN_DOC_001",
+            "document_title": "Nghiên cứu Hệ thống Bộ nhớ Đa quy mô SA-CMS trong Mô hình Ngôn ngữ",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 1,
+            "score": 14.2854,
+            "text": "## 2. Kiến trúc 3 cấp độ SA-CMS",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 2,
+            "citation_label": "[2]",
+            "passage_id": "DOC_1791271048929_45bf10::P000",
+            "document_id": "DOC_1791271048929_45bf10",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 2,
+            "score": 12.0755,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 3,
+            "citation_label": "[3]",
+            "passage_id": "DOC_1791271306897_51a76d::P000",
+            "document_id": "DOC_1791271306897_51a76d",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 3,
+            "score": 12.0755,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 4,
+            "citation_label": "[4]",
+            "passage_id": "DOC_1791271682090_2ca48d::P000",
+            "document_id": "DOC_1791271682090_2ca48d",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 4,
+            "score": 12.0755,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 5,
+            "citation_label": "[5]",
+            "passage_id": "DOC_1791271952866_dc50af::P000",
+            "document_id": "DOC_1791271952866_dc50af",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 5,
+            "score": 12.0755,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "evidence": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "VN_DOC_001::P003",
+            "document_id": "VN_DOC_001",
+            "document_title": "Nghiên cứu Hệ thống Bộ nhớ Đa quy mô SA-CMS trong Mô hình Ngôn ngữ",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 1,
+            "score": 14.2854,
+            "text": "## 2. Kiến trúc 3 cấp độ SA-CMS",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 2,
+            "citation_label": "[2]",
+            "passage_id": "DOC_1791271048929_45bf10::P000",
+            "document_id": "DOC_1791271048929_45bf10",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 2,
+            "score": 12.0755,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 3,
+            "citation_label": "[3]",
+            "passage_id": "DOC_1791271306897_51a76d::P000",
+            "document_id": "DOC_1791271306897_51a76d",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 3,
+            "score": 12.0755,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 4,
+            "citation_label": "[4]",
+            "passage_id": "DOC_1791271682090_2ca48d::P000",
+            "document_id": "DOC_1791271682090_2ca48d",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 4,
+            "score": 12.0755,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 5,
+            "citation_label": "[5]",
+            "passage_id": "DOC_1791271952866_dc50af::P000",
+            "document_id": "DOC_1791271952866_dc50af",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 5,
+            "score": 12.0755,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "telemetry": {
+          "input_tokens": 256,
+          "output_tokens": 152,
+          "total_tokens": 408,
+          "total_latency_ms": 8.85,
+          "retrieval_ms": 7.29,
+          "generation_ms": 0.01
+        },
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {
+          "routing": "DIRECT_LOOKUP",
+          "route_explanation": "Đã tìm thấy bằng chứng xác thực trong tài liệu.",
+          "effective_query": "Kiến trúc SA-CMS là gì?",
+          "is_follow_up": false,
+          "attached_document_count": 0,
+          "evidence_count": 5,
+          "refusal_reason": null,
+          "memory_level": "Level 3 (SA-CMS Gated Multi-Level)"
+        }
+      }
+    ]
+  },
+  {
+    "session_id": "chat_943bbed38ded",
+    "title": "Session Refusal",
+    "document_ids": [],
+    "created_at": 1792043656.3231065,
+    "updated_at": 1792043656.3644085,
+    "messages": [
+      {
+        "id": "msg_7a01c8c877",
+        "role": "user",
+        "content": "Thủ đô của Nhật Bản là thành phố nào?",
+        "timestamp": 1792043656.3644085,
+        "citations": [],
+        "evidence": [],
+        "telemetry": {},
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {}
+      },
+      {
+        "id": "msg_47e0037a31",
+        "role": "assistant",
+        "content": "Tài liệu chưa đủ thông tin. Không tìm thấy đủ thông tin trong tài liệu để trả lời chắc chắn.",
+        "timestamp": 1792043656.3644085,
+        "citations": [],
+        "evidence": [],
+        "telemetry": {
+          "input_tokens": 42,
+          "output_tokens": 27,
+          "total_tokens": 69,
+          "total_latency_ms": 0.11,
+          "retrieval_ms": 0.0,
+          "generation_ms": 0.0
+        },
+        "routing": "UNANSWERABLE",
+        "refused": true,
+        "refusal_reason": "UNANSWERABLE",
+        "diagnostics": {
+          "routing": "UNANSWERABLE",
+          "route_explanation": "Tài liệu bạn cung cấp không có thông tin để trả lời câu hỏi này.",
+          "effective_query": "Thủ đô của Nhật Bản là thành phố nào?",
+          "is_follow_up": false,
+          "attached_document_count": 0,
+          "evidence_count": 0,
+          "refusal_reason": "UNANSWERABLE",
+          "memory_level": "Level 3 (SA-CMS Gated Multi-Level)"
+        }
+      }
+    ]
+  },
+  {
+    "session_id": "chat_06943a66d6c5",
+    "title": "Session Lengths",
+    "document_ids": [],
+    "created_at": 1792043656.4081652,
+    "updated_at": 1792073076.2860446,
+    "messages": [
+      {
+        "id": "msg_8f2661eee5",
+        "role": "user",
+        "content": "SA-CMS hoạt động như thế nào?",
+        "timestamp": 1792043656.4495852,
+        "citations": [],
+        "evidence": [],
+        "telemetry": {},
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {}
+      },
+      {
+        "id": "msg_b1118720d9",
+        "role": "assistant",
+        "content": "Cấp độ 2 là Section Memory hoạt động ở thang thời gian trung bình, thực hiện tích lũy và cập nhật gradient tại ranh giới kết thúc mỗi đề mục của tài liệu. [1]\n\n### Nguồn tham khảo\n[1] **Nghiên cứu Hệ thống Bộ nhớ Đa quy mô SA-CMS trong Mô hình Ngôn ngữ** — Phần nội dung — Đoạn 1\n\n[2] **Nghiên cứu Hệ thống Bộ nhớ Đa quy mô SA-CMS trong Mô hình Ngôn ngữ** — Phần nội dung — Đoạn 2\n\n[3] **Pldc Da Xoa Abc Du Thua** — Phần nội dung — Đoạn 3\n\n[4] **Cơ chế Bộ nhớ Đa quy mô và Khối Giao tiếp Liên cấp trong Mô hình Ngôn ngữ** — 1. Giới thiệu Kiến trúc Bộ nhớ Đa quy mô — Đoạn 4\n\n[5] **Nhom05-Bai05** — 05.\tMSSV: — Đoạn 5",
+        "timestamp": 1792043656.4625509,
+        "citations": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "VN_DOC_001::P005",
+            "document_id": "VN_DOC_001",
+            "document_title": "Nghiên cứu Hệ thống Bộ nhớ Đa quy mô SA-CMS trong Mô hình Ngôn ngữ",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 1,
+            "score": 8.6237,
+            "text": "Cấp độ 2 là Section Memory hoạt động ở thang thời gian trung bình, thực hiện tích lũy và cập nhật gradient tại ranh giới kết thúc mỗi đề mục của tài liệu.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 2,
+            "citation_label": "[2]",
+            "passage_id": "VN_DOC_001::P006",
+            "document_id": "VN_DOC_001",
+            "document_title": "Nghiên cứu Hệ thống Bộ nhớ Đa quy mô SA-CMS trong Mô hình Ngôn ngữ",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 2,
+            "score": 8.522,
+            "text": "Cấp độ 3 là Document Memory hoạt động ở thang thời gian chậm nhất, ghi lại biểu diễn trừu tượng bất biến toàn cục của toàn bộ tài liệu khi hoàn thành lượt đọc.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 3,
+            "citation_label": "[3]",
+            "passage_id": "DOC_1791119854::P181",
+            "document_id": "DOC_1791119854",
+            "document_title": "Pldc Da Xoa Abc Du Thua",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 3,
+            "score": 7.9787,
+            "text": "Nguyên nhân cốt lõi của sự ra đời nhà nước là: A.Kết quả của nền sản xuất hàng hoá cùng những hoạt động thương nghiệp. B.Kết quả của 03 lần phân công lao động trong lịch sử. C.Nhu cầu về sự cần thiết phải có một tổ chức để dập tắt xung đột giai cấp.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 4,
+            "citation_label": "[4]",
+            "passage_id": "DEMO_DOC_001::P002",
+            "document_id": "DEMO_DOC_001",
+            "document_title": "Cơ chế Bộ nhớ Đa quy mô và Khối Giao tiếp Liên cấp trong Mô hình Ngôn ngữ",
+            "section_title": "1. Giới thiệu Kiến trúc Bộ nhớ Đa quy mô",
+            "paragraph_index": 4,
+            "score": 7.9676,
+            "text": "Hệ thống bộ nhớ liên tục (Continuum Memory System - CMS) giải quyết vấn đề này bằng cách thiết lập nhiều tầng bộ nhớ tham số hoạt động ở các chu kỳ thời gian khác nhau. Tầng 1 (Level 1) chịu trách nhiệm thích ứng ở cấp độ đoạn văn (paragraph), bắt giữ các chuyển tiếp cục bộ và từ vựng ngắn hạn.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 5,
+            "citation_label": "[5]",
+            "passage_id": "DOC_1791376866::P046",
+            "document_id": "DOC_1791376866",
+            "document_title": "Nhom05-Bai05",
+            "section_title": "05.\tMSSV:",
+            "paragraph_index": 5,
+            "score": 7.7049,
+            "text": "3 indexOf(byte[] data, byte[] pattern) Vai trò: Tìm vị trí chuỗi \\r\\n\\r\\n trong mảng byte (không phải String). Tại sao tự viết? Vì String.indexOf() chỉ hoạt động trên chuỗi — mà chuỗi có thể làm hỏng dữ liệu nhị phân. Phương thức:",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "evidence": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "VN_DOC_001::P005",
+            "document_id": "VN_DOC_001",
+            "document_title": "Nghiên cứu Hệ thống Bộ nhớ Đa quy mô SA-CMS trong Mô hình Ngôn ngữ",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 1,
+            "score": 8.6237,
+            "text": "Cấp độ 2 là Section Memory hoạt động ở thang thời gian trung bình, thực hiện tích lũy và cập nhật gradient tại ranh giới kết thúc mỗi đề mục của tài liệu.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 2,
+            "citation_label": "[2]",
+            "passage_id": "VN_DOC_001::P006",
+            "document_id": "VN_DOC_001",
+            "document_title": "Nghiên cứu Hệ thống Bộ nhớ Đa quy mô SA-CMS trong Mô hình Ngôn ngữ",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 2,
+            "score": 8.522,
+            "text": "Cấp độ 3 là Document Memory hoạt động ở thang thời gian chậm nhất, ghi lại biểu diễn trừu tượng bất biến toàn cục của toàn bộ tài liệu khi hoàn thành lượt đọc.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 3,
+            "citation_label": "[3]",
+            "passage_id": "DOC_1791119854::P181",
+            "document_id": "DOC_1791119854",
+            "document_title": "Pldc Da Xoa Abc Du Thua",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 3,
+            "score": 7.9787,
+            "text": "Nguyên nhân cốt lõi của sự ra đời nhà nước là: A.Kết quả của nền sản xuất hàng hoá cùng những hoạt động thương nghiệp. B.Kết quả của 03 lần phân công lao động trong lịch sử. C.Nhu cầu về sự cần thiết phải có một tổ chức để dập tắt xung đột giai cấp.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 4,
+            "citation_label": "[4]",
+            "passage_id": "DEMO_DOC_001::P002",
+            "document_id": "DEMO_DOC_001",
+            "document_title": "Cơ chế Bộ nhớ Đa quy mô và Khối Giao tiếp Liên cấp trong Mô hình Ngôn ngữ",
+            "section_title": "1. Giới thiệu Kiến trúc Bộ nhớ Đa quy mô",
+            "paragraph_index": 4,
+            "score": 7.9676,
+            "text": "Hệ thống bộ nhớ liên tục (Continuum Memory System - CMS) giải quyết vấn đề này bằng cách thiết lập nhiều tầng bộ nhớ tham số hoạt động ở các chu kỳ thời gian khác nhau. Tầng 1 (Level 1) chịu trách nhiệm thích ứng ở cấp độ đoạn văn (paragraph), bắt giữ các chuyển tiếp cục bộ và từ vựng ngắn hạn.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 5,
+            "citation_label": "[5]",
+            "passage_id": "DOC_1791376866::P046",
+            "document_id": "DOC_1791376866",
+            "document_title": "Nhom05-Bai05",
+            "section_title": "05.\tMSSV:",
+            "paragraph_index": 5,
+            "score": 7.7049,
+            "text": "3 indexOf(byte[] data, byte[] pattern) Vai trò: Tìm vị trí chuỗi \\r\\n\\r\\n trong mảng byte (không phải String). Tại sao tự viết? Vì String.indexOf() chỉ hoạt động trên chuỗi — mà chuỗi có thể làm hỏng dữ liệu nhị phân. Phương thức:",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "telemetry": {
+          "input_tokens": 258,
+          "output_tokens": 187,
+          "total_tokens": 445,
+          "total_latency_ms": 13.28,
+          "retrieval_ms": 8.15,
+          "generation_ms": 0.01
+        },
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {
+          "routing": "DIRECT_LOOKUP",
+          "route_explanation": "Đã tìm thấy bằng chứng xác thực trong tài liệu.",
+          "effective_query": "SA-CMS hoạt động như thế nào?",
+          "is_follow_up": false,
+          "attached_document_count": 0,
+          "evidence_count": 5,
+          "refusal_reason": null,
+          "memory_level": "Level 3 (SA-CMS Gated Multi-Level)"
+        }
+      },
+      {
+        "id": "msg_52eb62cc07",
+        "role": "user",
+        "content": "SA-CMS hoạt động như thế nào?",
+        "timestamp": 1792043656.5044386,
+        "citations": [],
+        "evidence": [],
+        "telemetry": {},
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {}
+      },
+      {
+        "id": "msg_072cc3ee56",
+        "role": "assistant",
+        "content": "Trong tài liệu, Cấp độ 2 là Section Memory hoạt động ở thang thời gian trung bình, thực hiện tích lũy và cập nhật gradient tại ranh giới kết thúc mỗi đề mục của tài liệu. [1]\n\nBên cạnh đó, Cấp độ 3 là Document Memory hoạt động ở thang thời gian chậm nhất, ghi lại biểu diễn trừu tượng bất biến toàn cục của toàn bộ tài liệu khi hoàn thành lượt đọc. [2]\n\n### Nguồn tham khảo\n[1] **Nghiên cứu Hệ thống Bộ nhớ Đa quy mô SA-CMS trong Mô hình Ngôn ngữ** — Phần nội dung — Đoạn 1\n\n[2] **Nghiên cứu Hệ thống Bộ nhớ Đa quy mô SA-CMS trong Mô hình Ngôn ngữ** — Phần nội dung — Đoạn 2\n\n[3] **Pldc Da Xoa Abc Du Thua** — Phần nội dung — Đoạn 3\n\n[4] **Cơ chế Bộ nhớ Đa quy mô và Khối Giao tiếp Liên cấp trong Mô hình Ngôn ngữ** — 1. Giới thiệu Kiến trúc Bộ nhớ Đa quy mô — Đoạn 4\n\n[5] **Nhom05-Bai05** — 05.\tMSSV: — Đoạn 5",
+        "timestamp": 1792043656.5184019,
+        "citations": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "VN_DOC_001::P005",
+            "document_id": "VN_DOC_001",
+            "document_title": "Nghiên cứu Hệ thống Bộ nhớ Đa quy mô SA-CMS trong Mô hình Ngôn ngữ",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 1,
+            "score": 8.6237,
+            "text": "Cấp độ 2 là Section Memory hoạt động ở thang thời gian trung bình, thực hiện tích lũy và cập nhật gradient tại ranh giới kết thúc mỗi đề mục của tài liệu.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 2,
+            "citation_label": "[2]",
+            "passage_id": "VN_DOC_001::P006",
+            "document_id": "VN_DOC_001",
+            "document_title": "Nghiên cứu Hệ thống Bộ nhớ Đa quy mô SA-CMS trong Mô hình Ngôn ngữ",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 2,
+            "score": 8.522,
+            "text": "Cấp độ 3 là Document Memory hoạt động ở thang thời gian chậm nhất, ghi lại biểu diễn trừu tượng bất biến toàn cục của toàn bộ tài liệu khi hoàn thành lượt đọc.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 3,
+            "citation_label": "[3]",
+            "passage_id": "DOC_1791119854::P181",
+            "document_id": "DOC_1791119854",
+            "document_title": "Pldc Da Xoa Abc Du Thua",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 3,
+            "score": 7.9787,
+            "text": "Nguyên nhân cốt lõi của sự ra đời nhà nước là: A.Kết quả của nền sản xuất hàng hoá cùng những hoạt động thương nghiệp. B.Kết quả của 03 lần phân công lao động trong lịch sử. C.Nhu cầu về sự cần thiết phải có một tổ chức để dập tắt xung đột giai cấp.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 4,
+            "citation_label": "[4]",
+            "passage_id": "DEMO_DOC_001::P002",
+            "document_id": "DEMO_DOC_001",
+            "document_title": "Cơ chế Bộ nhớ Đa quy mô và Khối Giao tiếp Liên cấp trong Mô hình Ngôn ngữ",
+            "section_title": "1. Giới thiệu Kiến trúc Bộ nhớ Đa quy mô",
+            "paragraph_index": 4,
+            "score": 7.9676,
+            "text": "Hệ thống bộ nhớ liên tục (Continuum Memory System - CMS) giải quyết vấn đề này bằng cách thiết lập nhiều tầng bộ nhớ tham số hoạt động ở các chu kỳ thời gian khác nhau. Tầng 1 (Level 1) chịu trách nhiệm thích ứng ở cấp độ đoạn văn (paragraph), bắt giữ các chuyển tiếp cục bộ và từ vựng ngắn hạn.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 5,
+            "citation_label": "[5]",
+            "passage_id": "DOC_1791376866::P046",
+            "document_id": "DOC_1791376866",
+            "document_title": "Nhom05-Bai05",
+            "section_title": "05.\tMSSV:",
+            "paragraph_index": 5,
+            "score": 7.7049,
+            "text": "3 indexOf(byte[] data, byte[] pattern) Vai trò: Tìm vị trí chuỗi \\r\\n\\r\\n trong mảng byte (không phải String). Tại sao tự viết? Vì String.indexOf() chỉ hoạt động trên chuỗi — mà chuỗi có thể làm hỏng dữ liệu nhị phân. Phương thức:",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "evidence": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "VN_DOC_001::P005",
+            "document_id": "VN_DOC_001",
+            "document_title": "Nghiên cứu Hệ thống Bộ nhớ Đa quy mô SA-CMS trong Mô hình Ngôn ngữ",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 1,
+            "score": 8.6237,
+            "text": "Cấp độ 2 là Section Memory hoạt động ở thang thời gian trung bình, thực hiện tích lũy và cập nhật gradient tại ranh giới kết thúc mỗi đề mục của tài liệu.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 2,
+            "citation_label": "[2]",
+            "passage_id": "VN_DOC_001::P006",
+            "document_id": "VN_DOC_001",
+            "document_title": "Nghiên cứu Hệ thống Bộ nhớ Đa quy mô SA-CMS trong Mô hình Ngôn ngữ",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 2,
+            "score": 8.522,
+            "text": "Cấp độ 3 là Document Memory hoạt động ở thang thời gian chậm nhất, ghi lại biểu diễn trừu tượng bất biến toàn cục của toàn bộ tài liệu khi hoàn thành lượt đọc.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 3,
+            "citation_label": "[3]",
+            "passage_id": "DOC_1791119854::P181",
+            "document_id": "DOC_1791119854",
+            "document_title": "Pldc Da Xoa Abc Du Thua",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 3,
+            "score": 7.9787,
+            "text": "Nguyên nhân cốt lõi của sự ra đời nhà nước là: A.Kết quả của nền sản xuất hàng hoá cùng những hoạt động thương nghiệp. B.Kết quả của 03 lần phân công lao động trong lịch sử. C.Nhu cầu về sự cần thiết phải có một tổ chức để dập tắt xung đột giai cấp.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 4,
+            "citation_label": "[4]",
+            "passage_id": "DEMO_DOC_001::P002",
+            "document_id": "DEMO_DOC_001",
+            "document_title": "Cơ chế Bộ nhớ Đa quy mô và Khối Giao tiếp Liên cấp trong Mô hình Ngôn ngữ",
+            "section_title": "1. Giới thiệu Kiến trúc Bộ nhớ Đa quy mô",
+            "paragraph_index": 4,
+            "score": 7.9676,
+            "text": "Hệ thống bộ nhớ liên tục (Continuum Memory System - CMS) giải quyết vấn đề này bằng cách thiết lập nhiều tầng bộ nhớ tham số hoạt động ở các chu kỳ thời gian khác nhau. Tầng 1 (Level 1) chịu trách nhiệm thích ứng ở cấp độ đoạn văn (paragraph), bắt giữ các chuyển tiếp cục bộ và từ vựng ngắn hạn.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 5,
+            "citation_label": "[5]",
+            "passage_id": "DOC_1791376866::P046",
+            "document_id": "DOC_1791376866",
+            "document_title": "Nhom05-Bai05",
+            "section_title": "05.\tMSSV:",
+            "paragraph_index": 5,
+            "score": 7.7049,
+            "text": "3 indexOf(byte[] data, byte[] pattern) Vai trò: Tìm vị trí chuỗi \\r\\n\\r\\n trong mảng byte (không phải String). Tại sao tự viết? Vì String.indexOf() chỉ hoạt động trên chuỗi — mà chuỗi có thể làm hỏng dữ liệu nhị phân. Phương thức:",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "telemetry": {
+          "input_tokens": 258,
+          "output_tokens": 243,
+          "total_tokens": 501,
+          "total_latency_ms": 14.09,
+          "retrieval_ms": 8.28,
+          "generation_ms": 0.02
+        },
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {
+          "routing": "DIRECT_LOOKUP",
+          "route_explanation": "Đã tìm thấy bằng chứng xác thực trong tài liệu.",
+          "effective_query": "SA-CMS hoạt động như thế nào?",
+          "is_follow_up": false,
+          "attached_document_count": 0,
+          "evidence_count": 5,
+          "refusal_reason": null,
+          "memory_level": "Level 3 (SA-CMS Gated Multi-Level)"
+        }
+      },
+      {
+        "id": "msg_f346f00f58",
+        "role": "user",
+        "content": "Hệ thống vận hành được phân cấp thành bao nhiêu tầng chức năng độc lập?",
+        "timestamp": 1792073076.2532516,
+        "citations": [],
+        "evidence": [],
+        "telemetry": {},
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {}
+      },
+      {
+        "id": "msg_903c80b6da",
+        "role": "assistant",
+        "content": "Chức năng lập hiến và lập pháp B. [1]\n\n### Nguồn tham khảo\n[1] **Pldc Da Xoa Abc Du Thua** — Phần nội dung — Đoạn 1\n\n[2] **Pldc Da Xoa Abc Du Thua** — Phần nội dung — Đoạn 2\n\n[3] **Quy hoạch Hạ tầng Đường sắt Tốc độ cao Bắc - Nam và Giao thông Đô thị 2030** — 2. Phân kỳ Đầu tư và Phương án Vận hành — Đoạn 3\n\n[4] **Pldc Da Xoa Abc Du Thua** — Phần nội dung — Đoạn 4\n\n[5] **Pldc Da Xoa Abc Du Thua** — Phần nội dung — Đoạn 5",
+        "timestamp": 1792073076.2860446,
+        "citations": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "DOC_1791119854::P006",
+            "document_id": "DOC_1791119854",
+            "document_title": "Pldc Da Xoa Abc Du Thua",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 1,
+            "score": 20.202,
+            "text": "A.Chức năng lập hiến và lập pháp B.Chức năng điều chỉnh các quan hệ xã hội C.Chức năng giám sát tối cao D.Cả A và C đều đúng Đáp án đúng: B Câu  5  ID: 256063882 Từ “các cấp” trong khái niệm Hội đồng Nhân dân các cấp là gồm: A.1 cấp B.2 cấp C.3 cấp D.4 cấp",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 2,
+            "citation_label": "[2]",
+            "passage_id": "DOC_1791119854::P044",
+            "document_id": "DOC_1791119854",
+            "document_title": "Pldc Da Xoa Abc Du Thua",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 2,
+            "score": 17.171,
+            "text": "A.Phân chia thành các nhánh quyền lực nhà nước (lập pháp, hành pháp, tư pháp) B.Thống nhất các quyền lập pháp, hành pháp, tư pháp C.Có sự phân công và phối hợp giữa các cơ quan Nhà nước trong việc thực hiện các quyền lập pháp, hành pháp, tư pháp D.Cả B và C",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 3,
+            "citation_label": "[3]",
+            "passage_id": "DEMO_DOC_002::P002",
+            "document_id": "DEMO_DOC_002",
+            "document_title": "Quy hoạch Hạ tầng Đường sắt Tốc độ cao Bắc - Nam và Giao thông Đô thị 2030",
+            "section_title": "2. Phân kỳ Đầu tư và Phương án Vận hành",
+            "paragraph_index": 3,
+            "score": 15.5232,
+            "text": "Phân kỳ Đầu tư và Phương án Vận hành Dự án được phân kỳ thực hiện với mục tiêu khởi công các đoạn ưu tiên trước năm 2027. Đoạn Hà Nội - Vinh và đoạn Nha Trang - Thành phố Hồ Chí Minh sẽ được triển khai thi công đồng loạt.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 4,
+            "citation_label": "[4]",
+            "passage_id": "DOC_1791119854::P005",
+            "document_id": "DOC_1791119854",
+            "document_title": "Pldc Da Xoa Abc Du Thua",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 4,
+            "score": 15.0049,
+            "text": "C.Pháp chế đòi hỏi tất cả các cơ quan nhà nước, nhân viên nhà nước, tổ chức xã hội, công dân đều nghiêm chỉnh chấp hành pháp luật D.Tất cả đều đúng Đáp án đúng: D Câu  4  ID: 256063881 Chức năng của pháp luật: A.Chức năng lập hiến và lập pháp",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 5,
+            "citation_label": "[5]",
+            "passage_id": "DOC_1791119854::P075",
+            "document_id": "DOC_1791119854",
+            "document_title": "Pldc Da Xoa Abc Du Thua",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 5,
+            "score": 14.4794,
+            "text": "Muốn trở thành chủ thể của quan hệ pháp luật, các cá nhân, tổ chức phải có: A.Năng lực chủ thể B.Năng lực pháp luật và năng lực hành vi C.A và B đều đúng D.A và B đều sai Đáp án đúng: C Câu  52  ID: 256063929",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "evidence": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "DOC_1791119854::P006",
+            "document_id": "DOC_1791119854",
+            "document_title": "Pldc Da Xoa Abc Du Thua",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 1,
+            "score": 20.202,
+            "text": "A.Chức năng lập hiến và lập pháp B.Chức năng điều chỉnh các quan hệ xã hội C.Chức năng giám sát tối cao D.Cả A và C đều đúng Đáp án đúng: B Câu  5  ID: 256063882 Từ “các cấp” trong khái niệm Hội đồng Nhân dân các cấp là gồm: A.1 cấp B.2 cấp C.3 cấp D.4 cấp",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 2,
+            "citation_label": "[2]",
+            "passage_id": "DOC_1791119854::P044",
+            "document_id": "DOC_1791119854",
+            "document_title": "Pldc Da Xoa Abc Du Thua",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 2,
+            "score": 17.171,
+            "text": "A.Phân chia thành các nhánh quyền lực nhà nước (lập pháp, hành pháp, tư pháp) B.Thống nhất các quyền lập pháp, hành pháp, tư pháp C.Có sự phân công và phối hợp giữa các cơ quan Nhà nước trong việc thực hiện các quyền lập pháp, hành pháp, tư pháp D.Cả B và C",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 3,
+            "citation_label": "[3]",
+            "passage_id": "DEMO_DOC_002::P002",
+            "document_id": "DEMO_DOC_002",
+            "document_title": "Quy hoạch Hạ tầng Đường sắt Tốc độ cao Bắc - Nam và Giao thông Đô thị 2030",
+            "section_title": "2. Phân kỳ Đầu tư và Phương án Vận hành",
+            "paragraph_index": 3,
+            "score": 15.5232,
+            "text": "Phân kỳ Đầu tư và Phương án Vận hành Dự án được phân kỳ thực hiện với mục tiêu khởi công các đoạn ưu tiên trước năm 2027. Đoạn Hà Nội - Vinh và đoạn Nha Trang - Thành phố Hồ Chí Minh sẽ được triển khai thi công đồng loạt.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 4,
+            "citation_label": "[4]",
+            "passage_id": "DOC_1791119854::P005",
+            "document_id": "DOC_1791119854",
+            "document_title": "Pldc Da Xoa Abc Du Thua",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 4,
+            "score": 15.0049,
+            "text": "C.Pháp chế đòi hỏi tất cả các cơ quan nhà nước, nhân viên nhà nước, tổ chức xã hội, công dân đều nghiêm chỉnh chấp hành pháp luật D.Tất cả đều đúng Đáp án đúng: D Câu  4  ID: 256063881 Chức năng của pháp luật: A.Chức năng lập hiến và lập pháp",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 5,
+            "citation_label": "[5]",
+            "passage_id": "DOC_1791119854::P075",
+            "document_id": "DOC_1791119854",
+            "document_title": "Pldc Da Xoa Abc Du Thua",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 5,
+            "score": 14.4794,
+            "text": "Muốn trở thành chủ thể của quan hệ pháp luật, các cá nhân, tổ chức phải có: A.Năng lực chủ thể B.Năng lực pháp luật và năng lực hành vi C.A và B đều đúng D.A và B đều sai Đáp án đúng: C Câu  52  ID: 256063929",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "telemetry": {
+          "input_tokens": 270,
+          "output_tokens": 137,
+          "total_tokens": 407,
+          "total_latency_ms": 33.13,
+          "retrieval_ms": 14.14,
+          "generation_ms": 0.04
+        },
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {
+          "routing": "DIRECT_LOOKUP",
+          "route_explanation": "Đã tìm thấy bằng chứng xác thực trong tài liệu.",
+          "effective_query": "Hệ thống vận hành được phân cấp thành bao nhiêu tầng chức năng độc lập?",
+          "is_follow_up": false,
+          "attached_document_count": 0,
+          "evidence_count": 5,
+          "refusal_reason": null,
+          "memory_level": "Level 3 (SA-CMS Gated Multi-Level)"
+        }
+      }
+    ]
+  },
+  {
+    "session_id": "chat_236d5e765ffe",
+    "title": "Hệ thống vận hành được phân cấp...",
+    "document_ids": [],
+    "created_at": 1792074769.165052,
+    "updated_at": 1792074772.0850089,
+    "messages": [
+      {
+        "id": "msg_ff3c0cd3e3",
+        "role": "user",
+        "content": "Hệ thống vận hành được phân cấp thành bao nhiêu tầng chức năng độc lập?",
+        "timestamp": 1792074772.0350857,
+        "citations": [],
+        "evidence": [],
+        "telemetry": {},
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {}
+      },
+      {
+        "id": "msg_90c37936d9",
+        "role": "assistant",
+        "content": "Chức năng lập hiến và lập pháp B. [1]\n\n### Nguồn tham khảo\n[1] **Pldc Da Xoa Abc Du Thua** — Phần nội dung — Đoạn 1\n\n[2] **Pldc Da Xoa Abc Du Thua** — Phần nội dung — Đoạn 2\n\n[3] **Quy hoạch Hạ tầng Đường sắt Tốc độ cao Bắc - Nam và Giao thông Đô thị 2030** — 2. Phân kỳ Đầu tư và Phương án Vận hành — Đoạn 3\n\n[4] **Pldc Da Xoa Abc Du Thua** — Phần nội dung — Đoạn 4\n\n[5] **Pldc Da Xoa Abc Du Thua** — Phần nội dung — Đoạn 5",
+        "timestamp": 1792074772.0850089,
+        "citations": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "DOC_1791119854::P006",
+            "document_id": "DOC_1791119854",
+            "document_title": "Pldc Da Xoa Abc Du Thua",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 1,
+            "score": 20.202,
+            "text": "A.Chức năng lập hiến và lập pháp B.Chức năng điều chỉnh các quan hệ xã hội C.Chức năng giám sát tối cao D.Cả A và C đều đúng Đáp án đúng: B Câu  5  ID: 256063882 Từ “các cấp” trong khái niệm Hội đồng Nhân dân các cấp là gồm: A.1 cấp B.2 cấp C.3 cấp D.4 cấp",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 2,
+            "citation_label": "[2]",
+            "passage_id": "DOC_1791119854::P044",
+            "document_id": "DOC_1791119854",
+            "document_title": "Pldc Da Xoa Abc Du Thua",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 2,
+            "score": 17.171,
+            "text": "A.Phân chia thành các nhánh quyền lực nhà nước (lập pháp, hành pháp, tư pháp) B.Thống nhất các quyền lập pháp, hành pháp, tư pháp C.Có sự phân công và phối hợp giữa các cơ quan Nhà nước trong việc thực hiện các quyền lập pháp, hành pháp, tư pháp D.Cả B và C",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 3,
+            "citation_label": "[3]",
+            "passage_id": "DEMO_DOC_002::P002",
+            "document_id": "DEMO_DOC_002",
+            "document_title": "Quy hoạch Hạ tầng Đường sắt Tốc độ cao Bắc - Nam và Giao thông Đô thị 2030",
+            "section_title": "2. Phân kỳ Đầu tư và Phương án Vận hành",
+            "paragraph_index": 3,
+            "score": 15.5232,
+            "text": "Phân kỳ Đầu tư và Phương án Vận hành Dự án được phân kỳ thực hiện với mục tiêu khởi công các đoạn ưu tiên trước năm 2027. Đoạn Hà Nội - Vinh và đoạn Nha Trang - Thành phố Hồ Chí Minh sẽ được triển khai thi công đồng loạt.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 4,
+            "citation_label": "[4]",
+            "passage_id": "DOC_1791119854::P005",
+            "document_id": "DOC_1791119854",
+            "document_title": "Pldc Da Xoa Abc Du Thua",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 4,
+            "score": 15.0049,
+            "text": "C.Pháp chế đòi hỏi tất cả các cơ quan nhà nước, nhân viên nhà nước, tổ chức xã hội, công dân đều nghiêm chỉnh chấp hành pháp luật D.Tất cả đều đúng Đáp án đúng: D Câu  4  ID: 256063881 Chức năng của pháp luật: A.Chức năng lập hiến và lập pháp",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 5,
+            "citation_label": "[5]",
+            "passage_id": "DOC_1791119854::P075",
+            "document_id": "DOC_1791119854",
+            "document_title": "Pldc Da Xoa Abc Du Thua",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 5,
+            "score": 14.4794,
+            "text": "Muốn trở thành chủ thể của quan hệ pháp luật, các cá nhân, tổ chức phải có: A.Năng lực chủ thể B.Năng lực pháp luật và năng lực hành vi C.A và B đều đúng D.A và B đều sai Đáp án đúng: C Câu  52  ID: 256063929",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "evidence": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "DOC_1791119854::P006",
+            "document_id": "DOC_1791119854",
+            "document_title": "Pldc Da Xoa Abc Du Thua",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 1,
+            "score": 20.202,
+            "text": "A.Chức năng lập hiến và lập pháp B.Chức năng điều chỉnh các quan hệ xã hội C.Chức năng giám sát tối cao D.Cả A và C đều đúng Đáp án đúng: B Câu  5  ID: 256063882 Từ “các cấp” trong khái niệm Hội đồng Nhân dân các cấp là gồm: A.1 cấp B.2 cấp C.3 cấp D.4 cấp",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 2,
+            "citation_label": "[2]",
+            "passage_id": "DOC_1791119854::P044",
+            "document_id": "DOC_1791119854",
+            "document_title": "Pldc Da Xoa Abc Du Thua",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 2,
+            "score": 17.171,
+            "text": "A.Phân chia thành các nhánh quyền lực nhà nước (lập pháp, hành pháp, tư pháp) B.Thống nhất các quyền lập pháp, hành pháp, tư pháp C.Có sự phân công và phối hợp giữa các cơ quan Nhà nước trong việc thực hiện các quyền lập pháp, hành pháp, tư pháp D.Cả B và C",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 3,
+            "citation_label": "[3]",
+            "passage_id": "DEMO_DOC_002::P002",
+            "document_id": "DEMO_DOC_002",
+            "document_title": "Quy hoạch Hạ tầng Đường sắt Tốc độ cao Bắc - Nam và Giao thông Đô thị 2030",
+            "section_title": "2. Phân kỳ Đầu tư và Phương án Vận hành",
+            "paragraph_index": 3,
+            "score": 15.5232,
+            "text": "Phân kỳ Đầu tư và Phương án Vận hành Dự án được phân kỳ thực hiện với mục tiêu khởi công các đoạn ưu tiên trước năm 2027. Đoạn Hà Nội - Vinh và đoạn Nha Trang - Thành phố Hồ Chí Minh sẽ được triển khai thi công đồng loạt.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 4,
+            "citation_label": "[4]",
+            "passage_id": "DOC_1791119854::P005",
+            "document_id": "DOC_1791119854",
+            "document_title": "Pldc Da Xoa Abc Du Thua",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 4,
+            "score": 15.0049,
+            "text": "C.Pháp chế đòi hỏi tất cả các cơ quan nhà nước, nhân viên nhà nước, tổ chức xã hội, công dân đều nghiêm chỉnh chấp hành pháp luật D.Tất cả đều đúng Đáp án đúng: D Câu  4  ID: 256063881 Chức năng của pháp luật: A.Chức năng lập hiến và lập pháp",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 5,
+            "citation_label": "[5]",
+            "passage_id": "DOC_1791119854::P075",
+            "document_id": "DOC_1791119854",
+            "document_title": "Pldc Da Xoa Abc Du Thua",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 5,
+            "score": 14.4794,
+            "text": "Muốn trở thành chủ thể của quan hệ pháp luật, các cá nhân, tổ chức phải có: A.Năng lực chủ thể B.Năng lực pháp luật và năng lực hành vi C.A và B đều đúng D.A và B đều sai Đáp án đúng: C Câu  52  ID: 256063929",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "telemetry": {
+          "input_tokens": 270,
+          "output_tokens": 137,
+          "total_tokens": 407,
+          "total_latency_ms": 50.2,
+          "retrieval_ms": 26.54,
+          "generation_ms": 0.03
+        },
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {
+          "routing": "DIRECT_LOOKUP",
+          "route_explanation": "Đã tìm thấy bằng chứng xác thực trong tài liệu.",
+          "effective_query": "Hệ thống vận hành được phân cấp thành bao nhiêu tầng chức năng độc lập?",
+          "is_follow_up": false,
+          "attached_document_count": 0,
+          "evidence_count": 5,
+          "refusal_reason": null,
+          "memory_level": "Level 3 (SA-CMS Gated Multi-Level)"
+        }
+      }
+    ]
+  },
+  {
+    "session_id": "chat_ff537ff1bab9",
+    "title": "Phiên làm việc SA-CMS Studio",
+    "document_ids": [],
+    "created_at": 1792075595.8461094,
+    "updated_at": 1792075633.9807847,
+    "messages": [
+      {
+        "id": "msg_c1742e241c",
+        "role": "user",
+        "content": "Kiến trúc SA-CMS áp dụng mấy cấp độ bộ nhớ?",
+        "timestamp": 1792075608.092275,
+        "citations": [],
+        "evidence": [],
+        "telemetry": {},
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {}
+      },
+      {
+        "id": "msg_1ba6fdc21b",
+        "role": "assistant",
+        "content": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. [1]\n\n### Nguồn tham khảo\n[1] **Tài liệu Nghiên cứu SA-CMS Mẫu Offline** — Chương 1: Kiến trúc Bộ nhớ — Đoạn 1\n\n[2] **Tài liệu Nghiên cứu SA-CMS Mẫu Offline** — Chương 1: Kiến trúc Bộ nhớ — Đoạn 2\n\n[3] **Tài liệu Nghiên cứu SA-CMS Mẫu Offline** — Chương 1: Kiến trúc Bộ nhớ — Đoạn 3\n\n[4] **Tài liệu Nghiên cứu SA-CMS Mẫu Offline** — Chương 1: Kiến trúc Bộ nhớ — Đoạn 4\n\n[5] **Tài liệu Nghiên cứu SA-CMS Mẫu Offline** — Chương 1: Kiến trúc Bộ nhớ — Đoạn 5",
+        "timestamp": 1792075608.1169045,
+        "citations": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "DOC_1791271048929_45bf10::P000",
+            "document_id": "DOC_1791271048929_45bf10",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 1,
+            "score": 26.1241,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 2,
+            "citation_label": "[2]",
+            "passage_id": "DOC_1791271306897_51a76d::P000",
+            "document_id": "DOC_1791271306897_51a76d",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 2,
+            "score": 26.1241,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 3,
+            "citation_label": "[3]",
+            "passage_id": "DOC_1791271682090_2ca48d::P000",
+            "document_id": "DOC_1791271682090_2ca48d",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 3,
+            "score": 26.1241,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 4,
+            "citation_label": "[4]",
+            "passage_id": "DOC_1791271952866_dc50af::P000",
+            "document_id": "DOC_1791271952866_dc50af",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 4,
+            "score": 26.1241,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 5,
+            "citation_label": "[5]",
+            "passage_id": "DOC_1791272033915_0080c3::P000",
+            "document_id": "DOC_1791272033915_0080c3",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 5,
+            "score": 26.1241,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "evidence": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "DOC_1791271048929_45bf10::P000",
+            "document_id": "DOC_1791271048929_45bf10",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 1,
+            "score": 26.1241,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 2,
+            "citation_label": "[2]",
+            "passage_id": "DOC_1791271306897_51a76d::P000",
+            "document_id": "DOC_1791271306897_51a76d",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 2,
+            "score": 26.1241,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 3,
+            "citation_label": "[3]",
+            "passage_id": "DOC_1791271682090_2ca48d::P000",
+            "document_id": "DOC_1791271682090_2ca48d",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 3,
+            "score": 26.1241,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 4,
+            "citation_label": "[4]",
+            "passage_id": "DOC_1791271952866_dc50af::P000",
+            "document_id": "DOC_1791271952866_dc50af",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 4,
+            "score": 26.1241,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 5,
+            "citation_label": "[5]",
+            "passage_id": "DOC_1791272033915_0080c3::P000",
+            "document_id": "DOC_1791272033915_0080c3",
+            "document_title": "Tài liệu Nghiên cứu SA-CMS Mẫu Offline",
+            "section_title": "Chương 1: Kiến trúc Bộ nhớ",
+            "paragraph_index": 5,
+            "score": 26.1241,
+            "text": "# Chương 1: Kiến trúc Bộ nhớ Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu. # Chương 2: Hiệu năng Thực nghiệm",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "telemetry": {
+          "input_tokens": 263,
+          "output_tokens": 174,
+          "total_tokens": 437,
+          "total_latency_ms": 24.02,
+          "retrieval_ms": 21.12,
+          "generation_ms": 0.06
+        },
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {
+          "routing": "DIRECT_LOOKUP",
+          "route_explanation": "Đã tìm thấy bằng chứng xác thực trong tài liệu.",
+          "effective_query": "Kiến trúc SA-CMS áp dụng mấy cấp độ bộ nhớ?",
+          "is_follow_up": false,
+          "attached_document_count": 0,
+          "evidence_count": 5,
+          "refusal_reason": null,
+          "memory_level": "Level 3 (SA-CMS Gated Multi-Level)"
+        }
+      },
+      {
+        "id": "msg_b25eae9601",
+        "role": "user",
+        "content": "Giá cổ phiếu VinFast hôm nay trên sàn NASDAQ là bao nhiêu?",
+        "timestamp": 1792075633.9307585,
+        "citations": [],
+        "evidence": [],
+        "telemetry": {},
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {}
+      },
+      {
+        "id": "msg_8aa4a55581",
+        "role": "assistant",
+        "content": "Tài liệu được cung cấp không chứa thông tin để trả lời câu hỏi này.",
+        "timestamp": 1792075633.9807847,
+        "citations": [],
+        "evidence": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "VN_DOC_005::P008",
+            "document_id": "VN_DOC_005",
+            "document_title": "Chiến lược Phát triển Năng lượng Tái tạo và Lưới điện Quốc gia",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 1,
+            "score": 12.9828,
+            "text": "Mức giá trần đối với dự án điện gió trên bờ trong khung giá chuyển tiếp được quy định là 1.587,12 đồng trên một kilowatt giờ (chưa bao gồm thuế VAT).",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 2,
+            "citation_label": "[2]",
+            "passage_id": "DOC_1791119854::P032",
+            "document_id": "DOC_1791119854",
+            "document_title": "Pldc Da Xoa Abc Du Thua",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 2,
+            "score": 10.9409,
+            "text": "Đáp án đúng: D Câu  20  ID: 256063897 Số lượng đại biểu Quốc hội ở nước ta được ấn định theo Hiến pháp 1992 tối đa là bao nhiêu? A.400 B.492 C.493 D.500 Đáp án đúng: D Câu  21  ID: 256063898",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 3,
+            "citation_label": "[3]",
+            "passage_id": "DOC_1791119854::P059",
+            "document_id": "DOC_1791119854",
+            "document_title": "Pldc Da Xoa Abc Du Thua",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 3,
+            "score": 9.4802,
+            "text": "Đáp án đúng: A Câu  37  ID: 256063914 Theo quy định của pháp luật Việt Nam, việc sửa đổi hoặc thông qua Hiến pháp phải được đại biểu Quốc hội tán thành theo một tỷ lệ nhất định. Tỷ lệ đó là bao nhiêu? A.Phải được hơn 1/2 đại biểu Quốc hội tán thành",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 4,
+            "citation_label": "[4]",
+            "passage_id": "DOC_1791119854::P185",
+            "document_id": "DOC_1791119854",
+            "document_title": "Pldc Da Xoa Abc Du Thua",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 4,
+            "score": 7.4771,
+            "text": "A là người lái đò đã già yếu, công việc thường ngày của ông là đưa học sinh qua sông đi học. Hôm đó là ngày mưa lũ nên ông không làm việc, nhưng nhìn thấy lũ trẽ không được đến trường nên ông đánh liều đưa chúng qua sông.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 5,
+            "citation_label": "[5]",
+            "passage_id": "DOC_1791119854::P186",
+            "document_id": "DOC_1791119854",
+            "document_title": "Pldc Da Xoa Abc Du Thua",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 5,
+            "score": 6.8662,
+            "text": "Hôm đó là ngày mưa lũ nên ông không làm việc, nhưng nhìn thấy lũ trẽ không được đến trường nên ông đánh liều đưa chúng qua sông. Sóng to làm đò bị lật làm chết nhiều học sinh. Hành vi khách quan trong cấu thành vi phạm pháp luật của ông A ở đây là:",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "telemetry": {
+          "input_tokens": 46,
+          "output_tokens": 20,
+          "total_tokens": 66,
+          "total_latency_ms": 49.13,
+          "retrieval_ms": 19.63,
+          "generation_ms": 0.0
+        },
+        "routing": "DIRECT_LOOKUP",
+        "refused": true,
+        "refusal_reason": "insufficient_evidence_coverage",
+        "diagnostics": {
+          "routing": "DIRECT_LOOKUP",
+          "route_explanation": "Đã tìm thấy bằng chứng xác thực trong tài liệu.",
+          "effective_query": "Giá cổ phiếu VinFast hôm nay trên sàn NASDAQ là bao nhiêu?",
+          "is_follow_up": false,
+          "attached_document_count": 0,
+          "evidence_count": 0,
+          "refusal_reason": "insufficient_evidence_coverage",
+          "memory_level": "Level 3 (SA-CMS Gated Multi-Level)"
+        }
+      }
+    ]
   }
 ]

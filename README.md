@@ -7,7 +7,9 @@
 > **Cập nhật lần cuối**: 15/10/2026 (🎉 **Nghiệm thu toàn diện Stage 2, 3 & 4 — 53/53 SHA-256 Pass, 161/161 Unit Tests Pass**)  
 > 📢 **BÁO CÁO KHOA HỌC CHÍNH THỨC**: Vui lòng tham khảo 👉 [`docs/final_scientific_report.md`](docs/final_scientific_report.md) và Bảng kết quả tổng hợp [`results/phase4_2_verified_master_results.csv`](results/phase4_2_verified_master_results.csv)!
 
+lệnh thực thi 
 
+python scripts/run_training.py --seed all
 ---
 
 ## 📌 BẢN ĐỒ TIẾN ĐỘ DỰ ÁN (PROJECT STATUS)
@@ -428,3 +430,6 @@ DACN-NCKH/
 
 ---
 *Ghi chú: Giữ nguyên các cam kết khoa học, không chỉnh sửa thuật toán đã chốt, không dùng kết quả chưa kiểm soát ngân sách.*
+
+NOTE Kiệt
+tui chỉ mới train AI còn về giao diện tui sẽ chỉnh sau 

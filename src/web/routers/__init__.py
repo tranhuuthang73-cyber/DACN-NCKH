@@ -15,6 +15,7 @@ from src.web.routers.telemetry import router as telemetry_router
 from src.web.routers.chat import router as chat_router
 from src.web.routers.study import router as study_router
 from src.web.routers.compare import router as compare_router
+from src.web.routers.export import router as export_router
 
 api_router = APIRouter()
 
@@ -29,6 +30,7 @@ api_router.include_router(telemetry_router)
 api_router.include_router(chat_router)
 api_router.include_router(study_router)
 api_router.include_router(compare_router)
+api_router.include_router(export_router)
 
 __all__ = [
     "api_router",
@@ -42,4 +44,5 @@ __all__ = [
     "chat_router",
     "study_router",
     "compare_router",
+    "export_router",
 ]

@@ -50,3 +50,7 @@ logs/*.log
 data/document_store/documents/DOC_*
 data/document_store/documents/DOC_CUSTOM_*
 data/document_store/documents/**/v[2-9]*.json
+data/*.db
+data/*.db-wal
+data/*.db-shm
+

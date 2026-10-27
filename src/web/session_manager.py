@@ -13,6 +13,19 @@ import uuid
 from pathlib import Path
 from typing import List, Dict, Any, Optional, Set
 
+from src.web.database import (
+    init_db,
+    migrate_legacy_json_to_sqlite,
+    upsert_session,
+    list_sessions_db,
+    get_session_by_id,
+    rename_session_db,
+    delete_session_db,
+    insert_message_db,
+    attach_document_db,
+    detach_document_db,
+)
+
 
 def generate_title_from_query(query: str, existing_titles: Optional[Set[str]] = None) -> str:
     """
@@ -216,25 +229,74 @@ class ChatSession:
 class SessionManager:
     """Manages chat session lifecycle, persistence, and conversation context."""
 
-    def __init__(self, storage_dir: str = "data/chat_sessions"):
+    def __init__(self, storage_dir: str = "data/chat_sessions", db_path: Optional[Path] = None):
         self.storage_dir = Path(storage_dir)
         self.storage_dir.mkdir(parents=True, exist_ok=True)
+        self.db_path = Path(db_path) if db_path else self.storage_dir.parent / "neuroread.db"
         self.sessions_file = self.storage_dir / "sessions.json"
         self._sessions: Dict[str, ChatSession] = {}
         self._load_sessions()
 
     def _load_sessions(self):
-        if self.sessions_file.exists():
-            try:
+        try:
+            init_db(self.db_path)
+            db_sessions = list_sessions_db(self.db_path)
+            if not db_sessions and self.sessions_file.exists():
+                migrate_legacy_json_to_sqlite(self.db_path)
+                db_sessions = list_sessions_db(self.db_path)
+
+            if db_sessions:
+                for s_meta in db_sessions:
+                    s_detail = get_session_by_id(s_meta["session_id"], db_path=self.db_path)
+                    if s_detail:
+                        self._sessions[s_detail["session_id"]] = ChatSession.from_dict(s_detail)
+            elif self.sessions_file.exists():
                 with open(self.sessions_file, "r", encoding="utf-8") as f:
                     data = json.load(f)
                     for item in data:
                         session = ChatSession.from_dict(item)
                         self._sessions[session.session_id] = session
-            except Exception:
-                self._sessions = {}
+        except Exception:
+            if self.sessions_file.exists():
+                try:
+                    with open(self.sessions_file, "r", encoding="utf-8") as f:
+                        data = json.load(f)
+                        for item in data:
+                            session = ChatSession.from_dict(item)
+                            self._sessions[session.session_id] = session
+                except Exception:
+                    self._sessions = {}
 
     def _save_sessions(self):
+        # 1. Sync to SQLite
+        try:
+            for s in self._sessions.values():
+                upsert_session(
+                    session_id=s.session_id,
+                    title=s.title,
+                    created_at=s.created_at,
+                    updated_at=s.updated_at,
+                    message_count=len(s.messages),
+                    db_path=self.db_path,
+                )
+                for doc_id in s.document_ids:
+                    attach_document_db(s.session_id, doc_id, db_path=self.db_path)
+                for m in s.messages:
+                    insert_message_db(
+                        msg_id=m.get("id"),
+                        session_id=s.session_id,
+                        role=m.get("role", "user"),
+                        content=m.get("content", ""),
+                        citations=m.get("citations", []),
+                        routing=m.get("routing", "DIRECT_LOOKUP"),
+                        is_refusal=bool(m.get("refused")),
+                        created_at=m.get("timestamp", s.updated_at),
+                        db_path=self.db_path,
+                    )
+        except Exception:
+            pass
+
+        # 2. Sync to JSON for full backward compatibility
         try:
             data = [s.to_dict() for s in self._sessions.values()]
             with open(self.sessions_file, "w", encoding="utf-8") as f:
@@ -300,6 +362,10 @@ class SessionManager:
         if session:
             session.title = new_title.strip() or "Cuộc trò chuyện"
             session.updated_at = time.time()
+            try:
+                rename_session_db(session_id, session.title, db_path=self.db_path)
+            except Exception:
+                pass
             self._save_sessions()
             return True
         return False
@@ -307,6 +373,10 @@ class SessionManager:
     def delete_session(self, session_id: str) -> bool:
         if session_id in self._sessions:
             del self._sessions[session_id]
+            try:
+                delete_session_db(session_id, db_path=self.db_path)
+            except Exception:
+                pass
             self._save_sessions()
             return True
         return False
@@ -316,6 +386,10 @@ class SessionManager:
         if session:
             attached = session.attach_document(doc_id)
             if attached:
+                try:
+                    attach_document_db(session_id, doc_id, db_path=self.db_path)
+                except Exception:
+                    pass
                 self._save_sessions()
             return True
         return False
@@ -354,6 +428,10 @@ class SessionManager:
         if session:
             detached = session.detach_document(doc_id)
             if detached:
+                try:
+                    detach_document_db(session_id, doc_id, db_path=self.db_path)
+                except Exception:
+                    pass
                 self._save_sessions()
             return True
         return False

@@ -13,6 +13,7 @@ STATIC_DIR = WEB_DIR / "static"
 DATA_DIR = PROJECT_ROOT / "data"
 DOCUMENT_STORE_DIR = DATA_DIR / "document_store"
 CHAT_SESSIONS_DIR = DATA_DIR / "chat_sessions"
+DB_PATH = DATA_DIR / "neuroread.db"
 LOCAL_RUNTIME_DIR = PROJECT_ROOT / "local_runtime"
 FIGURES_DIR = PROJECT_ROOT / "results" / "figures"
 

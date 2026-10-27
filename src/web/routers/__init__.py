@@ -13,6 +13,7 @@ from src.web.routers.research import router as research_router
 from src.web.routers.sessions import router as sessions_router
 from src.web.routers.telemetry import router as telemetry_router
 from src.web.routers.chat import router as chat_router
+from src.web.routers.study import router as study_router
 
 api_router = APIRouter()
 
@@ -25,6 +26,7 @@ api_router.include_router(research_router)
 api_router.include_router(sessions_router)
 api_router.include_router(telemetry_router)
 api_router.include_router(chat_router)
+api_router.include_router(study_router)
 
 __all__ = [
     "api_router",
@@ -36,4 +38,5 @@ __all__ = [
     "sessions_router",
     "telemetry_router",
     "chat_router",
+    "study_router",
 ]

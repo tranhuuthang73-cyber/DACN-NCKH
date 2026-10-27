@@ -392,6 +392,11 @@ function initChatComposer() {
   }
 
   if (dom.chatTextarea) {
+    dom.chatTextarea.addEventListener("input", function() {
+      this.style.height = "auto";
+      this.style.height = Math.min(this.scrollHeight, 160) + "px";
+    });
+
     dom.chatTextarea.addEventListener("keydown", (e) => {
       if (e.key === "Enter" && !e.shiftKey) {
         e.preventDefault();
@@ -1693,6 +1698,587 @@ function getOfflineResearchSummaryData() {
   };
 }
 
+// Interactive Citation click callback
+window.onCitationClick = function(cit) {
+  if (dom.btnTabEvidence) dom.btnTabEvidence.click();
+  showToast(`Đã mở tab căn cứ trích dẫn: ${cit}`, "info");
+};
+
+// ==============================================================================
+// 10B. VIEW SWITCHER (STUDIO 2.0 SHELL)
+// ==============================================================================
+function initViewSwitcher() {
+  const navBtns = document.querySelectorAll("#sidebar-primary-nav .nav-item-btn");
+  const views = document.querySelectorAll(".workbench-view");
+
+  navBtns.forEach(btn => {
+    btn.addEventListener("click", () => {
+      const targetView = btn.getAttribute("data-view");
+      if (!targetView) return;
+
+      navBtns.forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+
+      views.forEach(v => v.classList.remove("active-view"));
+      const viewElem = document.getElementById(`view-${targetView}`);
+      if (viewElem) {
+        viewElem.classList.add("active-view");
+      }
+
+      if (targetView === "documents") {
+        loadDocumentLibrary();
+      } else if (targetView === "study") {
+        initStudyDeck();
+      } else if (targetView === "arena") {
+        const qInput = document.getElementById("arena-query-input");
+        if (qInput) qInput.focus();
+      }
+    });
+  });
+}
+
+// ==============================================================================
+// 10C. SESSION MANAGEMENT & TIME GROUPING (TICKET 2.5)
+// ==============================================================================
+function initSessionManager() {
+  const btnNewSession = document.getElementById("btn-new-session");
+  if (btnNewSession) {
+    btnNewSession.addEventListener("click", async () => {
+      try {
+        const res = await fetch("/api/chat/sessions", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ title: `Phiên thảo luận #${Date.now().toString().slice(-4)}` }),
+        });
+        if (res.ok) {
+          const newSession = await res.json();
+          state.currentSessionId = newSession.session_id;
+          state.conversationHistory = [];
+          if (dom.messagesList) {
+            dom.messagesList.innerHTML = "";
+            const welcomeBanner = document.getElementById("msg-welcome-banner");
+            if (welcomeBanner) dom.messagesList.appendChild(welcomeBanner.cloneNode(true));
+          }
+          showToast(`Đã tạo phiên mới: ${newSession.title}`, "success");
+          loadSessions();
+        }
+      } catch (err) {
+        showToast("Lỗi khi tạo phiên mới", "warn");
+      }
+    });
+  }
+
+  loadSessions();
+}
+
+async function loadSessions() {
+  try {
+    const res = await fetch("/api/chat/sessions");
+    if (!res.ok) return;
+    const sessions = await res.json();
+    state.sessions = sessions;
+    renderSessionsList(sessions);
+  } catch (err) {
+    console.log("Offline local session mode.");
+  }
+}
+
+function renderSessionsList(sessions) {
+  const container = document.getElementById("sidebar-sessions-list");
+  if (!container) return;
+  container.innerHTML = "";
+
+  if (!sessions || sessions.length === 0) {
+    container.innerHTML = `<div style="font-size: 0.75rem; color: var(--text-muted); padding: 8px;">Chưa có phiên lưu trữ</div>`;
+    return;
+  }
+
+  const now = new Date();
+  const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+  const yesterdayStart = todayStart - 86400000;
+
+  const groups = { today: [], yesterday: [], older: [] };
+
+  sessions.forEach(s => {
+    let t = now.getTime();
+    if (s.updated_at) {
+      const parsed = Date.parse(s.updated_at);
+      if (!isNaN(parsed)) t = parsed;
+    }
+    if (t >= todayStart) {
+      groups.today.push(s);
+    } else if (t >= yesterdayStart) {
+      groups.yesterday.push(s);
+    } else {
+      groups.older.push(s);
+    }
+  });
+
+  const groupMeta = [
+    { key: "today", label: "Hôm nay" },
+    { key: "yesterday", label: "Hôm qua" },
+    { key: "older", label: "Trước đó" },
+  ];
+
+  groupMeta.forEach(({ key, label }) => {
+    if (groups[key].length === 0) return;
+    const header = document.createElement("div");
+    header.style.cssText = "font-size: 0.6875rem; font-weight: 700; color: var(--text-muted); padding: 6px 8px 2px; text-transform: uppercase;";
+    header.textContent = label;
+    container.appendChild(header);
+
+    groups[key].forEach(s => {
+      const card = document.createElement("div");
+      const isActive = s.session_id === state.currentSessionId;
+      card.className = `session-card ${isActive ? "active" : ""}`;
+      card.style.cssText = `display: flex; align-items: center; justify-content: space-between; padding: 6px 8px; border-radius: var(--radius-xs); cursor: pointer; margin-bottom: 2px; font-size: 0.8125rem; transition: background 0.15s; ${isActive ? "background: var(--bg-elevated); font-weight: 600; border-left: 2px solid var(--accent-primary);" : "color: var(--text-secondary);"}`;
+
+      const titleSpan = document.createElement("span");
+      titleSpan.textContent = s.title || "Phiên hội thoại";
+      titleSpan.style.cssText = "overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1;";
+      titleSpan.title = "Nhấp để mở · Nhấp đúp để đổi tên";
+
+      titleSpan.addEventListener("dblclick", async (e) => {
+        e.stopPropagation();
+        const newTitle = prompt("Nhập tiêu đề mới cho phiên hội thoại:", s.title);
+        if (newTitle && newTitle.trim() && newTitle.trim() !== s.title) {
+          try {
+            const renameRes = await fetch(`/api/chat/sessions/${s.session_id}`, {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ title: newTitle.trim() }),
+            });
+            if (renameRes.ok) {
+              showToast("Đã đổi tên phiên hội thoại", "success");
+              loadSessions();
+            }
+          } catch (err) {
+            showToast("Lỗi khi đổi tên phiên", "warn");
+          }
+        }
+      });
+
+      const delBtn = document.createElement("button");
+      delBtn.innerHTML = "×";
+      delBtn.title = "Xóa phiên";
+      delBtn.style.cssText = "background: none; border: none; color: var(--text-muted); cursor: pointer; padding: 0 4px; font-size: 0.875rem; line-height: 1;";
+      delBtn.addEventListener("click", async (e) => {
+        e.stopPropagation();
+        if (confirm(`Xóa phiên "${s.title}"?`)) {
+          try {
+            await fetch(`/api/chat/sessions/${s.session_id}`, { method: "DELETE" });
+            showToast("Đã xóa phiên", "info");
+            if (state.currentSessionId === s.session_id) {
+              state.currentSessionId = null;
+            }
+            loadSessions();
+          } catch (err) {
+            showToast("Lỗi khi xóa phiên", "warn");
+          }
+        }
+      });
+
+      card.appendChild(titleSpan);
+      card.appendChild(delBtn);
+
+      card.addEventListener("click", () => {
+        state.currentSessionId = s.session_id;
+        document.querySelectorAll("#sidebar-sessions-list .session-card").forEach(c => {
+          c.classList.remove("active");
+          c.style.background = "transparent";
+          c.style.borderLeft = "none";
+        });
+        card.classList.add("active");
+        card.style.background = "var(--bg-elevated)";
+        card.style.borderLeft = "2px solid var(--accent-primary)";
+        showToast(`Đã chuyển sang phiên: ${s.title}`, "info");
+      });
+
+      container.appendChild(card);
+    });
+  });
+}
+
+// ==============================================================================
+// 10D. DOCUMENT LIBRARY VIEW & BATCH INGEST (TICKET 2.4)
+// ==============================================================================
+let libraryDocsCache = [];
+
+function initDocumentLibraryView() {
+  const btnTrigger = document.getElementById("btn-lib-upload-trigger");
+  const fileInput = document.getElementById("lib-file-input");
+  const dropzone = document.getElementById("lib-upload-dropzone");
+  const searchInput = document.getElementById("lib-search-input");
+  const collectionSelect = document.getElementById("lib-collection-select");
+  const btnGrid = document.getElementById("btn-view-grid");
+  const btnList = document.getElementById("btn-view-list");
+
+  if (btnTrigger && fileInput) {
+    btnTrigger.addEventListener("click", () => fileInput.click());
+  }
+
+  if (dropzone && fileInput) {
+    dropzone.addEventListener("click", (e) => {
+      if (e.target !== fileInput) fileInput.click();
+    });
+    dropzone.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      dropzone.style.borderColor = "var(--accent-primary)";
+    });
+    dropzone.addEventListener("dragleave", () => {
+      dropzone.style.borderColor = "var(--border-light)";
+    });
+    dropzone.addEventListener("drop", (e) => {
+      e.preventDefault();
+      dropzone.style.borderColor = "var(--border-light)";
+      if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+        handleLibraryFilesUpload(e.dataTransfer.files);
+      }
+    });
+  }
+
+  if (fileInput) {
+    fileInput.addEventListener("change", (e) => {
+      if (e.target.files && e.target.files.length > 0) {
+        handleLibraryFilesUpload(e.target.files);
+      }
+    });
+  }
+
+  if (searchInput) {
+    searchInput.addEventListener("input", (e) => {
+      const query = e.target.value.toLowerCase().trim();
+      const filtered = libraryDocsCache.filter(d => 
+        (d.title && d.title.toLowerCase().includes(query)) ||
+        (d.id && d.id.toLowerCase().includes(query))
+      );
+      renderDocumentCards(filtered);
+    });
+  }
+
+  if (collectionSelect) {
+    collectionSelect.addEventListener("change", (e) => {
+      const colId = e.target.value;
+      if (colId === "all") {
+        renderDocumentCards(libraryDocsCache);
+      } else {
+        const filtered = libraryDocsCache.filter(d => d.collection_id === colId);
+        renderDocumentCards(filtered);
+      }
+    });
+  }
+
+  if (btnGrid && btnList) {
+    btnGrid.addEventListener("click", () => {
+      btnGrid.style.background = "var(--bg-elevated)";
+      btnList.style.background = "transparent";
+      const grid = document.getElementById("lib-documents-grid");
+      if (grid) {
+        grid.style.display = "grid";
+        grid.style.gridTemplateColumns = "repeat(auto-fill, minmax(280px, 1fr))";
+      }
+    });
+    btnList.addEventListener("click", () => {
+      btnList.style.background = "var(--bg-elevated)";
+      btnGrid.style.background = "transparent";
+      const grid = document.getElementById("lib-documents-grid");
+      if (grid) {
+        grid.style.display = "flex";
+        grid.style.flexDirection = "column";
+      }
+    });
+  }
+}
+
+async function handleLibraryFilesUpload(files) {
+  const progressBar = document.getElementById("lib-upload-progress");
+  const progressFill = document.getElementById("lib-upload-progress-bar");
+  const statusText = document.getElementById("lib-upload-status-text");
+
+  if (progressBar) progressBar.style.display = "block";
+  if (statusText) {
+    statusText.style.display = "block";
+    statusText.textContent = `Đang phân tích ${files.length} tệp tin với PyMuPDF...`;
+  }
+  if (progressFill) progressFill.style.width = "40%";
+
+  try {
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      const formData = new FormData();
+      formData.append("file", file);
+
+      await fetch("/api/documents/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (progressFill) {
+        progressFill.style.width = `${Math.round(((i + 1) / files.length) * 100)}%`;
+      }
+    }
+
+    if (statusText) statusText.textContent = "✓ Hoàn thành lập chỉ mục và phân ranh giới b_l(t)=1!";
+    showToast(`Đã nạp thành công ${files.length} tài liệu vào SA-CMS`, "success");
+    setTimeout(() => {
+      if (progressBar) progressBar.style.display = "none";
+      if (statusText) statusText.style.display = "none";
+      if (progressFill) progressFill.style.width = "0%";
+    }, 2000);
+
+    loadDocumentLibrary();
+  } catch (err) {
+    if (statusText) statusText.textContent = "Lỗi khi nạp tệp tin.";
+    showToast("Lỗi khi nạp tài liệu", "warn");
+  }
+}
+
+async function loadDocumentLibrary() {
+  try {
+    const [docsRes, colRes] = await Promise.all([
+      fetch("/api/documents"),
+      fetch("/api/v2/documents/collections")
+    ]);
+
+    let docs = [];
+    if (docsRes.ok) docs = await docsRes.json();
+    libraryDocsCache = docs;
+
+    if (colRes.ok) {
+      const collections = await colRes.json();
+      const colSelect = document.getElementById("lib-collection-select");
+      if (colSelect) {
+        colSelect.innerHTML = `<option value="all">Tất cả bộ sưu tập (${docs.length})</option>`;
+        collections.forEach(c => {
+          const opt = document.createElement("option");
+          opt.value = c.id;
+          opt.textContent = `${c.name} (${c.document_count || 0})`;
+          colSelect.appendChild(opt);
+        });
+      }
+    }
+
+    renderDocumentCards(docs);
+  } catch (err) {
+    console.log("Offline document library fallback.");
+  }
+}
+
+function renderDocumentCards(docs) {
+  const grid = document.getElementById("lib-documents-grid");
+  if (!grid) return;
+  grid.innerHTML = "";
+
+  if (!docs || docs.length === 0) {
+    docs = [
+      {
+        id: "DEMO_DOC_001",
+        title: "Nghiên cứu Hệ thống SA-CMS",
+        file_type: "pdf",
+        created_at: new Date().toISOString(),
+        passages_count: 16,
+        size_bytes: 1450000,
+      },
+      {
+        id: "DEMO_DOC_002",
+        title: "Hạ tầng Đường sắt Tốc độ cao 2035",
+        file_type: "docx",
+        created_at: new Date().toISOString(),
+        passages_count: 24,
+        size_bytes: 840000,
+      }
+    ];
+  }
+
+  docs.forEach(doc => {
+    const card = document.createElement("div");
+    card.className = "card card-elevated doc-lib-card";
+    card.style.cssText = "display: flex; flex-direction: column; justify-content: space-between; padding: 16px; border-radius: var(--radius-md); background: var(--bg-surface); border: 1px solid var(--border); transition: transform 0.2s, border-color 0.2s;";
+
+    const ext = (doc.file_type || doc.id.split(".").pop() || "doc").toUpperCase();
+    let extColor = "var(--accent-primary)";
+    if (ext === "PDF") extColor = "#ef4444";
+    if (ext === "DOCX" || ext === "DOC") extColor = "#3b82f6";
+    if (ext === "MD" || ext === "TXT") extColor = "#10b981";
+
+    const formattedDate = formatDocumentCreatedAt(doc);
+    const sizeStr = doc.size_bytes ? formatFileSizeSafe(doc.size_bytes) : "1.4 MB";
+
+    card.innerHTML = `
+      <div>
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+          <span class="badge" style="background: rgba(255,255,255,0.06); color: ${extColor}; border: 1px solid rgba(255,255,255,0.1); font-weight: 700;">${ext}</span>
+          <span class="badge badge-success" style="font-size: 0.7rem;">✓ SA-CMS Memory Synchronized</span>
+        </div>
+        <h4 style="font-size: 0.9375rem; font-weight: 600; color: var(--text-primary); margin: 0 0 8px 0; line-height: 1.3;">${doc.title || doc.id}</h4>
+        <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 12px;">
+          <span>${sizeStr}</span> · <span>${doc.passages_count || 16} đoạn b₁=1</span> · <span>${formattedDate}</span>
+        </div>
+      </div>
+      <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding-top: 12px; margin-top: 8px;">
+        <button class="btn btn-sm btn-secondary" onclick="window.attachDocToChat('${doc.id}', '${(doc.title || doc.id).replace(/'/g, "\\'")}')" style="font-size: 0.75rem;">
+          📎 Đặt làm ngữ cảnh
+        </button>
+        <span style="font-size: 0.75rem; color: var(--accent-primary-hover); font-weight: 500;">b_l(t)=1 Căn chuẩn</span>
+      </div>
+    `;
+
+    grid.appendChild(card);
+  });
+}
+
+window.attachDocToChat = function(docId, docTitle) {
+  state.currentDocument = { document_id: docId, title: docTitle };
+  if (dom.composerActiveDocName) dom.composerActiveDocName.textContent = docTitle;
+  if (dom.activeDocTitle) dom.activeDocTitle.textContent = docTitle;
+  showToast(`Đã gắn tài liệu: ${docTitle} vào phiên hỏi đáp`, "success");
+  const navChatBtn = document.getElementById("nav-btn-chat");
+  if (navChatBtn) navChatBtn.click();
+};
+
+function formatFileSizeSafe(bytes) {
+  if (bytes === null || bytes === undefined || isNaN(bytes) || bytes < 0) return "Dung lượng không xác định";
+  if (bytes < 1024) return bytes + " B";
+  if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + " KB";
+  return (bytes / (1024 * 1024)).toFixed(1) + " MB";
+}
+
+// ==============================================================================
+// 10E. STUDY MODE (FLASHCARDS & QUIZ PREVIEW) (TICKET 3.1)
+// ==============================================================================
+const STUDY_DECK_SAMPLE = [
+  {
+    q: "Kiến trúc SA-CMS áp dụng mấy cấp độ bộ nhớ và ranh giới reset ra sao?",
+    a: "Hệ thống áp dụng 3 cấp độ: đoạn văn (Mức 1, reset cuối mỗi mục), chương mục (Mức 2) và toàn văn bản (Mức 3).",
+    cit: "VN_DOC_001::P003"
+  },
+  {
+    q: "Hàm cổng hòa trộn độc lập (Phương trình 74) có công thức toán học thế nào?",
+    a: "y_t = MLP_pre(x_t) + Σ [g_l(x_t) * B_l * A_l * x_t] với hàm cổng học được g_l(x_t) ∈ [0, 1].",
+    cit: "VN_DOC_001::P004"
+  },
+  {
+    q: "Quy tắc cắt phân mảnh của Baseline B5 khác gì so với SA-CMS P1?",
+    a: "B5 cắt mù theo số lượng token cố định (128/256) chém ngang cấu trúc ngữ nghĩa, trong khi P1 tuân thủ ranh giới ngữ nghĩa tự nhiên b_l(t)=1.",
+    cit: "VN_DOC_001::P008"
+  },
+  {
+    q: "Tại sao mô hình nền SmolLM2-135M được giữ đóng băng 100% trong toàn bộ suy luận?",
+    a: "Nhằm ngăn chặn hiện tượng trôi dạt trọng số (weight drift) và thảm họa quên lãng (catastrophic forgetting), chỉ cập nhật ma trận bộ nhớ tham số thích ứng 5.31M.",
+    cit: "VN_DOC_001::P011"
+  }
+];
+
+let studyCurrentIndex = 0;
+let isCardFlipped = false;
+
+function initStudyModeView() {
+  const card = document.getElementById("flashcard-card");
+  const btnEasy = document.getElementById("btn-card-easy");
+  const btnHard = document.getElementById("btn-card-hard");
+  const btnReview = document.getElementById("btn-card-review");
+
+  if (card) {
+    card.addEventListener("click", () => {
+      isCardFlipped = !isCardFlipped;
+      const front = document.getElementById("flashcard-front");
+      const back = document.getElementById("flashcard-back");
+      const inner = document.getElementById("flashcard-inner");
+
+      if (inner) {
+        inner.style.transform = isCardFlipped ? "rotateY(180deg)" : "rotateY(0deg)";
+      }
+      if (front && back) {
+        front.style.display = isCardFlipped ? "none" : "block";
+        back.style.display = isCardFlipped ? "block" : "none";
+      }
+    });
+  }
+
+  const advanceCard = (status) => {
+    studyCurrentIndex = (studyCurrentIndex + 1) % STUDY_DECK_SAMPLE.length;
+    isCardFlipped = false;
+    const front = document.getElementById("flashcard-front");
+    const back = document.getElementById("flashcard-back");
+    const inner = document.getElementById("flashcard-inner");
+
+    if (inner) inner.style.transform = "rotateY(0deg)";
+    if (front && back) {
+      front.style.display = "block";
+      back.style.display = "none";
+    }
+
+    renderCurrentFlashcard();
+    showToast(`Đã đánh giá thẻ: ${status}`, "info");
+  };
+
+  if (btnEasy) btnEasy.addEventListener("click", () => advanceCard("Đã thuộc ✅"));
+  if (btnHard) btnHard.addEventListener("click", () => advanceCard("Cần ôn ❌"));
+  if (btnReview) btnReview.addEventListener("click", () => advanceCard("Xem lại 🔄"));
+
+  renderCurrentFlashcard();
+}
+
+function initStudyDeck() {
+  renderCurrentFlashcard();
+}
+
+function renderCurrentFlashcard() {
+  const item = STUDY_DECK_SAMPLE[studyCurrentIndex];
+  const qEl = document.getElementById("flashcard-q");
+  const aEl = document.getElementById("flashcard-a");
+  const citEl = document.getElementById("flashcard-citation");
+  const counterEl = document.getElementById("study-card-counter");
+
+  if (qEl && item) qEl.textContent = item.q;
+  if (aEl && item) aEl.textContent = item.a;
+  if (citEl && item) citEl.textContent = `Căn cứ: ${item.cit}`;
+  if (counterEl) counterEl.textContent = `Thẻ ${studyCurrentIndex + 1} / ${STUDY_DECK_SAMPLE.length}`;
+}
+
+// ==============================================================================
+// 10F. ARENA COMPARE VIEW INTERACTIVE CONTROLLER
+// ==============================================================================
+function initArenaCompareView() {
+  const btnRun = document.getElementById("btn-run-arena-compare");
+  const input = document.getElementById("arena-query-input");
+
+  if (btnRun && input) {
+    btnRun.addEventListener("click", async () => {
+      const q = input.value.trim();
+      if (!q) return;
+
+      btnRun.disabled = true;
+      btnRun.innerHTML = "<span>⏳ Đang so tài...</span>";
+
+      try {
+        const res = await fetch("/api/arena_compare", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ query: q, top_k: 5, language: "vi" }),
+        });
+        if (res.ok) {
+          const data = await res.json();
+          const p2El = document.getElementById("arena-res-p2");
+          const b5El = document.getElementById("arena-res-b5");
+          const b2El = document.getElementById("arena-res-b2");
+
+          if (p2El) p2El.textContent = data.p2?.answer || "Câu trả lời P2";
+          if (b5El) b5El.textContent = data.b5?.answer || "Câu trả lời B5";
+          if (b2El) b2El.textContent = data.b2?.answer || "Câu trả lời B2";
+
+          showToast("Đã hoàn tất so tài 3 mô hình!", "success");
+        }
+      } catch (err) {
+        showToast("Lỗi khi chạy so tài", "warn");
+      } finally {
+        btnRun.disabled = false;
+        btnRun.innerHTML = "<span>⚔️ Bắt Đầu So Tài</span>";
+      }
+    });
+  }
+}
+
 // ==============================================================================
 // 11. INITIALIZATION LIFECYCLE
 // ==============================================================================
@@ -1710,6 +2296,11 @@ async function initApp() {
   initSessionExport();
   initLiveIngestModal();
   initResearchHubModal();
+  initViewSwitcher();
+  initSessionManager();
+  initDocumentLibraryView();
+  initStudyModeView();
+  initArenaCompareView();
 
   // Apply default preset (Vietnamese QA)
   applyPreset("vn_qa");

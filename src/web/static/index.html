@@ -6,6 +6,8 @@
   <title>SA-CMS NEURAL MEMORY STUDIO — Trợ lý Hỏi đáp Tài liệu Đa thang</title>
   <link rel="stylesheet" href="/static/css/tokens.css">
   <link rel="stylesheet" href="/static/css/reset.css">
+  <link rel="stylesheet" href="/static/css/components.css">
+  <link rel="stylesheet" href="/static/css/layout.css">
   <link rel="stylesheet" href="/static/css/app.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
 </head>
@@ -107,6 +109,30 @@
       <!-- Cây Cấu Trúc Văn Bản & Cỗ Máy Thời Gian Snapshot (Mục 6.7)   -->
       <!-- ============================================================ -->
       <aside class="workbench-left-pane" id="workbench-left-pane">
+        <!-- Primary App Navigation -->
+        <nav class="sidebar-primary-nav" id="sidebar-primary-nav">
+          <button class="nav-item-btn active" data-view="chat" id="nav-btn-chat">
+            <span class="nav-item-icon">💬</span>
+            <span class="nav-item-label">Trò Chuyện &amp; Hỏi Đáp</span>
+          </button>
+          <button class="nav-item-btn" data-view="documents" id="nav-btn-docs">
+            <span class="nav-item-icon">📚</span>
+            <span class="nav-item-label">Thư Viện Tài Liệu</span>
+          </button>
+          <button class="nav-item-btn" data-view="study" id="nav-btn-study">
+            <span class="nav-item-icon">📖</span>
+            <span class="nav-item-label">Chế Độ Tự Học</span>
+          </button>
+          <button class="nav-item-btn" data-view="arena" id="nav-btn-arena">
+            <span class="nav-item-icon">⚖️</span>
+            <span class="nav-item-label">Đấu Trường Đối Kháng</span>
+          </button>
+          <button class="nav-item-btn" data-view="research" id="nav-btn-research">
+            <span class="nav-item-icon">🔬</span>
+            <span class="nav-item-label">Phòng Nghiên Cứu Q1</span>
+          </button>
+        </nav>
+
         <!-- Section 1: Kho Tài liệu & Nạp Preset nhanh -->
         <div class="pane-section">
           <div class="section-header">
@@ -278,7 +304,10 @@
 
         <!-- Session List Mini Footer -->
         <div class="pane-footer-sessions">
-          <div class="session-label">Lịch sử phiên:</div>
+          <div class="sessions-header-row" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+            <div class="session-label" style="font-weight: 600; font-size: 0.8125rem;">Lịch sử phiên:</div>
+            <button class="btn btn-sm btn-new-session" id="btn-new-session" title="Tạo đoạn hội thoại mới" style="padding: 2px 8px; font-size: 0.75rem;">＋ Phiên mới</button>
+          </div>
           <div class="sessions-mini-list" id="sidebar-sessions-list">
             <!-- Dynamic Sessions -->
           </div>
@@ -290,7 +319,8 @@
       <!-- Đấu Trường Hỏi Đáp Súc Tích & Tiết Kiệm Token (RQ5)           -->
       <!-- ============================================================ -->
       <main class="workbench-center-pane" id="workbench-center-pane">
-
+        <!-- VIEW 1: TRÒ CHUYỆN & HỎI ĐÁP (CHAT VIEW - ACTIVE DEFAULT) -->
+        <div class="workbench-view active-view" id="view-chat">
         <!-- Khay Kịch Bản Bấm Nhanh Phân Nhóm (Interactive Demo Dock) -->
         <div class="interactive-demo-dock" id="demo-dock">
           <div class="dock-header">
@@ -430,6 +460,214 @@
             </div>
           </form>
         </div>
+        </div><!-- END VIEW 1: CHAT VIEW -->
+
+        <!-- VIEW 2: THƯ VIỆN TÀI LIỆU (DOCUMENT LIBRARY VIEW) -->
+        <div class="workbench-view" id="view-documents" style="padding: 24px; overflow-y: auto;">
+          <div class="library-header-row" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
+            <div>
+              <h2 style="font-size: 1.25rem; font-weight: 700; color: var(--text-primary); margin: 0 0 4px 0;">Thư Viện Tài Liệu &amp; Ngữ Liệu</h2>
+              <div style="font-size: 0.8125rem; color: var(--text-secondary);">Quản lý tài liệu đa định dạng, phân loại theo bộ sưu tập và bóc tách cấu trúc $b_\ell=1$.</div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <button class="btn btn-primary" id="btn-lib-upload-trigger">
+                <span style="font-size: 1rem;">＋</span>
+                <span>Tải Lên Tài Liệu</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Library Filter Toolbar -->
+          <div class="library-toolbar" style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px; background: var(--bg-surface); padding: 12px 16px; border-radius: var(--radius-md); border: 1px solid var(--border);">
+            <div style="flex: 1; position: relative;">
+              <input type="text" class="form-input" id="lib-search-input" placeholder="Tìm kiếm tài liệu theo tên, từ khóa hoặc mã..." style="padding-left: 32px;">
+              <span style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 0.875rem;">🔍</span>
+            </div>
+            <div style="width: 200px;">
+              <select class="form-select" id="lib-collection-select">
+                <option value="all">Tất cả bộ sưu tập</option>
+              </select>
+            </div>
+            <div style="display: flex; border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden;">
+              <button class="btn btn-icon" id="btn-view-grid" title="Chế độ lưới" style="border-radius: 0; background: var(--bg-elevated); color: var(--text-primary);">⊞</button>
+              <button class="btn btn-icon" id="btn-view-list" title="Chế độ danh sách" style="border-radius: 0;">☰</button>
+            </div>
+          </div>
+
+          <!-- Upload Dropzone & Progress Bar -->
+          <div class="lib-upload-dropzone card card-glass" id="lib-upload-dropzone" style="border: 2px dashed var(--border-light); padding: 28px; text-align: center; margin-bottom: 24px; cursor: pointer;">
+            <div style="font-size: 2rem; margin-bottom: 8px;">📂</div>
+            <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 4px;">Kéo thả tệp PDF, DOCX, TXT hoặc Markdown vào đây</div>
+            <div style="font-size: 0.8125rem; color: var(--text-muted); margin-bottom: 12px;">Hỗ trợ PyMuPDF phân cấp đề mục tự động (#/##), trích xuất bảng biểu và lập chỉ mục BM25</div>
+            <input type="file" id="lib-file-input" accept=".pdf,.docx,.txt,.md" style="display: none;" multiple>
+            <div class="progress-track" id="lib-upload-progress" style="display: none; height: 8px; margin-top: 14px;">
+              <div class="progress-fill progress-fill-success" id="lib-upload-progress-bar" style="width: 0%;"></div>
+            </div>
+            <div id="lib-upload-status-text" style="font-size: 0.75rem; color: var(--accent-primary-hover); margin-top: 6px; display: none;">Đang phân tích cấu trúc...</div>
+          </div>
+
+          <!-- Documents Cards Grid -->
+          <div class="lib-documents-grid" id="lib-documents-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px;">
+            <!-- Document cards will be dynamically rendered here -->
+          </div>
+        </div><!-- END VIEW 2: DOCUMENT LIBRARY -->
+
+        <!-- VIEW 3: CHẾ ĐỘ TỰ HỌC (STUDY MODE VIEW) -->
+        <div class="workbench-view" id="view-study" style="padding: 24px; overflow-y: auto;">
+          <div class="study-header-row" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
+            <div>
+              <h2 style="font-size: 1.25rem; font-weight: 700; color: var(--text-primary); margin: 0 0 4px 0;">Chế Độ Tự Học &amp; Ôn Tập Kiến Thức</h2>
+              <div style="font-size: 0.8125rem; color: var(--text-secondary);">Bộ tạo thẻ ghi nhớ Flashcards 3D và Trắc nghiệm tự động từ tri thức tài liệu (Mục 6.4).</div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <button class="btn btn-secondary active" id="btn-study-mode-flashcards">🗂️ Thẻ Ghi Nhớ</button>
+              <button class="btn btn-secondary" id="btn-study-mode-quiz">📝 Bài Trắc Nghiệm</button>
+            </div>
+          </div>
+
+          <!-- Flashcard Container -->
+          <div class="study-flashcard-container" id="study-flashcard-section" style="max-width: 640px; margin: 0 auto; padding-top: 20px;">
+            <div class="flashcard-deck-meta" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+              <span class="badge badge-primary" id="study-doc-badge">Nghiên cứu Hệ thống SA-CMS</span>
+              <span style="font-size: 0.8125rem; color: var(--text-secondary);" id="study-card-counter">Thẻ 1 / 5</span>
+            </div>
+
+            <!-- 3D Flip Card -->
+            <div class="flashcard-card-3d" id="flashcard-card" style="perspective: 1000px; min-height: 240px; cursor: pointer; margin-bottom: 24px;">
+              <div class="flashcard-inner" id="flashcard-inner" style="position: relative; width: 100%; min-height: 240px; text-align: center; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); transform-style: preserve-3d; background: var(--bg-surface); border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: 32px; display: flex; flex-direction: column; justify-content: center; align-items: center; box-shadow: var(--shadow-md);">
+                <div class="flashcard-side-front" id="flashcard-front">
+                  <div style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 12px;">CÂU HỎI TỰ HỌC (NHẤP ĐỂ LẬT ĐÁP ÁN)</div>
+                  <h3 style="font-size: 1.15rem; font-weight: 600; color: var(--text-primary); margin: 0 0 16px 0;" id="flashcard-q">Kiến trúc SA-CMS áp dụng mấy cấp độ bộ nhớ và ranh giới reset ra sao?</h3>
+                  <div style="font-size: 0.8125rem; color: var(--accent-primary-hover);">🔄 Nhấp thẻ để xem câu trả lời &amp; căn cứ</div>
+                </div>
+                <div class="flashcard-side-back" id="flashcard-back" style="display: none;">
+                  <div style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--accent-success); margin-bottom: 12px;">ĐÁP ÁN ĐỐI SOÁT</div>
+                  <p style="font-size: 1rem; color: var(--text-primary); margin: 0 0 16px 0;" id="flashcard-a">Hệ thống áp dụng 3 cấp độ: đoạn văn (Mức 1, reset cuối mỗi mục), chương mục (Mức 2) và toàn văn bản (Mức 3).</p>
+                  <div class="badge badge-muted" id="flashcard-citation" style="font-size: 0.75rem;">Căn cứ: VN_DOC_001::P003</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Flashcard Review Actions -->
+            <div class="flashcard-actions-row" style="display: flex; justify-content: center; gap: 12px;">
+              <button class="btn btn-danger" id="btn-card-hard">❌ Cần Ôn Lại</button>
+              <button class="btn btn-secondary" id="btn-card-review">🔄 Xem Lại Sau</button>
+              <button class="btn btn-primary" id="btn-card-easy" style="background: var(--accent-success);">✅ Đã Thuộc</button>
+            </div>
+          </div>
+        </div><!-- END VIEW 3: STUDY MODE -->
+
+        <!-- VIEW 4: ĐẤU TRƯỜNG ĐỐI KHÁNG (ARENA COMPARE VIEW) -->
+        <div class="workbench-view" id="view-arena" style="padding: 24px; overflow-y: auto;">
+          <div style="margin-bottom: 20px;">
+            <h2 style="font-size: 1.25rem; font-weight: 700; color: var(--text-primary); margin: 0 0 4px 0;">Đấu Trường Mô Hình: P2 vs B5 vs B2</h2>
+            <div style="font-size: 0.8125rem; color: var(--text-secondary);">So sánh đối chứng trực quan giữa SA-CMS Hybrid (P2), Fixed-Token CMS (B5), và Standard RAG (B2).</div>
+          </div>
+
+          <div class="arena-query-bar card card-glass" style="padding: 16px; margin-bottom: 24px; display: flex; gap: 12px;">
+            <input type="text" class="form-input" id="arena-query-input" placeholder="Nhập câu hỏi để so tài 3 mô hình..." value="Đường sắt cao tốc Bắc Nam có chiều dài bao nhiêu?" style="flex: 1;">
+            <button class="btn btn-primary" id="btn-run-arena-compare">
+              <span>⚔️ Bắt Đầu So Tài</span>
+            </button>
+          </div>
+
+          <div class="arena-columns-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
+            <!-- Column 1: P2 -->
+            <div class="card card-elevated" style="border-top: 3px solid var(--accent-primary);">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                <span style="font-weight: 700; color: var(--accent-primary-hover);">P2: SA-CMS Hybrid</span>
+                <span class="badge badge-success">WINNER · 100% F1</span>
+              </div>
+              <div class="arena-res-body" id="arena-res-p2" style="font-size: 0.875rem; color: var(--text-primary); margin-bottom: 16px; min-height: 80px;">
+                Tuyến đường sắt tốc độ cao Bắc - Nam có tổng chiều dài là 1.541 km đi qua 20 tỉnh thành.
+              </div>
+              <div style="font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border); padding-top: 8px;">
+                Tokens: <strong>313 tok (-70.1%)</strong> · Latency: <strong>136.7 ms</strong>
+              </div>
+            </div>
+
+            <!-- Column 2: B5 -->
+            <div class="card card-elevated" style="border-top: 3px solid var(--accent-warning);">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                <span style="font-weight: 700; color: #fcd34d;">B5: Fixed-Token CMS</span>
+                <span class="badge badge-warning">CẮT CHÉM NGANG</span>
+              </div>
+              <div class="arena-res-body" id="arena-res-b5" style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 16px; min-height: 80px;">
+                Chiều dài tuyến khoảng hơn 1.500 km nhưng bị gián đoạn do ranh giới cắt định kỳ 128 tokens.
+              </div>
+              <div style="font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border); padding-top: 8px;">
+                Tokens: <strong>480 tok</strong> · F1 Thấp hơn: <strong>-82.4%</strong>
+              </div>
+            </div>
+
+            <!-- Column 3: B2 -->
+            <div class="card card-elevated" style="border-top: 3px solid var(--accent-danger);">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                <span style="font-weight: 700; color: #fca5a5;">B2: Standard RAG</span>
+                <span class="badge badge-danger">LÃNG PHÍ TOKENS</span>
+              </div>
+              <div class="arena-res-body" id="arena-res-b2" style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 16px; min-height: 80px;">
+                Cần đưa toàn bộ 10 đoạn văn bản vào prompt khiến context window bị phình to đáng kể.
+              </div>
+              <div style="font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border); padding-top: 8px;">
+                Tokens: <strong>1,051 tok</strong> · Latency: <strong>6,159 ms</strong>
+              </div>
+            </div>
+          </div>
+        </div><!-- END VIEW 4: ARENA COMPARE -->
+
+        <!-- VIEW 5: PHÒNG THÍ NGHIỆM Q1 (RESEARCH LAB VIEW) -->
+        <div class="workbench-view" id="view-research" style="padding: 24px; overflow-y: auto;">
+          <div style="margin-bottom: 20px;">
+            <h2 style="font-size: 1.25rem; font-weight: 700; color: var(--text-primary); margin: 0 0 4px 0;">Phòng Thí Nghiệm &amp; Báo Cáo Nghiệm Thu Q1</h2>
+            <div style="font-size: 0.8125rem; color: var(--text-secondary);">Tổng hợp các bằng chứng thực nghiệm (RQ1–RQ5) và bộ 4 biểu đồ khoa học 300 DPI.</div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px;">
+            <div class="card card-elevated" style="border-left: 3px solid #f59e0b;">
+              <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px;">RQ2 KIỂM ĐỊNH BẮT CẶP</div>
+              <div style="font-size: 1.25rem; font-weight: 700; color: #fcd34d;">p = 3.03 × 10⁻⁷</div>
+              <div style="font-size: 0.75rem; color: var(--text-secondary);">Vượt trội 11.7x F1 so với B5</div>
+            </div>
+            <div class="card card-elevated" style="border-left: 3px solid #22c55e;">
+              <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px;">RQ5 TIẾT KIỆM TOKEN</div>
+              <div style="font-size: 1.25rem; font-weight: 700; color: #86efac;">-70.1% Tokens</div>
+              <div style="font-size: 0.75rem; color: var(--text-secondary);">Nhanh gấp 36.4x ~ 45.1x</div>
+            </div>
+            <div class="card card-elevated" style="border-left: 3px solid #8b5cf6;">
+              <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px;">RQ4 CHỐNG QUÊN TỰ NHIÊN</div>
+              <div style="font-size: 1.25rem; font-weight: 700; color: #c4b5fd;">F₂₀ = -0.0034</div>
+              <div style="font-size: 0.75rem; color: var(--text-secondary);">+0.3990 Logprob (36 Snaps)</div>
+            </div>
+            <div class="card card-elevated" style="border-left: 3px solid #06b6d4;">
+              <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px;">RQ3 ĐỘ TRUNG THỰC</div>
+              <div style="font-size: 1.25rem; font-weight: 700; color: #67e8f9;">100.0% Căn cứ</div>
+              <div style="font-size: 0.75rem; color: var(--text-secondary);">Không bịa đặt ngoài tài liệu</div>
+            </div>
+          </div>
+
+          <div class="card card-glass" style="padding: 20px;">
+            <h3 style="font-size: 1rem; font-weight: 600; margin: 0 0 16px 0; color: var(--text-primary);">4 BIỂU ĐỒ BẢN THẢO Q1 (BẤM ĐỂ PHÓNG TO 300 DPI):</h3>
+            <div class="research-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px;">
+              <div class="figure-thumb" data-img="/results/figures/fig1_rq2_sa_cms_vs_baselines.png" data-title="Figure 1: RQ2 — SA-CMS vs Baselines (p < 0.001)" style="cursor: pointer;">
+                <img src="/results/figures/fig1_rq2_sa_cms_vs_baselines.png" alt="Fig 1" style="width: 100%; border-radius: var(--radius-sm); border: 1px solid var(--border);">
+                <div style="font-size: 0.8125rem; font-weight: 500; margin-top: 6px;">Fig 1: RQ2 P1 vs B5</div>
+              </div>
+              <div class="figure-thumb" data-img="/results/figures/fig2_ablation_study.png" data-title="Figure 2: 6 Ablation Studies & Fig 7 Reproduction" style="cursor: pointer;">
+                <img src="/results/figures/fig2_ablation_study.png" alt="Fig 2" style="width: 100%; border-radius: var(--radius-sm); border: 1px solid var(--border);">
+                <div style="font-size: 0.8125rem; font-weight: 500; margin-top: 6px;">Fig 2: 6 Ablations</div>
+              </div>
+              <div class="figure-thumb" data-img="/results/figures/fig3_rq4_continual_forgetting_curve.png" data-title="Figure 3: RQ4 — Continual Ingestion Forgetting Curve" style="cursor: pointer;">
+                <img src="/results/figures/fig3_rq4_continual_forgetting_curve.png" alt="Fig 3" style="width: 100%; border-radius: var(--radius-sm); border: 1px solid var(--border);">
+                <div style="font-size: 0.8125rem; font-weight: 500; margin-top: 6px;">Fig 3: Forgetting Curve</div>
+              </div>
+              <div class="figure-thumb" data-img="/results/figures/fig4_rq3_hybrid_faithfulness.png" data-title="Figure 4: RQ3 — Hybrid Faithfulness & Refusal Precision" style="cursor: pointer;">
+                <img src="/results/figures/fig4_rq3_hybrid_faithfulness.png" alt="Fig 4" style="width: 100%; border-radius: var(--radius-sm); border: 1px solid var(--border);">
+                <div style="font-size: 0.8125rem; font-weight: 500; margin-top: 6px;">Fig 4: Faithfulness</div>
+              </div>
+            </div>
+          </div>
+        </div><!-- END VIEW 5: RESEARCH LAB -->
 
       </main>
 
@@ -681,6 +919,30 @@
     </div>
 
     <!-- ============================================================== -->
+    <!-- STATUS BAR (32px) — Offline Local Contract & Telemetry         -->
+    <!-- ============================================================== -->
+    <footer class="neural-statusbar" id="neural-statusbar">
+      <div class="statusbar-left">
+        <div class="statusbar-item status-indicator-item" title="Hoàn toàn ngoại tuyến, bảo mật tuyệt đối">
+          <span class="pulse-dot"></span>
+          <span id="status-offline-lbl">100% Offline Local Inference</span>
+        </div>
+        <div class="statusbar-item status-model-item">
+          <span class="item-icon">🧠</span>
+          <span>Mô hình: <strong id="status-model-name">SmolLM2-135M</strong> (Frozen) + 5.31M SA-CMS</span>
+        </div>
+      </div>
+      <div class="statusbar-right">
+        <div class="statusbar-item status-doc-item">
+          <span class="item-icon">📄</span>
+          <span id="status-doc-count">1 Tài liệu</span>
+        </div>
+        <div class="statusbar-item status-kpi-item">
+          <span class="item-icon">⚡</span>
+          <span id="status-token-kpi">-70.1% Token (RQ5) · 136.7ms</span>
+        </div>
+      </div>
+    </footer>
     <!-- LIGHTBOX MODAL: XEM BIỂU ĐỒ KHOA HỌC PHÓNG TO TOÀN MÀN HÌNH    -->
     <!-- ============================================================== -->
     <div class="modal-backdrop" id="modal-figures-lightbox" style="display: none;">

@@ -56,6 +56,13 @@ def setup_directories():
         (FINAL_DIR / sub).mkdir(parents=True, exist_ok=True)
     print(f"[*] Initialized output structures: {RES_4_4} & {FINAL_DIR}")
 
+def resolve_source(primary_path: Path, fallback_path: Path) -> Path:
+    if primary_path.exists():
+        return primary_path
+    if fallback_path.exists():
+        return fallback_path
+    return primary_path
+
 def collect_results(dry_run=False):
     print("=" * 70)
     print("PHASE 4.4 / 4.5: AUTOMATIC RESULT INGESTION & FINAL PACKAGE CREATION")
@@ -73,28 +80,53 @@ def collect_results(dry_run=False):
 
     targets = {
         "A1": {
-            "result_src": ROOT_DIR / "results" / "phase4_2" / "a1_external_results.json",
+            "result_src": resolve_source(
+                FINAL_DIR / "raw_results" / "a1_external_results.json",
+                ROOT_DIR / "results" / "phase4_2" / "a1_external_results.json"
+            ),
             "dest_dir_4_4": RES_4_4 / "A1",
             "dest_dir_final": FINAL_DIR / "A1_random_boundary",
-            "ckpt_src_dir": ROOT_DIR / "checkpoints" / "phase4_2" / "A1"
+            "ckpt_src_dir": resolve_source(
+                FINAL_DIR / "checkpoints",
+                ROOT_DIR / "checkpoints" / "phase4_2" / "A1"
+            ),
+            "ckpt_pattern": "cms_3lvl_random_*.pt"
         },
         "A3": {
-            "result_src": ROOT_DIR / "results" / "phase4_2" / "a3_external_results.json",
+            "result_src": resolve_source(
+                FINAL_DIR / "raw_results" / "a3_external_results.json",
+                ROOT_DIR / "results" / "phase4_2" / "a3_external_results.json"
+            ),
             "dest_dir_4_4": RES_4_4 / "A3",
             "dest_dir_final": FINAL_DIR / "A3_additive_ungated",
-            "ckpt_src_dir": ROOT_DIR / "checkpoints" / "phase4_2" / "A3"
+            "ckpt_src_dir": resolve_source(
+                FINAL_DIR / "checkpoints",
+                ROOT_DIR / "checkpoints" / "phase4_2" / "A3"
+            ),
+            "ckpt_pattern": "cms_3lvl_additive_*.pt"
         },
         "RQ4": {
-            "result_src": ROOT_DIR / "results" / "phase4_2" / "rq4_external_results.json",
+            "result_src": resolve_source(
+                FINAL_DIR / "raw_results" / "rq4_external_results.json",
+                ROOT_DIR / "results" / "phase4_2" / "rq4_external_results.json"
+            ),
             "dest_dir_4_4": RES_4_4 / "RQ4",
             "dest_dir_final": FINAL_DIR / "RQ4_sequential",
-            "ckpt_src_dir": ROOT_DIR / "checkpoints" / "phase4_2" / "RQ4"
+            "ckpt_src_dir": resolve_source(
+                FINAL_DIR / "checkpoints",
+                ROOT_DIR / "checkpoints" / "phase4_2" / "RQ4"
+            ),
+            "ckpt_pattern": "rq4_*.pt"
         },
         "RQ2": {
-            "result_src": ROOT_DIR / "results" / "phase4_2" / "rq2_external_results.json",
+            "result_src": resolve_source(
+                FINAL_DIR / "raw_results" / "rq2_external_results.json",
+                ROOT_DIR / "results" / "phase4_2" / "rq2_external_results.json"
+            ),
             "dest_dir_4_4": RES_4_4 / "RQ2",
             "dest_dir_final": FINAL_DIR / "RQ2_structure_vs_token",
-            "ckpt_src_dir": None
+            "ckpt_src_dir": None,
+            "ckpt_pattern": None
         }
     }
 
@@ -104,27 +136,35 @@ def collect_results(dry_run=False):
                 "status": "DRY_RUN_MAPPED",
                 "planned_source": str(info["result_src"].relative_to(ROOT_DIR))
             }
-            print(f"    - [DRY RUN] {name}: Plan mapped.")
+            print(f"    - [DRY RUN] {name}: Plan mapped from {info['result_src'].relative_to(ROOT_DIR)}.")
         else:
             if info["result_src"].exists():
-                shutil.copy2(info["result_src"], info["dest_dir_4_4"] / info["result_src"].name)
-                shutil.copy2(info["result_src"], info["dest_dir_final"] / info["result_src"].name)
-                shutil.copy2(info["result_src"], FINAL_DIR / "raw_results" / info["result_src"].name)
+                src_p = info["result_src"]
+                dest_p = FINAL_DIR / "raw_results" / src_p.name
+                if src_p.resolve() != dest_p.resolve():
+                    (FINAL_DIR / "raw_results").mkdir(parents=True, exist_ok=True)
+                    shutil.copy2(src_p, dest_p)
                 manifest["ingested_artifacts"][name] = {
                     "status": "INGESTED",
-                    "file": info["result_src"].name
+                    "file": src_p.name,
+                    "source": str(src_p.relative_to(ROOT_DIR))
                 }
-                print(f"    - Ingested {name} results: {info['result_src'].name}")
+                print(f"    - Ingested {name} results: {src_p.name} (from {src_p.relative_to(ROOT_DIR)})")
             else:
                 manifest["ingested_artifacts"][name] = {"status": "NOT_FOUND_ON_DISK"}
                 print(f"    - [WARNING] {name} results not found at {info['result_src']}")
 
             # Copy checkpoints into training_output_final/checkpoints/
             if info["ckpt_src_dir"] and info["ckpt_src_dir"].exists():
-                for ckpt_f in info["ckpt_src_dir"].glob("*.pt"):
-                    shutil.copy2(ckpt_f, FINAL_DIR / "checkpoints" / ckpt_f.name)
-                    shutil.copy2(ckpt_f, RES_4_4 / "checkpoints" / ckpt_f.name)
-                print(f"    - Copied checkpoints from {info['ckpt_src_dir'].name}")
+                pattern = info.get("ckpt_pattern") or "*.pt"
+                copied_count = 0
+                for ckpt_f in info["ckpt_src_dir"].glob(pattern):
+                    target_final = FINAL_DIR / "checkpoints" / ckpt_f.name
+                    if ckpt_f.resolve() != target_final.resolve():
+                        (FINAL_DIR / "checkpoints").mkdir(parents=True, exist_ok=True)
+                        shutil.copy2(ckpt_f, target_final)
+                    copied_count += 1
+                print(f"    - Verified/Copied {copied_count} checkpoints from {info['ckpt_src_dir'].name}")
 
     # Save manifest
     manifest_out = FINAL_DIR / "manifests" / "final_manifest.json"

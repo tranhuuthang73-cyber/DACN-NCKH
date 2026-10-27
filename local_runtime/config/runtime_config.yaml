@@ -12,7 +12,7 @@ runtime:
 model:
   backbone_name: "HuggingFaceTB/SmolLM2-135M"
   local_model_path: "local_runtime/model"
-  local_tokenizer_path: "local_runtime/tokenizer"
+  local_tokenizer_path: "local_runtime/model"
   architecture: "StructureAlignedHopeLM"
   num_levels: 3
   precision: "float32"

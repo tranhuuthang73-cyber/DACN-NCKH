@@ -500,6 +500,18 @@ class HybridQAPipeline:
                 extracted_fact = "Metformin là lựa chọn đầu tay"
             elif "smollm2" in q_lower and ("parameter" in q_lower or "size" in q_lower or "tham số" in q_lower):
                 extracted_fact = "134.5 million parameters"
+            elif "gw" in q_lower or "điện gió" in q_lower:
+                m = re.search(r"(\d+(?:[,\.]\d+)?\s*GW)", clean_ev, re.IGNORECASE)
+                if m:
+                    extracted_fact = m.group(1).strip()
+            elif "mw" in q_lower:
+                m = re.search(r"(\d+(?:[,\.]\d+)?\s*MW)", clean_ev, re.IGNORECASE)
+                if m:
+                    extracted_fact = m.group(1).strip()
+            elif "teu" in q_lower:
+                m = re.search(r"(\d+(?:[,\.]\d+)?\s*(?:triệu\s+)?TEU)", clean_ev, re.IGNORECASE)
+                if m:
+                    extracted_fact = m.group(1).strip()
 
             if extracted_fact:
                 answer_body = extracted_fact

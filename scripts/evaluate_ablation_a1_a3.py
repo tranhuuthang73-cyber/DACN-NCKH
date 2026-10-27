@@ -279,12 +279,9 @@ def main():
         res_a1 = evaluate_variant("A1", "cms_3lvl_random", is_additive=False, jsonl_f=jsonl_f)
         res_a3 = evaluate_variant("A3", "cms_3lvl_additive", is_additive=True, jsonl_f=jsonl_f)
 
-    # Save to targets
+    # Save to canonical target
     targets_a1 = [
         ROOT_DIR / "training_output_final" / "raw_results" / "a1_external_results.json",
-        ROOT_DIR / "training_output_final" / "A1_random_boundary" / "a1_external_results.json",
-        ROOT_DIR / "results" / "phase4_4" / "A1" / "a1_external_results.json",
-        ROOT_DIR / "results" / "phase4_2" / "a1_external_results.json"
     ]
     for p in targets_a1:
         p.parent.mkdir(parents=True, exist_ok=True)
@@ -293,9 +290,6 @@ def main():
 
     targets_a3 = [
         ROOT_DIR / "training_output_final" / "raw_results" / "a3_external_results.json",
-        ROOT_DIR / "training_output_final" / "A3_additive_ungated" / "a3_external_results.json",
-        ROOT_DIR / "results" / "phase4_4" / "A3" / "a3_external_results.json",
-        ROOT_DIR / "results" / "phase4_2" / "a3_external_results.json"
     ]
     for p in targets_a3:
         p.parent.mkdir(parents=True, exist_ok=True)

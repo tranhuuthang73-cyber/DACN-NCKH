@@ -63,7 +63,7 @@ class LocalModelLoader:
         return {
             "model": {
                 "local_model_path": "local_runtime/model",
-                "local_tokenizer_path": "local_runtime/tokenizer",
+                "local_tokenizer_path": "local_runtime/model",
                 "num_levels": 3,
             },
             "checkpoints": {
@@ -84,7 +84,7 @@ class LocalModelLoader:
         ckpt_cfg = self.config.get("checkpoints", {})
 
         model_dir = ROOT_DIR / model_cfg.get("local_model_path", "local_runtime/model")
-        tokenizer_dir = ROOT_DIR / model_cfg.get("local_tokenizer_path", "local_runtime/tokenizer")
+        tokenizer_dir = ROOT_DIR / model_cfg.get("local_tokenizer_path", "local_runtime/model")
         ckpt_path = ROOT_DIR / ckpt_cfg.get("current_path", "local_runtime/checkpoints/cms_3lvl_seed_42.pt")
 
         if not model_dir.exists() or not (model_dir / "model.safetensors").exists():
@@ -195,7 +195,7 @@ class LocalModelLoader:
         Generates authoritative local resource status for Step 17 requirement.
         """
         model_dir = ROOT_DIR / "local_runtime" / "model"
-        tokenizer_dir = ROOT_DIR / "local_runtime" / "tokenizer"
+        tokenizer_dir = ROOT_DIR / "local_runtime" / "model"
         ckpt_dir = ROOT_DIR / "local_runtime" / "checkpoints"
 
         model_ready = (model_dir / "model.safetensors").exists()

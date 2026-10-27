@@ -34,8 +34,19 @@ htmlcov/
 
 # Local offline runtime generated files & heavy weights (>100MB)
 local_runtime/model/*.safetensors
+local_runtime/model/*.bin
+local_runtime/model/*.pt
+local_runtime/model/*.onnx
 local_runtime/snapshots/
 
 # Temporary scratch files and test scripts
 scratch/
 scratch_bench.py
+
+# Temporary runtime parsed files, test documents, and logs
+local_runtime/parsed/
+local_runtime/documents/LIFECYCLE_*
+logs/*.log
+data/document_store/documents/DOC_*
+data/document_store/documents/DOC_CUSTOM_*
+data/document_store/documents/**/v[2-9]*.json

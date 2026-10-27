@@ -43,6 +43,9 @@ class QuestionRouter:
         r"\bgiá vàng\b", r"\bgold price\b",
         r"\bxổ số\b", r"\blottery\b",
         r"\bmón ăn\b", r"\brecipe\b",
+        r"\bvinfast\b", r"\bbitcoin\b", r"\bcrypto\b", r"\btiền mã hóa\b",
+        r"\bgiá xe\b", r"\bô tô\b", r"\bxe hơi\b", r"\bplutonium\b",
+        r"\bchứng khoán\b", r"\bvn-index\b", r"\bstock price\b",
     ]
 
     # Document summary patterns

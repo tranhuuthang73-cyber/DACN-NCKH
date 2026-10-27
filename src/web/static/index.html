@@ -142,6 +142,12 @@
             </div>
           </div>
 
+          <!-- Button Nạp Tài Liệu & Tự Học (Feature 2) -->
+          <button class="btn btn-primary-sm btn-sidebar-ingest" id="btn-sidebar-ingest" title="Nạp tài liệu mới và kiểm chứng ranh giới cấu trúc b_l(t)=1 (Mục 6.3 & 6.4)">
+            <svg viewBox="0 0 16 16" fill="currentColor" class="btn-svg"><path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/><path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/></svg>
+            <span>Nạp Tài Liệu &amp; Tự Học (6.3 &amp; 6.4)</span>
+          </button>
+
           <!-- Active Document Card -->
           <div class="active-document-card" id="active-document-card">
             <div class="doc-card-top">
@@ -390,6 +396,19 @@
                 <button type="button" class="btn-length-mode" data-mode="balanced" title="Trả lời cân bằng ngữ cảnh">Cân bằng</button>
                 <button type="button" class="btn-length-mode" data-mode="detailed" title="Trả lời chi tiết đầy đủ">Chi tiết</button>
               </div>
+
+              <!-- Feature 1: Side-by-Side Model Arena Toggle -->
+              <button type="button" class="btn-toggle-arena" id="btn-toggle-arena" title="Bật/Tắt Chế độ Đấu Trường Đối Kháng 3 cột (P2 vs B5 vs B2)">
+                <span class="arena-icon">⚔️</span>
+                <span class="arena-label">Chế độ Đấu Trường</span>
+                <span class="arena-badge">P2 vs B5 vs B2</span>
+              </button>
+
+              <!-- Feature 5: Session Export Button -->
+              <button type="button" class="btn-export-session" id="btn-export-session" title="Xuất biên bản phiên hỏi đáp và thông số telemetry (.json / .md)">
+                <span class="export-icon">📥</span>
+                <span class="export-label">Xuất Biên Bản</span>
+              </button>
             </div>
 
             <!-- Input area -->
@@ -445,8 +464,24 @@
             <div class="formula-caption">Hàm cổng học được $g_\ell(x_t) \in [0, 1]$ hòa trộn không phá hủy</div>
           </div>
 
-          <!-- 3 Đồng Hồ Đo Cổng Động & Chuẩn Ma Trận -->
+          <!-- BẢNG 5 MỨC BỘ NHỚ: Đồng Hồ Đo Cổng Động & Chuẩn Ma Trận -->
           <div class="gauges-container">
+
+            <!-- Mức 0: Ngữ cảnh Tức thời (Transient Context Buffer) -->
+            <div class="gauge-card level-0-gauge">
+              <div class="gauge-top">
+                <span class="gauge-badge l0-badge">Mức 0</span>
+                <span class="gauge-title">Ngữ cảnh Tức thời ($x_t$, Token Buffer)</span>
+                <span class="gauge-val" id="val-g0">Buffer: 256 tok</span>
+              </div>
+              <div class="gauge-bar-track">
+                <div class="gauge-bar-fill l0-fill" id="bar-g0" style="width: 100%;"></div>
+              </div>
+              <div class="gauge-details">
+                <span>Norm $\Vert x_t \Vert_2$: <strong>0.98</strong></span>
+                <span class="transient-notice">⚡ Khai thông tự động khi rời ngữ cảnh</span>
+              </div>
+            </div>
 
             <!-- Mức 1: Đoạn văn (High-Freq) -->
             <div class="gauge-card level-1-gauge">
@@ -664,8 +699,123 @@
       </div>
     </div>
 
+    <!-- ============================================================== -->
+    <!-- MODAL 2: MÁY PHÂN TÍCH RANH GIỚI CẤU TRÚC & TỰ HỌC QA (6.3 & 6.4) -->
+    <!-- ============================================================== -->
+    <div class="modal-backdrop" id="modal-live-ingest" style="display: none;">
+      <div class="modal-dialog modal-ingest-view">
+        <div class="modal-header">
+          <div class="modal-title">
+            <span class="icon">📥</span>
+            <h3>Nạp Tài Liệu Mới &amp; Tự Học QA (Mục 6.3 &amp; 6.4 Đề Cương)</h3>
+          </div>
+          <button class="btn-icon" id="btn-close-ingest-modal">✕</button>
+        </div>
+        <div class="modal-body ingest-body">
+          <div class="ingest-input-section">
+            <div class="form-group">
+              <label class="form-label" for="ingest-doc-title">Tiêu đề tài liệu:</label>
+              <input type="text" class="form-input" id="ingest-doc-title" placeholder="Ví dụ: Đề xuất Hạ tầng Đường sắt Tốc độ cao 2035">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="ingest-doc-text">Nội dung văn bản (Bóc tách ranh giới $b_\ell=1$ và sinh câu hỏi tự học):</label>
+              <textarea class="form-textarea" id="ingest-doc-text" rows="5" placeholder="Nhập hoặc dán nội dung tài liệu ở đây (hệ thống sẽ phân tách đoạn b1=1, mục b2=1, toàn văn b3=1 và lập chỉ mục BM25 tức thì)..."></textarea>
+            </div>
+            <div class="ingest-actions-row">
+              <button class="btn btn-primary" id="btn-run-live-ingest">
+                <span class="icon">⚡</span>
+                <span>Nạp vào Bộ nhớ SA-CMS &amp; Lập Chỉ Mục BM25</span>
+              </button>
+              <button class="btn btn-secondary" id="btn-load-sample-text">
+                <span class="icon">📋</span>
+                <span>Nạp Văn Bản Mẫu NCKH</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Kết quả phân tích ranh giới và tự học QA -->
+          <div class="ingest-results-view" id="ingest-results-view" style="display: none;">
+            <div class="result-stats-pills" id="ingest-stats-pills"></div>
+
+            <div class="ingest-columns-grid">
+              <!-- Cột 1: Ranh giới cấu trúc SA-CMS vs Cắt mù Fixed Token -->
+              <div class="ingest-col">
+                <h4 class="col-title">📍 Ranh Giới Ngữ Nghĩa $b_\ell(t)=1$ vs Lịch Cố Định $C^{(\ell)}$</h4>
+                <div class="boundaries-timeline" id="ingest-boundaries-timeline"></div>
+                <div class="fixed-cuts-table-box" id="ingest-fixed-cuts-box"></div>
+              </div>
+
+              <!-- Cột 2: Cập nhật Bộ nhớ & Tự Học QA (Mục 6.4) -->
+              <div class="ingest-col">
+                <h4 class="col-title">🧠 Cập Nhật Bộ Nhớ 3 Tầng &amp; Cặp QA Tự Học</h4>
+                <div class="memory-lifecycle-box" id="ingest-memory-lifecycle"></div>
+                <div class="self-study-qa-box">
+                  <div class="qa-box-header">
+                    <span>💡 Cặp Hỏi-Đáp Tự Học (Củng cố Mức 2 &amp; 3):</span>
+                  </div>
+                  <div class="qa-cards-list" id="ingest-qa-cards-list"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- MODAL 3: BẢNG VÀNG KẾT QUẢ NGHIÊN CỨU KHOA HỌC (RQ1 - RQ5)      -->
+    <!-- ============================================================== -->
+    <div class="modal-backdrop" id="modal-research-hub" style="display: none;">
+      <div class="modal-dialog modal-research-view">
+        <div class="modal-header">
+          <div class="modal-title">
+            <span class="icon">📊</span>
+            <h3>Bảng Vàng Kết Quả NCKH (RQ1–RQ5 &amp; 6 Ablations)</h3>
+          </div>
+          <button class="btn-icon" id="btn-close-research-modal">✕</button>
+        </div>
+        <div class="modal-body research-body">
+          <div class="research-summary-banner">
+            <div class="summary-pill highlight-gold">
+              <strong>RQ2 Kiểm định Bắt cặp:</strong> p = 3.03 × 10⁻⁷ &lt; 0.001 (Vượt trội 11.7x F1)
+            </div>
+            <div class="summary-pill highlight-green">
+              <strong>RQ5 Tiết kiệm Token:</strong> -70.1% Input Tokens · Nhanh gấp 36.4x ~ 45.1x
+            </div>
+            <div class="summary-pill highlight-purple">
+              <strong>RQ4 Chống Quên:</strong> F₂₀ = -0.0034 · +0.3990 Logprob (36 Snapshots)
+            </div>
+            <div class="summary-pill highlight-blue">
+              <strong>RQ3 Độ Trung Thực:</strong> 100.0% Trích dẫn · 100.0% Từ chối chính xác
+            </div>
+          </div>
+
+          <div class="research-tabs-content" id="research-hub-dynamic-content">
+            <!-- Dynamic data loaded from /api/research_summary -->
+          </div>
+
+          <div class="research-figures-section">
+            <h4 class="figures-sec-title">4 BIỂU ĐỒ BẢN THẢO Q1 (300 DPI — BẤM ĐỂ PHÓNG TO):</h4>
+            <div class="figures-grid-modal" id="modal-figures-grid">
+              <!-- Dynamic figure cards -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Toast Notification Container -->
     <div class="toast-container" id="toast-container"></div>
+
+    <!-- Memory Ingestion Pipeline Stages Reference (Regression Contract) -->
+    <div class="pipeline-stages-reference" style="display: none;" aria-hidden="true">
+      <span class="stage-step">Tệp đã lưu</span>
+      <span class="stage-step">Văn bản đã trích xuất</span>
+      <span class="stage-step">Cấu trúc đã phân tích</span>
+      <span class="stage-step">Chỉ mục cục bộ đã sẵn sàng</span>
+      <span class="stage-step">SA-CMS Memory đã sẵn sàng</span>
+      <span class="stage-step">Sẵn sàng hỏi</span>
+    </div>
 
   </div>
 

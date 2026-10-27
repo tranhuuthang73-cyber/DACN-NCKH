@@ -5,19 +5,23 @@
   "ingested_artifacts": {
     "A1": {
       "status": "INGESTED",
-      "file": "a1_external_results.json"
+      "file": "a1_external_results.json",
+      "source": "training_output_final\\raw_results\\a1_external_results.json"
     },
     "A3": {
       "status": "INGESTED",
-      "file": "a3_external_results.json"
+      "file": "a3_external_results.json",
+      "source": "training_output_final\\raw_results\\a3_external_results.json"
     },
     "RQ4": {
       "status": "INGESTED",
-      "file": "rq4_external_results.json"
+      "file": "rq4_external_results.json",
+      "source": "training_output_final\\raw_results\\rq4_external_results.json"
     },
     "RQ2": {
       "status": "INGESTED",
-      "file": "rq2_external_results.json"
+      "file": "rq2_external_results.json",
+      "source": "training_output_final\\raw_results\\rq2_external_results.json"
     }
   }
 }

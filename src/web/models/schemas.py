@@ -109,3 +109,18 @@ class SnapshotCreateRequest(BaseModel):
 class SnapshotRollbackRequest(BaseModel):
     snapshot_id: Optional[str] = None
     document_id: Optional[str] = None
+
+
+# ==============================================================================
+# MULTI-DOCUMENT & COLLECTION SCHEMAS (Ticket 1.7)
+# ==============================================================================
+
+class BatchIngestRequest(BaseModel):
+    documents: List[RawDocumentRequest]
+
+
+class CreateCollectionRequest(BaseModel):
+    name: str
+    description: Optional[str] = ""
+    document_ids: Optional[List[str]] = None
+

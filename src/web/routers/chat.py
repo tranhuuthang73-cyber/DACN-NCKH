@@ -46,19 +46,27 @@ async def chat_query(
         qa_mode = QAMode.HYBRID
         method_name = "P2"
 
+    resolved_doc_ids = getattr(req, "document_ids", None)
     resolved_doc_id = req.document_id
     if resolved_doc_id and resolved_doc_id not in service.store._index:
         resolved_doc_id = None
+    if resolved_doc_id and not resolved_doc_ids:
+        resolved_doc_ids = [resolved_doc_id]
 
     # Step 1: Retrieval
     t_ret_start = time.perf_counter()
     retrieval_results = []
     if qa_mode in (QAMode.HYBRID, QAMode.CONTEXT):
-        retrieval_results = service.retriever.retrieve(query, top_k=req.top_k)
-        if resolved_doc_id:
-            doc_passages = [r for r in retrieval_results if getattr(r, "document_id", "") == resolved_doc_id]
-            if doc_passages:
-                retrieval_results = doc_passages
+        if resolved_doc_ids and len(resolved_doc_ids) > 1:
+            retrieval_results = service.retriever.retrieve(
+                query, top_k=req.top_k, document_ids=resolved_doc_ids
+            )
+        elif resolved_doc_id:
+            retrieval_results = service.retriever.retrieve(
+                query, top_k=req.top_k, document_id=resolved_doc_id
+            )
+        else:
+            retrieval_results = service.retriever.retrieve(query, top_k=req.top_k)
     t_ret_end = time.perf_counter()
     retrieval_ms = (t_ret_end - t_ret_start) * 1000
 

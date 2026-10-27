@@ -103,9 +103,15 @@ class BM25Retriever:
         self.avg_dl = sum(self.doc_lengths) / max(1, self.corpus_size)
         self._indexed = True
 
-    def retrieve(self, query: str, top_k: int = 5, document_id: Optional[str] = None) -> List[RetrievalResult]:
+    def retrieve(
+        self,
+        query: str,
+        top_k: int = 5,
+        document_id: Optional[str] = None,
+        document_ids: Optional[List[str]] = None,
+    ) -> List[RetrievalResult]:
         """
-        Retrieve top-k passages for a query with optional document_id filter.
+        Retrieve top-k passages for a query with optional document_id or multi document_ids filter.
         
         Returns:
             List[RetrievalResult] sorted by descending BM25 score.
@@ -117,9 +123,13 @@ class BM25Retriever:
         if not query_tokens:
             return []
 
+        allowed_docs = set(document_ids) if document_ids else None
         scores = []
         for idx in range(self.corpus_size):
-            if document_id and self.passages[idx].document_id != document_id:
+            p_doc = self.passages[idx].document_id
+            if document_id and p_doc != document_id:
+                continue
+            if allowed_docs is not None and p_doc not in allowed_docs:
                 continue
             score = self._score_document(query_tokens, idx)
             scores.append((idx, score))

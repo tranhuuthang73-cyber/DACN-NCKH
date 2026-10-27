@@ -11,9 +11,15 @@ from typing import Optional, List, Dict, Any
 
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form
 
-from src.web.models.schemas import IngestCustomDocRequest, RawDocumentRequest
+from src.web.models.schemas import (
+    IngestCustomDocRequest,
+    RawDocumentRequest,
+    BatchIngestRequest,
+    CreateCollectionRequest,
+)
 from src.web.dependencies import get_pipeline_service
 from src.web.services.pipeline_service import PipelineService
+from src.web.services.document_service import DocumentService
 from src.web.file_parser import sanitize_filename, extract_text_from_file, format_file_size
 
 router = APIRouter(tags=["Ingest"])
@@ -684,4 +690,69 @@ async def api_root_delete_document(
 ):
     """DELETE /documents/{id} — Delete an indexed document."""
     return await delete_document(doc_id, service=service)
+
+
+# ==============================================================================
+# MULTI-DOCUMENT & COLLECTION APIs (v2)
+# ==============================================================================
+
+@router.post("/api/v2/documents/batch-ingest")
+async def batch_ingest_documents(
+    req: BatchIngestRequest,
+    service: PipelineService = Depends(get_pipeline_service),
+):
+    """POST /api/v2/documents/batch-ingest — Ingests multiple documents in one atomic batch."""
+    doc_service = DocumentService(service)
+    docs_payload = [d.model_dump() if hasattr(d, "model_dump") else d.dict() for d in req.documents]
+    return doc_service.batch_ingest(docs_payload)
+
+
+@router.get("/api/v2/documents/collections")
+async def list_document_collections(
+    service: PipelineService = Depends(get_pipeline_service),
+):
+    """GET /api/v2/documents/collections — Lists all document collections."""
+    doc_service = DocumentService(service)
+    return {"collections": doc_service.list_collections()}
+
+
+@router.post("/api/v2/documents/collections")
+async def create_document_collection(
+    req: CreateCollectionRequest,
+    service: PipelineService = Depends(get_pipeline_service),
+):
+    """POST /api/v2/documents/collections — Creates a new collection."""
+    doc_service = DocumentService(service)
+    return doc_service.create_collection(
+        name=req.name,
+        description=req.description or "",
+        document_ids=req.document_ids,
+    )
+
+
+@router.get("/api/v2/documents/collections/{collection_id}")
+async def get_document_collection(
+    collection_id: str,
+    service: PipelineService = Depends(get_pipeline_service),
+):
+    """GET /api/v2/documents/collections/{id} — Retrieves collection detail."""
+    doc_service = DocumentService(service)
+    coll = doc_service.get_collection(collection_id)
+    if not coll:
+        raise HTTPException(status_code=404, detail=f"Collection '{collection_id}' not found.")
+    return coll
+
+
+@router.delete("/api/v2/documents/collections/{collection_id}")
+async def delete_document_collection(
+    collection_id: str,
+    service: PipelineService = Depends(get_pipeline_service),
+):
+    """DELETE /api/v2/documents/collections/{id} — Deletes a collection."""
+    doc_service = DocumentService(service)
+    success = doc_service.delete_collection(collection_id)
+    if not success:
+        raise HTTPException(status_code=404, detail=f"Collection '{collection_id}' not found.")
+    return {"success": True, "collection_id": collection_id}
+
 

@@ -5,10 +5,10 @@ Starts the 100% offline local web application with frozen SA-CMS neural memory,
 local document store, and BM25 retrieval without requiring any Internet access.
 
 Usage:
-    python run_offline.py [--host 127.0.0.1] [--port 8000] [--prefer-gpu]
+    python run_offline.py [--host 127.0.0.1] [--port 3636] [--prefer-gpu]
 
 Browser Access:
-    http://127.0.0.1:8000
+    http://127.0.0.1:3636
 """
 
 import os
@@ -32,7 +32,7 @@ def main():
         description="SA-CMS Offline Document-Grounded Chatbot Prototype"
     )
     parser.add_argument("--host", default="127.0.0.1", help="Host interface (default: 127.0.0.1)")
-    parser.add_argument("--port", type=int, default=8000, help="Port (default: 8000)")
+    parser.add_argument("--port", type=int, default=3636, help="Port (default: 3636)")
     parser.add_argument("--prefer-gpu", action="store_true", help="Use CUDA if available")
     args = parser.parse_args()
 

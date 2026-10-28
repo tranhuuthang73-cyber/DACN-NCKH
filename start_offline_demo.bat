@@ -14,9 +14,9 @@ set HF_HUB_OFFLINE=1
 set TRANSFORMERS_OFFLINE=1
 set SA_CMS_OFFLINE_MODE=1
 
-echo Dang mo trinh duyet tai http://127.0.0.1:8000 ...
-start "" "http://127.0.0.1:8000"
+echo Dang mo trinh duyet tai http://127.0.0.1:3636 ...
+start "" "http://127.0.0.1:3636"
 
-echo Dang khoi chay backend API tai cong 8000...
-python -m uvicorn src.web.app:app --host 127.0.0.1 --port 8000 --log-level info
+echo Dang khoi chay backend API tai cong 3636...
+python -m uvicorn src.web.app:app --host 127.0.0.1 --port 3636 --log-level info
 pause

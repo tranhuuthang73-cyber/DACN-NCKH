@@ -1,0 +1,23 @@
+{
+  "document_id": "DOC_1793198411",
+  "version": 1,
+  "title": "Alooo",
+  "raw_text": "toi là ai?\r\n\tkiet sieu dep trai",
+  "passages": [],
+  "structural_metadata": {},
+  "content_hash": "485730f19fb8ebbc",
+  "created_at": 1793198411.0420084,
+  "metadata": {
+    "category": "Uploaded",
+    "upload_meta": {
+      "original_filename": "alooo.txt",
+      "extension": ".txt",
+      "size_bytes": 34,
+      "word_count": 7,
+      "approx_tokens": 9
+    },
+    "file_name": "alooo.txt",
+    "file_size": "34 B",
+    "file_size_bytes": 34
+  }
+}

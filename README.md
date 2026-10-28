@@ -433,3 +433,4 @@ DACN-NCKH/
 
 NOTE Kiệt
 tui chỉ mới train AI còn về giao diện tui sẽ chỉnh sau 
+cách chạy web :python run_web.py

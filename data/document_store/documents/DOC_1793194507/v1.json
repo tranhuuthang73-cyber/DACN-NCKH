@@ -1,0 +1,23 @@
+{
+  "document_id": "DOC_1793194507",
+  "version": 1,
+  "title": "Alooo",
+  "raw_text": "kiet sieu dep trai",
+  "passages": [],
+  "structural_metadata": {},
+  "content_hash": "3bf502ce74e966aa",
+  "created_at": 1793194507.011114,
+  "metadata": {
+    "category": "Uploaded",
+    "upload_meta": {
+      "original_filename": "alooo.txt",
+      "extension": ".txt",
+      "size_bytes": 20,
+      "word_count": 4,
+      "approx_tokens": 5
+    },
+    "file_name": "alooo.txt",
+    "file_size": "20 B",
+    "file_size_bytes": 20
+  }
+}

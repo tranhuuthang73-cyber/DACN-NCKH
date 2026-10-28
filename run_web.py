@@ -3,7 +3,7 @@ Web Platform Entry Point — Phase 5.1.
 Runs the Advanced Document Intelligence Web Platform with Uvicorn.
 
 Usage:
-    python run_web.py [--host 127.0.0.1] [--port 8000] [--reload]
+    python run_web.py [--host 127.0.0.1] [--port 3636] [--reload]
 """
 
 import sys
@@ -20,7 +20,7 @@ if str(PROJECT_ROOT) not in sys.path:
 def main():
     parser = argparse.ArgumentParser(description="SA-CMS Document Intelligence Web Platform (Phase 5.1)")
     parser.add_argument("--host", default="127.0.0.1", help="Host interface (default: 127.0.0.1)")
-    parser.add_argument("--port", type=int, default=8000, help="Port (default: 8000)")
+    parser.add_argument("--port", type=int, default=3636, help="Port (default: 3636)")
     parser.add_argument("--reload", action="store_true", help="Enable auto-reload for development")
     args = parser.parse_args()
 

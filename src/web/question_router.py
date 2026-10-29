@@ -160,7 +160,7 @@ class QuestionRouter:
         cls,
         route: QuestionRoute,
         evidence_passages: List[Any],
-        score_threshold: float = 3.0,
+        score_threshold: float = 0.1,
         min_evidence: int = 1,
     ) -> Tuple[QuestionRoute, bool, str]:
         """

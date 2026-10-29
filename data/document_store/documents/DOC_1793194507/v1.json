@@ -3,7 +3,34 @@
   "version": 1,
   "title": "Alooo",
   "raw_text": "kiet sieu dep trai",
-  "passages": [],
+  "passages": [
+    {
+      "passage_id": "DOC_1793194507::P000",
+      "document_id": "DOC_1793194507",
+      "text": "kiet sieu dep trai",
+      "start_char": 0,
+      "end_char": 18,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "",
+      "metadata": {
+        "section_id": "SEC000",
+        "paragraph_id": "PARA001",
+        "document_version": 1,
+        "category": "Uploaded",
+        "upload_meta": {
+          "original_filename": "alooo.txt",
+          "extension": ".txt",
+          "size_bytes": 20,
+          "word_count": 4,
+          "approx_tokens": 5
+        },
+        "file_name": "alooo.txt",
+        "file_size": "20 B",
+        "file_size_bytes": 20
+      }
+    }
+  ],
   "structural_metadata": {},
   "content_hash": "3bf502ce74e966aa",
   "created_at": 1793194507.011114,

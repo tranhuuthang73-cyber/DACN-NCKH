@@ -28,7 +28,7 @@ class DocumentChunker:
         self,
         chunk_size: int = 256,
         chunk_overlap: int = 32,
-        min_chunk_size: int = 64,
+        min_chunk_size: int = 16,
         strategy: str = "sentence",  # "sentence" or "fixed"
     ):
         self.chunk_size = chunk_size
@@ -128,6 +128,9 @@ class DocumentChunker:
                 # Merge short trailing chunk with previous
                 prev_text, prev_start, prev_end = chunks[-1]
                 chunks[-1] = (prev_text + " " + chunk_text.strip(), prev_start, chunk_end)
+            elif chunk_text.strip():
+                # Emit even if shorter than min_chunk_size so content is never lost
+                chunks.append((chunk_text.strip(), chunk_start, chunk_end))
 
         return chunks
 

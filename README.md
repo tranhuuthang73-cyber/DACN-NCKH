@@ -431,6 +431,6 @@ DACN-NCKH/
 ---
 *Ghi chú: Giữ nguyên các cam kết khoa học, không chỉnh sửa thuật toán đã chốt, không dùng kết quả chưa kiểm soát ngân sách.*
 
-NOTE Kiệt
-tui chỉ mới train AI còn về giao diện tui sẽ chỉnh sau 
-cách chạy web :python run_web.py
+*NOTE Kiệt: sửa lại giao diện 
+
+

@@ -62,8 +62,8 @@ class PipelineService:
         self.store = DocumentStore(store_dir=str(self.store_dir))
         self.chunker = DocumentChunker(chunk_size=256, chunk_overlap=32)
         self.retriever = BM25Retriever(k1=1.5, b=0.75)
-        self.evidence_selector = EvidenceSelector(score_threshold=3.0, max_evidence=5, min_evidence=1, min_query_coverage=0.35)
-        self.refusal_controller = RefusalController(min_evidence_score=3.0, min_evidence_count=1, min_query_coverage=0.35)
+        self.evidence_selector = EvidenceSelector(score_threshold=0.1, max_evidence=5, min_evidence=1, min_query_coverage=0.40)
+        self.refusal_controller = RefusalController(min_evidence_score=0.1, min_evidence_count=1, min_query_coverage=0.40)
         self.structure_parser = DocumentStructureParser()
         self.telemetry = TelemetryLogger()
         self.session_manager = SessionManager()
@@ -922,11 +922,12 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
     if route != QuestionRoute.UNANSWERABLE:
         # Retrieve more candidates if comparing or synthesizing across docs
         top_k_retrieve = req.top_k * 3 if (route in (QuestionRoute.CROSS_DOCUMENT_COMPARISON, QuestionRoute.DOCUMENT_SUMMARY) or len(attached_docs) > 1) else req.top_k * 2
-        all_hits = service.retriever.retrieve(effective_query, top_k=top_k_retrieve)
 
         # Filter strictly by attached documents if any are attached
         if attached_docs:
-            retrieval_candidates = [h for h in all_hits if getattr(h, "document_id", "") in attached_docs]
+            retrieval_candidates = service.retriever.retrieve(
+                effective_query, top_k=top_k_retrieve, document_ids=attached_docs
+            )
             # If cross document comparison, prioritize multi-document coverage
             if route == QuestionRoute.CROSS_DOCUMENT_COMPARISON and len(attached_docs) > 1:
                 grouped_by_doc = {}
@@ -940,7 +941,7 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
                     retrieval_candidates = balanced
         else:
             # If no document attached to session, search over all store
-            retrieval_candidates = all_hits
+            retrieval_candidates = service.retriever.retrieve(effective_query, top_k=top_k_retrieve)
 
     t_ret_end = time.perf_counter()
     retrieval_ms = (t_ret_end - t_ret_start) * 1000

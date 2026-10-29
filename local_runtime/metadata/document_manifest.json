@@ -800,10 +800,10 @@
       "file_type": "txt",
       "file_size": 160,
       "version": 1,
-      "created_at": "2026-10-06T10:38:35Z",
+      "created_at": "2026-10-29T05:16:05Z",
       "parsed_path": "local_runtime/parsed/TEST_DOC_911.json",
       "index_path": "local_runtime/indexes/bm25_index.json",
-      "memory_snapshot": "snap_1791283116_ffde69",
+      "memory_snapshot": "snap_1793250967_1a40bf",
       "status": "READY"
     },
     "DOC_1791283057": {
@@ -1012,6 +1012,58 @@
       "parsed_path": "local_runtime/parsed/DOC_1793198411.json",
       "index_path": "local_runtime/indexes/bm25_index.json",
       "memory_snapshot": "snap_1793198412_711dd3",
+      "status": "READY"
+    },
+    "DOC_1793249063": {
+      "document_id": "DOC_1793249063",
+      "filename": "Đề_cương_Chatbot_hỏi_đáp_trên_tài_liệu_với_bộ_nhớ_đa_thang_dựa_trên_Nested_Learning.docx",
+      "file_hash": "391a654e653624eca349e946f60b43279812732d3bca27dab57786d5280b1ffe",
+      "file_type": "docx",
+      "file_size": 14079,
+      "version": 1,
+      "created_at": "2026-10-29T04:44:23Z",
+      "parsed_path": "local_runtime/parsed/DOC_1793249063.json",
+      "index_path": "local_runtime/indexes/bm25_index.json",
+      "memory_snapshot": "snap_1793249097_5e89df",
+      "status": "READY"
+    },
+    "DOC_1793249530": {
+      "document_id": "DOC_1793249530",
+      "filename": "alooo.txt",
+      "file_hash": "485730f19fb8ebbc0f20907afbf0ad7b9fde53ab9c7870532505cdb520e5b14c",
+      "file_type": "txt",
+      "file_size": 32,
+      "version": 1,
+      "created_at": "2026-10-29T04:52:10Z",
+      "parsed_path": "local_runtime/parsed/DOC_1793249530.json",
+      "index_path": "local_runtime/indexes/bm25_index.json",
+      "memory_snapshot": "snap_1793249530_3eef8d",
+      "status": "READY"
+    },
+    "DOC_1793251391": {
+      "document_id": "DOC_1793251391",
+      "filename": "Đề_cương_Chatbot_hỏi_đáp_trên_tài_liệu_với_bộ_nhớ_đa_thang_dựa_trên_Nested_Learning.docx",
+      "file_hash": "391a654e653624eca349e946f60b43279812732d3bca27dab57786d5280b1ffe",
+      "file_type": "docx",
+      "file_size": 14079,
+      "version": 1,
+      "created_at": "2026-10-29T05:23:11Z",
+      "parsed_path": "local_runtime/parsed/DOC_1793251391.json",
+      "index_path": "local_runtime/indexes/bm25_index.json",
+      "memory_snapshot": "snap_1793251424_b0ddee",
+      "status": "READY"
+    },
+    "DOC_1793251484": {
+      "document_id": "DOC_1793251484",
+      "filename": "alooo.txt",
+      "file_hash": "485730f19fb8ebbc0f20907afbf0ad7b9fde53ab9c7870532505cdb520e5b14c",
+      "file_type": "txt",
+      "file_size": 32,
+      "version": 1,
+      "created_at": "2026-10-29T05:24:45Z",
+      "parsed_path": "local_runtime/parsed/DOC_1793251484.json",
+      "index_path": "local_runtime/indexes/bm25_index.json",
+      "memory_snapshot": "snap_1793251485_92f34f",
       "status": "READY"
     }
   },

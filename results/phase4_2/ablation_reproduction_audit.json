@@ -1,0 +1,48 @@
+{
+  "A1": [
+    {
+      "seed": 42,
+      "qasper_f1": 0.1742,
+      "longhealth_acc": 60.0,
+      "mkniah_acc": 70.0,
+      "mkniah_em": 70.0
+    },
+    {
+      "seed": 43,
+      "qasper_f1": 0.1726,
+      "longhealth_acc": 55.0,
+      "mkniah_acc": 70.0,
+      "mkniah_em": 70.0
+    },
+    {
+      "seed": 44,
+      "qasper_f1": 0.1984,
+      "longhealth_acc": 60.0,
+      "mkniah_acc": 50.0,
+      "mkniah_em": 50.0
+    }
+  ],
+  "A3": [
+    {
+      "seed": 42,
+      "qasper_f1": 0.1608,
+      "longhealth_acc": 35.0,
+      "mkniah_acc": 70.0,
+      "mkniah_em": 70.0
+    },
+    {
+      "seed": 43,
+      "qasper_f1": 0.1752,
+      "longhealth_acc": 55.0,
+      "mkniah_acc": 70.0,
+      "mkniah_em": 70.0
+    },
+    {
+      "seed": 44,
+      "qasper_f1": 0.1376,
+      "longhealth_acc": 35.0,
+      "mkniah_acc": 70.0,
+      "mkniah_em": 70.0
+    }
+  ]
+}

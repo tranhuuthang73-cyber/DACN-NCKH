@@ -361,12 +361,19 @@ class HybridQAPipeline:
     ) -> str:
         """
         Step 3 (Clean Extractive-Guided Output):
-        Synthesizes a fluent, concise, grounded answer by performing extractive sentence
-        and span matching from top retrieved evidence passages, post-processing to remove
-        regex/token artifacts (e.g. '_DOC_013::P000]'), and ensuring complete terminal sentences.
-        If concise=True, focuses strictly on the salient answer fact (< 15 tokens).
+        Synthesizes a grounded answer by locating the single sentence that answers the
+        question, then cutting the minimal answer span inside it so the response never
+        over-captures a whole paragraph. Every non-refusal answer terminates with a
+        follow-up question block (Section 6.4 of the proposal).
         """
-        import re
+        from src.hybrid_qa.answer_span import (
+            ensure_trailing_question,
+            extract_answer_span,
+            generate_followup_questions,
+            select_best_sentence,
+            split_sentences,
+            strip_question_block,
+        )
 
         if not evidence_passages:
             return (
@@ -375,35 +382,26 @@ class HybridQAPipeline:
                 else "The provided document does not contain sufficient information to answer this question."
             )
 
-        q_tokens = set(re.findall(r"\w+", question.lower()))
-        stop_words = {
-            "là", "của", "và", "những", "các", "có", "trong", "được", "cho", "với", "này",
-            "đến", "khi", "tại", "một", "gì", "nào", "bao", "nhiêu", "sao", "thế", "đâu",
-            "mấy", "ai", "như", "theo",
-            "is", "the", "of", "and", "in", "to", "a", "what", "which", "how", "when", "where", "why"
-        }
-        content_q_tokens = q_tokens - stop_words
+        # 1. Collect candidate sentences from the focused evidence passage(s).
+        candidates: List[str] = []
+        for passage in evidence_passages:
+            candidates.extend(split_sentences(getattr(passage, "text", "") or ""))
 
-        scored_sentences = []
-        for p_idx, p in enumerate(evidence_passages):
-            raw_text = getattr(p, "text", "") or ""
-            clean_p_text = re.sub(r"\[?[A-Z0-9_\-]+::P\d+\]?", "", raw_text)
-            clean_p_text = re.sub(r"\[DOC_\w+\]", "", clean_p_text)
-            clean_p_text = re.sub(r"_[A-Z0-9_]+::P\d+\]?", "", clean_p_text)
+        if not candidates:
+            return (
+                "Tài liệu được cung cấp không chứa thông tin để trả lời câu hỏi này."
+                if language in ("vi", "vietnamese")
+                else "The provided document does not contain sufficient information to answer this question."
+            )
 
-            raw_sents = re.split(r"(?<=[.!?])\s+", clean_p_text)
-            for s in raw_sents:
-                s_clean = s.strip()
-                if len(s_clean) < 10 or s_clean.startswith("#"):
-                    continue
-                s_tokens = set(re.findall(r"\w+", s_clean.lower()))
-                overlap = len(content_q_tokens & s_tokens)
-                jaccard = overlap / max(1, len(content_q_tokens | s_tokens))
-                score = overlap * 2.0 + jaccard * 5.0 - (p_idx * 0.2)
-                scored_sentences.append((score, s_clean, p))
+        # 2. Pick the sentence with the strongest alignment, then cut the exact span.
+        best_sentence = select_best_sentence(question, candidates) or candidates[0]
+        answer_span = extract_answer_span(question, best_sentence)
 
-        scored_sentences.sort(key=lambda x: x[0], reverse=True)
+        if not answer_span:
+            answer_span = best_sentence
 
+<<<<<<< HEAD
         selected_sentences = []
         used_texts = set()
         for score, sent, p in scored_sentences:
@@ -545,11 +543,27 @@ class HybridQAPipeline:
                     answer_body = answer_body[0].lower() + answer_body[1:]
                 return f"{lead}{answer_body}".strip()
             return f"{answer_body} {cit_tag}".strip()
+=======
+        # 3. Multi-aspect synthesis keeps the answer body short and traceable.
+        primary = getattr(evidence_passages[0], "text", "") or ""
+        follow_ups = generate_followup_questions(
+            query=question,
+            context=primary,
+            section_title=getattr(evidence_passages[0], "section_title", "") or "",
+        )
+
+        if concise:
+            body = answer_span
+>>>>>>> b58cf1e (bug)
         else:
-            lead = f"Based on the provided document {cit_tag}, " if cit_tag else "Based on the provided document, "
-            if answer_body and answer_body[0].isupper():
-                answer_body = answer_body[0].lower() + answer_body[1:]
-            return f"{lead}{answer_body}".strip()
+            parts = [f"**Nội dung cốt lõi:**\n{answer_span}"]
+            support = [s for s in candidates if s != best_sentence][:2]
+            if support:
+                parts.append(f"📌 **Bối cảnh bổ sung:**\n{' '.join(support)}")
+            body = "\n\n".join(parts)
+
+        body = strip_question_block(body)
+        return ensure_trailing_question(body, follow_ups)
 
     def _answer_memory_mode(
         self,

@@ -59,6 +59,18 @@ from src.memory.mechanistic_inspector import MemoryMechanisticInspector
 from src.evaluation.rq_deep_analyzer import DeepRQAnalyzer
 from src.evaluation.token_efficiency_scorecard import TokenEfficiencyScorecard
 from src.web.local_model_loader import LocalModelLoader
+<<<<<<< HEAD
+=======
+from src.web.document_analyzer import DocumentAnalyzer
+from src.hybrid_qa.answer_span import (
+    ensure_trailing_question,
+    extract_answer_span,
+    generate_followup_questions,
+    select_best_sentence,
+    split_sentences,
+    strip_question_block,
+)
+>>>>>>> b58cf1e (bug)
 
 
 # ==============================================================================
@@ -1045,15 +1057,108 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
             answer_mode=req.answer_mode,
         )
 
+<<<<<<< HEAD
         # Append structured Sources section (Task 6)
         sources_list = []
         for c in citations_data:
             sources_list.append(f"[{c['citation_index']}] **{c['document_title']}** — {c['section_title']} — Đoạn {c['paragraph_index']}")
-
-        if sources_list:
-            answer_text = f"{body}\n\n### Nguồn tham khảo\n" + "\n\n".join(sources_list)
+=======
+        if wants_suggested_questions and attached_docs:
+            try:
+                attached_doc = service.store.get_document(attached_docs[0])
+                auto_qs = DocumentAnalyzer.generate_suggested_questions(attached_doc.raw_text, title=attached_doc.title, max_questions=5)
+                q_lines = [f"{idx}. **[{q['category']}]**: {q['question']}" for idx, q in enumerate(auto_qs, start=1)]
+                body = (
+                    f"Dựa trên cấu trúc phân tích tài liệu **{attached_doc.title}**, hệ thống tự động sinh ra các câu hỏi trọng tâm sau:\n\n"
+                    + "\n\n".join(q_lines)
+                    + "\n\n👉 Bạn có thể nhấn hoặc nhập bất kỳ câu hỏi nào ở trên để xem câu trả lời chi tiết kèm trích dẫn nguồn!"
+                )
+            except Exception:
+                body = "Dựa trên tài liệu đã cung cấp, dưới đây là các câu hỏi trọng tâm có thể tham khảo từ văn bản."
+        elif effective_route == QuestionRoute.DOCUMENT_SUMMARY:
+            if attached_docs:
+                try:
+                    attached_doc = service.store.get_document(attached_docs[0])
+                    intel = DocumentAnalyzer.extract_key_points_and_summary(attached_doc.raw_text, title=attached_doc.title, max_points=3)
+                    summary_points = [f"- {kp} {cit_1}" for kp in intel["key_points"]]
+                    body = f"Tài liệu **{attached_doc.title}** tập trung vào các nội dung trọng tâm sau:\n" + "\n".join(summary_points)
+                except Exception:
+                    summary_points = [f"- {s} {cit_1}" for s in sentences[:3]]
+                    body = "Tài liệu này tập trung vào các nội dung trọng tâm sau:\n" + "\n".join(summary_points)
+            else:
+                summary_points = []
+                for c in citations_data[:3]:
+                    pts = [s.strip() for s in c["text"].split(".") if len(s.strip()) > 20]
+                    if pts:
+                        summary_points.append(f"- {pts[0]} {c['citation_label']}")
+                if not summary_points:
+                    summary_points = [f"- {sentences[0]} {cit_1}"]
+                body = "Tài liệu này tập trung vào các nội dung trọng tâm sau:\n" + "\n".join(summary_points)
+        elif effective_route == QuestionRoute.CROSS_DOCUMENT_COMPARISON:
+            comp_points = []
+            for c in citations_data[:2]:
+                pts = [s.strip() for s in c["text"].split(".") if len(s.strip()) > 15]
+                lead = pts[0] if pts else c["text"][:120]
+                comp_points.append(f"- **{c['document_title']}**: {lead} {c['citation_label']}")
+            body = "Khi đối chiếu giữa các tài liệu, có các điểm phân biệt chính:\n" + "\n".join(comp_points)
+        elif effective_route == QuestionRoute.SECTION_LOOKUP:
+            salient_source = select_best_sentence(effective_query, sentences) or (sentences[0] if sentences else best_passage[:180])
+            salient = extract_answer_span(effective_query, salient_source) or salient_source
+            body = f"Tại mục được tra cứu, tài liệu ghi nhận: {salient}. {cit_1}"
         else:
-            answer_text = body
+            # Smart sentence selection: select the sentence with highest semantic match to the query
+            smart_answer, _ = DocumentAnalyzer.find_best_grounded_answer(
+                query=effective_query,
+                evidence_passages=evidence.evidence_passages,
+                answer_mode=req.answer_mode,
+            )
+            # Extract body (strip out Sources section if present, handled below)
+            if "### Nguồn tham khảo" in smart_answer:
+                body = smart_answer.split("### Nguồn tham khảo")[0].strip()
+            else:
+                body = smart_answer.strip()
+
+            # The analyzer refused internally (no on-topic evidence): propagate the refusal
+            # instead of dressing it up with citations that were never used.
+            if body.startswith("Không tìm thấy đủ thông tin bằng chứng"):
+                refused = True
+                refusal_reason = "insufficient_coverage"
+                citations_data = []
+                evidence_passages_out = []
+>>>>>>> b58cf1e (bug)
+
+        if refused:
+            answer_text = (
+                "Tài liệu không có thông tin hoặc chưa đủ căn cứ. "
+                "Không tìm thấy đủ thông tin trong tài liệu để trả lời chắc chắn."
+            )
+        else:
+            seen_source_keys = set()
+            sources_list = []
+            for c in citations_data:
+                s_key = (c["document_title"], c["section_title"], c["paragraph_index"])
+                if s_key not in seen_source_keys:
+                    seen_source_keys.add(s_key)
+                    sources_list.append(
+                        f"[{c['citation_index']}] **{c['document_title']}** — {c['section_title']} — Đoạn {c['paragraph_index']}"
+                    )
+
+            # Strip any question block the body may already carry so it can be re-attached last.
+            body = strip_question_block(body)
+            if sources_list:
+                answer_text = f"{body}\n\n### Nguồn tham khảo\n" + "\n\n".join(sources_list)
+            else:
+                answer_text = body
+
+            # Product invariant: every explanatory answer terminates with a follow-up question.
+            source_context = citations_data[0]["text"] if citations_data else best_passage
+            source_section = citations_data[0]["section_title"] if citations_data else ""
+            follow_up_questions = generate_followup_questions(
+                query=effective_query,
+                context=source_context,
+                section_title=source_section,
+            )
+            answer_text = ensure_trailing_question(answer_text, follow_up_questions)
 
     t_gen_end = time.perf_counter()
     generation_ms = (t_gen_end - t_gen_start) * 1000
@@ -1311,6 +1416,7 @@ async def chat_query(req: ChatRequest):
         input_tokens = len(query.split()) + 30
         output_tokens = len(answer.split())
     else:
+<<<<<<< HEAD
         # Sub-passage context compression to reduce input token footprint & remove noise
         context_str, comp_stats = compress_evidence_context(
             question=query,
@@ -1319,6 +1425,29 @@ async def chat_query(req: ChatRequest):
         )
         evidence_diagnostics["context_compression"] = comp_stats
 
+=======
+        # Answer span extraction first: the model-free path keeps the exact clause.
+        evidence_pool = [
+            type("_P", (), {
+                "text": e["text"],
+                "passage_id": e["passage_id"],
+                "document_id": e["document_id"],
+                "document_title": e.get("document_title", e["document_id"]),
+                "section_title": e.get("section_title", ""),
+                "paragraph_index": 1,
+                "score": e["score"],
+            })()
+            for e in evidence_passages_out
+        ]
+        extracted_answer, _ = DocumentAnalyzer.find_best_grounded_answer(
+            query=query,
+            evidence_passages=evidence_pool,
+            answer_mode=req.answer_mode,
+        )
+
+        # Build prompt using Token-Efficient Prompt Engine (Task 10)
+        context_str = "\n\n".join(f"[{e['passage_id']}] {e['text']}" for e in evidence_passages_out)
+>>>>>>> b58cf1e (bug)
         prompt, max_ans_tokens = build_token_efficient_prompt(
             question=query,
             context_text=context_str if qa_mode != QAMode.MEMORY else "",
@@ -1328,12 +1457,22 @@ async def chat_query(req: ChatRequest):
 
         input_tokens = int(len(prompt.split()) * 1.35)
 
+<<<<<<< HEAD
         # Generate answer using loaded model or structured high-fidelity grounded synthesizer
+=======
+>>>>>>> b58cf1e (bug)
         if service.model_loaded and service.model is not None and service.tokenizer is not None:
             raw_answer = service.pipeline._generate_answer(prompt)
-            answer = postprocess_concise_answer(raw_answer, citations, req.answer_mode, refused)
+            model_answer = postprocess_concise_answer(raw_answer, citations, req.answer_mode, refused)
+            # A 135M backbone often emits degenerate text; fall back to the grounded
+            # extractive answer whenever the generation is not usable.
+            if len(model_answer.strip()) < 8 or citations == []:
+                answer = extracted_answer
+            else:
+                answer = model_answer
             output_tokens = len(service.tokenizer.encode(answer))
         else:
+<<<<<<< HEAD
             if evidence_passages_out:
                 raw_answer = synthesize_accurate_grounded_answer(
                     question=query,
@@ -1346,6 +1485,10 @@ async def chat_query(req: ChatRequest):
 
             answer = postprocess_concise_answer(raw_answer, citations, req.answer_mode, refused)
             output_tokens = int(len(answer.split()) * 1.35)
+=======
+            answer = extracted_answer
+            output_tokens = count_tokens(answer, service.tokenizer)
+>>>>>>> b58cf1e (bug)
 
     t_gen_end = time.perf_counter()
     generation_ms = (t_gen_end - t_gen_start) * 1000

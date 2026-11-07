@@ -1,0 +1,38 @@
+{
+  "document_id": "DOC_1794063683628_52567f",
+  "sections": [
+    {
+      "title": "## 1. Gioi thieu Nested Learning",
+      "start": 0,
+      "end": 88
+    },
+    {
+      "title": "## 2. Ung dung",
+      "start": 88,
+      "end": 150
+    }
+  ],
+  "paragraphs": [
+    {
+      "text": "## 1.",
+      "start": 0,
+      "end": 5
+    },
+    {
+      "text": "Gioi thieu Nested Learning\nNested Learning la phuong phap hoc da thang thoi gian.",
+      "start": 6,
+      "end": 87
+    },
+    {
+      "text": "## 2.",
+      "start": 88,
+      "end": 93
+    },
+    {
+      "text": "Ung dung\nPhuong phap giup giam thieu bo nho RAM dang ke.",
+      "start": 94,
+      "end": 150
+    }
+  ],
+  "total_tokens": 30
+}

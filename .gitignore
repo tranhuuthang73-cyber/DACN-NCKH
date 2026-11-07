@@ -49,3 +49,8 @@ training_handoff_rtx3050/training_handoff_rtx3050/output/
 # Temporary scratch files and test scripts
 scratch/
 scratch_bench.py
+
+checkpoints/train_5m/
+checkpoints/train_10m/
+checkpoints/*.pt
+logs/*.log

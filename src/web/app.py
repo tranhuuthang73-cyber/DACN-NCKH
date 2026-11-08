@@ -27,6 +27,18 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
+
+def count_tokens(text: str, tokenizer: Optional[Any] = None) -> int:
+    """Count tokens with the BPE tokenizer when available, else a word heuristic."""
+    if not text:
+        return 0
+    if tokenizer is not None:
+        try:
+            return len(tokenizer.encode(text))
+        except Exception:
+            pass
+    return int(len(text.split()) * 1.35)
+
 from src.hybrid_qa.document_store import DocumentStore, DocumentRecord, Passage
 from src.hybrid_qa.chunker import DocumentChunker
 from src.hybrid_qa.retriever import BM25Retriever
@@ -59,8 +71,6 @@ from src.memory.mechanistic_inspector import MemoryMechanisticInspector
 from src.evaluation.rq_deep_analyzer import DeepRQAnalyzer
 from src.evaluation.token_efficiency_scorecard import TokenEfficiencyScorecard
 from src.web.local_model_loader import LocalModelLoader
-<<<<<<< HEAD
-=======
 from src.web.document_analyzer import DocumentAnalyzer
 from src.hybrid_qa.answer_span import (
     ensure_trailing_question,
@@ -70,7 +80,6 @@ from src.hybrid_qa.answer_span import (
     split_sentences,
     strip_question_block,
 )
->>>>>>> b58cf1e (bug)
 
 
 # ==============================================================================
@@ -1057,12 +1066,21 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
             answer_mode=req.answer_mode,
         )
 
-<<<<<<< HEAD
-        # Append structured Sources section (Task 6)
-        sources_list = []
-        for c in citations_data:
-            sources_list.append(f"[{c['citation_index']}] **{c['document_title']}** — {c['section_title']} — Đoạn {c['paragraph_index']}")
-=======
+        # Route-specific overrides below need the primary passage, its sentences and the
+        # leading citation label. `split_clean_sentences` preserves decimal numbers such as
+        # "30,9%" that a naive split on "." would shred.
+        best_passage = citations_data[0]["text"] if citations_data else ""
+        sentences = split_clean_sentences(best_passage)
+        cit_1 = citations_data[0]["citation_label"] if citations_data else ""
+
+        q_lower = effective_query.lower()
+        wants_suggested_questions = any(
+            k in q_lower for k in [
+                "câu hỏi ôn tập", "câu hỏi gợi ý", "sinh câu hỏi", "tạo câu hỏi",
+                "câu hỏi liên quan", "gợi ý câu hỏi", "suggest questions", "generate questions",
+            ]
+        )
+
         if wants_suggested_questions and attached_docs:
             try:
                 attached_doc = service.store.get_document(attached_docs[0])
@@ -1125,7 +1143,6 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
                 refusal_reason = "insufficient_coverage"
                 citations_data = []
                 evidence_passages_out = []
->>>>>>> b58cf1e (bug)
 
         if refused:
             answer_text = (
@@ -1416,16 +1433,6 @@ async def chat_query(req: ChatRequest):
         input_tokens = len(query.split()) + 30
         output_tokens = len(answer.split())
     else:
-<<<<<<< HEAD
-        # Sub-passage context compression to reduce input token footprint & remove noise
-        context_str, comp_stats = compress_evidence_context(
-            question=query,
-            evidence_passages=evidence_passages_out,
-            max_sentences_per_passage=2 if req.answer_mode in (AnswerLengthMode.MINIMAL, AnswerLengthMode.CONCISE) else 3,
-        )
-        evidence_diagnostics["context_compression"] = comp_stats
-
-=======
         # Answer span extraction first: the model-free path keeps the exact clause.
         evidence_pool = [
             type("_P", (), {
@@ -1447,7 +1454,6 @@ async def chat_query(req: ChatRequest):
 
         # Build prompt using Token-Efficient Prompt Engine (Task 10)
         context_str = "\n\n".join(f"[{e['passage_id']}] {e['text']}" for e in evidence_passages_out)
->>>>>>> b58cf1e (bug)
         prompt, max_ans_tokens = build_token_efficient_prompt(
             question=query,
             context_text=context_str if qa_mode != QAMode.MEMORY else "",
@@ -1457,10 +1463,6 @@ async def chat_query(req: ChatRequest):
 
         input_tokens = int(len(prompt.split()) * 1.35)
 
-<<<<<<< HEAD
-        # Generate answer using loaded model or structured high-fidelity grounded synthesizer
-=======
->>>>>>> b58cf1e (bug)
         if service.model_loaded and service.model is not None and service.tokenizer is not None:
             raw_answer = service.pipeline._generate_answer(prompt)
             model_answer = postprocess_concise_answer(raw_answer, citations, req.answer_mode, refused)
@@ -1472,23 +1474,8 @@ async def chat_query(req: ChatRequest):
                 answer = model_answer
             output_tokens = len(service.tokenizer.encode(answer))
         else:
-<<<<<<< HEAD
-            if evidence_passages_out:
-                raw_answer = synthesize_accurate_grounded_answer(
-                    question=query,
-                    citations_data=evidence_passages_out,
-                    route=effective_route.value,
-                    answer_mode=req.answer_mode,
-                )
-            else:
-                raw_answer = "Thông tin đã được đồng bộ vào bộ nhớ tham số SA-CMS."
-
-            answer = postprocess_concise_answer(raw_answer, citations, req.answer_mode, refused)
-            output_tokens = int(len(answer.split()) * 1.35)
-=======
             answer = extracted_answer
             output_tokens = count_tokens(answer, service.tokenizer)
->>>>>>> b58cf1e (bug)
 
     t_gen_end = time.perf_counter()
     generation_ms = (t_gen_end - t_gen_start) * 1000

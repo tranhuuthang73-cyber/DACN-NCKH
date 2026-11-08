@@ -69,9 +69,17 @@ def evaluate_variant(variant):
     mkniah = NaturalMKNIAHBenchmark(num_samples=10)
 
     runs = []
+    missing = []
     for seed in SEEDS:
         ckpt = CHECKPOINTS[variant]
         ckpt_path = Path(str(ckpt).format(seed=seed))
+        if not ckpt_path.exists():
+            # A1/A3 checkpoints live under training_output_final/checkpoints/, which is
+            # git-ignored, so a fresh clone cannot reproduce them. Record the gap rather
+            # than crashing or silently reporting a partial aggregate.
+            missing.append(str(ckpt_path.relative_to(ROOT)).replace("\\", "/"))
+            continue
+
         model = build_model(variant)
         state = torch.load(ckpt_path, map_location=DEVICE, weights_only=False)
         model.cms.load_state_dict(state["cms_state_dict"], strict=False)
@@ -123,6 +131,8 @@ def evaluate_variant(variant):
 
     def agg(key):
         values = [r[key] for r in runs]
+        if not values:
+            return {"mean": None, "sd": None, "per_seed": []}
         return {
             "mean": round(statistics.mean(values), 4),
             "sd": round(statistics.stdev(values), 4) if len(values) > 1 else 0.0,
@@ -132,6 +142,8 @@ def evaluate_variant(variant):
     return {
         "variant": variant,
         "runs": runs,
+        "status": "ok" if not missing else ("partial" if runs else "checkpoints_missing"),
+        "missing_checkpoints": missing,
         "aggregate": {
             "qasper_f1": agg("qasper_f1"),
             "longhealth_acc_pct": agg("longhealth_acc_pct"),
@@ -163,4 +175,10 @@ if __name__ == "__main__":
     dest.parent.mkdir(parents=True, exist_ok=True)
     with open(dest, "w", encoding="utf-8") as f:
         json.dump(audit, f, indent=2, ensure_ascii=False)
+
+    missing_variants = [
+        name for name, payload in audit["variants"].items() if payload["status"] != "ok"
+    ]
+    if missing_variants:
+        print(f"INCOMPLETE: {', '.join(missing_variants)} could not be fully reproduced", flush=True)
     print("saved", dest, flush=True)

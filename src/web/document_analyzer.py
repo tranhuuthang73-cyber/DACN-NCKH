@@ -251,7 +251,10 @@ class DocumentAnalyzer:
                 sentence_pool.append(sentence)
                 sentence_sections.append(passage_section)
 
-        best_sentence = select_best_sentence(query, sentence_pool, sentence_sections)
+        from src.web.token_optimizer import expand_query_semantics
+        exp_query, _ = expand_query_semantics(query)
+
+        best_sentence = select_best_sentence(exp_query, sentence_pool, sentence_sections)
         best_passage_idx = 0
         if best_sentence:
             for idx, passage in enumerate(evidence_passages):
@@ -266,7 +269,11 @@ class DocumentAnalyzer:
         matched_section = ""
         if best_sentence in sentence_pool:
             matched_section = sentence_sections[sentence_pool.index(best_sentence)]
-        if not best_sentence or relevance_score(query, best_sentence, extra=matched_section) < MIN_RELEVANCE:
+        rel = max(
+            relevance_score(query, best_sentence, extra=matched_section),
+            relevance_score(exp_query, best_sentence, extra=matched_section),
+        )
+        if not best_sentence or rel < MIN_RELEVANCE:
             return "Không tìm thấy đủ thông tin bằng chứng trong tài liệu để trả lời câu hỏi này.", []
 
         # Deduplicate citations: one citation per distinct document & section.
@@ -295,9 +302,11 @@ class DocumentAnalyzer:
 
         cit_1 = dedup_citations[0]["citation_label"] if dedup_citations else "[1]"
 
-        # Precision cut: the minimal answering span, never the whole sentence/paragraph.
-        answer_core = extract_answer_span(query, best_sentence) if best_sentence else ""
-        if not answer_core:
+        # Precision cut: minimal answering span, fallback to best_sentence if span is fragmented or cuts key-values
+        answer_core = extract_answer_span(exp_query, best_sentence) if best_sentence else ""
+        if not answer_core or len(answer_core.split()) < 4 or answer_core.strip().endswith(":") or ":" in best_sentence:
+            answer_core = best_sentence
+        elif not answer_core:
             answer_core = best_sentence
 
         if answer_core and not answer_core.endswith((".", "!", "?")):

@@ -62,6 +62,7 @@ from src.web.token_optimizer import (
     compress_evidence_context,
     synthesize_accurate_grounded_answer,
     split_clean_sentences,
+    expand_query_semantics,
 )
 from src.web.demo_data import seed_demo_documents, DEMO_DOCUMENTS
 from src.web.session_manager import SessionManager, ChatSession
@@ -371,7 +372,7 @@ async def upload_document(
         raise HTTPException(status_code=400, detail=str(e))
 
     doc_title = title or Path(filename).stem.replace("_", " ").title()
-    doc_id = f"DOC_{int(time.time())}"
+    doc_id = f"DOC_{int(time.time() * 1000)}_{uuid.uuid4().hex[:6]}"
 
     doc_record = service.store.add_document(
         title=doc_title,
@@ -951,23 +952,69 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
     effective_query = service.session_manager.resolve_conversation_context(session_id, raw_query)
 
     # Step 3: Question Routing (Task 4 & 5)
-    attached_docs = session.document_ids
+    attached_docs = list(session.document_ids) if session.document_ids else []
+
+    # Strict Document Isolation: If no document is explicitly attached, bind to the latest user document
+    if not attached_docs:
+        all_store_docs = service.store.list_documents()
+        if all_store_docs:
+            user_docs = [d for d in all_store_docs if not d.get("document_id", "").startswith("DEMO_DOC_")]
+            target_list = user_docs if user_docs else all_store_docs
+            attached_docs = [target_list[-1]["document_id"]]
+            # Persist binding to session so subsequent messages stay isolated
+            try:
+                service.session_manager.attach_document(session_id, attached_docs[0])
+            except Exception:
+                pass
+
     route, route_meta = service.question_router.classify_intent(
         effective_query, num_attached_documents=len(attached_docs)
     )
 
-    # Step 4: Retrieval based on routing & attached documents
+    # Step 4: Retrieval based on routing & attached documents (Pre-filtered for Zero Leakage)
     t_ret_start = time.perf_counter()
     retrieval_candidates = []
 
     if route != QuestionRoute.UNANSWERABLE:
         # Retrieve more candidates if comparing or synthesizing across docs
         top_k_retrieve = req.top_k * 3 if (route in (QuestionRoute.CROSS_DOCUMENT_COMPARISON, QuestionRoute.DOCUMENT_SUMMARY) or len(attached_docs) > 1) else req.top_k * 2
-        all_hits = service.retriever.retrieve(effective_query, top_k=top_k_retrieve)
+        expanded_query_text, _ = expand_query_semantics(effective_query)
 
-        # Filter strictly by attached documents if any are attached
+        # Pre-filter strictly at BM25 level: ONLY passages from attached_docs are even scored
         if attached_docs:
-            retrieval_candidates = [h for h in all_hits if getattr(h, "document_id", "") in attached_docs]
+            retrieval_candidates = service.retriever.retrieve(
+                expanded_query_text,
+                top_k=top_k_retrieve,
+                allowed_document_ids=attached_docs,
+            )
+            best_score = max((getattr(h, "score", 0.0) for h in retrieval_candidates), default=0.0)
+
+            # If document summary or weak hit on exploratory summary, pull document's passages directly
+            if route == QuestionRoute.DOCUMENT_SUMMARY or (best_score < service.evidence_selector.score_threshold and route in (QuestionRoute.DOCUMENT_SUMMARY, QuestionRoute.MULTI_PASSAGE_SYNTHESIS)):
+                from src.hybrid_qa.retriever import RetrievalResult
+                fallback_candidates = []
+                for d_id in attached_docs:
+                    try:
+                        d_obj = service.store.get_document(d_id)
+                        if d_obj and d_obj.passages:
+                            for p in d_obj.passages[:top_k_retrieve]:
+                                fallback_candidates.append(
+                                    RetrievalResult(
+                                        passage_id=p.passage_id,
+                                        document_id=p.document_id,
+                                        text=p.text,
+                                        score=10.0,
+                                        start_char=p.start_char,
+                                        end_char=p.end_char,
+                                        section_title=p.section_title,
+                                        metadata=p.metadata,
+                                    )
+                                )
+                    except Exception:
+                        pass
+                if fallback_candidates:
+                    retrieval_candidates = fallback_candidates
+
             # If cross document comparison, prioritize multi-document coverage
             if route == QuestionRoute.CROSS_DOCUMENT_COMPARISON and len(attached_docs) > 1:
                 grouped_by_doc = {}
@@ -980,8 +1027,8 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
                 if balanced:
                     retrieval_candidates = balanced
         else:
-            # If no document attached to session, search over all store
-            retrieval_candidates = all_hits
+            # Fallback only when absolutely no documents exist anywhere
+            retrieval_candidates = service.retriever.retrieve(expanded_query_text, top_k=top_k_retrieve)
 
     t_ret_end = time.perf_counter()
     retrieval_ms = (t_ret_end - t_ret_start) * 1000
@@ -1007,12 +1054,28 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
     refusal_message = ""
 
     if not is_grounded or (refusal_decision and refusal_decision.should_refuse and route != QuestionRoute.DOCUMENT_SUMMARY):
-        refused = True
-        refusal_reason = effective_route.value if not is_grounded else (refusal_decision.reason.value if refusal_decision and refusal_decision.reason else "out_of_domain")
-        refusal_message = (
-            "Không tìm thấy đủ thông tin trong tài liệu để trả lời chắc chắn. "
-            "Tài liệu được cung cấp hiện chưa đủ thông tin cho câu hỏi này."
-        )
+        if attached_docs and route == QuestionRoute.DOCUMENT_SUMMARY and len(retrieval_candidates) > 0:
+            refused = False
+            effective_route = QuestionRoute.DOCUMENT_SUMMARY
+        else:
+            refused = True
+            refusal_reason = effective_route.value if not is_grounded else (refusal_decision.reason.value if refusal_decision and refusal_decision.reason else "out_of_domain")
+            if attached_docs:
+                try:
+                    target_doc = service.store.get_document(attached_docs[0])
+                    target_title = target_doc.title if target_doc else attached_docs[0]
+                except Exception:
+                    target_title = "tài liệu đang chọn"
+                refusal_message = (
+                    f"Không tìm thấy đủ thông tin trong tài liệu để trả lời chắc chắn. "
+                    f"Tài liệu **{target_title}** không có thông tin trả lời cho câu hỏi này. "
+                    "Hệ thống không sử dụng dữ liệu từ tài liệu khác để bảo đảm độ chính xác tuyệt đối."
+                )
+            else:
+                refusal_message = (
+                    "Không tìm thấy đủ thông tin trong tài liệu để trả lời chắc chắn. "
+                    "Tài liệu được cung cấp hiện chưa đủ thông tin cho câu hỏi này."
+                )
 
     # Step 6: Build citations & evidence structures
     citations_data = []
@@ -1058,6 +1121,7 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
             question=effective_query,
             evidence_passages=citations_data,
             max_sentences_per_passage=2 if req.answer_mode in ("concise", "minimal") else 3,
+            tokenizer=service.tokenizer,
         )
         body = synthesize_accurate_grounded_answer(
             question=effective_query,
@@ -1098,7 +1162,7 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
                 try:
                     attached_doc = service.store.get_document(attached_docs[0])
                     intel = DocumentAnalyzer.extract_key_points_and_summary(attached_doc.raw_text, title=attached_doc.title, max_points=3)
-                    summary_points = [f"- {kp} {cit_1}" for kp in intel["key_points"]]
+                    summary_points = [f"- {kp.lstrip('- ').strip()} {cit_1}" for kp in intel["key_points"]]
                     body = f"Tài liệu **{attached_doc.title}** tập trung vào các nội dung trọng tâm sau:\n" + "\n".join(summary_points)
                 except Exception:
                     summary_points = [f"- {s} {cit_1}" for s in sentences[:3]]
@@ -1182,8 +1246,13 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
     total_latency_ms = (time.perf_counter() - t_start) * 1000
 
     compressed_ctx_tok = compression_stats.get("compressed_context_tokens", 0)
-    input_tokens = int(len(effective_query.split()) * 1.35) + (compressed_ctx_tok if (not refused and compressed_ctx_tok > 0) else (120 if not refused else 30))
-    output_tokens = int(len(answer_text.split()) * 1.35)
+    if service.tokenizer:
+        query_tok = len(service.tokenizer.encode(effective_query, add_special_tokens=False))
+        output_tokens = len(service.tokenizer.encode(answer_text, add_special_tokens=False))
+        input_tokens = query_tok + (compressed_ctx_tok if (not refused and compressed_ctx_tok > 0) else (120 if not refused else 30))
+    else:
+        input_tokens = int(len(effective_query.split()) * 1.35) + (compressed_ctx_tok if (not refused and compressed_ctx_tok > 0) else (120 if not refused else 30))
+        output_tokens = int(len(answer_text.split()) * 1.35)
 
     telemetry_data = {
         "input_tokens": input_tokens,
@@ -1217,6 +1286,7 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
         "context_compression": compression_stats,
         "refusal_reason": refusal_reason,
         "memory_level": memory_level_label,
+        "suggested_questions": follow_up_questions if not refused else [],
     }
 
     # Step 8: Add assistant message to session & persist
@@ -1230,6 +1300,7 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
         refused=refused,
         refusal_reason=refusal_reason,
         diagnostics=diagnostics_data,
+        suggested_questions=follow_up_questions if not refused else [],
     )
     service.session_manager.save()
 
@@ -1277,6 +1348,7 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
         "routing": effective_route.value,
         "refused": refused,
         "citations": citations_data,
+        "suggested_questions": follow_up_questions if not refused else [],
         "telemetry": telemetry_data,
         "diagnostics": diagnostics_data,
         "memory_diagnostics": mem_diag,
@@ -1355,12 +1427,33 @@ async def chat_query(req: ChatRequest):
     t_ret_start = time.perf_counter()
     retrieval_results = []
     if qa_mode in (QAMode.HYBRID, QAMode.CONTEXT):
-        retrieval_results = service.retriever.retrieve(query, top_k=req.top_k)
+        expanded_query, _ = expand_query_semantics(query)
+        retrieval_results = service.retriever.retrieve(expanded_query, top_k=req.top_k)
         if resolved_doc_id:
             # Filter or prioritize current document
             doc_passages = [r for r in retrieval_results if getattr(r, "document_id", "") == resolved_doc_id]
             if doc_passages:
                 retrieval_results = doc_passages
+            else:
+                from src.hybrid_qa.retriever import RetrievalResult
+                try:
+                    d_obj = service.store.get_document(resolved_doc_id)
+                    if d_obj and d_obj.passages:
+                        retrieval_results = [
+                            RetrievalResult(
+                                passage_id=p.passage_id,
+                                document_id=p.document_id,
+                                text=p.text,
+                                score=10.0,
+                                start_char=p.start_char,
+                                end_char=p.end_char,
+                                section_title=p.section_title,
+                                metadata=p.metadata,
+                            )
+                            for p in d_obj.passages[:req.top_k * 2]
+                        ]
+                except Exception:
+                    pass
     t_ret_end = time.perf_counter()
     retrieval_ms = (t_ret_end - t_ret_start) * 1000
 
@@ -1390,7 +1483,7 @@ async def chat_query(req: ChatRequest):
     evidence_diagnostics = {}
 
     if qa_mode == QAMode.HYBRID:
-        if not is_grounded or (refusal_decision and refusal_decision.should_refuse):
+        if not is_grounded or (refusal_decision and refusal_decision.should_refuse and route != QuestionRoute.DOCUMENT_SUMMARY and not resolved_doc_id):
             refused = True
             refusal_reason = effective_route.value if not is_grounded else (refusal_decision.reason.value if refusal_decision and refusal_decision.reason else "no_evidence")
             refusal_message = "Không tìm thấy đủ thông tin trong tài liệu để trả lời chắc chắn."

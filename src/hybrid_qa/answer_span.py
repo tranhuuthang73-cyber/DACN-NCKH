@@ -587,41 +587,60 @@ def generate_followup_questions(
     query: str,
     context: str = "",
     section_title: str = "",
-    count: int = 2,
+    count: int = 3,
 ) -> List[str]:
     """
-    Produces grounded follow-up questions tied to the answered topic.
-
-    Questions are anchored on real document vocabulary (a salient phrase, a genuine
-    metric, or the section heading) so they stay answerable from the same source and
-    never degrade into fragments like "Vai trò của 'thống'".
+    Produces fluent, natural, grounded follow-up questions tied to the answered topic and document.
+    Anchored on real document content and entities so they stay directly answerable.
     """
+    q_low = (query or "").lower()
+    ctx_low = (context or "").lower()
     raw_topic = section_title or query
     topic = _clean_topic(raw_topic)
-    # Generic headings are useless as question anchors; fall back to the question itself.
     if strip_accents(topic.lower()) in {"phan noi dung", "noi dung", "toan van", "tong quan"}:
         topic = _clean_topic(query)
 
     candidates: List[str] = []
 
-    for number in _meaningful_numbers(context):
-        candidates.append(f"Chỉ số {number} được tài liệu đo trong điều kiện nào?")
+    # 1. Identity, Roles, Workplace
+    if any(k in q_low or k in ctx_low for k in ["chức vụ", "tổ trưởng", "công tác", "nghề", "làm việc", "tên là", "trần hữu trang", "đơn vị"]):
+        candidates.append("Đơn vị công tác cụ thể của tác giả là gì?")
+        candidates.append("Kết quả phấn đấu và thành tích đạt được ra sao?")
+        candidates.append("Các nhiệm vụ trọng tâm được giao gồm những gì?")
 
-    phrase = _salient_phrase(context)
-    if phrase:
-        candidates.append(f"Vai trò của {phrase} được tài liệu giải thích như thế nào?")
+    # 2. Ideology, Study, Guidelines
+    if any(k in q_low or k in ctx_low for k in ["học tập", "tư tưởng", "đạo đức", "chỉ thị", "chính trị", "hồ chí minh", "phong cách"]):
+        candidates.append("Nội dung học tập theo tư tưởng Bác gồm những điểm chính nào?")
+        candidates.append("Kế hoạch thực hiện chuyên đề năm 2026 được đề ra như thế nào?")
+        candidates.append("Trách nhiệm của người Đảng viên được tài liệu nêu ra sao?")
 
-    candidates.append(f"Nguyên nhân nào khiến '{topic}' được xem là yếu tố then chốt?")
-    candidates.append(f"Những rủi ro hoặc hạn chế nào của '{topic}' được nêu trong tài liệu?")
-    candidates.append(f"Bằng chứng định lượng nào trong tài liệu xác nhận kết luận về '{topic}'?")
+    # 3. Innovation, Performance, Improvements
+    if any(k in q_low or k in ctx_low for k in ["kết quả", "sáng kiến", "cải tiến", "quy trình", "công nghệ", "năng suất", "phấn đấu"]):
+        candidates.append("Những sáng kiến cải tiến quy trình làm việc gồm những gì?")
+        candidates.append("Các biện pháp khắc phục hạn chế, thiếu sót của bản thân là gì?")
 
+    # 4. Dates / Years
+    years = re.findall(r"\b(202[0-9]|2030)\b", context)
+    if years:
+        candidates.append(f"Mục tiêu hoặc kế hoạch trong năm {years[0]} là gì?")
+
+    # 5. Percentages or Metrics
+    for num in _meaningful_numbers(context):
+        if "%" in num or "phần trăm" in num.lower():
+            candidates.append(f"Chỉ số {num} phản ánh kết quả hoặc tiêu chí nào?")
+
+    candidates.append(f"Nội dung trọng tâm liên quan đến '{topic}' gồm những gì?")
+    candidates.append("Những biện pháp chính được tài liệu đề xuất là gì?")
+
+    # Deduplicate and filter out near-duplicates of the current query
+    clean_q = re.sub(r"[^\w\s]", "", q_low).strip()
     seen: set = set()
     unique: List[str] = []
     for question in candidates:
-        key = question.lower().strip()
-        if key in seen:
+        clean_cand = re.sub(r"[^\w\s]", "", question.lower()).strip()
+        if clean_cand == clean_q or clean_cand in seen:
             continue
-        seen.add(key)
+        seen.add(clean_cand)
         unique.append(question)
         if len(unique) >= max(1, count):
             break

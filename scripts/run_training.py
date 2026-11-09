@@ -315,6 +315,8 @@ def build_full_datasets(tokenizer: Any, max_length: int = 1280) -> Dict[str, Any
     # 4. Full-Text Domain & Local Workspace Documents (100% unscanned previously)
     doc_sources: List[Tuple[str, str, str, str, str]] = []
     paper_path = ROOT_DIR / "paper_text.txt"
+    if not paper_path.exists():
+        paper_path = ROOT_DIR / "docs" / "paper_text.txt"
     if paper_path.exists():
         doc_sources.append((
             "PAPER_NL_2025",
@@ -325,6 +327,8 @@ def build_full_datasets(tokenizer: Any, max_length: int = 1280) -> Dict[str, Any
         ))
 
     decuong_path = ROOT_DIR / "de_cuong_text.txt"
+    if not decuong_path.exists():
+        decuong_path = ROOT_DIR / "docs" / "de_cuong_text.txt"
     if decuong_path.exists():
         doc_sources.append((
             "DE_CUONG_NCKH",

@@ -74,16 +74,20 @@ class QAPairExtractor:
         text: str,
         document_id: str = "DOC_INLINE",
         max_pairs_per_section: int = 5,
+        max_pairs: Optional[int] = None,
     ) -> SelfStudyReport:
         """Parses text into hierarchical structure and extracts QA pairs across levels."""
         start_time = time.time()
         doc_structure = self.parser.parse_text(text)
-        return self.extract_from_structure(
+        report = self.extract_from_structure(
             doc_structure=doc_structure,
             document_id=document_id,
             max_pairs_per_section=max_pairs_per_section,
             start_time=start_time,
         )
+        if max_pairs is not None and len(report.pairs) > max_pairs:
+            report.pairs = report.pairs[:max_pairs]
+        return report
 
     def extract_from_structure(
         self,

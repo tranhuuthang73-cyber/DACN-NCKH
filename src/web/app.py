@@ -203,6 +203,10 @@ FIGURES_DIR = PROJECT_ROOT / "results" / "figures"
 if FIGURES_DIR.exists():
     app.mount("/results/figures", StaticFiles(directory=str(FIGURES_DIR)), name="figures")
 
+# Mount Self-Study Autonomous Brain Router (Proposal Sections 6.4 & 6.5)
+from src.self_study.api import self_study_router
+app.include_router(self_study_router)
+
 
 # ==============================================================================
 # PYDANTIC REQUEST / RESPONSE SCHEMAS

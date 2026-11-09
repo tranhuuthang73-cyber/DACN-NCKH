@@ -350,3 +350,4 @@ class SelfStudyTrainer:
             self.model.reset_memory()
         elif hasattr(self.model, "cms") and hasattr(self.model.cms, "reset_memory"):
             self.model.cms.reset_memory()
+

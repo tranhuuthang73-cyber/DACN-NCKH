@@ -42,6 +42,7 @@ _VI_STOPWORDS = {
         "có", "được", "khi", "này", "đó", "theo", "về", "như", "một", "nhiều",
         "thì", "mà", "từ", "ở", "ra", "đã", "sẽ", "đang", "bởi", "do", "bằng",
         "gì", "nào", "sao", "thế", "đâu", "mấy", "ai", "bao", "nhiêu", "vậy",
+        "cách", "làm", "món", "cũng", "rất", "nữa", "hãy", "xin", "ơi", "ạ", "nhé",
         "the", "is", "are", "of", "and", "in", "to", "for", "with", "on", "a",
         "an", "what", "which", "how", "when", "where", "why",
     )
@@ -103,6 +104,8 @@ def detect_query_intent(query: str) -> str:
         return "SUMMARY"
     if any(k in q for k in ["han che", "nhuoc diem", "thach thuc", "kho khan", "limitation", "drawback", "weakness", "rui ro"]):
         return "LIMITATION"
+    if any(k in q for k in ["uu diem", "uu the", "loi the", "loi ich", "the manh", "advantage", "benefit"]):
+        return "ADVANTAGE"
     if any(k in q for k in ["bao nhieu", "may ", "ty le", "ti le", "phan tram", "chi phi", "thoi gian", "do tre", "so luong", "tong so", "how many", "how much"]):
         return "METRIC"
     if any(k in q for k in ["gom nhung", "bao gom", "cac buoc", "thanh phan", "danh sach", "list", "components"]):
@@ -185,11 +188,12 @@ class NeuralReaderEngine:
         # Strict token-level matching (never substring search on short stems)
         matches = [kw for kw in query_keywords if kw in s_words]
 
-        # Grounding Gating: if zero query keywords match the sentence, score is strictly 0.0
-        if not matches:
+        # Grounding Gating: Require significant lexical overlap
+        min_matches = 1 if len(query_keywords) <= 2 else 2
+        coverage_ratio = len(matches) / max(1, len(query_keywords))
+        if len(matches) < min_matches or coverage_ratio < 0.25:
             return 0.0
 
-        coverage_ratio = len(matches) / max(1, len(query_keywords))
         overlap_score = coverage_ratio * 6.0
 
         # 2. Intent alignment boost ONLY applies when there is actual lexical grounding
@@ -201,6 +205,8 @@ class NeuralReaderEngine:
         elif intent == "MECHANISM" and any(cue in s_norm for cue in ["nho", "thong qua", "bang cach", "co che", "hoat dong", "cap nhat"]):
             intent_boost += 1.5
         elif intent == "LIMITATION" and any(cue in s_norm for cue in ["han che", "nhuoc diem", "thach thuc", "kho khan", "canh bao", "rui ro"]):
+            intent_boost += 2.5
+        elif intent == "ADVANTAGE" and any(cue in sentence.lower() for cue in ["đạt", "giảm", "tăng", "tiết kiệm", "tối ưu", "hiệu quả", "vượt trội", "tốt hơn", "chi phí", "độ trễ", "token"]):
             intent_boost += 2.5
         elif intent == "ENUMERATION" and any(cue in s_norm for cue in ["gom", "bao gom", "cac thanh phan", "nhu sau:", "buoc:"]):
             intent_boost += 2.0

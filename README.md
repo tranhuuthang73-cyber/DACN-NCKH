@@ -25,10 +25,13 @@ Tiến trình huấn luyện toàn bộ tập dữ liệu (`scripts/run_training
 Checkpoint tốt nhất của Full-Dataset (**Seed 42**: `local_runtime/checkpoints/cms_3lvl_full_dataset.pt`, SHA-256: `bcdaee6af95e7de96fbc523e4f24687a0c75bc44297d93c1c727fd342a01c059`) đã được **kích hoạt mặc định** trong `local_runtime/config/runtime_config.yaml`:
 
 ```powershell
-# Khởi chạy ngay giao diện Web NL DocChat (100% Offline, tự động nạp cms_3lvl_full_dataset.pt)
-.\start_offline_demo.bat
+# Cách 1: Khởi chạy dạng Desktop App (cửa sổ ứng dụng độc lập, 100% Offline)
+.\start_app.bat
 
-# Hoặc chạy trực tiếp bằng Python
+# Cách 2: Khởi chạy chế độ Online / Mạng LAN (cho phép các máy khác cùng WiFi/LAN truy cập)
+.\start_online.bat
+
+# Cách 3: Chạy trực tiếp bằng Python
 python run_offline.py --host 127.0.0.1 --port 8000
 ```
 - **Chuyển đổi Checkpoint trực tiếp trên giao diện Web**: Mở menu cấu hình chế độ ở thanh tiêu đề ➔ mục **Checkpoint SA-CMS (Offline)** để chuyển đổi tức thời giữa:
@@ -391,7 +394,8 @@ DACN-NCKH/
 ├── README.md                      # [FILE NÀY] Báo cáo tóm tắt toàn bộ dự án
 ├── README_HANDOVER.md             # Biên bản bàn giao, cập nhật tiến độ & danh mục artifacts
 ├── run_offline.py                 # [PHASE 5] Entrypoint khởi chạy Web Platform NL DocChat 100% Offline
-├── start_offline_demo.bat         # [PHASE 5] Script 1-click mở Web App & trình duyệt tại http://127.0.0.1:8000
+├── start_app.bat                  # [PHASE 5] Script 1-click mở ứng dụng Desktop App (100% Offline)
+├── start_online.bat               # [PHASE 5] Script mở server Online / LAN cho nhiều máy cùng truy cập
 ├── run_chatbot.py                 # [PHASE 3.3] CLI chuẩn hóa backend chatbot (Root entrypoint)
 ├── run_hybrid_qa.py               # CLI tương tác hỏi đáp, nạp tài liệu và test Phase 3.0
 ├── run_phase2_5_controlled.py     # Script chạy kiểm toán thực nghiệm Phase 2.5
@@ -497,14 +501,17 @@ Phần giao diện Web chưa hoàn thành trước đó đã được tích hợ
 - **Trả lời có Căn cứ & Cổng Từ chối Chống Ảo giác**: Hiển thị tách biệt phần `TRẢ LỜI` và thẻ `CĂN CỨ` thu gọn; nhấp vào nhãn `[1]` hoặc **Xem toàn văn** để mở ngăn trượt đối chiếu nguyên văn đoạn trích gốc có tô sáng từ khóa.
 - **Giải phẫu Bộ nhớ 3 Tầng SA-CMS & Research Lab**: Chuyển đổi trực tiếp giữa `P2: Hybrid SA-CMS + BM25`, `P1: SA-CMS Memory-Only`, `B2: Standard BM25 RAG`; hiển thị trực quan phương trình tổng hợp cổng phần dư `Eq. 74` (`g₁, g₂, g₃`), nâng cấp phiên bản tài liệu (`v2`) / `Rollback Snapshot`, chạy đối sánh 4 mô hình (`B1/B2/P1/P2`), 7 kịch bản bảo vệ 1-click và xem 4 biểu đồ chuẩn Q1 (300 DPI) hoàn toàn ngoại tuyến.
 - **Chế độ Trình diễn Bảo vệ & Phím tắt Chuyên nghiệp**: Nút **Trình diễn** (`#btn-presentation-mode`) mở rộng không gian đọc/máy chiếu cho hội đồng nghiệm thu; hỗ trợ đầy đủ phím tắt `Ctrl+K` (mở nhanh kho tài liệu), `Ctrl+/` (đóng/mở ngăn X-Ray SA-CMS), `Ctrl+L` (tạo cuộc trò chuyện mới), `Alt+T` (đổi Sáng/Tối), và `Esc` (đóng hộp thoại / thu nhỏ trình diễn).
-- **Đồng bộ hóa Thư mục Gốc Ngoài & Trong**: Chuẩn hóa toàn bộ điểm vào khởi chạy (`start_offline_demo.bat`, `start_web.bat`, `run_offline.py`, `run_web.py`, `run_chatbot.py`, `run_hybrid_qa.py`, `scripts/run_training.py`, `pytest.ini`) để hoạt động mượt mà dù chạy từ thư mục gốc ngoài hay thư mục con.
+- **Đồng bộ hóa Thư mục Gốc Ngoài & Trong**: Chuẩn hóa toàn bộ điểm vào khởi chạy (`start_app.bat`, `start_online.bat`, `run_offline.py`, `train.py`, `pytest.ini`) để hoạt động mượt mà dù chạy từ thư mục gốc ngoài hay thư mục con.
 
-### Cách khởi chạy nhanh (100% Offline)
+### Cách khởi chạy nhanh
 ```powershell
-# Cách 1: Chạy file thực thi tự động (mở trình duyệt tại http://127.0.0.1:8000)
-.\start_offline_demo.bat
+# Cách 1: Mở ứng dụng dạng Desktop App (cửa sổ độc lập, 100% Offline)
+.\start_app.bat
 
-# Cách 2: Khởi chạy trực tiếp bằng Python
+# Cách 2: Mở server Online / Mạng LAN (cho máy khác cùng mạng WiFi/LAN truy cập)
+.\start_online.bat
+
+# Cách 3: Khởi chạy trực tiếp bằng Python
 python run_offline.py --host 127.0.0.1 --port 8000
 ```
 
@@ -537,7 +544,7 @@ python run_offline.py --host 127.0.0.1 --port 8000
 
 ```powershell
 # 1. Lấy ra sử dụng ngay trên Web App (mặc định nạp cms_3lvl_full_dataset.pt)
-.\start_offline_demo.bat
+.\start_app.bat
 
 # 2. Chạy tiếp tiến trình huấn luyện cho các Seed còn lại (Seed 43 & Seed 44)
 python scripts/run_training.py --seed all

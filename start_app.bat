@@ -1,13 +1,13 @@
 @echo off
-title NL DocChat — SA-CMS Neural Memory Studio (100%% Offline Edition)
+title NL DocChat — SA-CMS Desktop App Studio
 cd /d "%~dp0"
 
 echo ==============================================================================
-echo [NL DocChat / SA-CMS] KHOI DONG HE THONG HOI DAP TAI LIEU 100%% STRICT OFFLINE
+echo [NL DocChat / SA-CMS] KHOI DONG UNG DUNG CHATBOT HOI DAP TAI LIEU (APP MODE)
 echo ==============================================================================
 echo Backbone:   SmolLM2-135M (Frozen 100%%) + 5.31M SA-CMS Continuum Memory
 echo Checkpoint: cms_3lvl_extended.pt (Extended Bilingual GPU Verified)
-echo Mode:       100%% Local Offline (Zero External CDN / Zero Internet Egress)
+echo Mode:       Desktop App Window (100%% Local Offline)
 echo ==============================================================================
 
 set HF_HUB_OFFLINE=1
@@ -30,9 +30,10 @@ if "%PYTHON_EXE%"=="" if exist "..\.venv\Scripts\python.exe" (
 )
 if "%PYTHON_EXE%"=="" set PYTHON_EXE=python
 
-echo Dang mo trinh duyet tai http://127.0.0.1:8000 ...
-start "" "http://127.0.0.1:8000"
+REM Mo cua so Desktop App doc lap (khong thanh dia chi URL, khong tab trinh duyet)
+echo Dang mo cua so ung dung tai http://127.0.0.1:8000 ...
+start /b "" cmd /c "timeout /t 2 >nul & (if exist "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe" (start "" "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe" --app=http://127.0.0.1:8000) else if exist "C:\Program Files\Google\Chrome\Application\chrome.exe" (start "" "C:\Program Files\Google\Chrome\Application\chrome.exe" --app=http://127.0.0.1:8000) else (start "" "http://127.0.0.1:8000"))"
 
-echo Dang khoi chay backend API tai cong 8000 su dung "%PYTHON_EXE%"...
+echo Dang khoi chay backend API tai cong 8000...
 "%PYTHON_EXE%" run_offline.py --host 127.0.0.1 --port 8000
 pause

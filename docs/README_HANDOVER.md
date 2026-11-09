@@ -19,7 +19,9 @@ Tiến trình huấn luyện toàn bộ tập dữ liệu (`scripts/run_training
 2. **Cách Lấy ra Sử dụng Ngay hoặc Chạy Tiếp Tiến trình Train**:
    - **Khởi chạy Web App `NL DocChat` (100% Offline)**:
      ```powershell
-     .\start_offline_demo.bat
+     .\start_app.bat
+     # Hoặc mở server Online/LAN:
+     .\start_online.bat
      # Hoặc: python run_offline.py --host 127.0.0.1 --port 8000
      ```
    - **Chạy tiếp tiến trình huấn luyện cho Seed 43 & Seed 44** (Tự động bỏ qua Seed 42 đã xong, và tự động lưu tạm `cms_3lvl_full_seed_{seed}_partial.pt` sau mỗi epoch):

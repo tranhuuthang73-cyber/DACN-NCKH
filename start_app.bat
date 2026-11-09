@@ -37,3 +37,4 @@ start /b "" cmd /c "timeout /t 2 >nul & (if exist "C:\Program Files (x86)\Micros
 echo Dang khoi chay backend API tai cong 8000...
 "%PYTHON_EXE%" run_offline.py --host 127.0.0.1 --port 8000
 pause
+

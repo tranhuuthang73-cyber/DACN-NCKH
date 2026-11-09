@@ -81,3 +81,4 @@ class SelfStudyReport:
             "pairs": [p.to_dict() for p in self.pairs],
             "metadata": self.metadata,
         }
+

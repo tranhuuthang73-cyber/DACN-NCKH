@@ -9,10 +9,13 @@ from src.self_study.types import (
     SelfStudyReport,
 )
 from src.self_study.extractor import QAPairExtractor
+from src.self_study.trainer import SelfStudyTrainer
 
 __all__ = [
     "QARuleType",
     "SelfStudyQAPair",
     "SelfStudyReport",
     "QAPairExtractor",
+    "SelfStudyTrainer",
 ]
+

@@ -36,3 +36,4 @@ start /b "" cmd /c "timeout /t 2 >nul & start "" "http://127.0.0.1:8000""
 echo Dang mo cong 8000 cho toan mang noi bo...
 "%PYTHON_EXE%" run_offline.py --host 0.0.0.0 --port 8000
 pause
+

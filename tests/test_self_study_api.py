@@ -93,3 +93,35 @@ def test_api_reset_memory(client):
     assert response.status_code == 200
     data = response.json()
     assert data["status"] in ("success", "error")
+
+
+def test_api_hypergraph_build_and_deduce(client):
+    # 1. Build hypergraph from existing documents
+    res_build = client.post("/api/self-study/hypergraph/build")
+    assert res_build.status_code == 200
+    build_data = res_build.json()
+    assert build_data["status"] == "success"
+    assert "hypergraph_statistics" in build_data
+
+    # 2. Test multi-hop deduce
+    payload = {
+        "query": "SA-CMS giải quyết vấn đề gì?",
+        "start_concept": "SA-CMS",
+        "target_concept": "Chi phí token",
+        "max_hops": 4,
+    }
+    res_deduce = client.post("/api/self-study/hypergraph/deduce", json=payload)
+    assert res_deduce.status_code == 200
+    deduce_data = res_deduce.json()
+    assert deduce_data["status"] in ("success", "no_path_found")
+
+
+def test_api_contradiction_scan(client):
+    payload = {"document_ids": None}
+    res = client.post("/api/self-study/contradictions/scan", json=payload)
+    assert res.status_code == 200
+    data = res.json()
+    assert data["status"] == "success"
+    assert "report" in data
+    assert "contradictions_found" in data["report"]
+

@@ -16,15 +16,19 @@ from src.self_study.types import SelfStudyQAPair
 from src.self_study.extractor import QAPairExtractor
 from src.self_study.trainer import SelfStudyTrainer
 from src.self_study.reader import NeuralReaderEngine, NeuralReaderResult
+from src.reasoning.hypergraph import ConceptHypergraph, MultiHopChain
+from src.reasoning.cross_doc_scanner import CrossDocumentContradictionScanner, ContradictionScanReport
 
 logger = logging.getLogger(__name__)
 
 self_study_router = APIRouter(prefix="/api/self-study", tags=["Self-Study Brain"])
 
-# Global singleton trainer and reader instances
+# Global singleton trainer, reader, hypergraph, and contradiction scanner
 _trainer: Optional[SelfStudyTrainer] = None
 _reader: Optional[NeuralReaderEngine] = None
 _extractor = QAPairExtractor()
+_hypergraph = ConceptHypergraph()
+_contradiction_scanner = CrossDocumentContradictionScanner()
 
 
 def _get_service():
@@ -73,6 +77,17 @@ class AskSelfStudyRequest(BaseModel):
     document_id: Optional[str] = Field(None, description="Optional document ID for memory isolation")
     answer_mode: str = Field("balanced", description="concise | balanced | comprehensive")
     top_k: int = Field(4, ge=1, le=10, description="Number of evidence passages")
+
+
+class MultiHopDeduceRequest(BaseModel):
+    query: str = Field(..., min_length=2, description="Relational reasoning query")
+    start_concept: str = Field(..., description="Starting concept node")
+    target_concept: str = Field(..., description="Target concept node to bridge to")
+    max_hops: int = Field(4, ge=1, le=8, description="Maximum hops in graph BFS")
+
+
+class ContradictionScanRequest(BaseModel):
+    document_ids: Optional[List[str]] = Field(None, description="List of document IDs to scan (default: all)")
 
 
 @self_study_router.post("/ingest")
@@ -243,3 +258,91 @@ async def reset_self_study_memory():
         return {"status": "success", "message": "SA-CMS memory successfully reset to initial base state."}
     except Exception as e:
         return {"status": "error", "error": str(e)}
+
+
+@self_study_router.post("/hypergraph/build")
+async def build_concept_hypergraph():
+    """
+    Builds the concept hypergraph by analyzing all documents in the local store.
+    """
+    service = _get_service()
+    docs = service.store.list_documents()
+    total_extracted = 0
+
+    from src.self_study.reader import split_clean_sentences
+
+    for d_meta in docs:
+        doc_id = d_meta.get("document_id", "")
+        try:
+            doc = service.store.get_document(doc_id)
+            sentences = split_clean_sentences(doc.raw_text)
+            count = _hypergraph.extract_from_sentences(
+                sentences=sentences,
+                document_id=doc_id,
+                section_title=doc.title,
+            )
+            total_extracted += count
+        except Exception:
+            continue
+
+    stats = _hypergraph.get_statistics()
+    return {
+        "status": "success",
+        "total_documents_analyzed": len(docs),
+        "relations_extracted": total_extracted,
+        "hypergraph_statistics": stats,
+    }
+
+
+@self_study_router.post("/hypergraph/deduce")
+async def deduce_multi_hop_path(req: MultiHopDeduceRequest):
+    """
+    Executes multi-hop deduction across document boundaries.
+    """
+    chain = _hypergraph.synthesize_multi_hop_deduction(
+        query=req.query,
+        start_concept=req.start_concept,
+        target_concept=req.target_concept,
+        max_hops=req.max_hops,
+    )
+    if not chain:
+        return {
+            "status": "no_path_found",
+            "message": f"Không tìm thấy chuỗi liên kết suy luận trực tiếp giữa '{req.start_concept}' và '{req.target_concept}'.",
+            "chain": None,
+        }
+    return {
+        "status": "success",
+        "chain": chain.to_dict(),
+    }
+
+
+@self_study_router.post("/contradictions/scan")
+async def scan_cross_document_contradictions(req: ContradictionScanRequest):
+    """
+    Scans document store for factual, numerical, and polarity contradictions.
+    """
+    service = _get_service()
+    docs_to_scan = []
+
+    if req.document_ids:
+        target_ids = req.document_ids
+    else:
+        target_ids = [d.get("document_id", "") for d in service.store.list_documents()]
+
+    for d_id in target_ids:
+        try:
+            doc = service.store.get_document(d_id)
+            docs_to_scan.append({
+                "document_id": d_id,
+                "title": doc.title,
+                "text": doc.raw_text,
+            })
+        except Exception:
+            continue
+
+    report = _contradiction_scanner.scan_documents(docs_to_scan)
+    return {
+        "status": "success",
+        "report": report.to_dict(),
+    }

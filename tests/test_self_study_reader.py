@@ -153,3 +153,4 @@ def test_neural_reader_serialization(sample_passages):
     assert "tokens_used" in d
     assert "latency_ms" in d
     assert "followup_questions" in d
+

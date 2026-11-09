@@ -25,6 +25,15 @@ from src.reasoning.sleep_replay import (
     SleepReplayEngine,
     ConsolidationReport,
 )
+from src.reasoning.dialogue_tracker import (
+    DialogueTurn,
+    DialogueSessionState,
+    ParametricDialogueTracker,
+)
+from src.reasoning.meta_cognition import (
+    MetaCognitiveReport,
+    MetaCognitiveEvaluator,
+)
 
 __all__ = [
     "RelationType",
@@ -40,4 +49,9 @@ __all__ = [
     "SurprisalResult",
     "SleepReplayEngine",
     "ConsolidationReport",
+    "DialogueTurn",
+    "DialogueSessionState",
+    "ParametricDialogueTracker",
+    "MetaCognitiveReport",
+    "MetaCognitiveEvaluator",
 ]

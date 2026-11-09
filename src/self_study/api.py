@@ -20,12 +20,14 @@ from src.reasoning.hypergraph import ConceptHypergraph, MultiHopChain
 from src.reasoning.cross_doc_scanner import CrossDocumentContradictionScanner, ContradictionScanReport
 from src.reasoning.entropy_gate import EntropySurprisalGate, SurprisalResult
 from src.reasoning.sleep_replay import SleepReplayEngine, ConsolidationReport
+from src.reasoning.dialogue_tracker import ParametricDialogueTracker, DialogueSessionState, DialogueTurn
+from src.reasoning.meta_cognition import MetaCognitiveEvaluator, MetaCognitiveReport
 
 logger = logging.getLogger(__name__)
 
 self_study_router = APIRouter(prefix="/api/self-study", tags=["Self-Study Brain"])
 
-# Global singleton trainer, reader, hypergraph, contradiction scanner, and sleep engine
+# Global singleton trainer, reader, hypergraph, contradiction scanner, sleep engine, dialogue tracker, meta evaluator
 _trainer: Optional[SelfStudyTrainer] = None
 _reader: Optional[NeuralReaderEngine] = None
 _extractor = QAPairExtractor()
@@ -33,6 +35,8 @@ _hypergraph = ConceptHypergraph()
 _contradiction_scanner = CrossDocumentContradictionScanner()
 _entropy_gate = EntropySurprisalGate(surprisal_threshold=3.5)
 _sleep_engine: Optional[SleepReplayEngine] = None
+_dialogue_tracker = ParametricDialogueTracker()
+_meta_evaluator = MetaCognitiveEvaluator()
 
 
 def _get_service():
@@ -103,6 +107,28 @@ class SleepConsolidateRequest(BaseModel):
     document_ids: Optional[List[str]] = Field(None, description="Optional document IDs to replay")
     steps: int = Field(3, ge=1, le=20, description="Number of consolidation rehearsal steps")
     ewc_lambda: float = Field(200.0, ge=10.0, le=2000.0, description="EWC quadratic penalty strength")
+
+
+class DialogueResolveRequest(BaseModel):
+    session_id: str = Field("default", description="Session ID for tracking turns")
+    query: str = Field(..., min_length=1, description="Current turn user query")
+    previous_answer: Optional[str] = Field(None, description="Previous assistant answer if any")
+    register_turn: bool = Field(False, description="Whether to record this query/answer as a completed turn")
+    document_id: Optional[str] = Field(None, description="Active document ID")
+
+
+class DialogueTurnRequest(BaseModel):
+    session_id: str = Field("default", description="Session ID for tracking turns")
+    query: str = Field(..., min_length=1, description="User query")
+    answer: str = Field(..., min_length=1, description="Assistant answer")
+    document_id: Optional[str] = Field(None, description="Active document ID")
+
+
+class MetaCognitiveEvalRequest(BaseModel):
+    query: str = Field(..., min_length=1, description="User's query")
+    answer: str = Field(..., min_length=1, description="Generated answer to evaluate")
+    citations: Optional[List[Dict[str, Any]]] = Field(None, description="Citations supporting the answer")
+    raw_confidence: float = Field(0.80, ge=0.0, le=1.0, description="Raw confidence score")
 
 
 @self_study_router.post("/ingest")
@@ -415,4 +441,71 @@ async def consolidate_sleep_memory(req: SleepConsolidateRequest):
     return {
         "status": "success",
         "consolidation_report": report.to_dict(),
+    }
+
+
+@self_study_router.post("/dialogue/resolve")
+async def resolve_dialogue_query(req: DialogueResolveRequest):
+    """
+    Resolves anaphora and elliptic context in multi-turn dialogue
+    using active entities and discourse history without prompt bloating.
+    """
+    resolved_query, session = _dialogue_tracker.resolve_query(req.session_id, req.query)
+
+    if req.register_turn and req.previous_answer:
+        _dialogue_tracker.record_turn(
+            session_id=req.session_id,
+            raw_query=req.query,
+            resolved_query=resolved_query,
+            bot_summary=req.previous_answer,
+        )
+
+    compact_prompt = _dialogue_tracker.get_compact_context_prompt(req.session_id)
+
+    return {
+        "status": "success",
+        "session_id": req.session_id,
+        "original_query": req.query,
+        "resolved_query": resolved_query,
+        "active_subject": session.active_subject,
+        "entity_registry": session.entity_registry,
+        "compact_prompt": compact_prompt,
+    }
+
+
+@self_study_router.post("/dialogue/turn")
+async def record_dialogue_turn(req: DialogueTurnRequest):
+    """
+    Records a completed Q&A turn into parametric dialogue memory.
+    """
+    resolved_query, _ = _dialogue_tracker.resolve_query(req.session_id, req.query)
+    turn = _dialogue_tracker.record_turn(
+        session_id=req.session_id,
+        raw_query=req.query,
+        resolved_query=resolved_query,
+        bot_summary=req.answer,
+    )
+    session = _dialogue_tracker.get_or_create_session(req.session_id)
+    return {
+        "status": "success",
+        "turn": turn.to_dict(),
+        "session_state": session.to_dict(),
+    }
+
+
+@self_study_router.post("/meta-cognition/evaluate")
+async def evaluate_meta_cognition(req: MetaCognitiveEvalRequest):
+    """
+    Evaluates response quality, epistemically tagging statements as
+    [Chắc chắn] vs [Có khả năng cao / Giả thuyết] and identifying knowledge gaps.
+    """
+    report = _meta_evaluator.evaluate_response(
+        query=req.query,
+        answer_text=req.answer,
+        citations=req.citations or [],
+        raw_confidence=req.raw_confidence,
+    )
+    return {
+        "status": "success",
+        "report": report.to_dict(),
     }

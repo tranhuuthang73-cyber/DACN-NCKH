@@ -153,3 +153,55 @@ def test_api_sleep_consolidate(client):
     assert data["consolidation_report"]["status"] in ("success", "no_pairs_to_replay")
 
 
+def test_api_dialogue_resolve_and_turn(client):
+    # 1. Record turn 1
+    turn_payload = {
+        "session_id": "api_test_session_1",
+        "query": "Kiến trúc của mô hình SA-CMS có những thành phần nào?",
+        "answer": "Mô hình SA-CMS bao gồm ba tầng bộ nhớ căn theo đoạn, phần và tài liệu.",
+    }
+    turn_res = client.post("/api/self-study/dialogue/turn", json=turn_payload)
+    assert turn_res.status_code == 200
+    turn_data = turn_res.json()
+    assert turn_data["status"] == "success"
+    assert "turn" in turn_data
+    assert "SA-CMS" in turn_data["session_state"]["active_subject"]
+
+    # 2. Resolve anaphoric query in turn 2
+    resolve_payload = {
+        "session_id": "api_test_session_1",
+        "query": "Ưu điểm của nó là gì?",
+    }
+    resolve_res = client.post("/api/self-study/dialogue/resolve", json=resolve_payload)
+    assert resolve_res.status_code == 200
+    resolve_data = resolve_res.json()
+    assert resolve_data["status"] == "success"
+    assert "SA-CMS" in resolve_data["resolved_query"]
+    assert "compact_prompt" in resolve_data
+
+
+def test_api_meta_cognition_evaluate(client):
+    payload = {
+        "query": "Tỷ lệ giảm token của SA-CMS là bao nhiêu?",
+        "answer": "Mô hình SA-CMS đạt tỷ lệ giảm 87,5% chi phí token [1]. Có thể hệ thống mở rộng tốt.",
+        "citations": [
+            {
+                "citation_label": "[1]",
+                "doc_id": "doc1",
+                "text": "Mô hình SA-CMS đạt tỷ lệ giảm 87,5% chi phí token.",
+            }
+        ],
+        "raw_confidence": 0.90,
+    }
+    res = client.post("/api/self-study/meta-cognition/evaluate", json=payload)
+    assert res.status_code == 200
+    data = res.json()
+    assert data["status"] == "success"
+    assert "report" in data
+    report = data["report"]
+    assert len(report["verified_facts"]) >= 1
+    assert "87,5%" in report["verified_facts"][0]["statement"]
+    assert report["verified_facts"][0]["epistemic_tag"] == "[Chắc chắn]"
+
+
+

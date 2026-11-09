@@ -84,3 +84,4 @@ def test_compact_context_prompt_token_savings():
     assert "Q1:" in prompt or "Q2:" in prompt
     # Ultra-compact length
     assert len(prompt.split()) < 30
+

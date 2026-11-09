@@ -10,6 +10,12 @@ from src.self_study.types import (
 )
 from src.self_study.extractor import QAPairExtractor
 from src.self_study.trainer import SelfStudyTrainer
+from src.self_study.reader import (
+    NeuralReaderEngine,
+    NeuralReaderResult,
+    detect_query_intent,
+    split_clean_sentences,
+)
 
 __all__ = [
     "QARuleType",
@@ -17,5 +23,9 @@ __all__ = [
     "SelfStudyReport",
     "QAPairExtractor",
     "SelfStudyTrainer",
+    "NeuralReaderEngine",
+    "NeuralReaderResult",
+    "detect_query_intent",
+    "split_clean_sentences",
 ]
 

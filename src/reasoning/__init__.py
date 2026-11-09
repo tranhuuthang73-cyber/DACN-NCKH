@@ -17,6 +17,14 @@ from src.reasoning.cross_doc_scanner import (
     ContradictionScanReport,
     CrossDocumentContradictionScanner,
 )
+from src.reasoning.entropy_gate import (
+    EntropySurprisalGate,
+    SurprisalResult,
+)
+from src.reasoning.sleep_replay import (
+    SleepReplayEngine,
+    ConsolidationReport,
+)
 
 __all__ = [
     "RelationType",
@@ -28,4 +36,8 @@ __all__ = [
     "ContradictionAlert",
     "ContradictionScanReport",
     "CrossDocumentContradictionScanner",
+    "EntropySurprisalGate",
+    "SurprisalResult",
+    "SleepReplayEngine",
+    "ConsolidationReport",
 ]

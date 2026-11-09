@@ -125,3 +125,31 @@ def test_api_contradiction_scan(client):
     assert "report" in data
     assert "contradictions_found" in data["report"]
 
+
+def test_api_entropy_filter(client):
+    payload = {
+        "text": "Xin chào bạn, chúc một ngày tốt lành. Mô hình SA-CMS đạt tỷ lệ giảm 87,5% chi phí token.",
+        "surprisal_threshold": 3.5,
+    }
+    res = client.post("/api/self-study/entropy/filter", json=payload)
+    assert res.status_code == 200
+    data = res.json()
+    assert data["status"] == "success"
+    assert "filtered_text" in data
+    assert "SA-CMS" in data["filtered_text"]
+
+
+def test_api_sleep_consolidate(client):
+    payload = {
+        "document_ids": None,
+        "steps": 1,
+        "ewc_lambda": 100.0,
+    }
+    res = client.post("/api/self-study/sleep/consolidate", json=payload)
+    assert res.status_code == 200
+    data = res.json()
+    assert data["status"] == "success"
+    assert "consolidation_report" in data
+    assert data["consolidation_report"]["status"] in ("success", "no_pairs_to_replay")
+
+

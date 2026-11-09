@@ -281,3 +281,4 @@ class CrossDocumentContradictionScanner:
             alerts=alerts,
             scan_duration_ms=duration,
         )
+

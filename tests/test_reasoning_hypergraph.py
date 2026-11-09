@@ -166,3 +166,4 @@ def test_hypergraph_no_path_returns_none():
         target_concept="Cụm B",
     )
     assert chain is None
+

@@ -108,3 +108,4 @@ def test_single_document_scan():
     assert report.total_documents == 1
     assert report.contradictions_found == 0
     assert len(report.alerts) == 0
+

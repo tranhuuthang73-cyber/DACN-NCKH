@@ -18,17 +18,21 @@ from src.self_study.trainer import SelfStudyTrainer
 from src.self_study.reader import NeuralReaderEngine, NeuralReaderResult
 from src.reasoning.hypergraph import ConceptHypergraph, MultiHopChain
 from src.reasoning.cross_doc_scanner import CrossDocumentContradictionScanner, ContradictionScanReport
+from src.reasoning.entropy_gate import EntropySurprisalGate, SurprisalResult
+from src.reasoning.sleep_replay import SleepReplayEngine, ConsolidationReport
 
 logger = logging.getLogger(__name__)
 
 self_study_router = APIRouter(prefix="/api/self-study", tags=["Self-Study Brain"])
 
-# Global singleton trainer, reader, hypergraph, and contradiction scanner
+# Global singleton trainer, reader, hypergraph, contradiction scanner, and sleep engine
 _trainer: Optional[SelfStudyTrainer] = None
 _reader: Optional[NeuralReaderEngine] = None
 _extractor = QAPairExtractor()
 _hypergraph = ConceptHypergraph()
 _contradiction_scanner = CrossDocumentContradictionScanner()
+_entropy_gate = EntropySurprisalGate(surprisal_threshold=3.5)
+_sleep_engine: Optional[SleepReplayEngine] = None
 
 
 def _get_service():
@@ -88,6 +92,17 @@ class MultiHopDeduceRequest(BaseModel):
 
 class ContradictionScanRequest(BaseModel):
     document_ids: Optional[List[str]] = Field(None, description="List of document IDs to scan (default: all)")
+
+
+class EntropyFilterRequest(BaseModel):
+    text: str = Field(..., min_length=2, description="Text to evaluate and prune")
+    surprisal_threshold: float = Field(3.5, ge=1.0, le=10.0, description="Minimum bits of surprisal")
+
+
+class SleepConsolidateRequest(BaseModel):
+    document_ids: Optional[List[str]] = Field(None, description="Optional document IDs to replay")
+    steps: int = Field(3, ge=1, le=20, description="Number of consolidation rehearsal steps")
+    ewc_lambda: float = Field(200.0, ge=10.0, le=2000.0, description="EWC quadratic penalty strength")
 
 
 @self_study_router.post("/ingest")
@@ -345,4 +360,59 @@ async def scan_cross_document_contradictions(req: ContradictionScanRequest):
     return {
         "status": "success",
         "report": report.to_dict(),
+    }
+
+
+@self_study_router.post("/entropy/filter")
+async def filter_low_surprisal_text(req: EntropyFilterRequest):
+    """
+    Evaluates informational surprisal and prunes low-entropy filler sentences.
+    """
+    gate = EntropySurprisalGate(surprisal_threshold=req.surprisal_threshold)
+    res = gate.filter_text(req.text)
+    return {
+        "status": "success",
+        "result": res.to_dict(),
+        "filtered_text": res.filtered_text,
+    }
+
+
+@self_study_router.post("/sleep/consolidate")
+async def consolidate_sleep_memory(req: SleepConsolidateRequest):
+    """
+    Triggers sleep-phase synaptic memory consolidation and EWC protection.
+    """
+    global _sleep_engine
+    service = _get_service()
+    service.load_model_if_requested(prefer_gpu=False)
+
+    if _sleep_engine is None:
+        _sleep_engine = SleepReplayEngine(
+            model=service.model,
+            device=service.device,
+            ewc_lambda=req.ewc_lambda,
+        )
+    else:
+        _sleep_engine.ewc_lambda = req.ewc_lambda
+
+    all_pairs = []
+    target_ids = req.document_ids or [d.get("document_id", "") for d in service.store.list_documents()[:3]]
+
+    for d_id in target_ids:
+        try:
+            doc = service.store.get_document(d_id)
+            report = _extractor.extract_from_text(doc.raw_text, document_id=d_id, max_pairs=3)
+            all_pairs.extend(report.pairs)
+        except Exception:
+            continue
+
+    trainer = get_trainer()
+    report = _sleep_engine.consolidate(
+        sample_pairs=all_pairs,
+        trainer=trainer,
+        steps=req.steps,
+    )
+    return {
+        "status": "success",
+        "consolidation_report": report.to_dict(),
     }

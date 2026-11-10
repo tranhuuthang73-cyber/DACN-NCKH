@@ -7399,5 +7399,2272 @@
         ]
       }
     ]
+  },
+  {
+    "session_id": "chat_6d7bc1cf6c2a",
+    "title": "Toàn bộ tài liệu Chủ Đề Viết cho tôi",
+    "document_ids": [
+      "DOC_1794232412414_1c6f54",
+      "DOC_1794280669223_adc62f",
+      "DOC_1794280700582_d53f96"
+    ],
+    "created_at": 1794279996.2625377,
+    "updated_at": 1794280705.6292455,
+    "messages": [
+      {
+        "id": "msg_e8b461fb7b",
+        "role": "user",
+        "content": "Tóm tắt toàn bộ tài liệu Chủ Đề Viết cho tôi.",
+        "timestamp": 1794279996.2802846,
+        "citations": [],
+        "evidence": [],
+        "telemetry": {},
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {},
+        "suggested_questions": []
+      },
+      {
+        "id": "msg_9f4236313c",
+        "role": "assistant",
+        "content": "Không tìm thấy đủ thông tin trong tài liệu để trả lời chắc chắn. Tài liệu **tài liệu đang chọn** không có thông tin trả lời cho câu hỏi này. Hệ thống không sử dụng dữ liệu từ tài liệu khác để bảo đảm độ chính xác tuyệt đối.",
+        "timestamp": 1794279996.3018746,
+        "citations": [],
+        "evidence": [],
+        "telemetry": {
+          "input_tokens": 66,
+          "output_tokens": 169,
+          "total_tokens": 235,
+          "tokens_saved": 0,
+          "compression_ratio_pct": 0.0,
+          "total_latency_ms": 9.83,
+          "retrieval_ms": 0.15,
+          "generation_ms": 0.0
+        },
+        "routing": "UNANSWERABLE",
+        "refused": true,
+        "refusal_reason": "UNANSWERABLE",
+        "diagnostics": {
+          "mode": "hybrid",
+          "method": "P2",
+          "routing": "UNANSWERABLE",
+          "route_explanation": "Tài liệu không đề cập đến thông tin này.",
+          "effective_query": "Tóm tắt toàn bộ tài liệu Chủ Đề Viết cho tôi.",
+          "is_follow_up": false,
+          "attached_document_count": 1,
+          "evidence_count": 0,
+          "dynamic_top_k": false,
+          "context_compression": {
+            "raw_context_tokens": 0,
+            "compressed_context_tokens": 0,
+            "tokens_saved": 0,
+            "compression_ratio_pct": 0.0
+          },
+          "refusal_reason": "UNANSWERABLE",
+          "memory_level": "Level 3 (SA-CMS Gated Multi-Level)",
+          "suggested_questions": []
+        },
+        "suggested_questions": []
+      },
+      {
+        "id": "msg_edcc01bb4c",
+        "role": "system",
+        "type": "document_attached",
+        "content": "Đã thêm tài liệu \"Chủ Đề Viết\" vào cuộc trò chuyện.",
+        "timestamp": 1794280025.7708924,
+        "metadata": {
+          "document_id": "DOC_1794280023604_72091b",
+          "title": "Chủ Đề Viết",
+          "file_name": "chủ_đề_viết.docx",
+          "file_size": "31.8 KB",
+          "source": "upload"
+        },
+        "citations": [],
+        "evidence": [],
+        "telemetry": {},
+        "routing": "SYSTEM_EVENT",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {}
+      },
+      {
+        "id": "msg_a5abb0f3fe",
+        "role": "user",
+        "content": "topic 11",
+        "timestamp": 1794280034.1975224,
+        "citations": [],
+        "evidence": [],
+        "telemetry": {},
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {},
+        "suggested_questions": []
+      },
+      {
+        "id": "msg_62cac4e6d5",
+        "role": "assistant",
+        "content": "**Nội dung cốt lõi:**\nTOPIC 11: I am planning to visit Singapore for a short holiday, and I am looking for an apartment to stay in. [1]\n\n📌 **Bối cảnh bổ sung:**\nI look forward to hearing from you. I am writing to ask for some information about apartments for rent in your area.\n\n### Nguồn tham khảo\n[1] **Chủ Đề Viết** — Phần nội dung — Đoạn 1\n\n[2] **Chủ Đề Viết** — Phần nội dung — Đoạn 2\n\n💡 **Câu hỏi tự học tiếp theo:**\n1. Nội dung trọng tâm liên quan đến 'topic 11' gồm những gì?\n2. Những biện pháp chính được tài liệu đề xuất là gì?",
+        "timestamp": 1794280034.2206433,
+        "citations": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "DOC_1794280023604_72091b::P008",
+            "document_id": "DOC_1794280023604_72091b",
+            "document_title": "Chủ Đề Viết",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 1,
+            "score": 9.5157,
+            "text": "Could you please talk to them and ask them to make less noise at night? I hope you can help me solve this problem soon. Thank you for your time and understanding. I look forward to hearing from you. TOPIC 11:",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 2,
+            "citation_label": "[2]",
+            "passage_id": "DOC_1794280023604_72091b::P009",
+            "document_id": "DOC_1794280023604_72091b",
+            "document_title": "Chủ Đề Viết",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 2,
+            "score": 9.5157,
+            "text": "I look forward to hearing from you. TOPIC 11: I am planning to visit Singapore for a short holiday, and I am looking for an apartment to stay in. I am writing to ask for some information about apartments for rent in your area.",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "evidence": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "DOC_1794280023604_72091b::P008",
+            "document_id": "DOC_1794280023604_72091b",
+            "document_title": "Chủ Đề Viết",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 1,
+            "score": 9.5157,
+            "text": "Could you please talk to them and ask them to make less noise at night? I hope you can help me solve this problem soon. Thank you for your time and understanding. I look forward to hearing from you. TOPIC 11:",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 2,
+            "citation_label": "[2]",
+            "passage_id": "DOC_1794280023604_72091b::P009",
+            "document_id": "DOC_1794280023604_72091b",
+            "document_title": "Chủ Đề Viết",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 2,
+            "score": 9.5157,
+            "text": "I look forward to hearing from you. TOPIC 11: I am planning to visit Singapore for a short holiday, and I am looking for an apartment to stay in. I am writing to ask for some information about apartments for rent in your area.",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "telemetry": {
+          "input_tokens": 153,
+          "output_tokens": 293,
+          "total_tokens": 446,
+          "tokens_saved": 14,
+          "compression_ratio_pct": 8.59,
+          "total_latency_ms": 19.61,
+          "retrieval_ms": 0.22,
+          "generation_ms": 15.36
+        },
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {
+          "mode": "hybrid",
+          "method": "P2",
+          "routing": "DIRECT_LOOKUP",
+          "route_explanation": "Đã tìm thấy bằng chứng xác thực trong tài liệu.",
+          "effective_query": "topic 11",
+          "is_follow_up": false,
+          "attached_document_count": 2,
+          "evidence_count": 2,
+          "dynamic_top_k": true,
+          "context_compression": {
+            "raw_context_tokens": 163,
+            "compressed_context_tokens": 149,
+            "tokens_saved": 14,
+            "compression_ratio_pct": 8.59
+          },
+          "refusal_reason": null,
+          "memory_level": "Level 3 (SA-CMS Gated Multi-Level)",
+          "suggested_questions": [
+            "Nội dung trọng tâm liên quan đến 'topic 11' gồm những gì?",
+            "Những biện pháp chính được tài liệu đề xuất là gì?"
+          ]
+        },
+        "suggested_questions": [
+          "Nội dung trọng tâm liên quan đến 'topic 11' gồm những gì?",
+          "Những biện pháp chính được tài liệu đề xuất là gì?"
+        ]
+      },
+      {
+        "id": "msg_b260f69ce6",
+        "role": "user",
+        "content": "Nội dung trọng tâm liên quan đến 'topic 11' gồm những gì?",
+        "timestamp": 1794280048.7209349,
+        "citations": [],
+        "evidence": [],
+        "telemetry": {},
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {},
+        "suggested_questions": []
+      },
+      {
+        "id": "msg_4c958ba97a",
+        "role": "user",
+        "content": "Những biện pháp chính được tài liệu đề xuất là gì?",
+        "timestamp": 1794280051.9575076,
+        "citations": [],
+        "evidence": [],
+        "telemetry": {},
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {},
+        "suggested_questions": []
+      },
+      {
+        "id": "msg_74e30773fa",
+        "role": "assistant",
+        "content": "Không tìm thấy đủ thông tin trong tài liệu để trả lời chắc chắn. Tài liệu **tài liệu đang chọn** không có thông tin trả lời cho câu hỏi này. Hệ thống không sử dụng dữ liệu từ tài liệu khác để bảo đảm độ chính xác tuyệt đối.",
+        "timestamp": 1794280051.963478,
+        "citations": [],
+        "evidence": [],
+        "telemetry": {
+          "input_tokens": 73,
+          "output_tokens": 169,
+          "total_tokens": 242,
+          "tokens_saved": 0,
+          "compression_ratio_pct": 0.0,
+          "total_latency_ms": 1.04,
+          "retrieval_ms": 0.49,
+          "generation_ms": 0.0
+        },
+        "routing": "UNANSWERABLE",
+        "refused": true,
+        "refusal_reason": "UNANSWERABLE",
+        "diagnostics": {
+          "mode": "hybrid",
+          "method": "P2",
+          "routing": "UNANSWERABLE",
+          "route_explanation": "Tài liệu không đề cập đến thông tin này.",
+          "effective_query": "Những biện pháp chính được tài liệu đề xuất là gì?",
+          "is_follow_up": false,
+          "attached_document_count": 2,
+          "evidence_count": 0,
+          "dynamic_top_k": true,
+          "context_compression": {
+            "raw_context_tokens": 0,
+            "compressed_context_tokens": 0,
+            "tokens_saved": 0,
+            "compression_ratio_pct": 0.0
+          },
+          "refusal_reason": "UNANSWERABLE",
+          "memory_level": "Level 3 (SA-CMS Gated Multi-Level)",
+          "suggested_questions": []
+        },
+        "suggested_questions": []
+      },
+      {
+        "id": "msg_974d8845fe",
+        "role": "user",
+        "content": "Nội dung trọng tâm liên quan đến 'topic 11' gồm những gì?",
+        "timestamp": 1794280054.811979,
+        "citations": [],
+        "evidence": [],
+        "telemetry": {},
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {},
+        "suggested_questions": []
+      },
+      {
+        "id": "msg_f819713597",
+        "role": "user",
+        "content": "Nội dung trọng tâm liên quan đến 'topic 11' gồm những gì?",
+        "timestamp": 1794280058.1895587,
+        "citations": [],
+        "evidence": [],
+        "telemetry": {},
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {},
+        "suggested_questions": []
+      },
+      {
+        "id": "msg_d194b434ab",
+        "role": "user",
+        "content": "Nội dung trọng tâm liên quan đến 'topic 11' gồm những gì?",
+        "timestamp": 1794280060.8482428,
+        "citations": [],
+        "evidence": [],
+        "telemetry": {},
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {},
+        "suggested_questions": []
+      },
+      {
+        "id": "msg_a999d97e9a",
+        "role": "system",
+        "type": "document_attached",
+        "content": "Đã thêm tài liệu \"Alooo\" vào cuộc trò chuyện.",
+        "timestamp": 1794280098.285919,
+        "metadata": {
+          "document_id": "DOC_1794280097936_811399",
+          "title": "Alooo",
+          "file_name": "alooo.txt",
+          "file_size": "34 B",
+          "source": "upload"
+        },
+        "citations": [],
+        "evidence": [],
+        "telemetry": {},
+        "routing": "SYSTEM_EVENT",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {}
+      },
+      {
+        "id": "msg_4738cddbbf",
+        "role": "user",
+        "content": "ai dep trai",
+        "timestamp": 1794280104.8530614,
+        "citations": [],
+        "evidence": [],
+        "telemetry": {},
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {},
+        "suggested_questions": []
+      },
+      {
+        "id": "msg_6a7f4bc284",
+        "role": "assistant",
+        "content": "**Nội dung cốt lõi:**\nkiet sieu dep trai. [1]\n\n### Nguồn tham khảo\n[1] **Alooo** — Phần nội dung — Đoạn 1\n\n💡 **Câu hỏi tự học tiếp theo:**\n1. Nội dung trọng tâm liên quan đến 'ai dep trai' gồm những gì?\n2. Những biện pháp chính được tài liệu đề xuất là gì?",
+        "timestamp": 1794280104.858061,
+        "citations": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "DOC_1794280097936_811399::P000",
+            "document_id": "DOC_1794280097936_811399",
+            "document_title": "Alooo",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 1,
+            "score": 29.5563,
+            "text": "toi là ai?\nkiet sieu dep trai",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "evidence": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "DOC_1794280097936_811399::P000",
+            "document_id": "DOC_1794280097936_811399",
+            "document_title": "Alooo",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 1,
+            "score": 29.5563,
+            "text": "toi là ai?\nkiet sieu dep trai",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "telemetry": {
+          "input_tokens": 41,
+          "output_tokens": 183,
+          "total_tokens": 224,
+          "tokens_saved": 7,
+          "compression_ratio_pct": 15.91,
+          "total_latency_ms": 1.34,
+          "retrieval_ms": 0.09,
+          "generation_ms": 0.77
+        },
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {
+          "mode": "hybrid",
+          "method": "P2",
+          "routing": "DIRECT_LOOKUP",
+          "route_explanation": "Đã tìm thấy bằng chứng xác thực trong tài liệu.",
+          "effective_query": "ai dep trai",
+          "is_follow_up": false,
+          "attached_document_count": 2,
+          "evidence_count": 1,
+          "dynamic_top_k": true,
+          "context_compression": {
+            "raw_context_tokens": 44,
+            "compressed_context_tokens": 37,
+            "tokens_saved": 7,
+            "compression_ratio_pct": 15.91
+          },
+          "refusal_reason": null,
+          "memory_level": "Level 3 (SA-CMS Gated Multi-Level)",
+          "suggested_questions": [
+            "Nội dung trọng tâm liên quan đến 'ai dep trai' gồm những gì?",
+            "Những biện pháp chính được tài liệu đề xuất là gì?"
+          ]
+        },
+        "suggested_questions": [
+          "Nội dung trọng tâm liên quan đến 'ai dep trai' gồm những gì?",
+          "Những biện pháp chính được tài liệu đề xuất là gì?"
+        ]
+      },
+      {
+        "id": "msg_f53332f6c7",
+        "role": "user",
+        "content": "ai đẹp trai nhất",
+        "timestamp": 1794280125.2768738,
+        "citations": [],
+        "evidence": [],
+        "telemetry": {},
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {},
+        "suggested_questions": []
+      },
+      {
+        "id": "msg_bd5b6d00ec",
+        "role": "assistant",
+        "content": "Không tìm thấy đủ thông tin trong tài liệu để trả lời chắc chắn. Tài liệu **tài liệu đang chọn** không có thông tin trả lời cho câu hỏi này. Hệ thống không sử dụng dữ liệu từ tài liệu khác để bảo đảm độ chính xác tuyệt đối.",
+        "timestamp": 1794280125.2818732,
+        "citations": [],
+        "evidence": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "DOC_1794280097936_811399::P000",
+            "document_id": "DOC_1794280097936_811399",
+            "document_title": "Alooo",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 1,
+            "score": 17.7338,
+            "text": "toi là ai?\nkiet sieu dep trai",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "telemetry": {
+          "input_tokens": 43,
+          "output_tokens": 169,
+          "total_tokens": 212,
+          "tokens_saved": 0,
+          "compression_ratio_pct": 0.0,
+          "total_latency_ms": 0.62,
+          "retrieval_ms": 0.08,
+          "generation_ms": 0.0
+        },
+        "routing": "DIRECT_LOOKUP",
+        "refused": true,
+        "refusal_reason": "insufficient_evidence_coverage",
+        "diagnostics": {
+          "mode": "hybrid",
+          "method": "P2",
+          "routing": "DIRECT_LOOKUP",
+          "route_explanation": "Đã tìm thấy bằng chứng xác thực trong tài liệu.",
+          "effective_query": "ai đẹp trai nhất",
+          "is_follow_up": false,
+          "attached_document_count": 2,
+          "evidence_count": 0,
+          "dynamic_top_k": true,
+          "context_compression": {
+            "raw_context_tokens": 0,
+            "compressed_context_tokens": 0,
+            "tokens_saved": 0,
+            "compression_ratio_pct": 0.0
+          },
+          "refusal_reason": "insufficient_evidence_coverage",
+          "memory_level": "Level 3 (SA-CMS Gated Multi-Level)",
+          "suggested_questions": []
+        },
+        "suggested_questions": []
+      },
+      {
+        "id": "msg_1e2dbf422e",
+        "role": "user",
+        "content": "ai đẹp trai",
+        "timestamp": 1794280133.4774926,
+        "citations": [],
+        "evidence": [],
+        "telemetry": {},
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {},
+        "suggested_questions": []
+      },
+      {
+        "id": "msg_7ffb97c39e",
+        "role": "assistant",
+        "content": "**Nội dung cốt lõi:**\nkiet sieu dep trai. [1]\n\n### Nguồn tham khảo\n[1] **Alooo** — Phần nội dung — Đoạn 1\n\n💡 **Câu hỏi tự học tiếp theo:**\n1. Nội dung trọng tâm liên quan đến 'ai đẹp trai' gồm những gì?\n2. Những biện pháp chính được tài liệu đề xuất là gì?",
+        "timestamp": 1794280133.4824934,
+        "citations": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "DOC_1794280097936_811399::P000",
+            "document_id": "DOC_1794280097936_811399",
+            "document_title": "Alooo",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 1,
+            "score": 17.7338,
+            "text": "toi là ai?\nkiet sieu dep trai",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "evidence": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "DOC_1794280097936_811399::P000",
+            "document_id": "DOC_1794280097936_811399",
+            "document_title": "Alooo",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 1,
+            "score": 17.7338,
+            "text": "toi là ai?\nkiet sieu dep trai",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "telemetry": {
+          "input_tokens": 45,
+          "output_tokens": 187,
+          "total_tokens": 232,
+          "tokens_saved": 7,
+          "compression_ratio_pct": 15.91,
+          "total_latency_ms": 1.53,
+          "retrieval_ms": 0.09,
+          "generation_ms": 0.91
+        },
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {
+          "mode": "hybrid",
+          "method": "P2",
+          "routing": "DIRECT_LOOKUP",
+          "route_explanation": "Đã tìm thấy bằng chứng xác thực trong tài liệu.",
+          "effective_query": "ai đẹp trai",
+          "is_follow_up": false,
+          "attached_document_count": 2,
+          "evidence_count": 1,
+          "dynamic_top_k": true,
+          "context_compression": {
+            "raw_context_tokens": 44,
+            "compressed_context_tokens": 37,
+            "tokens_saved": 7,
+            "compression_ratio_pct": 15.91
+          },
+          "refusal_reason": null,
+          "memory_level": "Level 3 (SA-CMS Gated Multi-Level)",
+          "suggested_questions": [
+            "Nội dung trọng tâm liên quan đến 'ai đẹp trai' gồm những gì?",
+            "Những biện pháp chính được tài liệu đề xuất là gì?"
+          ]
+        },
+        "suggested_questions": [
+          "Nội dung trọng tâm liên quan đến 'ai đẹp trai' gồm những gì?",
+          "Những biện pháp chính được tài liệu đề xuất là gì?"
+        ]
+      },
+      {
+        "id": "msg_2c956a6ed0",
+        "role": "user",
+        "content": "Nội dung trọng tâm liên quan đến 'ai đẹp trai' gồm những gì?",
+        "timestamp": 1794280139.798829,
+        "citations": [],
+        "evidence": [],
+        "telemetry": {},
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {},
+        "suggested_questions": []
+      },
+      {
+        "id": "msg_0ffc3615ea",
+        "role": "user",
+        "content": "Những biện pháp chính được tài liệu đề xuất là gì?",
+        "timestamp": 1794280141.1826286,
+        "citations": [],
+        "evidence": [],
+        "telemetry": {},
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {},
+        "suggested_questions": []
+      },
+      {
+        "id": "msg_83ad26078c",
+        "role": "assistant",
+        "content": "Không tìm thấy đủ thông tin trong tài liệu để trả lời chắc chắn. Tài liệu **tài liệu đang chọn** không có thông tin trả lời cho câu hỏi này. Hệ thống không sử dụng dữ liệu từ tài liệu khác để bảo đảm độ chính xác tuyệt đối.",
+        "timestamp": 1794280141.1876256,
+        "citations": [],
+        "evidence": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "DOC_1794280097936_811399::P000",
+            "document_id": "DOC_1794280097936_811399",
+            "document_title": "Alooo",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 1,
+            "score": 3.5508,
+            "text": "toi là ai?\nkiet sieu dep trai",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "telemetry": {
+          "input_tokens": 73,
+          "output_tokens": 169,
+          "total_tokens": 242,
+          "tokens_saved": 0,
+          "compression_ratio_pct": 0.0,
+          "total_latency_ms": 0.62,
+          "retrieval_ms": 0.08,
+          "generation_ms": 0.0
+        },
+        "routing": "DIRECT_LOOKUP",
+        "refused": true,
+        "refusal_reason": "insufficient_evidence_coverage",
+        "diagnostics": {
+          "mode": "hybrid",
+          "method": "P2",
+          "routing": "DIRECT_LOOKUP",
+          "route_explanation": "Đã tìm thấy bằng chứng xác thực trong tài liệu.",
+          "effective_query": "Những biện pháp chính được tài liệu đề xuất là gì?",
+          "is_follow_up": false,
+          "attached_document_count": 2,
+          "evidence_count": 0,
+          "dynamic_top_k": true,
+          "context_compression": {
+            "raw_context_tokens": 0,
+            "compressed_context_tokens": 0,
+            "tokens_saved": 0,
+            "compression_ratio_pct": 0.0
+          },
+          "refusal_reason": "insufficient_evidence_coverage",
+          "memory_level": "Level 3 (SA-CMS Gated Multi-Level)",
+          "suggested_questions": []
+        },
+        "suggested_questions": []
+      },
+      {
+        "id": "msg_fd8f3aaf12",
+        "role": "system",
+        "type": "document_attached",
+        "content": "Đã thêm tài liệu \"Đề Cương Chatbot Hỏi Đáp Trên Tài Liệu Với Bộ Nhớ Đa Thang Dựa Trên Nested Learning\" vào cuộc trò chuyện.",
+        "timestamp": 1794280700.431933,
+        "metadata": {
+          "document_id": "DOC_1794280669223_adc62f",
+          "title": "Đề Cương Chatbot Hỏi Đáp Trên Tài Liệu Với Bộ Nhớ Đa Thang Dựa Trên Nested Learning",
+          "file_name": "Đề_cương_Chatbot_hỏi_đáp_trên_tài_liệu_với_bộ_nhớ_đa_thang_dựa_trên_Nested_Learning.docx",
+          "file_size": "182.6 KB",
+          "source": "upload"
+        },
+        "citations": [],
+        "evidence": [],
+        "telemetry": {},
+        "routing": "SYSTEM_EVENT",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {}
+      },
+      {
+        "id": "msg_58775430d3",
+        "role": "system",
+        "type": "document_attached",
+        "content": "Đã thêm tài liệu \"Topic Speak\" vào cuộc trò chuyện.",
+        "timestamp": 1794280705.6292455,
+        "metadata": {
+          "document_id": "DOC_1794280700582_d53f96",
+          "title": "Topic Speak",
+          "file_name": "Topic_speak.docx",
+          "file_size": "33.2 KB",
+          "source": "upload"
+        },
+        "citations": [],
+        "evidence": [],
+        "telemetry": {},
+        "routing": "SYSTEM_EVENT",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {}
+      }
+    ]
+  },
+  {
+    "session_id": "chat_2d3c7363380f",
+    "title": "Topic 1",
+    "document_ids": [
+      "DOC_1794280705781_b5d5c4"
+    ],
+    "created_at": 1794280719.611816,
+    "updated_at": 1794280907.5422668,
+    "messages": [
+      {
+        "id": "msg_c869dd0bd8",
+        "role": "user",
+        "content": "topic 1",
+        "timestamp": 1794280719.62788,
+        "citations": [],
+        "evidence": [],
+        "telemetry": {},
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {},
+        "suggested_questions": []
+      },
+      {
+        "id": "msg_45ef5fb220",
+        "role": "assistant",
+        "content": "**Nội dung cốt lõi:**\nTopic 50: Describe an interesting video that you watched on social media. [1]\n\n📌 **Bối cảnh bổ sung:**\nIn the future, I hope I can go hiking with my friends. I think it will be an interesting and unforgettable experience.\n\n### Nguồn tham khảo\n[1] **Topic Speak** — Phần nội dung — Đoạn 1\n\n[2] **Topic Speak** — Phần nội dung — Đoạn 2\n\n[3] **Topic Speak** — Phần nội dung — Đoạn 3\n\n[4] **Topic Speak** — Phần nội dung — Đoạn 4\n\n[5] **Topic Speak** — Phần nội dung — Đoạn 5\n\n💡 **Câu hỏi tự học tiếp theo:**\n1. Nội dung trọng tâm liên quan đến 'topic 1' gồm những gì?\n2. Những biện pháp chính được tài liệu đề xuất là gì?",
+        "timestamp": 1794280719.6461434,
+        "citations": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "DOC_1794280705781_b5d5c4::P021",
+            "document_id": "DOC_1794280705781_b5d5c4",
+            "document_title": "Topic Speak",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 1,
+            "score": 4.5025,
+            "text": "In the future, I hope I can go hiking with my friends. I think it will be an interesting and unforgettable experience. Topic 50: Describe an interesting video that you watched on social media",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 2,
+            "citation_label": "[2]",
+            "passage_id": "DOC_1794280705781_b5d5c4::P003",
+            "document_id": "DOC_1794280705781_b5d5c4",
+            "document_title": "Topic Speak",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 2,
+            "score": 4.3962,
+            "text": "Topic 2:Describe a famous person that you would like to meet I would like to talk about a famous person I want to meet. His name is Ludwig van Beethoven. He was a famous German composer and pianist.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 3,
+            "citation_label": "[3]",
+            "passage_id": "DOC_1794280705781_b5d5c4::P016",
+            "document_id": "DOC_1794280705781_b5d5c4",
+            "document_title": "Topic Speak",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 3,
+            "score": 4.3962,
+            "text": "Although the problem was solved, I didn't have a good experience at that restaurant. I think good customer service is very important for every business. Topic 49: Describe an outdoor sport you would like to try",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 4,
+            "citation_label": "[4]",
+            "passage_id": "DOC_1794280705781_b5d5c4::P017",
+            "document_id": "DOC_1794280705781_b5d5c4",
+            "document_title": "Topic Speak",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 4,
+            "score": 4.2948,
+            "text": "Topic 49: Describe an outdoor sport you would like to try I would like to talk about an outdoor sport I want to try. It is hiking. I first knew about this sport through videos on social media.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 5,
+            "citation_label": "[5]",
+            "passage_id": "DOC_1794280705781_b5d5c4::P000",
+            "document_id": "DOC_1794280705781_b5d5c4",
+            "document_title": "Topic Speak",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 5,
+            "score": 4.1512,
+            "text": "Topic 1: Describe a time when you were ill I would like to talk about a time when I was ill. Last year, I had the flu. I had a high fever, a headache, and a sore throat. I also felt very tired and didn't want to do anything.",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "evidence": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "DOC_1794280705781_b5d5c4::P021",
+            "document_id": "DOC_1794280705781_b5d5c4",
+            "document_title": "Topic Speak",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 1,
+            "score": 4.5025,
+            "text": "In the future, I hope I can go hiking with my friends. I think it will be an interesting and unforgettable experience. Topic 50: Describe an interesting video that you watched on social media",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 2,
+            "citation_label": "[2]",
+            "passage_id": "DOC_1794280705781_b5d5c4::P003",
+            "document_id": "DOC_1794280705781_b5d5c4",
+            "document_title": "Topic Speak",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 2,
+            "score": 4.3962,
+            "text": "Topic 2:Describe a famous person that you would like to meet I would like to talk about a famous person I want to meet. His name is Ludwig van Beethoven. He was a famous German composer and pianist.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 3,
+            "citation_label": "[3]",
+            "passage_id": "DOC_1794280705781_b5d5c4::P016",
+            "document_id": "DOC_1794280705781_b5d5c4",
+            "document_title": "Topic Speak",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 3,
+            "score": 4.3962,
+            "text": "Although the problem was solved, I didn't have a good experience at that restaurant. I think good customer service is very important for every business. Topic 49: Describe an outdoor sport you would like to try",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 4,
+            "citation_label": "[4]",
+            "passage_id": "DOC_1794280705781_b5d5c4::P017",
+            "document_id": "DOC_1794280705781_b5d5c4",
+            "document_title": "Topic Speak",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 4,
+            "score": 4.2948,
+            "text": "Topic 49: Describe an outdoor sport you would like to try I would like to talk about an outdoor sport I want to try. It is hiking. I first knew about this sport through videos on social media.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 5,
+            "citation_label": "[5]",
+            "passage_id": "DOC_1794280705781_b5d5c4::P000",
+            "document_id": "DOC_1794280705781_b5d5c4",
+            "document_title": "Topic Speak",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 5,
+            "score": 4.1512,
+            "text": "Topic 1: Describe a time when you were ill I would like to talk about a time when I was ill. Last year, I had the flu. I had a high fever, a headache, and a sore throat. I also felt very tired and didn't want to do anything.",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "telemetry": {
+          "input_tokens": 378,
+          "output_tokens": 347,
+          "total_tokens": 725,
+          "tokens_saved": 13,
+          "compression_ratio_pct": 3.35,
+          "total_latency_ms": 8.58,
+          "retrieval_ms": 0.35,
+          "generation_ms": 5.57
+        },
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {
+          "mode": "hybrid",
+          "method": "P2",
+          "routing": "DIRECT_LOOKUP",
+          "route_explanation": "Đã tìm thấy bằng chứng xác thực trong tài liệu.",
+          "effective_query": "topic 1",
+          "is_follow_up": false,
+          "attached_document_count": 1,
+          "evidence_count": 5,
+          "dynamic_top_k": true,
+          "context_compression": {
+            "raw_context_tokens": 388,
+            "compressed_context_tokens": 375,
+            "tokens_saved": 13,
+            "compression_ratio_pct": 3.35
+          },
+          "refusal_reason": null,
+          "memory_level": "Level 3 (SA-CMS Gated Multi-Level)",
+          "suggested_questions": [
+            "Nội dung trọng tâm liên quan đến 'topic 1' gồm những gì?",
+            "Những biện pháp chính được tài liệu đề xuất là gì?"
+          ]
+        },
+        "suggested_questions": [
+          "Nội dung trọng tâm liên quan đến 'topic 1' gồm những gì?",
+          "Những biện pháp chính được tài liệu đề xuất là gì?"
+        ]
+      },
+      {
+        "id": "msg_0114cc3028",
+        "role": "user",
+        "content": "Nội dung trọng tâm liên quan đến 'topic 1' gồm những gì?",
+        "timestamp": 1794280741.391757,
+        "citations": [],
+        "evidence": [],
+        "telemetry": {},
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {},
+        "suggested_questions": []
+      },
+      {
+        "id": "msg_d2566ad0c9",
+        "role": "assistant",
+        "content": "Tài liệu **Topic Speak** tập trung vào các nội dung trọng tâm sau:\n- **Tóm lược cốt lõi**: Tài liệu Topic Speak tập trung vào Topic 1: Describe a time when you were ill\n\nI would like to talk about a time when I was ill.\n- **Tổng quan thực nghiệm**: Về bài toán, Topic 1: Describe a time when you were ill\nI would like to talk about a time when I was ill. Topic 1: Describe a time when you were ill\n\nI would like to talk about a time when I was ill. Last year, I had the flu. I had a high fever, a headache, and a sore throat. [1]\n\n### Nguồn tham khảo\n[1] **Topic Speak** — Phần nội dung — Đoạn 1\n\n[2] **Topic Speak** — Phần nội dung — Đoạn 2\n\n[3] **Topic Speak** — Phần nội dung — Đoạn 3\n\n[4] **Topic Speak** — Phần nội dung — Đoạn 4\n\n[5] **Topic Speak** — Phần nội dung — Đoạn 5\n\n💡 **Câu hỏi tự học tiếp theo:**\n1. Nội dung trọng tâm liên quan đến 'Nội dung trọng tâm liên quan đến 'topic 1'' gồm những gì?\n2. Những biện pháp chính được tài liệu đề xuất là gì?",
+        "timestamp": 1794280741.4470634,
+        "citations": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "DOC_1794280705781_b5d5c4::P000",
+            "document_id": "DOC_1794280705781_b5d5c4",
+            "document_title": "Topic Speak",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 1,
+            "score": 10.0,
+            "text": "Topic 1: Describe a time when you were ill I would like to talk about a time when I was ill. Last year, I had the flu. I had a high fever, a headache, and a sore throat. I also felt very tired and didn't want to do anything.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 2,
+            "citation_label": "[2]",
+            "passage_id": "DOC_1794280705781_b5d5c4::P001",
+            "document_id": "DOC_1794280705781_b5d5c4",
+            "document_title": "Topic Speak",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 2,
+            "score": 10.0,
+            "text": "The illness lasted for about four days. During that time, I stayed at home and took some medicine. My mother also prepared healthy food and reminded me to get enough rest. Because of this illness, I couldn't go to school or meet my friends.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 3,
+            "citation_label": "[3]",
+            "passage_id": "DOC_1794280705781_b5d5c4::P002",
+            "document_id": "DOC_1794280705781_b5d5c4",
+            "document_title": "Topic Speak",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 3,
+            "score": 10.0,
+            "text": "Because of this illness, I couldn't go to school or meet my friends. I also missed some lessons. It was not a good experience, but it taught me that health is very important. Since then, I have tried to eat healthy food and exercise regularly.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 4,
+            "citation_label": "[4]",
+            "passage_id": "DOC_1794280705781_b5d5c4::P003",
+            "document_id": "DOC_1794280705781_b5d5c4",
+            "document_title": "Topic Speak",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 4,
+            "score": 10.0,
+            "text": "Topic 2:Describe a famous person that you would like to meet I would like to talk about a famous person I want to meet. His name is Ludwig van Beethoven. He was a famous German composer and pianist.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 5,
+            "citation_label": "[5]",
+            "passage_id": "DOC_1794280705781_b5d5c4::P004",
+            "document_id": "DOC_1794280705781_b5d5c4",
+            "document_title": "Topic Speak",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 5,
+            "score": 10.0,
+            "text": "He is famous for creating many beautiful and powerful pieces of music. One interesting thing about him is that he continued composing music even after he became deaf. I want to meet him because I really admire his talent and determination.",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "evidence": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "DOC_1794280705781_b5d5c4::P000",
+            "document_id": "DOC_1794280705781_b5d5c4",
+            "document_title": "Topic Speak",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 1,
+            "score": 10.0,
+            "text": "Topic 1: Describe a time when you were ill I would like to talk about a time when I was ill. Last year, I had the flu. I had a high fever, a headache, and a sore throat. I also felt very tired and didn't want to do anything.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 2,
+            "citation_label": "[2]",
+            "passage_id": "DOC_1794280705781_b5d5c4::P001",
+            "document_id": "DOC_1794280705781_b5d5c4",
+            "document_title": "Topic Speak",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 2,
+            "score": 10.0,
+            "text": "The illness lasted for about four days. During that time, I stayed at home and took some medicine. My mother also prepared healthy food and reminded me to get enough rest. Because of this illness, I couldn't go to school or meet my friends.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 3,
+            "citation_label": "[3]",
+            "passage_id": "DOC_1794280705781_b5d5c4::P002",
+            "document_id": "DOC_1794280705781_b5d5c4",
+            "document_title": "Topic Speak",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 3,
+            "score": 10.0,
+            "text": "Because of this illness, I couldn't go to school or meet my friends. I also missed some lessons. It was not a good experience, but it taught me that health is very important. Since then, I have tried to eat healthy food and exercise regularly.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 4,
+            "citation_label": "[4]",
+            "passage_id": "DOC_1794280705781_b5d5c4::P003",
+            "document_id": "DOC_1794280705781_b5d5c4",
+            "document_title": "Topic Speak",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 4,
+            "score": 10.0,
+            "text": "Topic 2:Describe a famous person that you would like to meet I would like to talk about a famous person I want to meet. His name is Ludwig van Beethoven. He was a famous German composer and pianist.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 5,
+            "citation_label": "[5]",
+            "passage_id": "DOC_1794280705781_b5d5c4::P004",
+            "document_id": "DOC_1794280705781_b5d5c4",
+            "document_title": "Topic Speak",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 5,
+            "score": 10.0,
+            "text": "He is famous for creating many beautiful and powerful pieces of music. One interesting thing about him is that he continued composing music even after he became deaf. I want to meet him because I really admire his talent and determination.",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "telemetry": {
+          "input_tokens": 405,
+          "output_tokens": 496,
+          "total_tokens": 901,
+          "tokens_saved": 43,
+          "compression_ratio_pct": 10.51,
+          "total_latency_ms": 44.58,
+          "retrieval_ms": 1.29,
+          "generation_ms": 40.58
+        },
+        "routing": "DOCUMENT_SUMMARY",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {
+          "mode": "hybrid",
+          "method": "P2",
+          "routing": "DOCUMENT_SUMMARY",
+          "route_explanation": "Đã tổng hợp được ngữ cảnh toàn diện từ tài liệu.",
+          "effective_query": "Nội dung trọng tâm liên quan đến 'topic 1' gồm những gì?",
+          "is_follow_up": false,
+          "attached_document_count": 1,
+          "evidence_count": 5,
+          "dynamic_top_k": false,
+          "context_compression": {
+            "raw_context_tokens": 409,
+            "compressed_context_tokens": 366,
+            "tokens_saved": 43,
+            "compression_ratio_pct": 10.51
+          },
+          "refusal_reason": null,
+          "memory_level": "Level 3 (SA-CMS Gated Multi-Level)",
+          "suggested_questions": [
+            "Nội dung trọng tâm liên quan đến 'Nội dung trọng tâm liên quan đến 'topic 1'' gồm những gì?",
+            "Những biện pháp chính được tài liệu đề xuất là gì?"
+          ]
+        },
+        "suggested_questions": [
+          "Nội dung trọng tâm liên quan đến 'Nội dung trọng tâm liên quan đến 'topic 1'' gồm những gì?",
+          "Những biện pháp chính được tài liệu đề xuất là gì?"
+        ]
+      },
+      {
+        "id": "msg_f57b10ccfa",
+        "role": "user",
+        "content": "Những biện pháp chính được tài liệu đề xuất là gì?",
+        "timestamp": 1794280773.5441973,
+        "citations": [],
+        "evidence": [],
+        "telemetry": {},
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {},
+        "suggested_questions": []
+      },
+      {
+        "id": "msg_cf83b6de09",
+        "role": "assistant",
+        "content": "Không tìm thấy đủ thông tin trong tài liệu để trả lời chắc chắn. Tài liệu **Topic Speak** không có thông tin trả lời cho câu hỏi này. Hệ thống không sử dụng dữ liệu từ tài liệu khác để bảo đảm độ chính xác tuyệt đối.",
+        "timestamp": 1794280773.558375,
+        "citations": [],
+        "evidence": [],
+        "telemetry": {
+          "input_tokens": 73,
+          "output_tokens": 157,
+          "total_tokens": 230,
+          "tokens_saved": 0,
+          "compression_ratio_pct": 0.0,
+          "total_latency_ms": 1.69,
+          "retrieval_ms": 0.65,
+          "generation_ms": 0.0
+        },
+        "routing": "UNANSWERABLE",
+        "refused": true,
+        "refusal_reason": "UNANSWERABLE",
+        "diagnostics": {
+          "mode": "hybrid",
+          "method": "P2",
+          "routing": "UNANSWERABLE",
+          "route_explanation": "Tài liệu không đề cập đến thông tin này.",
+          "effective_query": "Những biện pháp chính được tài liệu đề xuất là gì?",
+          "is_follow_up": false,
+          "attached_document_count": 1,
+          "evidence_count": 0,
+          "dynamic_top_k": true,
+          "context_compression": {
+            "raw_context_tokens": 0,
+            "compressed_context_tokens": 0,
+            "tokens_saved": 0,
+            "compression_ratio_pct": 0.0
+          },
+          "refusal_reason": "UNANSWERABLE",
+          "memory_level": "Level 3 (SA-CMS Gated Multi-Level)",
+          "suggested_questions": []
+        },
+        "suggested_questions": []
+      },
+      {
+        "id": "msg_54abdd0e8d",
+        "role": "user",
+        "content": "topic 50",
+        "timestamp": 1794280787.9589708,
+        "citations": [],
+        "evidence": [],
+        "telemetry": {},
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {},
+        "suggested_questions": []
+      },
+      {
+        "id": "msg_8472abe069",
+        "role": "assistant",
+        "content": "**Nội dung cốt lõi:**\nTopic 50: Describe an interesting video that you watched on social media. [1]\n\n📌 **Bối cảnh bổ sung:**\nIn the future, I hope I can go hiking with my friends. I think it will be an interesting and unforgettable experience.\n\n### Nguồn tham khảo\n[1] **Topic Speak** — Phần nội dung — Đoạn 1\n\n[2] **Topic Speak** — Phần nội dung — Đoạn 2\n\n💡 **Câu hỏi tự học tiếp theo:**\n1. Nội dung trọng tâm liên quan đến 'topic 50' gồm những gì?\n2. Những biện pháp chính được tài liệu đề xuất là gì?",
+        "timestamp": 1794280787.9701555,
+        "citations": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "DOC_1794280705781_b5d5c4::P021",
+            "document_id": "DOC_1794280705781_b5d5c4",
+            "document_title": "Topic Speak",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 1,
+            "score": 11.8282,
+            "text": "In the future, I hope I can go hiking with my friends. I think it will be an interesting and unforgettable experience. Topic 50: Describe an interesting video that you watched on social media",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 2,
+            "citation_label": "[2]",
+            "passage_id": "DOC_1794280705781_b5d5c4::P022",
+            "document_id": "DOC_1794280705781_b5d5c4",
+            "document_title": "Topic Speak",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 2,
+            "score": 10.44,
+            "text": "Topic 50: Describe an interesting video that you watched on social media I would like to talk about an interesting video I watched on social media. I watched it about two weeks ago on TikTok. The video was about Ludwig van Beethoven, a famous German composer.",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "evidence": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "DOC_1794280705781_b5d5c4::P021",
+            "document_id": "DOC_1794280705781_b5d5c4",
+            "document_title": "Topic Speak",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 1,
+            "score": 11.8282,
+            "text": "In the future, I hope I can go hiking with my friends. I think it will be an interesting and unforgettable experience. Topic 50: Describe an interesting video that you watched on social media",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 2,
+            "citation_label": "[2]",
+            "passage_id": "DOC_1794280705781_b5d5c4::P022",
+            "document_id": "DOC_1794280705781_b5d5c4",
+            "document_title": "Topic Speak",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 2,
+            "score": 10.44,
+            "text": "Topic 50: Describe an interesting video that you watched on social media I would like to talk about an interesting video I watched on social media. I watched it about two weeks ago on TikTok. The video was about Ludwig van Beethoven, a famous German composer.",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "telemetry": {
+          "input_tokens": 161,
+          "output_tokens": 264,
+          "total_tokens": 425,
+          "tokens_saved": 0,
+          "compression_ratio_pct": 0.0,
+          "total_latency_ms": 4.68,
+          "retrieval_ms": 0.37,
+          "generation_ms": 2.7
+        },
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {
+          "mode": "hybrid",
+          "method": "P2",
+          "routing": "DIRECT_LOOKUP",
+          "route_explanation": "Đã tìm thấy bằng chứng xác thực trong tài liệu.",
+          "effective_query": "topic 50",
+          "is_follow_up": false,
+          "attached_document_count": 1,
+          "evidence_count": 2,
+          "dynamic_top_k": true,
+          "context_compression": {
+            "raw_context_tokens": 157,
+            "compressed_context_tokens": 157,
+            "tokens_saved": 0,
+            "compression_ratio_pct": 0.0
+          },
+          "refusal_reason": null,
+          "memory_level": "Level 3 (SA-CMS Gated Multi-Level)",
+          "suggested_questions": [
+            "Nội dung trọng tâm liên quan đến 'topic 50' gồm những gì?",
+            "Những biện pháp chính được tài liệu đề xuất là gì?"
+          ]
+        },
+        "suggested_questions": [
+          "Nội dung trọng tâm liên quan đến 'topic 50' gồm những gì?",
+          "Những biện pháp chính được tài liệu đề xuất là gì?"
+        ]
+      },
+      {
+        "id": "msg_2edbba58f5",
+        "role": "user",
+        "content": "cho tôi biết topic 49",
+        "timestamp": 1794280806.0710318,
+        "citations": [],
+        "evidence": [],
+        "telemetry": {},
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {},
+        "suggested_questions": []
+      },
+      {
+        "id": "msg_c6fea6b296",
+        "role": "assistant",
+        "content": "**Nội dung cốt lõi:**\nTopic 49: Describe an outdoor sport you would like to try. [1]\n\n📌 **Bối cảnh bổ sung:**\nAlthough the problem was solved, I didn't have a good experience at that restaurant. I think good customer service is very important for every business.\n\n### Nguồn tham khảo\n[1] **Topic Speak** — Phần nội dung — Đoạn 1\n\n[2] **Topic Speak** — Phần nội dung — Đoạn 2\n\n💡 **Câu hỏi tự học tiếp theo:**\n1. Nội dung trọng tâm liên quan đến 'cho tôi biết topic 49' gồm những gì?\n2. Những biện pháp chính được tài liệu đề xuất là gì?",
+        "timestamp": 1794280806.080941,
+        "citations": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "DOC_1794280705781_b5d5c4::P016",
+            "document_id": "DOC_1794280705781_b5d5c4",
+            "document_title": "Topic Speak",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 1,
+            "score": 12.3653,
+            "text": "Although the problem was solved, I didn't have a good experience at that restaurant. I think good customer service is very important for every business. Topic 49: Describe an outdoor sport you would like to try",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 2,
+            "citation_label": "[2]",
+            "passage_id": "DOC_1794280705781_b5d5c4::P017",
+            "document_id": "DOC_1794280705781_b5d5c4",
+            "document_title": "Topic Speak",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 2,
+            "score": 12.0802,
+            "text": "Topic 49: Describe an outdoor sport you would like to try I would like to talk about an outdoor sport I want to try. It is hiking. I first knew about this sport through videos on social media.",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "evidence": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "DOC_1794280705781_b5d5c4::P016",
+            "document_id": "DOC_1794280705781_b5d5c4",
+            "document_title": "Topic Speak",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 1,
+            "score": 12.3653,
+            "text": "Although the problem was solved, I didn't have a good experience at that restaurant. I think good customer service is very important for every business. Topic 49: Describe an outdoor sport you would like to try",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 2,
+            "citation_label": "[2]",
+            "passage_id": "DOC_1794280705781_b5d5c4::P017",
+            "document_id": "DOC_1794280705781_b5d5c4",
+            "document_title": "Topic Speak",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 2,
+            "score": 12.0802,
+            "text": "Topic 49: Describe an outdoor sport you would like to try I would like to talk about an outdoor sport I want to try. It is hiking. I first knew about this sport through videos on social media.",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "telemetry": {
+          "input_tokens": 161,
+          "output_tokens": 275,
+          "total_tokens": 436,
+          "tokens_saved": 0,
+          "compression_ratio_pct": 0.0,
+          "total_latency_ms": 5.85,
+          "retrieval_ms": 0.82,
+          "generation_ms": 4.08
+        },
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {
+          "mode": "hybrid",
+          "method": "P2",
+          "routing": "DIRECT_LOOKUP",
+          "route_explanation": "Đã tìm thấy bằng chứng xác thực trong tài liệu.",
+          "effective_query": "cho tôi biết topic 49",
+          "is_follow_up": false,
+          "attached_document_count": 1,
+          "evidence_count": 2,
+          "dynamic_top_k": true,
+          "context_compression": {
+            "raw_context_tokens": 149,
+            "compressed_context_tokens": 149,
+            "tokens_saved": 0,
+            "compression_ratio_pct": 0.0
+          },
+          "refusal_reason": null,
+          "memory_level": "Level 3 (SA-CMS Gated Multi-Level)",
+          "suggested_questions": [
+            "Nội dung trọng tâm liên quan đến 'cho tôi biết topic 49' gồm những gì?",
+            "Những biện pháp chính được tài liệu đề xuất là gì?"
+          ]
+        },
+        "suggested_questions": [
+          "Nội dung trọng tâm liên quan đến 'cho tôi biết topic 49' gồm những gì?",
+          "Những biện pháp chính được tài liệu đề xuất là gì?"
+        ]
+      },
+      {
+        "id": "msg_eff3aab9c4",
+        "role": "user",
+        "content": "cho tôi biết chủ đề 47",
+        "timestamp": 1794280817.4614854,
+        "citations": [],
+        "evidence": [],
+        "telemetry": {},
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {},
+        "suggested_questions": []
+      },
+      {
+        "id": "msg_e251b3fde9",
+        "role": "assistant",
+        "content": "Không tìm thấy đủ thông tin trong tài liệu để trả lời chắc chắn. Tài liệu **Topic Speak** không có thông tin trả lời cho câu hỏi này. Hệ thống không sử dụng dữ liệu từ tài liệu khác để bảo đảm độ chính xác tuyệt đối.",
+        "timestamp": 1794280817.4696608,
+        "citations": [],
+        "evidence": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "DOC_1794280705781_b5d5c4::P007",
+            "document_id": "DOC_1794280705781_b5d5c4",
+            "document_title": "Topic Speak",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 1,
+            "score": 8.4739,
+            "text": "Topic 47: Describe a success that you were proud of I would like to talk about a success that made me very proud. It was completing a difficult project at university. At first, I didn't know how to start because the project had many difficult tasks.",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "telemetry": {
+          "input_tokens": 48,
+          "output_tokens": 157,
+          "total_tokens": 205,
+          "tokens_saved": 0,
+          "compression_ratio_pct": 0.0,
+          "total_latency_ms": 1.91,
+          "retrieval_ms": 0.45,
+          "generation_ms": 0.0
+        },
+        "routing": "DIRECT_LOOKUP",
+        "refused": true,
+        "refusal_reason": "insufficient_evidence_coverage",
+        "diagnostics": {
+          "mode": "hybrid",
+          "method": "P2",
+          "routing": "DIRECT_LOOKUP",
+          "route_explanation": "Đã tìm thấy bằng chứng xác thực trong tài liệu.",
+          "effective_query": "cho tôi biết chủ đề 47",
+          "is_follow_up": false,
+          "attached_document_count": 1,
+          "evidence_count": 0,
+          "dynamic_top_k": true,
+          "context_compression": {
+            "raw_context_tokens": 0,
+            "compressed_context_tokens": 0,
+            "tokens_saved": 0,
+            "compression_ratio_pct": 0.0
+          },
+          "refusal_reason": "insufficient_evidence_coverage",
+          "memory_level": "Level 3 (SA-CMS Gated Multi-Level)",
+          "suggested_questions": []
+        },
+        "suggested_questions": []
+      },
+      {
+        "id": "msg_8f66fad198",
+        "role": "user",
+        "content": "Những biện pháp chính được tài liệu đề xuất là gì?",
+        "timestamp": 1794280904.9387434,
+        "citations": [],
+        "evidence": [],
+        "telemetry": {},
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {},
+        "suggested_questions": []
+      },
+      {
+        "id": "msg_0769ea7634",
+        "role": "assistant",
+        "content": "Không tìm thấy đủ thông tin trong tài liệu để trả lời chắc chắn. Tài liệu **Topic Speak** không có thông tin trả lời cho câu hỏi này. Hệ thống không sử dụng dữ liệu từ tài liệu khác để bảo đảm độ chính xác tuyệt đối.",
+        "timestamp": 1794280904.9513855,
+        "citations": [],
+        "evidence": [],
+        "telemetry": {
+          "input_tokens": 73,
+          "output_tokens": 157,
+          "total_tokens": 230,
+          "tokens_saved": 0,
+          "compression_ratio_pct": 0.0,
+          "total_latency_ms": 1.81,
+          "retrieval_ms": 0.62,
+          "generation_ms": 0.0
+        },
+        "routing": "UNANSWERABLE",
+        "refused": true,
+        "refusal_reason": "UNANSWERABLE",
+        "diagnostics": {
+          "mode": "hybrid",
+          "method": "P2",
+          "routing": "UNANSWERABLE",
+          "route_explanation": "Tài liệu không đề cập đến thông tin này.",
+          "effective_query": "Những biện pháp chính được tài liệu đề xuất là gì?",
+          "is_follow_up": false,
+          "attached_document_count": 1,
+          "evidence_count": 0,
+          "dynamic_top_k": true,
+          "context_compression": {
+            "raw_context_tokens": 0,
+            "compressed_context_tokens": 0,
+            "tokens_saved": 0,
+            "compression_ratio_pct": 0.0
+          },
+          "refusal_reason": "UNANSWERABLE",
+          "memory_level": "Level 3 (SA-CMS Gated Multi-Level)",
+          "suggested_questions": []
+        },
+        "suggested_questions": []
+      },
+      {
+        "id": "msg_2e9dca63f3",
+        "role": "user",
+        "content": "Nội dung trọng tâm liên quan đến 'cho tôi biết topic 49' gồm những gì?",
+        "timestamp": 1794280907.5222833,
+        "citations": [],
+        "evidence": [],
+        "telemetry": {},
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {},
+        "suggested_questions": []
+      },
+      {
+        "id": "msg_cd1097f0de",
+        "role": "assistant",
+        "content": "Tài liệu **Topic Speak** tập trung vào các nội dung trọng tâm sau:\n- **Tóm lược cốt lõi**: Tài liệu Topic Speak tập trung vào Topic 1: Describe a time when you were ill\n\nI would like to talk about a time when I was ill.\n- **Tổng quan thực nghiệm**: Về bài toán, Topic 1: Describe a time when you were ill\nI would like to talk about a time when I was ill. Topic 1: Describe a time when you were ill\n\nI would like to talk about a time when I was ill. Last year, I had the flu. I had a high fever, a headache, and a sore throat. [1]\n\n### Nguồn tham khảo\n[1] **Topic Speak** — Phần nội dung — Đoạn 1\n\n[2] **Topic Speak** — Phần nội dung — Đoạn 2\n\n[3] **Topic Speak** — Phần nội dung — Đoạn 3\n\n[4] **Topic Speak** — Phần nội dung — Đoạn 4\n\n[5] **Topic Speak** — Phần nội dung — Đoạn 5\n\n💡 **Câu hỏi tự học tiếp theo:**\n1. Nội dung trọng tâm liên quan đến 'Nội dung trọng tâm liên quan đến 'cho tôi' gồm những gì?\n2. Những biện pháp chính được tài liệu đề xuất là gì?",
+        "timestamp": 1794280907.5422668,
+        "citations": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "DOC_1794280705781_b5d5c4::P000",
+            "document_id": "DOC_1794280705781_b5d5c4",
+            "document_title": "Topic Speak",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 1,
+            "score": 10.0,
+            "text": "Topic 1: Describe a time when you were ill I would like to talk about a time when I was ill. Last year, I had the flu. I had a high fever, a headache, and a sore throat. I also felt very tired and didn't want to do anything.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 2,
+            "citation_label": "[2]",
+            "passage_id": "DOC_1794280705781_b5d5c4::P001",
+            "document_id": "DOC_1794280705781_b5d5c4",
+            "document_title": "Topic Speak",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 2,
+            "score": 10.0,
+            "text": "The illness lasted for about four days. During that time, I stayed at home and took some medicine. My mother also prepared healthy food and reminded me to get enough rest. Because of this illness, I couldn't go to school or meet my friends.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 3,
+            "citation_label": "[3]",
+            "passage_id": "DOC_1794280705781_b5d5c4::P002",
+            "document_id": "DOC_1794280705781_b5d5c4",
+            "document_title": "Topic Speak",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 3,
+            "score": 10.0,
+            "text": "Because of this illness, I couldn't go to school or meet my friends. I also missed some lessons. It was not a good experience, but it taught me that health is very important. Since then, I have tried to eat healthy food and exercise regularly.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 4,
+            "citation_label": "[4]",
+            "passage_id": "DOC_1794280705781_b5d5c4::P003",
+            "document_id": "DOC_1794280705781_b5d5c4",
+            "document_title": "Topic Speak",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 4,
+            "score": 10.0,
+            "text": "Topic 2:Describe a famous person that you would like to meet I would like to talk about a famous person I want to meet. His name is Ludwig van Beethoven. He was a famous German composer and pianist.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 5,
+            "citation_label": "[5]",
+            "passage_id": "DOC_1794280705781_b5d5c4::P004",
+            "document_id": "DOC_1794280705781_b5d5c4",
+            "document_title": "Topic Speak",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 5,
+            "score": 10.0,
+            "text": "He is famous for creating many beautiful and powerful pieces of music. One interesting thing about him is that he continued composing music even after he became deaf. I want to meet him because I really admire his talent and determination.",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "evidence": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "DOC_1794280705781_b5d5c4::P000",
+            "document_id": "DOC_1794280705781_b5d5c4",
+            "document_title": "Topic Speak",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 1,
+            "score": 10.0,
+            "text": "Topic 1: Describe a time when you were ill I would like to talk about a time when I was ill. Last year, I had the flu. I had a high fever, a headache, and a sore throat. I also felt very tired and didn't want to do anything.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 2,
+            "citation_label": "[2]",
+            "passage_id": "DOC_1794280705781_b5d5c4::P001",
+            "document_id": "DOC_1794280705781_b5d5c4",
+            "document_title": "Topic Speak",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 2,
+            "score": 10.0,
+            "text": "The illness lasted for about four days. During that time, I stayed at home and took some medicine. My mother also prepared healthy food and reminded me to get enough rest. Because of this illness, I couldn't go to school or meet my friends.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 3,
+            "citation_label": "[3]",
+            "passage_id": "DOC_1794280705781_b5d5c4::P002",
+            "document_id": "DOC_1794280705781_b5d5c4",
+            "document_title": "Topic Speak",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 3,
+            "score": 10.0,
+            "text": "Because of this illness, I couldn't go to school or meet my friends. I also missed some lessons. It was not a good experience, but it taught me that health is very important. Since then, I have tried to eat healthy food and exercise regularly.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 4,
+            "citation_label": "[4]",
+            "passage_id": "DOC_1794280705781_b5d5c4::P003",
+            "document_id": "DOC_1794280705781_b5d5c4",
+            "document_title": "Topic Speak",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 4,
+            "score": 10.0,
+            "text": "Topic 2:Describe a famous person that you would like to meet I would like to talk about a famous person I want to meet. His name is Ludwig van Beethoven. He was a famous German composer and pianist.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 5,
+            "citation_label": "[5]",
+            "passage_id": "DOC_1794280705781_b5d5c4::P004",
+            "document_id": "DOC_1794280705781_b5d5c4",
+            "document_title": "Topic Speak",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 5,
+            "score": 10.0,
+            "text": "He is famous for creating many beautiful and powerful pieces of music. One interesting thing about him is that he continued composing music even after he became deaf. I want to meet him because I really admire his talent and determination.",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "telemetry": {
+          "input_tokens": 414,
+          "output_tokens": 497,
+          "total_tokens": 911,
+          "tokens_saved": 43,
+          "compression_ratio_pct": 10.51,
+          "total_latency_ms": 12.1,
+          "retrieval_ms": 1.49,
+          "generation_ms": 7.87
+        },
+        "routing": "DOCUMENT_SUMMARY",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {
+          "mode": "hybrid",
+          "method": "P2",
+          "routing": "DOCUMENT_SUMMARY",
+          "route_explanation": "Đã tổng hợp được ngữ cảnh toàn diện từ tài liệu.",
+          "effective_query": "Nội dung trọng tâm liên quan đến 'cho tôi biết topic 49' gồm những gì?",
+          "is_follow_up": false,
+          "attached_document_count": 1,
+          "evidence_count": 5,
+          "dynamic_top_k": false,
+          "context_compression": {
+            "raw_context_tokens": 409,
+            "compressed_context_tokens": 366,
+            "tokens_saved": 43,
+            "compression_ratio_pct": 10.51
+          },
+          "refusal_reason": null,
+          "memory_level": "Level 3 (SA-CMS Gated Multi-Level)",
+          "suggested_questions": [
+            "Nội dung trọng tâm liên quan đến 'Nội dung trọng tâm liên quan đến 'cho tôi' gồm những gì?",
+            "Những biện pháp chính được tài liệu đề xuất là gì?"
+          ]
+        },
+        "suggested_questions": [
+          "Nội dung trọng tâm liên quan đến 'Nội dung trọng tâm liên quan đến 'cho tôi' gồm những gì?",
+          "Những biện pháp chính được tài liệu đề xuất là gì?"
+        ]
+      }
+    ]
+  },
+  {
+    "session_id": "chat_7fabdb9d1db7",
+    "title": "Các nhiệm vụ trọng tâm và mục tiêu...",
+    "document_ids": [
+      "DEMO_DOC_001"
+    ],
+    "created_at": 1794280980.0363243,
+    "updated_at": 1794281049.205855,
+    "messages": [
+      {
+        "id": "msg_0822d09177",
+        "role": "user",
+        "content": "Các nhiệm vụ trọng tâm và mục tiêu phấn đấu trong năm 2026 là gì?",
+        "timestamp": 1794280980.063391,
+        "citations": [],
+        "evidence": [],
+        "telemetry": {},
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {},
+        "suggested_questions": []
+      },
+      {
+        "id": "msg_b8bd8bbae7",
+        "role": "assistant",
+        "content": "Tài liệu **Topic Speak** tập trung vào các nội dung trọng tâm sau:\n- **Tóm lược cốt lõi**: Tài liệu Topic Speak tập trung vào Topic 1: Describe a time when you were ill\n\nI would like to talk about a time when I was ill.\n- **Tổng quan thực nghiệm**: Về bài toán, Topic 1: Describe a time when you were ill\nI would like to talk about a time when I was ill. Topic 1: Describe a time when you were ill\n\nI would like to talk about a time when I was ill. Last year, I had the flu. I had a high fever, a headache, and a sore throat. [1]\n\n### Nguồn tham khảo\n[1] **Topic Speak** — Phần nội dung — Đoạn 1\n\n[2] **Topic Speak** — Phần nội dung — Đoạn 2\n\n[3] **Topic Speak** — Phần nội dung — Đoạn 3\n\n[4] **Topic Speak** — Phần nội dung — Đoạn 4\n\n[5] **Topic Speak** — Phần nội dung — Đoạn 5\n\n💡 **Câu hỏi tự học tiếp theo:**\n1. Những sáng kiến cải tiến quy trình làm việc gồm những gì?\n2. Các biện pháp khắc phục hạn chế, thiếu sót của bản thân là gì?\n3. Nội dung trọng tâm liên quan đến 'Các nhiệm vụ trọng tâm và mục tiêu phấn' gồm những gì?",
+        "timestamp": 1794280980.1169379,
+        "citations": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "DOC_1794280705781_b5d5c4::P000",
+            "document_id": "DOC_1794280705781_b5d5c4",
+            "document_title": "Topic Speak",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 1,
+            "score": 10.0,
+            "text": "Topic 1: Describe a time when you were ill I would like to talk about a time when I was ill. Last year, I had the flu. I had a high fever, a headache, and a sore throat. I also felt very tired and didn't want to do anything.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 2,
+            "citation_label": "[2]",
+            "passage_id": "DOC_1794280705781_b5d5c4::P001",
+            "document_id": "DOC_1794280705781_b5d5c4",
+            "document_title": "Topic Speak",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 2,
+            "score": 10.0,
+            "text": "The illness lasted for about four days. During that time, I stayed at home and took some medicine. My mother also prepared healthy food and reminded me to get enough rest. Because of this illness, I couldn't go to school or meet my friends.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 3,
+            "citation_label": "[3]",
+            "passage_id": "DOC_1794280705781_b5d5c4::P002",
+            "document_id": "DOC_1794280705781_b5d5c4",
+            "document_title": "Topic Speak",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 3,
+            "score": 10.0,
+            "text": "Because of this illness, I couldn't go to school or meet my friends. I also missed some lessons. It was not a good experience, but it taught me that health is very important. Since then, I have tried to eat healthy food and exercise regularly.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 4,
+            "citation_label": "[4]",
+            "passage_id": "DOC_1794280705781_b5d5c4::P003",
+            "document_id": "DOC_1794280705781_b5d5c4",
+            "document_title": "Topic Speak",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 4,
+            "score": 10.0,
+            "text": "Topic 2:Describe a famous person that you would like to meet I would like to talk about a famous person I want to meet. His name is Ludwig van Beethoven. He was a famous German composer and pianist.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 5,
+            "citation_label": "[5]",
+            "passage_id": "DOC_1794280705781_b5d5c4::P004",
+            "document_id": "DOC_1794280705781_b5d5c4",
+            "document_title": "Topic Speak",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 5,
+            "score": 10.0,
+            "text": "He is famous for creating many beautiful and powerful pieces of music. One interesting thing about him is that he continued composing music even after he became deaf. I want to meet him because I really admire his talent and determination.",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "evidence": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "DOC_1794280705781_b5d5c4::P000",
+            "document_id": "DOC_1794280705781_b5d5c4",
+            "document_title": "Topic Speak",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 1,
+            "score": 10.0,
+            "text": "Topic 1: Describe a time when you were ill I would like to talk about a time when I was ill. Last year, I had the flu. I had a high fever, a headache, and a sore throat. I also felt very tired and didn't want to do anything.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 2,
+            "citation_label": "[2]",
+            "passage_id": "DOC_1794280705781_b5d5c4::P001",
+            "document_id": "DOC_1794280705781_b5d5c4",
+            "document_title": "Topic Speak",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 2,
+            "score": 10.0,
+            "text": "The illness lasted for about four days. During that time, I stayed at home and took some medicine. My mother also prepared healthy food and reminded me to get enough rest. Because of this illness, I couldn't go to school or meet my friends.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 3,
+            "citation_label": "[3]",
+            "passage_id": "DOC_1794280705781_b5d5c4::P002",
+            "document_id": "DOC_1794280705781_b5d5c4",
+            "document_title": "Topic Speak",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 3,
+            "score": 10.0,
+            "text": "Because of this illness, I couldn't go to school or meet my friends. I also missed some lessons. It was not a good experience, but it taught me that health is very important. Since then, I have tried to eat healthy food and exercise regularly.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 4,
+            "citation_label": "[4]",
+            "passage_id": "DOC_1794280705781_b5d5c4::P003",
+            "document_id": "DOC_1794280705781_b5d5c4",
+            "document_title": "Topic Speak",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 4,
+            "score": 10.0,
+            "text": "Topic 2:Describe a famous person that you would like to meet I would like to talk about a famous person I want to meet. His name is Ludwig van Beethoven. He was a famous German composer and pianist.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 5,
+            "citation_label": "[5]",
+            "passage_id": "DOC_1794280705781_b5d5c4::P004",
+            "document_id": "DOC_1794280705781_b5d5c4",
+            "document_title": "Topic Speak",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 5,
+            "score": 10.0,
+            "text": "He is famous for creating many beautiful and powerful pieces of music. One interesting thing about him is that he continued composing music even after he became deaf. I want to meet him because I really admire his talent and determination.",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "telemetry": {
+          "input_tokens": 417,
+          "output_tokens": 555,
+          "total_tokens": 972,
+          "tokens_saved": 43,
+          "compression_ratio_pct": 10.51,
+          "total_latency_ms": 45.01,
+          "retrieval_ms": 1.65,
+          "generation_ms": 21.19
+        },
+        "routing": "DOCUMENT_SUMMARY",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {
+          "mode": "hybrid",
+          "method": "P2",
+          "routing": "DOCUMENT_SUMMARY",
+          "route_explanation": "Đã tổng hợp được ngữ cảnh toàn diện từ tài liệu.",
+          "effective_query": "Các nhiệm vụ trọng tâm và mục tiêu phấn đấu trong năm 2026 là gì?",
+          "is_follow_up": false,
+          "attached_document_count": 1,
+          "evidence_count": 5,
+          "dynamic_top_k": false,
+          "context_compression": {
+            "raw_context_tokens": 409,
+            "compressed_context_tokens": 366,
+            "tokens_saved": 43,
+            "compression_ratio_pct": 10.51
+          },
+          "refusal_reason": null,
+          "memory_level": "Level 3 (SA-CMS Gated Multi-Level)",
+          "suggested_questions": [
+            "Những sáng kiến cải tiến quy trình làm việc gồm những gì?",
+            "Các biện pháp khắc phục hạn chế, thiếu sót của bản thân là gì?",
+            "Nội dung trọng tâm liên quan đến 'Các nhiệm vụ trọng tâm và mục tiêu phấn' gồm những gì?"
+          ]
+        },
+        "suggested_questions": [
+          "Những sáng kiến cải tiến quy trình làm việc gồm những gì?",
+          "Các biện pháp khắc phục hạn chế, thiếu sót của bản thân là gì?",
+          "Nội dung trọng tâm liên quan đến 'Các nhiệm vụ trọng tâm và mục tiêu phấn' gồm những gì?"
+        ]
+      },
+      {
+        "id": "msg_b3c05f8ffc",
+        "role": "system",
+        "type": "document_attached",
+        "content": "Đã thêm tài liệu \"Cơ chế Bộ nhớ Đa quy mô và Khối Giao tiếp Liên cấp trong Mô hình Ngôn ngữ\" vào cuộc trò chuyện.",
+        "timestamp": 1794280999.0059593,
+        "metadata": {
+          "document_id": "DEMO_DOC_001",
+          "title": "Cơ chế Bộ nhớ Đa quy mô và Khối Giao tiếp Liên cấp trong Mô hình Ngôn ngữ",
+          "file_name": "Cơ chế Bộ nhớ Đa quy mô và Khối Giao tiếp Liên cấp trong Mô hình Ngôn ngữ",
+          "file_size": "Dung lượng không xác định",
+          "source": "library"
+        },
+        "citations": [],
+        "evidence": [],
+        "telemetry": {},
+        "routing": "SYSTEM_EVENT",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {}
+      },
+      {
+        "id": "msg_c7aacb858a",
+        "role": "user",
+        "content": "cơ chế bộ nhớ là gì",
+        "timestamp": 1794281012.533045,
+        "citations": [],
+        "evidence": [],
+        "telemetry": {},
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {},
+        "suggested_questions": []
+      },
+      {
+        "id": "msg_8eceeac9fa",
+        "role": "assistant",
+        "content": "**Nội dung cốt lõi:**\nCổng g_t nhận đầu vào là vector ẩn của tầng chú ý, điều tiết tỷ lệ thông tin bộ nhớ được đưa…. [1]\n\n📌 **Bối cảnh bổ sung:**\nKhông giống các cơ chế cộng dồn đơn giản, SA-CMS áp dụng công thức cổng thích ứng để kết hợp biểu diễn chú ý của backbone và đầu ra bộ nhớ tham số.\n\n### Nguồn tham khảo\n[1] **Cơ chế Bộ nhớ Đa quy mô và Khối Giao tiếp Liên cấp trong Mô hình Ngôn ngữ** — 2. Cơ chế Cổng Hòa trộn Phần dư (Gated Residual Blending) — Đoạn 1\n\n[2] **Cơ chế Bộ nhớ Đa quy mô và Khối Giao tiếp Liên cấp trong Mô hình Ngôn ngữ** — 2. Cơ chế Cổng Hòa trộn Phần dư (Gated Residual Blending) — Đoạn 2\n\n[3] **Cơ chế Bộ nhớ Đa quy mô và Khối Giao tiếp Liên cấp trong Mô hình Ngôn ngữ** — 1. Giới thiệu Kiến trúc Bộ nhớ Đa quy mô — Đoạn 3\n\n💡 **Câu hỏi tự học tiếp theo:**\n1. Nội dung trọng tâm liên quan đến 'Cơ chế Cổng Hòa trộn Phần dư (Gated Residual' gồm những gì?\n2. Những biện pháp chính được tài liệu đề xuất là gì?",
+        "timestamp": 1794281012.5543363,
+        "citations": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "DEMO_DOC_001::P004",
+            "document_id": "DEMO_DOC_001",
+            "document_title": "Cơ chế Bộ nhớ Đa quy mô và Khối Giao tiếp Liên cấp trong Mô hình Ngôn ngữ",
+            "section_title": "2. Cơ chế Cổng Hòa trộn Phần dư (Gated Residual Blending)",
+            "paragraph_index": 1,
+            "score": 24.2727,
+            "text": "Cơ chế Cổng Hòa trộn Phần dư (Gated Residual Blending) Không giống các cơ chế cộng dồn đơn giản, SA-CMS áp dụng công thức cổng thích ứng để kết hợp biểu diễn chú ý của backbone và đầu ra bộ nhớ tham số.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 2,
+            "citation_label": "[2]",
+            "passage_id": "DEMO_DOC_001::P005",
+            "document_id": "DEMO_DOC_001",
+            "document_title": "Cơ chế Bộ nhớ Đa quy mô và Khối Giao tiếp Liên cấp trong Mô hình Ngôn ngữ",
+            "section_title": "2. Cơ chế Cổng Hòa trộn Phần dư (Gated Residual Blending)",
+            "paragraph_index": 2,
+            "score": 20.8386,
+            "text": "Không giống các cơ chế cộng dồn đơn giản, SA-CMS áp dụng công thức cổng thích ứng để kết hợp biểu diễn chú ý của backbone và đầu ra bộ nhớ tham số. Cổng g_t nhận đầu vào là vector ẩn của tầng chú ý và điều tiết tỷ lệ thông tin bộ nhớ được đưa vào dòng biểu diễn chính.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 3,
+            "citation_label": "[3]",
+            "passage_id": "DEMO_DOC_001::P003",
+            "document_id": "DEMO_DOC_001",
+            "document_title": "Cơ chế Bộ nhớ Đa quy mô và Khối Giao tiếp Liên cấp trong Mô hình Ngôn ngữ",
+            "section_title": "1. Giới thiệu Kiến trúc Bộ nhớ Đa quy mô",
+            "paragraph_index": 3,
+            "score": 15.6082,
+            "text": "Tầng 2 (Level 2) cập nhật ở ranh giới phần mục (section), duy trì mạch lập luận và ngữ cảnh chủ đề. Tầng 3 (Level 3) đồng bộ ở ranh giới toàn bộ tài liệu (document), lưu trữ các thực thể cốt lõi. # 2. Cơ chế Cổng Hòa trộn Phần dư (Gated Residual Blending)",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "evidence": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "DEMO_DOC_001::P004",
+            "document_id": "DEMO_DOC_001",
+            "document_title": "Cơ chế Bộ nhớ Đa quy mô và Khối Giao tiếp Liên cấp trong Mô hình Ngôn ngữ",
+            "section_title": "2. Cơ chế Cổng Hòa trộn Phần dư (Gated Residual Blending)",
+            "paragraph_index": 1,
+            "score": 24.2727,
+            "text": "Cơ chế Cổng Hòa trộn Phần dư (Gated Residual Blending) Không giống các cơ chế cộng dồn đơn giản, SA-CMS áp dụng công thức cổng thích ứng để kết hợp biểu diễn chú ý của backbone và đầu ra bộ nhớ tham số.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 2,
+            "citation_label": "[2]",
+            "passage_id": "DEMO_DOC_001::P005",
+            "document_id": "DEMO_DOC_001",
+            "document_title": "Cơ chế Bộ nhớ Đa quy mô và Khối Giao tiếp Liên cấp trong Mô hình Ngôn ngữ",
+            "section_title": "2. Cơ chế Cổng Hòa trộn Phần dư (Gated Residual Blending)",
+            "paragraph_index": 2,
+            "score": 20.8386,
+            "text": "Không giống các cơ chế cộng dồn đơn giản, SA-CMS áp dụng công thức cổng thích ứng để kết hợp biểu diễn chú ý của backbone và đầu ra bộ nhớ tham số. Cổng g_t nhận đầu vào là vector ẩn của tầng chú ý và điều tiết tỷ lệ thông tin bộ nhớ được đưa vào dòng biểu diễn chính.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 3,
+            "citation_label": "[3]",
+            "passage_id": "DEMO_DOC_001::P003",
+            "document_id": "DEMO_DOC_001",
+            "document_title": "Cơ chế Bộ nhớ Đa quy mô và Khối Giao tiếp Liên cấp trong Mô hình Ngôn ngữ",
+            "section_title": "1. Giới thiệu Kiến trúc Bộ nhớ Đa quy mô",
+            "paragraph_index": 3,
+            "score": 15.6082,
+            "text": "Tầng 2 (Level 2) cập nhật ở ranh giới phần mục (section), duy trì mạch lập luận và ngữ cảnh chủ đề. Tầng 3 (Level 3) đồng bộ ở ranh giới toàn bộ tài liệu (document), lưu trữ các thực thể cốt lõi. # 2. Cơ chế Cổng Hòa trộn Phần dư (Gated Residual Blending)",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "telemetry": {
+          "input_tokens": 610,
+          "output_tokens": 700,
+          "total_tokens": 1310,
+          "tokens_saved": 0,
+          "compression_ratio_pct": 0.0,
+          "total_latency_ms": 16.02,
+          "retrieval_ms": 0.28,
+          "generation_ms": 8.44
+        },
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {
+          "mode": "hybrid",
+          "method": "P2",
+          "routing": "DIRECT_LOOKUP",
+          "route_explanation": "Đã tìm thấy bằng chứng xác thực trong tài liệu.",
+          "effective_query": "cơ chế bộ nhớ là gì",
+          "is_follow_up": false,
+          "attached_document_count": 1,
+          "evidence_count": 3,
+          "dynamic_top_k": true,
+          "context_compression": {
+            "raw_context_tokens": 593,
+            "compressed_context_tokens": 593,
+            "tokens_saved": 0,
+            "compression_ratio_pct": 0.0
+          },
+          "refusal_reason": null,
+          "memory_level": "Level 3 (SA-CMS Gated Multi-Level)",
+          "suggested_questions": [
+            "Nội dung trọng tâm liên quan đến 'Cơ chế Cổng Hòa trộn Phần dư (Gated Residual' gồm những gì?",
+            "Những biện pháp chính được tài liệu đề xuất là gì?"
+          ]
+        },
+        "suggested_questions": [
+          "Nội dung trọng tâm liên quan đến 'Cơ chế Cổng Hòa trộn Phần dư (Gated Residual' gồm những gì?",
+          "Những biện pháp chính được tài liệu đề xuất là gì?"
+        ]
+      },
+      {
+        "id": "msg_d253c76220",
+        "role": "user",
+        "content": "Nội dung trọng tâm liên quan đến 'Cơ chế Cổng Hòa trộn Phần dư (Gated Residual' gồm những gì?",
+        "timestamp": 1794281047.4512584,
+        "citations": [],
+        "evidence": [],
+        "telemetry": {},
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {},
+        "suggested_questions": []
+      },
+      {
+        "id": "msg_f53535f63b",
+        "role": "assistant",
+        "content": "Tài liệu **Cơ chế Bộ nhớ Đa quy mô và Khối Giao tiếp Liên cấp trong Mô hình Ngôn ngữ** tập trung vào các nội dung trọng tâm sau:\n- **Tóm lược cốt lõi**: Tài liệu Cơ chế Bộ nhớ Đa quy mô và Khối Giao tiếp Liên cấp trong Mô hình Ngôn ngữ tập trung vào Giới thiệu Kiến trúc Bộ nhớ Đa quy mô\n\nTrong các mô hình ngôn ngữ hiện đại, việc xử lý văn bản dài thường gặp thách thức.\n- **Tổng quan thực nghiệm**: Về bài toán, Trong các mô hình ngôn ngữ hiện đại, việc xử lý văn bản dài thường gặp thách thức lớn về chi phí bộ nhớ và sự suy giảm chú ý (attention dilution). Về giải pháp, Không giống các cơ chế cộng dồn đơn giản, SA-CMS áp dụng công thức cổng thích ứng để kết hợp biểu diễn chú ý của backbone và đầu ra bộ nhớ tham số. Về thực nghiệm, Bằng cách nén thông tin lịch sử tài liệu vào các ma trận bộ nhớ, hệ thống cho phép mô hình trả lời các truy vấn mà không cần nhồi toàn bộ văn bản 10,000 token vào context window. [1]\n\n### Nguồn tham khảo\n[1] **Cơ chế Bộ nhớ Đa quy mô và Khối Giao tiếp Liên cấp trong Mô hình Ngôn ngữ** — 1. Giới thiệu Kiến trúc Bộ nhớ Đa quy mô — Đoạn 1\n\n[2] **Cơ chế Bộ nhớ Đa quy mô và Khối Giao tiếp Liên cấp trong Mô hình Ngôn ngữ** — 1. Giới thiệu Kiến trúc Bộ nhớ Đa quy mô — Đoạn 2\n\n[3] **Cơ chế Bộ nhớ Đa quy mô và Khối Giao tiếp Liên cấp trong Mô hình Ngôn ngữ** — 1. Giới thiệu Kiến trúc Bộ nhớ Đa quy mô — Đoạn 3\n\n[4] **Cơ chế Bộ nhớ Đa quy mô và Khối Giao tiếp Liên cấp trong Mô hình Ngôn ngữ** — 1. Giới thiệu Kiến trúc Bộ nhớ Đa quy mô — Đoạn 4\n\n[5] **Cơ chế Bộ nhớ Đa quy mô và Khối Giao tiếp Liên cấp trong Mô hình Ngôn ngữ** — 2. Cơ chế Cổng Hòa trộn Phần dư (Gated Residual Blending) — Đoạn 5\n\n💡 **Câu hỏi tự học tiếp theo:**\n1. Nội dung trọng tâm liên quan đến 'Giới thiệu Kiến trúc Bộ nhớ Đa quy mô' gồm những gì?\n2. Những biện pháp chính được tài liệu đề xuất là gì?",
+        "timestamp": 1794281047.4703455,
+        "citations": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "DEMO_DOC_001::P000",
+            "document_id": "DEMO_DOC_001",
+            "document_title": "Cơ chế Bộ nhớ Đa quy mô và Khối Giao tiếp Liên cấp trong Mô hình Ngôn ngữ",
+            "section_title": "1. Giới thiệu Kiến trúc Bộ nhớ Đa quy mô",
+            "paragraph_index": 1,
+            "score": 10.0,
+            "text": "# 1. Giới thiệu Kiến trúc Bộ nhớ Đa quy mô Trong các mô hình ngôn ngữ hiện đại, việc xử lý văn bản dài thường gặp thách thức lớn về chi phí bộ nhớ và sự suy giảm chú ý (attention dilution).",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 2,
+            "citation_label": "[2]",
+            "passage_id": "DEMO_DOC_001::P001",
+            "document_id": "DEMO_DOC_001",
+            "document_title": "Cơ chế Bộ nhớ Đa quy mô và Khối Giao tiếp Liên cấp trong Mô hình Ngôn ngữ",
+            "section_title": "1. Giới thiệu Kiến trúc Bộ nhớ Đa quy mô",
+            "paragraph_index": 2,
+            "score": 10.0,
+            "text": "Trong các mô hình ngôn ngữ hiện đại, việc xử lý văn bản dài thường gặp thách thức lớn về chi phí bộ nhớ và sự suy giảm chú ý (attention dilution). Hệ thống bộ nhớ liên tục (Continuum Memory System - CMS) giải quyết vấn đề này bằng cách thiết lập nhiều tầng bộ nhớ tham số hoạt động ở các chu kỳ thời gian khác nhau.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 3,
+            "citation_label": "[3]",
+            "passage_id": "DEMO_DOC_001::P002",
+            "document_id": "DEMO_DOC_001",
+            "document_title": "Cơ chế Bộ nhớ Đa quy mô và Khối Giao tiếp Liên cấp trong Mô hình Ngôn ngữ",
+            "section_title": "1. Giới thiệu Kiến trúc Bộ nhớ Đa quy mô",
+            "paragraph_index": 3,
+            "score": 10.0,
+            "text": "Tầng 1 (Level 1) chịu trách nhiệm thích ứng ở cấp độ đoạn văn (paragraph), bắt giữ các chuyển tiếp cục bộ và từ vựng ngắn hạn. Tầng 2 (Level 2) cập nhật ở ranh giới phần mục (section), duy trì mạch lập luận và ngữ cảnh chủ đề.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 4,
+            "citation_label": "[4]",
+            "passage_id": "DEMO_DOC_001::P003",
+            "document_id": "DEMO_DOC_001",
+            "document_title": "Cơ chế Bộ nhớ Đa quy mô và Khối Giao tiếp Liên cấp trong Mô hình Ngôn ngữ",
+            "section_title": "1. Giới thiệu Kiến trúc Bộ nhớ Đa quy mô",
+            "paragraph_index": 4,
+            "score": 10.0,
+            "text": "Tầng 2 (Level 2) cập nhật ở ranh giới phần mục (section), duy trì mạch lập luận và ngữ cảnh chủ đề. Tầng 3 (Level 3) đồng bộ ở ranh giới toàn bộ tài liệu (document), lưu trữ các thực thể cốt lõi. # 2. Cơ chế Cổng Hòa trộn Phần dư (Gated Residual Blending)",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 5,
+            "citation_label": "[5]",
+            "passage_id": "DEMO_DOC_001::P004",
+            "document_id": "DEMO_DOC_001",
+            "document_title": "Cơ chế Bộ nhớ Đa quy mô và Khối Giao tiếp Liên cấp trong Mô hình Ngôn ngữ",
+            "section_title": "2. Cơ chế Cổng Hòa trộn Phần dư (Gated Residual Blending)",
+            "paragraph_index": 5,
+            "score": 10.0,
+            "text": "Cơ chế Cổng Hòa trộn Phần dư (Gated Residual Blending) Không giống các cơ chế cộng dồn đơn giản, SA-CMS áp dụng công thức cổng thích ứng để kết hợp biểu diễn chú ý của backbone và đầu ra bộ nhớ tham số.",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "evidence": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "DEMO_DOC_001::P000",
+            "document_id": "DEMO_DOC_001",
+            "document_title": "Cơ chế Bộ nhớ Đa quy mô và Khối Giao tiếp Liên cấp trong Mô hình Ngôn ngữ",
+            "section_title": "1. Giới thiệu Kiến trúc Bộ nhớ Đa quy mô",
+            "paragraph_index": 1,
+            "score": 10.0,
+            "text": "# 1. Giới thiệu Kiến trúc Bộ nhớ Đa quy mô Trong các mô hình ngôn ngữ hiện đại, việc xử lý văn bản dài thường gặp thách thức lớn về chi phí bộ nhớ và sự suy giảm chú ý (attention dilution).",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 2,
+            "citation_label": "[2]",
+            "passage_id": "DEMO_DOC_001::P001",
+            "document_id": "DEMO_DOC_001",
+            "document_title": "Cơ chế Bộ nhớ Đa quy mô và Khối Giao tiếp Liên cấp trong Mô hình Ngôn ngữ",
+            "section_title": "1. Giới thiệu Kiến trúc Bộ nhớ Đa quy mô",
+            "paragraph_index": 2,
+            "score": 10.0,
+            "text": "Trong các mô hình ngôn ngữ hiện đại, việc xử lý văn bản dài thường gặp thách thức lớn về chi phí bộ nhớ và sự suy giảm chú ý (attention dilution). Hệ thống bộ nhớ liên tục (Continuum Memory System - CMS) giải quyết vấn đề này bằng cách thiết lập nhiều tầng bộ nhớ tham số hoạt động ở các chu kỳ thời gian khác nhau.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 3,
+            "citation_label": "[3]",
+            "passage_id": "DEMO_DOC_001::P002",
+            "document_id": "DEMO_DOC_001",
+            "document_title": "Cơ chế Bộ nhớ Đa quy mô và Khối Giao tiếp Liên cấp trong Mô hình Ngôn ngữ",
+            "section_title": "1. Giới thiệu Kiến trúc Bộ nhớ Đa quy mô",
+            "paragraph_index": 3,
+            "score": 10.0,
+            "text": "Tầng 1 (Level 1) chịu trách nhiệm thích ứng ở cấp độ đoạn văn (paragraph), bắt giữ các chuyển tiếp cục bộ và từ vựng ngắn hạn. Tầng 2 (Level 2) cập nhật ở ranh giới phần mục (section), duy trì mạch lập luận và ngữ cảnh chủ đề.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 4,
+            "citation_label": "[4]",
+            "passage_id": "DEMO_DOC_001::P003",
+            "document_id": "DEMO_DOC_001",
+            "document_title": "Cơ chế Bộ nhớ Đa quy mô và Khối Giao tiếp Liên cấp trong Mô hình Ngôn ngữ",
+            "section_title": "1. Giới thiệu Kiến trúc Bộ nhớ Đa quy mô",
+            "paragraph_index": 4,
+            "score": 10.0,
+            "text": "Tầng 2 (Level 2) cập nhật ở ranh giới phần mục (section), duy trì mạch lập luận và ngữ cảnh chủ đề. Tầng 3 (Level 3) đồng bộ ở ranh giới toàn bộ tài liệu (document), lưu trữ các thực thể cốt lõi. # 2. Cơ chế Cổng Hòa trộn Phần dư (Gated Residual Blending)",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 5,
+            "citation_label": "[5]",
+            "passage_id": "DEMO_DOC_001::P004",
+            "document_id": "DEMO_DOC_001",
+            "document_title": "Cơ chế Bộ nhớ Đa quy mô và Khối Giao tiếp Liên cấp trong Mô hình Ngôn ngữ",
+            "section_title": "2. Cơ chế Cổng Hòa trộn Phần dư (Gated Residual Blending)",
+            "paragraph_index": 5,
+            "score": 10.0,
+            "text": "Cơ chế Cổng Hòa trộn Phần dư (Gated Residual Blending) Không giống các cơ chế cộng dồn đơn giản, SA-CMS áp dụng công thức cổng thích ứng để kết hợp biểu diễn chú ý của backbone và đầu ra bộ nhớ tham số.",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "telemetry": {
+          "input_tokens": 1006,
+          "output_tokens": 1328,
+          "total_tokens": 2334,
+          "tokens_saved": 1,
+          "compression_ratio_pct": 0.11,
+          "total_latency_ms": 15.64,
+          "retrieval_ms": 1.05,
+          "generation_ms": 12.13
+        },
+        "routing": "DOCUMENT_SUMMARY",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {
+          "mode": "hybrid",
+          "method": "P2",
+          "routing": "DOCUMENT_SUMMARY",
+          "route_explanation": "Đã tổng hợp được ngữ cảnh toàn diện từ tài liệu.",
+          "effective_query": "Nội dung trọng tâm liên quan đến 'Cơ chế Cổng Hòa trộn Phần dư (Gated Residual' gồm những gì?",
+          "is_follow_up": false,
+          "attached_document_count": 1,
+          "evidence_count": 5,
+          "dynamic_top_k": false,
+          "context_compression": {
+            "raw_context_tokens": 941,
+            "compressed_context_tokens": 940,
+            "tokens_saved": 1,
+            "compression_ratio_pct": 0.11
+          },
+          "refusal_reason": null,
+          "memory_level": "Level 3 (SA-CMS Gated Multi-Level)",
+          "suggested_questions": [
+            "Nội dung trọng tâm liên quan đến 'Giới thiệu Kiến trúc Bộ nhớ Đa quy mô' gồm những gì?",
+            "Những biện pháp chính được tài liệu đề xuất là gì?"
+          ]
+        },
+        "suggested_questions": [
+          "Nội dung trọng tâm liên quan đến 'Giới thiệu Kiến trúc Bộ nhớ Đa quy mô' gồm những gì?",
+          "Những biện pháp chính được tài liệu đề xuất là gì?"
+        ]
+      },
+      {
+        "id": "msg_be3efc5a97",
+        "role": "user",
+        "content": "Những biện pháp chính được tài liệu đề xuất là gì?",
+        "timestamp": 1794281049.1937275,
+        "citations": [],
+        "evidence": [],
+        "telemetry": {},
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {},
+        "suggested_questions": []
+      },
+      {
+        "id": "msg_a9aac743d1",
+        "role": "assistant",
+        "content": "Tài liệu không có thông tin hoặc chưa đủ căn cứ. Không tìm thấy đủ thông tin trong tài liệu để trả lời chắc chắn.",
+        "timestamp": 1794281049.205855,
+        "citations": [],
+        "evidence": [],
+        "telemetry": {
+          "input_tokens": 73,
+          "output_tokens": 82,
+          "total_tokens": 155,
+          "tokens_saved": 0,
+          "compression_ratio_pct": 0.0,
+          "total_latency_ms": 5.86,
+          "retrieval_ms": 0.29,
+          "generation_ms": 4.07
+        },
+        "routing": "DIRECT_LOOKUP",
+        "refused": true,
+        "refusal_reason": "insufficient_coverage",
+        "diagnostics": {
+          "mode": "hybrid",
+          "method": "P2",
+          "routing": "DIRECT_LOOKUP",
+          "route_explanation": "Đã tìm thấy bằng chứng xác thực trong tài liệu.",
+          "effective_query": "Những biện pháp chính được tài liệu đề xuất là gì?",
+          "is_follow_up": false,
+          "attached_document_count": 1,
+          "evidence_count": 0,
+          "dynamic_top_k": true,
+          "context_compression": {
+            "raw_context_tokens": 389,
+            "compressed_context_tokens": 389,
+            "tokens_saved": 0,
+            "compression_ratio_pct": 0.0
+          },
+          "refusal_reason": "insufficient_coverage",
+          "memory_level": "Level 3 (SA-CMS Gated Multi-Level)",
+          "suggested_questions": []
+        },
+        "suggested_questions": []
+      }
+    ]
   }
 ]

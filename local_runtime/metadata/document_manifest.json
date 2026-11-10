@@ -1026,6 +1026,71 @@
       "index_path": "local_runtime/indexes/bm25_index.json",
       "memory_snapshot": "snap_1794232413_ca803b",
       "status": "READY"
+    },
+    "DOC_1794280023604_72091b": {
+      "document_id": "DOC_1794280023604_72091b",
+      "filename": "chủ_đề_viết.docx",
+      "file_hash": "746cac72870ccd5175b23b189cb64b699833dd98c771a4baa6985192ced23475",
+      "file_type": "docx",
+      "file_size": 2766,
+      "version": 1,
+      "created_at": "2026-11-10T03:07:03Z",
+      "parsed_path": "local_runtime/parsed/DOC_1794280023604_72091b.json",
+      "index_path": "local_runtime/indexes/bm25_index.json",
+      "memory_snapshot": "snap_1794280025_ba6406",
+      "status": "READY"
+    },
+    "DOC_1794280097936_811399": {
+      "document_id": "DOC_1794280097936_811399",
+      "filename": "alooo.txt",
+      "file_hash": "ffffd69c97617594412e8a230264a2c9d3231f2fe6f533e91443070ef96ea819",
+      "file_type": "txt",
+      "file_size": 30,
+      "version": 1,
+      "created_at": "2026-11-10T03:08:17Z",
+      "parsed_path": "local_runtime/parsed/DOC_1794280097936_811399.json",
+      "index_path": "local_runtime/indexes/bm25_index.json",
+      "memory_snapshot": "snap_1794280098_34932c",
+      "status": "READY"
+    },
+    "DOC_1794280669223_adc62f": {
+      "document_id": "DOC_1794280669223_adc62f",
+      "filename": "Đề_cương_Chatbot_hỏi_đáp_trên_tài_liệu_với_bộ_nhớ_đa_thang_dựa_trên_Nested_Learning.docx",
+      "file_hash": "391a654e653624eca349e946f60b43279812732d3bca27dab57786d5280b1ffe",
+      "file_type": "docx",
+      "file_size": 14079,
+      "version": 1,
+      "created_at": "2026-11-10T03:17:49Z",
+      "parsed_path": "local_runtime/parsed/DOC_1794280669223_adc62f.json",
+      "index_path": "local_runtime/indexes/bm25_index.json",
+      "memory_snapshot": "snap_1794280700_20282a",
+      "status": "READY"
+    },
+    "DOC_1794280700582_d53f96": {
+      "document_id": "DOC_1794280700582_d53f96",
+      "filename": "Topic_speak.docx",
+      "file_hash": "e3add3eb98a3b911b41ae77ae55e4cd62c8048cdfc8f3dfc67cb1c7c7b42f8ac",
+      "file_type": "docx",
+      "file_size": 4441,
+      "version": 1,
+      "created_at": "2026-11-10T03:18:20Z",
+      "parsed_path": "local_runtime/parsed/DOC_1794280700582_d53f96.json",
+      "index_path": "local_runtime/indexes/bm25_index.json",
+      "memory_snapshot": "snap_1794280705_13ee36",
+      "status": "READY"
+    },
+    "DOC_1794280705781_b5d5c4": {
+      "document_id": "DOC_1794280705781_b5d5c4",
+      "filename": "Topic_speak.docx",
+      "file_hash": "e3add3eb98a3b911b41ae77ae55e4cd62c8048cdfc8f3dfc67cb1c7c7b42f8ac",
+      "file_type": "docx",
+      "file_size": 4441,
+      "version": 1,
+      "created_at": "2026-11-10T03:18:25Z",
+      "parsed_path": "local_runtime/parsed/DOC_1794280705781_b5d5c4.json",
+      "index_path": "local_runtime/indexes/bm25_index.json",
+      "memory_snapshot": "snap_1794280710_b5807c",
+      "status": "READY"
     }
   }
 }

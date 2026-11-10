@@ -625,3 +625,7 @@ python scripts/run_training.py --seed 44
 
 ---
 *Ghi chú: Giữ nguyên toàn bộ cam kết khoa học, trọng số đã huấn luyện (`checkpoints/phase4_*`, `training_output_final/`, `cms_3lvl_seed_42.pt`) và kết quả thực nghiệm Phase 4 (`results/phase4_*`). Giao diện NL DocChat và các checkpoints mở rộng (`cms_3lvl_full_dataset.pt`, `cms_3lvl_extended.pt`) đã hoàn thiện đồng bộ.*
+
+
+
+hơi ít câu hỏi với lỗi những biện pháp đề xuất chính không có thể đọc được nội dung

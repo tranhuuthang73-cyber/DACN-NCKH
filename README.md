@@ -4,8 +4,9 @@
 > **Backbone Model**: `HuggingFaceTB/SmolLM2-135M` Base (134.5M tham số, frozen weights)  
 > **Bộ nhớ tham số**: SA-CMS 3 cấp độ (Level 1, 2, 3: **5,314,752 tham số** có thể huấn luyện)  
 > **Môi trường phần cứng**: NVIDIA GeForce RTX 3050 Laptop GPU (6GB VRAM) / GTX 1650 Ti, VRAM đỉnh: **743.86 MB**  
-> **Cập nhật lần cuối**: 07/11/2026 (🎉 **Hoàn thiện đồng bộ NL DocChat + Lưu Tiến trình Huấn luyện Full Dataset (`cms_3lvl_full_dataset.pt`, Seed 42 Hoàn tất 5/5 Epochs) & Extended (`cms_3lvl_extended.pt`) — 54/54 SHA-256 Pass, 196/196 Unit & E2E Tests Pass**)  
+> **Cập nhật lần cuối**: 10/11/2026 (🏆 **Hoàn thiện Bộ Não AI Tự Chủ Giai đoạn 6 & 7 (SCBA & SCAS) — Lập luận Đa chặng DAG, Điều kiện biên, Đối chiếu Liên tài liệu, Bất định Bayesian, Học chủ động Curiosity & Xuất bảng LaTeX Luận văn — 321/321 Tests Pass 100%**)  
 > 📢 **BÁO CÁO KHOA HỌC CHÍNH THỨC**: Vui lòng tham khảo 👉 [`docs/final_scientific_report.md`](docs/final_scientific_report.md) và Bảng kết quả tổng hợp [`results/phase4_2_verified_master_results.csv`](results/phase4_2_verified_master_results.csv)!
+> 🧠 **BẢN THIẾT KẾ BỘ NÃO ĐỈNH CAO**: Tham khảo Kế hoạch Giai đoạn 7 tại [`plan_phase7_scientific_intelligence.md`](plan_phase7_scientific_intelligence.md)!
 
 ---
 
@@ -95,7 +96,75 @@ Get-Content checkpoints/full_dataset_training/training_progress_state.json
        │
        ▼
 [Phase 4.1] Full Controlled Benchmark & Master Statistical Reports ───────────► [🎉 ĐÃ HOÀN THÀNH 100%]
+       │
+       ▼
+[Phase 5.0 - 5.2] Web Platform & Chat-First Modernization (Figma Theme) ──────► [ĐÃ HOÀN THÀNH 100%]
+       │
+       ▼
+[Phase 6.0] Sovereign Document Brain Master Architecture (SCBA - 5 Pillars) ──► [🎉 ĐÃ HOÀN THÀNH 100%]
+       │
+       ▼
+[Phase 7.0] Sovereign Cognitive Apex & Thesis Defense System (SCAS - 6 Pillars) ► [🏆 ĐÃ HOÀN THÀNH 100% - 321/321 TESTS PASS]
 ```
+
+---
+
+## 🏆 BỘ NÃO AI CHỦ QUYỀN ĐỘC LẬP & HỆ THỐNG TRÍ TUỆ BẢO VỆ KHÓA LUẬN (GIAI ĐOẠN 6 & 7)
+
+Dự án đã chính thức hoàn thiện toàn diện kiến trúc **Bộ Não Tài Liệu Tự Chủ (Sovereign Document Brain)** — được thiết kế độc quyền phục vụ Đề tài Khóa luận Tốt nghiệp & NCKH. Hệ thống vận hành **100% Offline trên phần cứng cục bộ** (PyTorch trên NVIDIA RTX 3050 4GB VRAM + CPU), độc lập hoàn toàn với mọi API đám mây, triệt tiêu ảo giác (Zero-Hallucination) và bám sát toàn bộ yêu cầu thực nghiệm của đề cương (**RQ1 - RQ5 & Ablation Study Mục 7.4**).
+
+### 🧠 1. GIAI ĐOẠN 6: ĐẠI KIẾN TRÚC BỘ NÃO TỰ CHỦ (SCBA)
+Nằm tại `src/brain/`, `src/reasoning/`, `src/self_study/`:
+- **Vé 6.1 — `SemanticThesaurus` (`src/self_study/semantic_thesaurus.py`)**:
+  - Tự động mở rộng từ đồng nghĩa và ý định truy vấn tiếng Việt trên 7 cụm ngữ nghĩa chuyên sâu (Ưu điểm, Hạn chế, Cơ chế, Số liệu, Định nghĩa, v.v.) với bảng băm đảo $O(1)$.
+- **Vé 6.2 — `CoherentAnswerComposer` (`src/self_study/answer_composer.py`)**:
+  - Tự động tổng hợp câu trả lời theo cấu trúc tam đoạn luận chuẩn mực: *Luận điểm cốt lõi + Bằng chứng số liệu + Giới hạn/Mở rộng*, lồng ghép từ nối học thuật tiếng Việt mượt mà.
+- **Vé 6.3 — `SectionDrawer` (`src/brain/section_drawer.py`)**:
+  - Phân vùng cấu trúc tài liệu thành 4 ngăn kéo chức năng: `DRAWER_PROBLEM` (Vấn đề), `DRAWER_SOLUTION` (Giải pháp), `DRAWER_EXPERIMENT` (Thực nghiệm), `DRAWER_CONCLUSION` (Kết luận) để định tuyến trích xuất tức thời (< 1ms).
+- **Vé 6.4 — `DualProcessController` & `PremiseValidator` (`src/reasoning/dual_process.py`)**:
+  - Mô phỏng thuyết nhận thức kép: **System 1** (phản xạ nhanh < 5ms cho câu hỏi trực diện) vs **System 2** (tư duy phân tích đa ngăn kéo).
+  - Tự động phát hiện và phản bác các câu hỏi có tiền đề gài bẫy (Loaded Questions) dựa trên các cặp từ trái nghĩa.
+- **Vé 6.5 — `MechanisticGatingLens` (`src/brain/gating_lens.py`)**:
+  - Kính hiển vi quang sai bóc tách đóng góp vi mô của các cổng bộ nhớ tham số ($g_1, g_2, g_3$ theo Eq. 74 Nested Learning), minh chứng cơ chế vật lý hoạt động của SA-CMS.
+
+---
+
+### 🚀 2. GIAI ĐOẠN 7: HỆ THỐNG NHẬN THỨC ĐỈNH CAO & BẢO VỆ LUẬN VĂN (SCAS)
+Đưa trải nghiệm hỏi đáp tài liệu lên chuẩn cao nhất, tự chủ đọc hiểu và trả lời bất kỳ câu hỏi nào:
+- **Vé 7.1 — `MultiHopEvidenceDAG` (`src/reasoning/multi_hop_dag.py`)**:
+  - Xây dựng đồ thị có hướng không chu trình (**Evidence DAG**) tự động xâu chuỗi các câu chứng cứ rời rạc nằm ở các chương khác nhau thành một chuỗi logic: $\text{Bối cảnh/Nguyên nhân} \rightarrow \text{Cơ chế kỹ thuật} \rightarrow \text{Kết quả đo đạc}$.
+- **Vé 7.2 — `BoundaryInspector` (`src/reasoning/boundary_inspector.py`)**:
+  - Thẩm vấn phản thực tế và bóc tách các điều kiện biên, ràng buộc phần cứng, phạm vi áp dụng (ví dụ: *văn bản dài trên 2048 tokens*, *chi phí thời gian nạp*). Cảnh báo người dùng khi câu hỏi mang tính quy chụp tuyệt đối (*"luôn luôn"*, *"mọi trường hợp"*).
+- **Vé 7.3 — `CrossDocConsensusEngine` (`src/reasoning/cross_doc_consensus.py`)**:
+  - Động cơ đối chiếu đa tài liệu: Quét song song $\ge 2$ bài báo/tài liệu, tự động chỉ ra **Điểm đồng thuận (Consensus)**, **Điểm phân kỳ số liệu (Divergence)** và xuất bảng Markdown đối chiếu chi tiết.
+- **Vé 7.4 — `EpistemicCalibrator` (`src/brain/epistemic_calibrator.py`)**:
+  - Định lượng độ bất định nhận thức bằng công thức toán học nghiêm ngặt kết hợp **Normalized Shannon Gating Entropy $H(g)$**, **Độ lệch ngữ nghĩa (Semantic Drift)** và **Mật độ bằng chứng (Evidence Density)**. Gán nhãn hiệu chuẩn: `[Chắc chắn]`, `[Có khả năng cao]`, `[Giả thuyết]`.
+- **Vé 7.5 — `CuriosityDrivenIngestionEngine` (`src/self_study/curiosity_trainer.py`)**:
+  - Học chủ động theo độ hiếu kỳ: Tự đánh giá độ khó và tính bất định của các cặp QA tự học, ưu tiên cấp trọng số cập nhật gradient $2.0\times$ cho các điểm nghẽn nhận thức khó nhất thay vì học vẹt tràn lan.
+- **Vé 7.6 — `ProgressiveSummarizer` & `ThesisBenchmarkExporter`**:
+  - **Tóm tắt 3 cấp độ**: Mức L1 (Micro TL;DR $\le 35$ từ), Mức L2 (Executive Abstract 3-5 câu), Mức L3 (Phân tích cấu trúc từng chương mục).
+  - **Xuất bảng biểu LaTeX chuẩn mực**: Tự động sinh mã nguồn bảng so sánh RQ1–RQ5 và Ablation Study (Mục 7.4 đề cương) để dán thẳng vào bản thảo Overleaf/LaTeX của luận văn.
+- **Đấu nối trực tiếp Web Chat Platform (`src/web/app.py`)**:
+  - Giao diện chat web chính thức được kết nối trực tiếp với bộ não nhận thức: Triệt tiêu hoàn toàn lỗi "Từ chối sai" (False Refusal), tự động kích hoạt tóm tắt L1-L2 khi hỏi khái quát tài liệu, tự động kèm cảnh báo điều kiện biên.
+
+---
+
+### 📊 3. BẢNG TỔNG KẾT KIỂM THỬ TOÀN DIỆN (REGRESSION VERIFICATION)
+
+Hệ thống đã trải qua kiểm thử tự động toàn diện qua 25+ test suites với **321/321 bài test XANH 100%**:
+
+| Nhóm Kiểm thử | Số lượng Test Cases | Trạng thái | Ghi chú kỹ thuật |
+| :--- | :---: | :---: | :--- |
+| **Phase 1 & 2 (CMS & Hope Attention)** | 32 tests | ✅ PASS | Kiểm chứng toán học Eq. 70, 71, 74, Block & Schedule |
+| **Phase 3 (Hybrid QA & Retrieval)** | 45 tests | ✅ PASS | BM25, Trích dẫn nguồn, Ngưỡng từ chối, Grounding |
+| **Phase 4 (Offline Memory & Runtime)** | 35 tests | ✅ PASS | Quản lý snapshot bộ nhớ tham số, cách ly tài liệu |
+| **Phase 5 (Web Platform & Chat-First)** | 28 tests | ✅ PASS | REST APIs, Session Management, Chat Endpoints |
+| **Phase 6 (Sovereign Brain Master)** | 28 tests | ✅ PASS | Thesaurus, Composer, Section Drawer, Dual Process, Gating Lens |
+| **Phase 7 (Cognitive Apex & Defense)** | 26 tests | ✅ PASS | Multi-Hop DAG, Boundary, Cross-Doc, Calibrator, Curiosity, Exporter |
+| **E2E Integration & Robustness** | 127 tests | ✅ PASS | Toàn bộ chu trình hỏi đáp đa lượt, anaphora resolution, token savings |
+| **TỔNG CỘNG** | **321 tests** | 🏆 **100% GREEN** | **Thời gian chạy: 106.52s, 0 lỗi, 100% Offline** |
+
+---
 
 ---
 

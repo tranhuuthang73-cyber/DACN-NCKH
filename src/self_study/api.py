@@ -356,16 +356,42 @@ async def ask_neural_reader(req: AskSelfStudyRequest):
             new_words = len(c["text"].split())
             tokens_saved_by_entropy += max(0, orig_words - new_words)
 
-    # 5. Read and synthesize with NeuralReaderEngine
+    # 5. Dual-Process Reasoning & Grounded Synthesis (Ticket 6.4)
+    from src.reasoning.dual_process import DualProcessController
     reader = get_reader()
-    res: NeuralReaderResult = reader.synthesize(
+    dual_controller = DualProcessController(reader_engine=reader)
+    dual_res = dual_controller.execute(
         query=resolved_query,
         passages=citations_data,
         answer_mode=req.answer_mode,
-        include_followup=True,
     )
 
-    out_dict = res.to_dict()
+    if dual_res.is_refutation:
+        out_dict = {
+            "core_answer": dual_res.core_span,
+            "composed_answer": dual_res.final_answer,
+            "key_points": [dual_res.final_answer],
+            "formatted_answer": dual_res.final_answer,
+            "citations": citations_data,
+            "intent": "PREMISE_REFUTATION",
+            "confidence": dual_res.confidence,
+            "is_grounded": True,
+            "tokens_used": int(len(dual_res.final_answer.split()) * 1.3),
+            "latency_ms": dual_res.latency_ms,
+            "followup_questions": [],
+            "process_mode": dual_res.process_mode,
+            "reasoning_trace": dual_res.reasoning_trace,
+        }
+    else:
+        res: NeuralReaderResult = reader.synthesize(
+            query=resolved_query,
+            passages=citations_data,
+            answer_mode=req.answer_mode,
+            include_followup=True,
+        )
+        out_dict = res.to_dict()
+        out_dict["process_mode"] = dual_res.process_mode
+        out_dict["reasoning_trace"] = dual_res.reasoning_trace
 
     # 6. Calibrated Meta-Cognition epistemic verification
     if req.use_meta_cognition:

@@ -76,9 +76,9 @@ LIMITATION_CUES = (
 )
 
 NUMBER_RE = re.compile(
-    r"\d+\s*[-–—]\s*\d+"                    # ranges such as 2024-2030
+    r"(?<!\w)(?:\d+\s*[-–—]\s*\d+"                    # ranges such as 2024-2030
     r"|\d+(?:[.,]\d+)?\s*(?:%|phần\s*trăm|token[s]?|ms|giây|phút|giờ|"
-    r"gb|mb|kb|mw|kw|triệu|tỷ|nghìn|đồng|usd|vnd)?",
+    r"gb|mb|kb|mw|kw|triệu|tỷ|nghìn|đồng|usd|vnd)?)(?!\w)",
     re.IGNORECASE,
 )
 

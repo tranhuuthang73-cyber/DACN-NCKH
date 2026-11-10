@@ -104,8 +104,10 @@ def detect_query_intent(query: str) -> str:
         return "SUMMARY"
     if any(k in q for k in ["han che", "nhuoc diem", "thach thuc", "kho khan", "limitation", "drawback", "weakness", "rui ro"]):
         return "LIMITATION"
-    if any(k in q for k in ["uu diem", "uu the", "loi the", "loi ich", "the manh", "advantage", "benefit"]):
+    if any(k in q for k in ["uu diem", "uu the", "loi the", "loi ich", "the manh", "giup ich", "tac dung", "advantage", "benefit"]):
         return "ADVANTAGE"
+    if any(k in q for k in ["tai sao", "vi sao", "nguyen nhan", "ly do", "dong luc", "why", "reason"]):
+        return "CAUSE"
     if any(k in q for k in ["bao nhieu", "may ", "ty le", "ti le", "phan tram", "chi phi", "thoi gian", "do tre", "so luong", "tong so", "how many", "how much"]):
         return "METRIC"
     if any(k in q for k in ["gom nhung", "bao gom", "cac buoc", "thanh phan", "danh sach", "list", "components"]):
@@ -133,10 +135,12 @@ class NeuralReaderResult:
     tokens_used: int
     latency_ms: float
     followup_questions: List[str] = field(default_factory=list)
+    composed_answer: str = ""
 
     def to_dict(self) -> Dict[str, Any]:
         return {
             "core_answer": self.core_answer,
+            "composed_answer": self.composed_answer,
             "key_points": self.key_points,
             "formatted_answer": self.formatted_answer,
             "citations": self.citations,
@@ -160,10 +164,19 @@ class NeuralReaderEngine:
         model: Optional[Any] = None,
         tokenizer: Optional[Any] = None,
         min_confidence: float = 0.25,
+        thesaurus: Optional[Any] = None,
+        composer: Optional[Any] = None,
+        section_drawer: Optional[Any] = None,
     ):
         self.model = model
         self.tokenizer = tokenizer
         self.min_confidence = min_confidence
+        from src.self_study.semantic_thesaurus import SemanticThesaurus
+        from src.self_study.answer_composer import CoherentAnswerComposer
+        from src.brain.section_drawer import SectionDrawer
+        self.thesaurus = thesaurus or SemanticThesaurus()
+        self.composer = composer or CoherentAnswerComposer()
+        self.section_drawer = section_drawer or SectionDrawer()
 
     def _extract_keywords(self, text: str) -> List[str]:
         words = re.findall(r"\w+", strip_accents(text.lower()))
@@ -188,13 +201,16 @@ class NeuralReaderEngine:
         # Strict token-level matching (never substring search on short stems)
         matches = [kw for kw in query_keywords if kw in s_words]
 
-        # Grounding Gating: Require significant lexical overlap
+        # Soft matching via semantic thesaurus (bridges colloquial phrasing to technical terms)
+        soft_score, soft_matches = self.thesaurus.compute_soft_match(query, sentence, intent)
+
+        # Grounding Gating: Require significant lexical overlap OR solid soft match
         min_matches = 1 if len(query_keywords) <= 2 else 2
         coverage_ratio = len(matches) / max(1, len(query_keywords))
-        if len(matches) < min_matches or coverage_ratio < 0.25:
+        if (len(matches) < min_matches or coverage_ratio < 0.25) and soft_score < 0.40:
             return 0.0
 
-        overlap_score = coverage_ratio * 6.0
+        overlap_score = (coverage_ratio * 4.5) + (soft_score * 2.5)
 
         # 2. Intent alignment boost ONLY applies when there is actual lexical grounding
         intent_boost = 0.0
@@ -207,6 +223,8 @@ class NeuralReaderEngine:
         elif intent == "LIMITATION" and any(cue in s_norm for cue in ["han che", "nhuoc diem", "thach thuc", "kho khan", "canh bao", "rui ro"]):
             intent_boost += 2.5
         elif intent == "ADVANTAGE" and any(cue in sentence.lower() for cue in ["đạt", "giảm", "tăng", "tiết kiệm", "tối ưu", "hiệu quả", "vượt trội", "tốt hơn", "chi phí", "độ trễ", "token"]):
+            intent_boost += 2.5
+        elif intent == "CAUSE" and any(cue in s_norm for cue in ["nguyen nhan", "do ", "boi vi", "xuat phat", "dong luc", "thach thuc", "van de"]):
             intent_boost += 2.5
         elif intent == "ENUMERATION" and any(cue in s_norm for cue in ["gom", "bao gom", "cac thanh phan", "nhu sau:", "buoc:"]):
             intent_boost += 2.0
@@ -320,9 +338,14 @@ class NeuralReaderEngine:
         intent = detect_query_intent(query)
         query_keywords = self._extract_keywords(query)
 
-        # 1. Break passages into candidate sentences and score them
+        # 1. Prioritize passages by semantic section drawer
+        ranked_passages = self.section_drawer.filter_and_rank_by_intent(
+            passages, intent=intent, max_passages=len(passages)
+        )
+
+        # 2. Break passages into candidate sentences and score them
         candidates = []
-        for p_idx, p in enumerate(passages):
+        for p_idx, p in enumerate(ranked_passages):
             raw_text = p.get("text", "")
             doc_title = p.get("document_title", p.get("document_id", "Tài liệu"))
             sec_title = p.get("section_title", "")
@@ -375,48 +398,29 @@ class NeuralReaderEngine:
         core_span = self.extract_core_span(query, best_candidate["sentence"], intent)
         primary_cit = best_candidate["citation_label"]
 
-        # 3. Extract complementary key points (avoiding semantic redundancy)
-        key_points = []
-        used_sentences = {best_candidate["sentence"]}
-        active_citations = [best_candidate["passage_data"]]
+        # 3. Compose coherent multi-sentence prose via CoherentAnswerComposer
+        composed_prose, composer_key_points, active_cands = self.composer.compose(
+            query=query,
+            candidates=candidates,
+            intent=intent,
+            answer_mode=answer_mode,
+        )
 
-        max_points = 1 if answer_mode == "concise" else (3 if answer_mode == "comprehensive" else 2)
-
-        for cand in candidates[1:]:
-            if len(key_points) >= max_points:
-                break
-            cand_sent = cand["sentence"]
-            if cand_sent in used_sentences:
-                continue
-
-            # Check overlap with already used sentences (Jaccard similarity on words)
-            cand_words = set(re.findall(r"\w+", cand_sent.lower()))
-            redundant = False
-            for u in used_sentences:
-                u_words = set(re.findall(r"\w+", u.lower()))
-                jaccard = len(cand_words & u_words) / max(1, len(cand_words | u_words))
-                if jaccard > 0.65:
-                    redundant = True
-                    break
-
-            if not redundant and cand["score"] >= (self.min_confidence * 0.8):
-                used_sentences.add(cand_sent)
-                clean_point = cand_sent.strip()
-                if clean_point[-1] not in ".!?":
-                    clean_point = f"{clean_point}."
-                key_points.append(f"{clean_point} {cand['citation_label']}")
-                if cand["passage_data"] not in active_citations:
-                    active_citations.append(cand["passage_data"])
+        active_citations = [c["passage_data"] for c in active_cands if "passage_data" in c]
+        if best_candidate["passage_data"] not in active_citations:
+            active_citations.insert(0, best_candidate["passage_data"])
 
         # 4. Format clean, high-signal response body
         lines = []
-        # Opening core sentence
-        lines.append(f"{core_span} {primary_cit}".strip())
+        if answer_mode == "concise":
+            lines.append(f"{core_span} {primary_cit}".strip())
+        else:
+            lines.append(composed_prose)
 
-        # Structured supporting details if present
-        if key_points and answer_mode != "concise":
+        # Structured supporting details if comprehensive mode requested
+        if answer_mode == "comprehensive" and len(composer_key_points) > 1:
             lines.append("\n**Các điểm trọng tâm chi tiết:**")
-            for pt in key_points:
+            for pt in composer_key_points:
                 lines.append(f"- {pt}")
 
         # Follow-up questions tail
@@ -449,7 +453,8 @@ class NeuralReaderEngine:
 
         return NeuralReaderResult(
             core_answer=core_span,
-            key_points=key_points,
+            composed_answer=composed_prose,
+            key_points=composer_key_points,
             formatted_answer=formatted_answer,
             citations=active_citations,
             intent=intent,

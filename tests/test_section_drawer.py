@@ -76,3 +76,4 @@ def test_filter_and_rank_by_intent(drawer):
     # For MECHANISM intent, solution drawer (p2) must be first
     mech_ranked = drawer.filter_and_rank_by_intent(passages, intent="MECHANISM")
     assert mech_ranked[0]["passage_id"] == "p2"
+

@@ -204,4 +204,35 @@ def test_api_meta_cognition_evaluate(client):
     assert report["verified_facts"][0]["epistemic_tag"] == "[Chắc chắn]"
 
 
+def test_api_get_document_progressive_digest(client):
+    res = client.get("/api/self-study/DEMO_DOC_001/digest")
+    assert res.status_code == 200
+    data = res.json()
+    assert data["status"] == "success"
+    assert "l1_tldr" in data
+    assert "l2_executive" in data
+    assert "l3_section_digest" in data
+    assert len(data["l1_tldr"]) > 0
+
+
+def test_api_get_cross_doc_consensus_matrix(client):
+    res = client.post("/api/self-study/cross-doc/matrix", json={})
+    assert res.status_code == 200
+    data = res.json()
+    assert data["status"] == "success"
+    assert "summary_markdown" in data
+    assert "document_count" in data
+
+
+def test_api_get_thesis_latex_tables(client):
+    res = client.get("/api/self-study/thesis/latex-tables")
+    assert res.status_code == 200
+    data = res.json()
+    assert data["status"] == "success"
+    assert "\\begin{table}" in data["rq_table_latex"]
+    assert "\\begin{table}" in data["ablation_table_latex"]
+    assert "SA-CMS" in data["rq_table_latex"]
+
+
+
 

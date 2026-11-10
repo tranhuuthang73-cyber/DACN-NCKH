@@ -1165,12 +1165,18 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
             if attached_docs:
                 try:
                     attached_doc = service.store.get_document(attached_docs[0])
+                    from src.brain.progressive_summarizer import ProgressiveSummarizer
+                    prog_sum = ProgressiveSummarizer()
+                    digest = prog_sum.generate_digest(attached_doc.raw_text, doc_title=attached_doc.title)
+                    body = (
+                        f"Tài liệu **{attached_doc.title}** tập trung vào các nội dung trọng tâm sau:\n"
+                        f"- **Tóm lược cốt lõi**: {digest.l1_tldr}\n"
+                        f"- **Tổng quan thực nghiệm**: {digest.l2_executive} {cit_1}"
+                    )
+                except Exception:
                     intel = DocumentAnalyzer.extract_key_points_and_summary(attached_doc.raw_text, title=attached_doc.title, max_points=3)
                     summary_points = [f"- {kp.lstrip('- ').strip()} {cit_1}" for kp in intel["key_points"]]
                     body = f"Tài liệu **{attached_doc.title}** tập trung vào các nội dung trọng tâm sau:\n" + "\n".join(summary_points)
-                except Exception:
-                    summary_points = [f"- {s} {cit_1}" for s in sentences[:3]]
-                    body = "Tài liệu này tập trung vào các nội dung trọng tâm sau:\n" + "\n".join(summary_points)
             else:
                 summary_points = []
                 for c in citations_data[:3]:
@@ -1230,6 +1236,19 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
 
             # Strip any question block the body may already carry so it can be re-attached last.
             body = strip_question_block(body)
+
+            # Boundary advisory check (Ticket 7.2)
+            try:
+                from src.reasoning.boundary_inspector import BoundaryInspector
+                _b_inspector = BoundaryInspector()
+                _b_advisory = _b_inspector.inspect_and_advise(citations_data, effective_query)
+                if _b_advisory.has_boundary and _b_advisory.clauses:
+                    _b_cond = _b_advisory.clauses[0].condition_text
+                    if _b_cond not in body and _b_advisory.advisory_text not in body:
+                        body = f"{body}\n\n👉 **{_b_advisory.advisory_text}**"
+            except Exception:
+                pass
+
             if sources_list:
                 answer_text = f"{body}\n\n### Nguồn tham khảo\n" + "\n\n".join(sources_list)
             else:

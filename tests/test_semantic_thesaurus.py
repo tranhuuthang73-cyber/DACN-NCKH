@@ -108,3 +108,4 @@ def test_reader_engine_integration_with_thesaurus():
     # The reader should choose sentence 2 discussing cost reduction ("87,5% chi phí token")
     assert "87,5%" in res.core_answer
     assert "chi phí token" in res.core_answer
+

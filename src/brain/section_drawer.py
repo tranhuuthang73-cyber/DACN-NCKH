@@ -160,3 +160,4 @@ class SectionDrawer:
 
         combined = aligned_passages + other_passages
         return combined[:max_passages]
+

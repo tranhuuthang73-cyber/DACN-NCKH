@@ -94,3 +94,4 @@ def test_dual_process_execution_deliberate_end_to_end(passages):
     assert res.confidence > 0.30
     assert len(res.reasoning_trace) > 0
     assert "[1]" in res.final_answer
+

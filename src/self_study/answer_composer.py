@@ -200,3 +200,4 @@ class CoherentAnswerComposer:
         # Combine into cohesive paragraph
         composed_prose = " ".join(composed_parts).strip()
         return composed_prose, key_points, active_citations
+

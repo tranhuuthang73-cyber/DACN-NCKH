@@ -208,3 +208,4 @@ class DualProcessController:
             latency_ms=round(latency, 2),
             reasoning_trace=trace,
         )
+

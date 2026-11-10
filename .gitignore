@@ -41,6 +41,8 @@ local_runtime/parsed/TEST_DOC_*
 local_runtime/documents/LIFECYCLE_DOC_*
 data/document_store/documents/DOC_179*
 data/document_store/documents/doc_self_study_*
+data/document_store/documents/doc_benchmark_*
+data/document_store/documents/doc_noisy_*
 data/document_store/documents/test_doc_*
 local_runtime/documents/doc_self_study_*
 local_runtime/parsed/doc_self_study_*

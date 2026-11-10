@@ -134,3 +134,4 @@ def test_reader_engine_integration_with_composer():
     assert "87,5%" in res.composed_answer
     assert "[1]" in res.composed_answer
     assert len(res.key_points) >= 2
+

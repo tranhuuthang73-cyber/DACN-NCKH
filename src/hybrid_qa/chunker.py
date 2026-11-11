@@ -6,6 +6,8 @@ Design:
 - Falls back to fixed-token chunking if no sentence boundaries found.
 - Assigns passage IDs in format DOC{id}::P{idx}.
 - Preserves character and token offsets for citation traceability.
+- Adaptive Structural Boundary Overlap: zero-overlap across paragraph boundaries
+  and strict zero-overlap on section / topic boundaries (Topic N, Chủ đề N, etc.).
 """
 
 import re
@@ -13,15 +15,33 @@ from typing import List, Optional, Tuple
 from src.hybrid_qa.document_store import Passage, DocumentRecord
 
 
+TOPIC_HEADING_KEYWORDS = (
+    r"topic|chủ đề|chu de|bài|bai|mục|muc|chương|chuong|phần|phan|section|chapter|lesson|unit"
+)
+
+
 class DocumentChunker:
     """
     Chunks a document into passages suitable for retrieval.
     Supports sentence-aware and fixed-size chunking strategies.
+    Strictly enforces structural isolation on heading / topic boundaries.
     """
 
     SENTENCE_BOUNDARY = re.compile(
         r'(?<=[.!?])\s+(?=[A-Z\u00C0-\u024F])|'  # Period/excl/question + space + uppercase
         r'(?<=\n)\s*\n+'                             # Blank line
+    )
+
+    # Shared Heading Regex: recognizes Markdown headers, topic headers, and numbered sections
+    HEADING_RE = re.compile(
+        rf"^\s*(?:#{{1,6}}\s+\S.*|(?:{TOPIC_HEADING_KEYWORDS})\s*\d+\s*[:.\-–].*|\d+(?:\.\d+)*\.\s+[A-ZÀ-Ỹ].*)$",
+        re.MULTILINE | re.IGNORECASE,
+    )
+
+    # Heading Finder Regex: locates headings occurring at line start or inline after sentence boundaries
+    HEADING_FINDER = re.compile(
+        rf"(?:^|(?<=[\n.!?]))\s*(?P<heading>(?:#{{1,6}}\s+\S[^\n]*|(?:{TOPIC_HEADING_KEYWORDS})\s*\d+\s*[:.\-–][^\n]*|\d+(?:\.\d+)*\.\s+[A-ZÀ-Ỹ][^\n]*))",
+        re.IGNORECASE | re.MULTILINE,
     )
 
     ABBREVIATIONS = {
@@ -42,6 +62,15 @@ class DocumentChunker:
         self.min_chunk_size = min_chunk_size
         self.strategy = strategy
         self.adaptive_overlap = adaptive_overlap
+
+    @classmethod
+    def is_heading(cls, text: str) -> bool:
+        """Checks if a string represents or starts with a recognized section/topic heading."""
+        if not text:
+            return False
+        clean = text.strip()
+        first_line = clean.split("\n")[0].strip()
+        return bool(cls.HEADING_RE.match(first_line))
 
     def chunk_document(self, doc: DocumentRecord) -> List[Passage]:
         """
@@ -89,11 +118,12 @@ class DocumentChunker:
     def _sentence_chunk(self, text: str) -> List[Tuple[str, int, int]]:
         """
         Sentence-aware chunking with Adaptive Structural Boundary Overlap:
+        - If a candidate sentence is a section/topic heading (HEADING_RE), the accumulated
+          sentences are immediately flushed with ZERO overlap. Overlap never crosses a heading.
         - If a chunk ends at a natural paragraph boundary (blank line) or before a new section heading,
           overlap is set to 0 to eliminate redundant token duplication across paragraphs.
         - If a single long paragraph is split mid-paragraph, sentence overlap is preserved.
         """
-        # Split into sentences
         sentences = self._split_sentences(text)
         if not sentences:
             return self._fixed_chunk(text)
@@ -105,8 +135,20 @@ class DocumentChunker:
 
         for sent_text, sent_start, sent_end in sentences:
             sent_len = len(sent_text)
+            sent_is_heading = self.is_heading(sent_text)
 
-            if current_len + sent_len > self.chunk_size and current_sentences:
+            # RULE: A heading must never be conjoined with previous section/topic sentences!
+            if sent_is_heading and current_sentences:
+                chunk_text = " ".join(s[0] for s in current_sentences)
+                chunk_start = current_sentences[0][1]
+                chunk_end = current_sentences[-1][2]
+                chunks.append((chunk_text.strip(), chunk_start, chunk_end))
+                # Strict ZERO overlap across heading boundaries
+                current_sentences = []
+                current_len = 0
+                current_start = sent_start
+
+            elif current_len + sent_len > self.chunk_size and current_sentences:
                 # Emit current chunk
                 chunk_text = " ".join(s[0] for s in current_sentences)
                 chunk_start = current_sentences[0][1]
@@ -115,7 +157,7 @@ class DocumentChunker:
 
                 # Check if boundary between chunk_end and sent_start is a natural paragraph/section break
                 gap_text = text[chunk_end:sent_start] if sent_start >= chunk_end else ""
-                is_natural_boundary = ("\n\n" in gap_text) or sent_text.lstrip().startswith("#")
+                is_natural_boundary = ("\n\n" in gap_text) or sent_text.lstrip().startswith("#") or sent_is_heading
 
                 if self.adaptive_overlap and is_natural_boundary:
                     # Zero-overlap on natural structural boundaries to save tokens
@@ -123,10 +165,14 @@ class DocumentChunker:
                     current_len = 0
                     current_start = sent_start
                 else:
-                    # Mid-paragraph split: keep last few sentences for continuity
+                    # Mid-paragraph split: keep last few sentences for continuity,
+                    # but never allow overlap to step backward across a heading
                     overlap_len = 0
                     overlap_start = len(current_sentences)
                     for i in range(len(current_sentences) - 1, -1, -1):
+                        if self.is_heading(current_sentences[i][0]):
+                            overlap_start = i
+                            break
                         overlap_len += len(current_sentences[i][0])
                         if overlap_len >= self.chunk_overlap:
                             overlap_start = i
@@ -147,9 +193,14 @@ class DocumentChunker:
             if len(chunk_text.strip()) >= self.min_chunk_size:
                 chunks.append((chunk_text.strip(), chunk_start, chunk_end))
             elif chunks:
-                # Merge short trailing chunk with previous
+                # Only merge trailing chunk if both chunks share the same section and neither is a heading
                 prev_text, prev_start, prev_end = chunks[-1]
-                chunks[-1] = (prev_text + " " + chunk_text.strip(), prev_start, chunk_end)
+                prev_sec = self._find_section_title(text, prev_start)
+                curr_sec = self._find_section_title(text, chunk_start)
+                if prev_sec == curr_sec and not any(self.is_heading(s[0]) for s in current_sentences):
+                    chunks[-1] = (prev_text + " " + chunk_text.strip(), prev_start, chunk_end)
+                else:
+                    chunks.append((chunk_text.strip(), chunk_start, chunk_end))
             else:
                 chunks.append((chunk_text.strip(), chunk_start, chunk_end))
 
@@ -171,62 +222,95 @@ class DocumentChunker:
         """
         Split text into (sentence_text, start_char, end_char) tuples.
         Protects common Vietnamese/English abbreviations and numbering from false splits.
+        Isolates section headings (Markdown, Topic N, Chủ đề N, etc.) as distinct units.
         """
+        if not text.strip():
+            return []
+
+        boundaries: List[Tuple[int, int, str]] = []
+
+        # 1. Standard sentence boundary matches (punctuation + space + uppercase, or \n\n)
+        for match in self.SENTENCE_BOUNDARY.finditer(text):
+            boundaries.append((match.start(), match.end(), "std"))
+
+        # 2. Structural heading boundaries (lines or inline occurrences)
+        for match in self.HEADING_FINDER.finditer(text):
+            h_start = match.start("heading")
+            h_end = match.end("heading")
+            if h_start > 0:
+                boundaries.append((h_start, h_start, "head_start"))
+            next_pos = h_end
+            while next_pos < len(text) and text[next_pos] in " \t\r\n":
+                next_pos += 1
+            boundaries.append((h_end, next_pos, "head_end"))
+
+        # Sort and merge overlapping / adjacent split boundaries
+        boundaries.sort(key=lambda x: (x[0], x[1]))
+        merged: List[List[Any]] = []
+        for b_start, b_end, b_type in boundaries:
+            if not merged:
+                merged.append([b_start, b_end, b_type])
+            else:
+                prev = merged[-1]
+                if b_start <= prev[1]:
+                    prev[1] = max(prev[1], b_end)
+                    if b_type != "std":
+                        prev[2] = b_type
+                else:
+                    merged.append([b_start, b_end, b_type])
+
         sentences = []
         last_end = 0
-        for match in self.SENTENCE_BOUNDARY.finditer(text):
-            candidate = text[last_end:match.start()].strip()
-            if not candidate:
-                last_end = match.end()
+        for b_start, b_end, b_type in merged:
+            segment = text[last_end:b_start]
+            cand = segment.strip()
+            if not cand:
+                last_end = max(last_end, b_end)
                 continue
 
-            # Check if split occurred right after an abbreviation (e.g. 'TS.', 'Tp.', 'Fig.', 'Eq.')
-            last_word = candidate.split()[-1].lower() if candidate.split() else ""
-            if last_word in self.ABBREVIATIONS and "\n" not in match.group(0):
+            # Check if split occurred right after an abbreviation (e.g. 'TS.', 'Tp.', 'Fig.')
+            last_word = cand.split()[-1].lower() if cand.split() else ""
+            if last_word in self.ABBREVIATIONS and b_type == "std" and "\n" not in text[b_start:b_end]:
                 continue
 
-            sentences.append((candidate, last_end, match.start()))
-            last_end = match.end()
+            lead = len(segment) - len(segment.lstrip())
+            s_start = last_end + lead
+            s_end = s_start + len(cand)
+            sentences.append((cand, s_start, s_end))
+            last_end = max(last_end, b_end)
 
-        # Last sentence
-        remaining = text[last_end:].strip()
-        if remaining:
-            sentences.append((remaining, last_end, len(text)))
+        remaining = text[last_end:]
+        if remaining.strip():
+            cand = remaining.strip()
+            lead = len(remaining) - len(remaining.lstrip())
+            s_start = last_end + lead
+            sentences.append((cand, s_start, s_start + len(cand)))
 
         return sentences
 
-    @staticmethod
-    def _find_section_title(full_text: str, char_pos: int) -> str:
+    @classmethod
+    def _find_section_title(cls, full_text: str, char_pos: int) -> str:
         """Find the nearest preceding section heading for a character position."""
-        heading_patterns = [
-            re.compile(r"^(#{1,6})\s+(.+)$", re.MULTILINE),
-            re.compile(r"^(\d+(\.\d+)*)\.\s+([A-Z][^\n]+)$", re.MULTILINE),
-        ]
         best_title = ""
         best_pos = -1
-        for pattern in heading_patterns:
-            for match in pattern.finditer(full_text):
-                if match.start() <= char_pos and match.start() > best_pos:
-                    best_pos = match.start()
-                    best_title = match.group(0).strip().lstrip("#").strip()
+        for match in cls.HEADING_FINDER.finditer(full_text):
+            h_start = match.start("heading")
+            if h_start <= (char_pos + 2) and h_start > best_pos:
+                best_pos = h_start
+                best_title = match.group("heading").strip().lstrip("#").strip()
         return best_title
 
-    @staticmethod
-    def _find_section_id(full_text: str, char_pos: int) -> str:
+    @classmethod
+    def _find_section_id(cls, full_text: str, char_pos: int) -> str:
         """Find the section ID (e.g. SEC001) for a character position."""
-        heading_patterns = [
-            re.compile(r"^(#{1,6})\s+(.+)$", re.MULTILINE),
-            re.compile(r"^(\d+(\.\d+)*)\.\s+([A-Z][^\n]+)$", re.MULTILINE),
-        ]
         headings = []
-        for pattern in heading_patterns:
-            for match in pattern.finditer(full_text):
-                headings.append((match.start(), match.group(0).strip()))
+        for match in cls.HEADING_FINDER.finditer(full_text):
+            headings.append((match.start("heading"), match.group("heading").strip()))
         headings.sort(key=lambda x: x[0])
 
         sec_idx = 0
         for i, (pos, _) in enumerate(headings):
-            if pos <= char_pos:
+            if pos <= (char_pos + 2):
                 sec_idx = i + 1
             else:
                 break
@@ -239,4 +323,3 @@ class DocumentChunker:
         paras = re.split(r'\n\s*\n+', prefix.strip())
         para_idx = len(paras) if paras and paras[0] else 1
         return f"PARA{para_idx:03d}"
-

@@ -96,6 +96,36 @@ def generate_title_from_query(query: str, existing_titles: Optional[Set[str]] = 
     return clean
 
 
+def extract_topic_anchor(text: str) -> Optional[str]:
+    """
+    Extracts explicit topic anchor (alias + number, or quoted text) from user query.
+    Examples:
+      'cho tôi biết topic 49' -> 'topic 49'
+      'cho tôi biết chủ đề 47' -> 'chủ đề 47'
+      'Nội dung liên quan đến "SA-CMS"' -> 'SA-CMS'
+    """
+    if not text:
+        return None
+    # 1. Topic aliases + number
+    m = re.search(
+        r"\b(topic|chủ\s*đề|bài|mục|chương|phần|section|chapter|lesson|unit)\s*(\d+)\b",
+        text,
+        re.IGNORECASE,
+    )
+    if m:
+        alias = m.group(1).strip()
+        num = m.group(2).strip()
+        return f"{alias} {num}"
+
+    # 2. Quoted text
+    qm = re.search(r"['\"“]([^'\"”]+)['\"”]", text)
+    if qm:
+        val = qm.group(1).strip()
+        if len(val) >= 2:
+            return val
+    return None
+
+
 class ChatSession:
     """Represents an active multi-turn conversation session."""
 
@@ -383,9 +413,10 @@ class SessionManager:
 
         # Check if user is referencing a suggested question or answer facet by index:
         # e.g., "câu 2", "câu hỏi 2", "giải thích kỹ hơn ý thứ 2", "phân tích điểm 1", "question 2", "#2"
+        # Note: "mục" is intentionally excluded so section queries like "cho biết mục 3" are not hijacked!
         idx_match = re.search(
             r"^(?:trả lời\s+|hỏi\s+|cho biết\s+|giải thích(?:\s+kỹ(?:\s+hơn)?|\s+chi tiết(?:\s+hơn)?|\s+rõ(?:\s+hơn)?)?\s+|phân tích(?:\s+kỹ(?:\s+hơn)?)?\s+|làm rõ\s+)?"
-            r"(câu(?:\s*hỏi)?|ý|điểm|luận điểm|mục|question)\s*(?:thứ\s*|số\s*)?(\d+)\b",
+            r"(câu(?:\s*hỏi)?|ý|điểm|luận điểm|question)\s*(?:thứ\s*|số\s*)?(\d+)\b",
             q_lower,
         )
         kind_token = ""
@@ -401,7 +432,7 @@ class SessionManager:
                 target_idx = -1
 
         if target_idx >= 0:
-            prefer_bullets = kind_token in ("ý", "điểm", "luận điểm", "mục")
+            prefer_bullets = kind_token in ("ý", "điểm", "luận điểm")
             for m in reversed(session.messages):
                 if m.get("role") == "assistant":
                     c_text = m.get("content", "")
@@ -448,6 +479,22 @@ class SessionManager:
             last_user_query = user_msgs[-1].get("content", "").strip()
         else:
             return current_query
+
+        # Anchor carry-over (Root-cause fix for multi-turn topic context loss)
+        current_anchor = extract_topic_anchor(current_query)
+        if current_anchor is None:
+            words = current_query.split()
+            if len(words) <= 14:
+                generic_cues = ["tài liệu", "này", "đó", "thêm", "chi tiết", "ví dụ", "tại sao", "như thế nào"]
+                elliptical_starters = ["còn", "thế còn", "thế thì", "vậy còn", "what about", "how about"]
+                has_anaphoric_cue = (
+                    any(re.search(r"\b" + re.escape(c) + r"\b", q_lower) for c in generic_cues)
+                    or any(q_lower.startswith(st) for st in elliptical_starters)
+                )
+                if has_anaphoric_cue:
+                    last_anchor = extract_topic_anchor(last_user_query)
+                    if last_anchor:
+                        return f"{current_query} ({last_anchor})"
 
         # Pronouns and contextual indicators in Vietnamese and English
         pronouns_vi = ["nó", "chúng", "điều này", "phương pháp này", "công nghệ này", "mô hình này", "hệ thống này", "thứ này"]

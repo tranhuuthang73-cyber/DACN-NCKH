@@ -18,6 +18,12 @@ from typing import List, Dict, Any, Optional, Collection, Tuple, Set
 from src.hybrid_qa.document_store import Passage
 
 
+TOPIC_ALIAS_PATTERN = re.compile(
+    r"\b(?:topic|chủ đề|chu de|bài|bai|mục|muc|chương|chuong|phần|phan|section|chapter|lesson|unit)\s*(\d+)\b",
+    re.IGNORECASE,
+)
+
+
 def strip_accents(text: str) -> str:
     """Removes Vietnamese tone marks for accent-insensitive matching."""
     text = unicodedata.normalize("NFD", text)
@@ -92,10 +98,10 @@ class BM25Retriever:
 
     @staticmethod
     def _tokenize(text: str) -> List[str]:
-        """Simple whitespace + lowercasing tokenizer."""
+        """Simple whitespace + lowercasing tokenizer preserving digits."""
         text = text.lower()
         text = re.sub(r'[^\w\s]', ' ', text)
-        return [t for t in text.split() if len(t) > 1]
+        return [t for t in text.split() if len(t) > 1 or t.isdigit()]
 
     def build_index(self, passages: List[Passage]) -> None:
         """Build BM25 index from a list of passages."""
@@ -327,18 +333,50 @@ class BM25Retriever:
         if document_id:
             allowed_set = allowed_set.intersection({document_id}) if allowed_set else {document_id}
 
-        q_topic_m = re.search(r"\b(?:topic|chủ đề|bài|mục)\s*(\d+)\b", query.lower())
-        target_topic_num = q_topic_m.group(1) if q_topic_m else None
+        # Check topic / section pin with aliases
+        q_topic_matches = set(TOPIC_ALIAS_PATTERN.findall(query.lower()))
+
+        target_passages_exist = False
+        if q_topic_matches:
+            for idx in range(self.corpus_size):
+                if allowed_set and self.passages[idx].document_id not in allowed_set:
+                    continue
+                p = self.passages[idx]
+                sec_topics = set(TOPIC_ALIAS_PATTERN.findall((p.section_title or "").lower()))
+                text_topics = set(TOPIC_ALIAS_PATTERN.findall((p.text or "").lower()))
+                if (sec_topics & q_topic_matches) or (text_topics & q_topic_matches):
+                    target_passages_exist = True
+                    break
 
         scores = []
         for idx in range(self.corpus_size):
             if allowed_set and self.passages[idx].document_id not in allowed_set:
                 continue
+
+            p = self.passages[idx]
+            sec_topics = set(TOPIC_ALIAS_PATTERN.findall((p.section_title or "").lower()))
+            text_topics = set(TOPIC_ALIAS_PATTERN.findall((p.text or "").lower()))
+
+            # If >= 1 passage matches target topic N, exclude passages declaring a different number
+            if target_passages_exist:
+                if sec_topics and not (sec_topics & q_topic_matches):
+                    continue
+                text_head_m = re.match(
+                    r"^\s*(?:topic|chủ đề|chu de|bài|bai|mục|muc|chương|chuong|phần|phan|section|chapter|lesson|unit)\s*(\d+)\b",
+                    (p.text or "").lower(),
+                )
+                if text_head_m and text_head_m.group(1) not in q_topic_matches:
+                    continue
+
             score = self._score_document(query_tokens, idx)
-            if target_topic_num:
-                p_text_low = self.passages[idx].text.lower()
-                if re.search(rf"\b(?:topic|chủ đề|bài|mục)\s*{target_topic_num}\b", p_text_low):
+
+            # Match on section_title first (+30.0), then text (+15.0)
+            if q_topic_matches:
+                if sec_topics & q_topic_matches:
+                    score += 30.0
+                elif text_topics & q_topic_matches:
                     score += 15.0
+
             scores.append((idx, score))
 
         # Sort by score descending

@@ -73,7 +73,19 @@ class QuestionRouter:
         r"\bchương\s+\d+\b", r"\bchương\s+[ivxcdm]+\b", r"\bchapter\s+\d+\b",
         r"\bphần\s+\d+\b", r"\bphần\s+[ivxcdm]+\b", r"\bsection\s+\d+\b",
         r"\bmục\s+\d+(\.\d+)*\b", r"\bđiều\s+\d+\b", r"\bkhoản\s+\d+\b",
+        r"\btopic\s*\d+\b", r"\bchủ\s*đề\s*\d+\b", r"\bbài\s*\d+\b",
+        r"\blesson\s*\d+\b", r"\bunit\s*\d+\b",
     ]
+
+    # Explicit scope patterns: topic aliases + N or quoted span after "liên quan đến/về"
+    TOPIC_SCOPE_PATTERN = re.compile(
+        r"\b(topic|chủ\s*đề|bài|mục|chương|phần|section|chapter|lesson|unit)\s*(\d+)\b",
+        re.IGNORECASE,
+    )
+    QUOTED_SCOPE_PATTERN = re.compile(
+        r"(?:liên\s+quan\s+đến|liên\s+quan\s+về|về)\s+['\"“]([^'\"”]+)['\"”]",
+        re.IGNORECASE,
+    )
 
     # Page lookup patterns
     PAGE_PATTERNS = [
@@ -138,7 +150,30 @@ class QuestionRouter:
                     "explanation": "Tra cứu thông tin theo trang cụ thể.",
                 }
 
-        # 4. Check Section lookup (specific chapter / section)
+        # 4. Scope Check BEFORE SUMMARY: any alias+N or quoted span after "liên quan đến/về"
+        topic_match = cls.TOPIC_SCOPE_PATTERN.search(q_norm)
+        if topic_match:
+            alias_name = topic_match.group(1).title()
+            num = topic_match.group(2)
+            target = f"{alias_name} {num}"
+            return QuestionRoute.SECTION_LOOKUP, {
+                "matched_pattern": cls.TOPIC_SCOPE_PATTERN.pattern,
+                "target_section": target,
+                "scope_type": "topic_alias",
+                "explanation": f"Tra cứu thông tin theo {target} cụ thể.",
+            }
+
+        quoted_match = cls.QUOTED_SCOPE_PATTERN.search(query)
+        if quoted_match:
+            target = quoted_match.group(1).strip()
+            return QuestionRoute.SECTION_LOOKUP, {
+                "matched_pattern": cls.QUOTED_SCOPE_PATTERN.pattern,
+                "target_section": target,
+                "scope_type": "quoted_scope",
+                "explanation": f"Tra cứu thông tin theo phạm vi '{target}'.",
+            }
+
+        # Check general Section lookup patterns
         for pat in cls.SECTION_PATTERNS:
             match = re.search(pat, q_norm, re.IGNORECASE)
             if match:

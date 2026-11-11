@@ -475,6 +475,18 @@ def relevance_score(query: str, sentence: str, extra: str = "") -> float:
     repeats the topic. Used as a refusal gate: below threshold the system refuses
     instead of guessing.
     """
+    # Alias + N matching: if query has alias+N and passage section/text has any alias+N with the same N, rel = 1.0
+    alias_re = re.compile(
+        r"\b(?:topic|chủ đề|chu de|bài|bai|mục|muc|chương|chuong|phần|phan|section|chapter|lesson|unit)\s*(\d+)\b",
+        re.IGNORECASE,
+    )
+    q_aliases = set(alias_re.findall(query or ""))
+    if q_aliases:
+        passage_text = f"{sentence or ''} {extra or ''}"
+        p_aliases = set(alias_re.findall(passage_text))
+        if q_aliases & p_aliases:
+            return 1.0
+
     q_tokens = _tokens(query)
     if not q_tokens:
         return 0.0
@@ -575,18 +587,29 @@ def _salient_phrase(context: str) -> str:
     return max(singles, key=len)
 
 
-def _clean_topic(text: str, max_words: int = 9) -> str:
+def _clean_topic(text: str, max_words: int = 12) -> str:
     """Normalises a section heading or query into a short, quotable topic label."""
     cleaned = (text or "").strip()
     # Strip nested template prefixes/suffixes to avoid recursion
-    cleaned = re.sub(r"^nội dung trọng tâm (?:liên quan đến|về)\s*['\"]?", "", cleaned, flags=re.IGNORECASE)
-    cleaned = re.sub(r"['\"]?\s*gồm những gì\??$", "", cleaned, flags=re.IGNORECASE)
+    cleaned = re.sub(r"^(?:nội dung trọng tâm|điểm nổi bật|nội dung chính|tổng quan|tóm tắt)\s*(?:liên quan đến|về)?\s*['\"]?", "", cleaned, flags=re.IGNORECASE)
+    cleaned = re.sub(r"['\"]?\s*(?:gồm những gì|như thế nào|ra sao|là gì)\??$", "", cleaned, flags=re.IGNORECASE)
     cleaned = re.sub(r"^(?:cho tôi biết|hãy cho biết|cho biết|tìm hiểu về|tóm tắt|về|câu hỏi về)\s+", "", cleaned, flags=re.IGNORECASE)
     cleaned = re.sub(r"^(#{1,4}\s*)?(\d+(?:\.\d+)*\.?\s*)?", "", cleaned.strip())
     topic = _clean(cleaned)
     topic = topic.strip("'\"` ").strip()
+
+    # Drop unbalanced opening or closing parentheses
+    if topic.count("(") > topic.count(")"):
+        topic = re.sub(r"\([^\)]*$", "", topic).strip()
+    elif topic.count(")") > topic.count("("):
+        topic = topic.replace(")", "").strip()
+
     words = topic.split()
-    return " ".join(words[:max_words]) if words else "nội dung này"
+    if words:
+        topic = " ".join(words[:max_words])
+    else:
+        topic = "nội dung này"
+    return topic.rstrip(" (,-–—:;")
 
 
 def generate_followup_questions(
@@ -598,13 +621,17 @@ def generate_followup_questions(
     """
     Produces fluent, natural, grounded follow-up questions tied to the answered topic and document.
     Anchored on real document content and entities so they stay directly answerable.
+    Guarantees exactly `count` questions when context is non-empty.
     """
     q_low = (query or "").lower()
     ctx_low = (context or "").lower()
-    raw_topic = section_title or query
-    topic = _clean_topic(raw_topic)
-    if strip_accents(topic.lower()) in {"phan noi dung", "noi dung", "toan van", "tong quan"}:
-        topic = _clean_topic(query)
+
+    # Prefer clean section_title over query for Topic label
+    sec_clean = (section_title or "").strip()
+    if sec_clean and strip_accents(sec_clean.lower()) not in {"phan noi dung", "noi dung", "toan van", "tong quan", "section", "doc"}:
+        topic = _clean_topic(sec_clean, max_words=12)
+    else:
+        topic = _clean_topic(query, max_words=12)
 
     candidates: List[str] = []
 
@@ -628,7 +655,7 @@ def generate_followup_questions(
         if h_m:
             sec_txt = h_m.group(1).strip()
             if not any(g in sec_txt.lower() for g in ["nguồn tham khảo", "tài liệu", "đoạn", "bài tập", "references", "phụ lục"]):
-                candidates.append(f"Mục tiêu và nội dung của '{sec_txt}' được trình bày ra sao?")
+                candidates.append(f"Mục tiêu và phạm vi của '{sec_txt}' được trình bày ra sao?")
         if len(candidates) >= 5:
             break
 
@@ -640,39 +667,40 @@ def generate_followup_questions(
         if 1 <= len(term.split()) <= 5 and not any(w in term.lower() for w in ["điều này", "nó", "chúng", "đây", "tài liệu"]):
             candidates.append(f"Vai trò và nguyên lý hoạt động của '{term}' là gì?")
 
-    # 4. Identity, Roles, Workplace
-    if any(k in q_low or k in ctx_low for k in ["chức vụ", "tổ trưởng", "công tác", "nghề", "làm việc", "tên là", "trần hữu trang", "đơn vị"]):
+    # 4. Identity, Roles, Workplace — ONLY when context literally contains them
+    if any(k in ctx_low for k in ["trần hữu trang", "công tác tại", "tổ trưởng", "đơn vị công tác"]):
         candidates.append("Đơn vị công tác cụ thể của tác giả là gì?")
         candidates.append("Kết quả phấn đấu và thành tích đạt được ra sao?")
-        candidates.append("Các nhiệm vụ trọng tâm được giao gồm những gì?")
+        candidates.append("Các nhiệm vụ và công việc cụ thể được giao gồm những gì?")
 
-    # 5. Ideology, Study, Guidelines
-    if any(k in q_low or k in ctx_low for k in ["học tập", "tư tưởng", "đạo đức", "chỉ thị", "chính trị", "hồ chí minh", "phong cách"]):
-        candidates.append("Nội dung học tập theo tư tưởng Bác gồm những điểm chính nào?")
+    # 5. Ideology, Study, Guidelines — ONLY when context literally contains them
+    if any(k in ctx_low for k in ["hồ chí minh", "chỉ thị 05", "chỉ thị 07", "đảng viên"]):
+        candidates.append("Phương hướng học tập theo tư tưởng Bác gồm những điểm nào?")
         candidates.append("Kế hoạch thực hiện chuyên đề năm 2026 được đề ra như thế nào?")
         candidates.append("Trách nhiệm của người Đảng viên được tài liệu nêu ra sao?")
 
-    # 6. Innovation, Performance, Improvements
-    if any(k in q_low or k in ctx_low for k in ["kết quả", "sáng kiến", "cải tiến", "quy trình", "công nghệ", "năng suất", "phấn đấu"]):
+    # 6. Innovation, Performance, Improvements — ONLY when context literally contains them
+    if any(k in ctx_low for k in ["sáng kiến", "cải tiến quy trình", "năng suất lao động"]):
         candidates.append("Những sáng kiến cải tiến quy trình làm việc gồm những gì?")
-        candidates.append("Các biện pháp khắc phục hạn chế, thiếu sót của bản thân là gì?")
+        candidates.append("Các giải pháp khắc phục hạn chế, thiếu sót của bản thân là gì?")
 
-    # 7. Dates / Years
+    # 7. Dates / Years from context
     years = re.findall(r"\b(202[0-9]|2030)\b", context)
     if years:
         candidates.append(f"Mục tiêu hoặc kế hoạch trong năm {years[0]} là gì?")
 
-    # 8. Percentages or Metrics
+    # 8. Percentages or Metrics from context
     for num in _meaningful_numbers(context):
         if "%" in num or "phần trăm" in num.lower():
             candidates.append(f"Chỉ số {num} phản ánh kết quả hoặc tiêu chí nào?")
 
-    # 9. Clean topic question with varied natural phrasing (not repeating "nội dung trọng tâm")
+    # 9. Clean topic questions (ZERO summary trigger words)
     if topic and topic != "nội dung này" and not any(topic.lower() in c.lower() for c in candidates):
-        candidates.append(f"Điểm nổi bật hoặc yêu cầu liên quan đến '{topic}' gồm những gì?")
+        candidates.append(f"Yêu cầu và chi tiết cụ thể liên quan đến '{topic}' gồm những gì?")
+        candidates.append(f"Nội dung và cách triển khai '{topic}' được mô tả ra sao?")
 
-    # 10. Only suggest "biện pháp/giải pháp" if the document context actually mentions them
-    if any(k in ctx_low for k in ["biện pháp", "giải pháp", "khắc phục", "đề xuất", "phương án", "kiến nghị"]):
+    # 10. Only suggest "biện pháp/giải pháp" if context literally mentions them
+    if any(k in ctx_low for k in ["biện pháp", "giải pháp"]):
         candidates.append("Những biện pháp chính được tài liệu đề xuất là gì?")
 
     # Deduplicate and filter out near-duplicates of the current query
@@ -685,9 +713,37 @@ def generate_followup_questions(
             continue
         seen.add(clean_cand)
         unique.append(question)
-        if len(unique) >= max(3, count):
+        if len(unique) >= count:
             break
-    return unique
+
+    # Fallback to guarantee EXACTLY `count` questions when context is non-empty
+    if len(unique) < count and context.strip():
+        ctx_sents = [s.strip() for s in split_sentences(context) if len(s.strip().split()) >= 4]
+        for sent in ctx_sents:
+            if len(unique) >= count:
+                break
+            snippet = _cap_words(sent, 8).rstrip(".,:;!?")
+            clean_snip = re.sub(r"[^\w\s]", "", snippet.lower()).strip()
+            if clean_snip and clean_snip not in seen:
+                cand_q = f"Thông tin về '{snippet}' được giải thích như thế nào?"
+                seen.add(clean_snip)
+                unique.append(cand_q)
+
+        # Secondary fallback using topic
+        topic_fallbacks = [
+            f"Chi tiết cụ thể liên quan đến '{topic}' được trình bày ra sao?",
+            f"Yêu cầu và đặc điểm của '{topic}' gồm những gì?",
+            f"Các yếu tố cần lưu ý về '{topic}' là gì?",
+        ]
+        for tf in topic_fallbacks:
+            if len(unique) >= count:
+                break
+            clean_tf = re.sub(r"[^\w\s]", "", tf.lower()).strip()
+            if clean_tf not in seen:
+                seen.add(clean_tf)
+                unique.append(tf)
+
+    return unique[:count]
 
 
 def build_question_block(questions: Sequence[str]) -> str:

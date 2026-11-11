@@ -83,10 +83,11 @@ def test_deep_epistemic_calibration_in_e2e_chat():
     """Verify that EpistemicCalibrator.calibrate_deep is wired into the chat endpoint response & diagnostics."""
     client = TestClient(app)
 
-    # 1. Create a session
+    # 1. Create a session and attach document
     resp_session = client.post("/api/chat/sessions", json={"title": "Test Wave 3 Integrated"})
     assert resp_session.status_code == 200
     session_id = resp_session.json()["session_id"]
+    client.post(f"/api/chat/sessions/{session_id}/documents", json={"document_id": "DEMO_DOC_001"})
 
     # 2. Ask question in detailed mode
     resp_chat = client.post(

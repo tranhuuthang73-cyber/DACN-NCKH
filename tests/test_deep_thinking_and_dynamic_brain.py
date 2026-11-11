@@ -96,11 +96,13 @@ def test_system_2_thought_trace_in_chat_session(test_client):
     res_data = msg_res.json()
     answer = res_data["answer"]
 
-    # If evidence found and answered (not refused), System 2 thinking trace must be surfaced
+    # If evidence found and answered (not refused), System 2 thinking trace must be surfaced in diagnostics
     if not res_data["refused"]:
-        assert "Tiến trình nơ-ron suy ngẫm (System 2)" in answer
-        assert "Kích hoạt SA-CMS" in answer
-        assert "Độ tin cậy tri thức" in answer
+        trace = res_data.get("diagnostics", {}).get("reasoning_trace")
+        assert trace is not None
+        assert trace["mode"] == "SYSTEM_2_DELIBERATE"
+        assert "gating_weights" in trace
+        assert "certainty" in trace
         # Dynamic memory diagnostics returned
         mem_diag = res_data["memory_diagnostics"]
         assert mem_diag["has_cms"] is True

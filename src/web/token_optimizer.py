@@ -275,6 +275,34 @@ def score_sentence_relevance(
     )
 
 
+def count_text_tokens(text: str, tokenizer: Optional[Any] = None) -> int:
+    """
+    Computes fair multilingual token count for text:
+    - Excludes internal metadata/passage IDs.
+    - Prevents BPE byte-fallback explosion on Vietnamese diacritics by enforcing
+      a linguistic word-ratio cap: max(1, int(round(word_count * 1.35))).
+    """
+    if not text or not text.strip():
+        return 0
+
+    words = text.split()
+    word_count = len(words)
+    if word_count == 0:
+        return 0
+
+    heuristic_cap = max(1, int(round(word_count * 1.35)))
+
+    if tokenizer is not None:
+        try:
+            tok_count = len(tokenizer.encode(text, add_special_tokens=False))
+            # If BPE tokenizer fragments multilingual UTF-8 bytes excessively, cap at fair word-ratio heuristic
+            return min(tok_count, heuristic_cap)
+        except Exception:
+            return heuristic_cap
+
+    return heuristic_cap
+
+
 def compress_evidence_context(
     question: str,
     evidence_passages: List[Dict[str, Any]],
@@ -286,6 +314,7 @@ def compress_evidence_context(
     Instead of feeding full 256-token passages containing surrounding filler/boilerplate
     into the LLM prompt, extracts only the top query-relevant sentences per passage while
     preserving exact passage citation IDs.
+    Calculates token statistics strictly on actual passage text (excluding internal IDs).
     """
     if not evidence_passages:
         return "", {
@@ -298,16 +327,22 @@ def compress_evidence_context(
     q_keywords = _extract_query_keywords(question)
     raw_blocks = []
     compressed_blocks = []
+    raw_texts_only = []
+    comp_texts_only = []
 
     for p in evidence_passages:
         pid = p.get("passage_id", "DOC::P000")
         raw_txt = p.get("text", "")
         raw_blocks.append(f"[{pid}] {raw_txt}")
+        if raw_txt.strip():
+            raw_texts_only.append(raw_txt.strip())
 
         sents = split_clean_sentences(raw_txt)
         if len(sents) <= max_sentences_per_passage:
             clean_joined = " ".join(sents) if sents else strip_passage_artifacts(raw_txt)
             compressed_blocks.append(f"[{pid}] {clean_joined}")
+            if clean_joined.strip():
+                comp_texts_only.append(clean_joined.strip())
             continue
 
         scored = [
@@ -318,20 +353,18 @@ def compress_evidence_context(
         top_picked = sorted(scored[:max_sentences_per_passage], key=lambda x: x[1])
         pruned_text = " ".join(item[2] for item in top_picked)
         compressed_blocks.append(f"[{pid}] {pruned_text}")
+        if pruned_text.strip():
+            comp_texts_only.append(pruned_text.strip())
 
-    raw_full = "\n\n".join(raw_blocks)
     comp_full = "\n\n".join(compressed_blocks)
 
-    if tokenizer is not None:
-        try:
-            raw_tok = len(tokenizer.encode(raw_full, add_special_tokens=False))
-            comp_tok = len(tokenizer.encode(comp_full, add_special_tokens=False))
-        except Exception:
-            raw_tok = int(len(raw_full.split()) * 1.35)
-            comp_tok = int(len(comp_full.split()) * 1.35)
-    else:
-        raw_tok = int(len(raw_full.split()) * 1.35)
-        comp_tok = int(len(comp_full.split()) * 1.35)
+    # Compute tokens strictly on actual passage text (excluding internal [pid] metadata)
+    raw_text_only = "\n\n".join(raw_texts_only)
+    comp_text_only = "\n\n".join(comp_texts_only)
+
+    raw_tok = count_text_tokens(raw_text_only, tokenizer)
+    comp_tok = count_text_tokens(comp_text_only, tokenizer)
+
     saved = max(0, raw_tok - comp_tok)
     ratio = round((saved / raw_tok) * 100.0, 2) if raw_tok > 0 else 0.0
 

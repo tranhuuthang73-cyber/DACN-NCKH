@@ -960,10 +960,13 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
     all_store_docs = service.store.list_documents()
 
     # Filter out dead / deleted document IDs that no longer exist on disk
-    attached_docs = [
-        d_id for d_id in raw_attached_docs
-        if service.store.get_document(d_id) is not None
-    ]
+    attached_docs = []
+    for d_id in raw_attached_docs:
+        try:
+            if service.store.get_document(d_id) is not None:
+                attached_docs.append(d_id)
+        except Exception:
+            pass
 
     # If no document is currently attached to the session, try Smart Entity Linking from query title
     if not attached_docs and all_store_docs:
@@ -1156,6 +1159,15 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
         citations_data.append(cit_item)
         evidence_passages_out.append(cit_item)
 
+    # Dynamic SA-CMS Multi-Scale Memory Diagnostics (Real-time Gating & Shannon Entropy)
+    from src.reasoning.dynamic_gating import compute_dynamic_memory_diagnostics
+    mem_diag = compute_dynamic_memory_diagnostics(
+        query=effective_query,
+        route=effective_route,
+        citations_data=citations_data,
+        pipeline_service=service,
+    )
+
     # Step 7: Answer Generation with Sub-Passage Context Pruning & Clean Grounded Synthesis
     t_gen_start = time.perf_counter()
     compression_stats = {"raw_context_tokens": 0, "compressed_context_tokens": 0, "tokens_saved": 0, "compression_ratio_pct": 0.0}
@@ -1302,6 +1314,41 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
                 "Không tìm thấy đủ thông tin trong tài liệu để trả lời chắc chắn."
             )
         else:
+            # Dual-Process Reasoning & Premise Invalidation Check
+            from src.reasoning.dual_process import DualProcessController
+            _dual_ctrl = DualProcessController()
+            _premise_res = _dual_ctrl.premise_validator.validate_premise(effective_query, citations_data)
+            if _premise_res.has_false_premise:
+                body = _premise_res.refutation_text
+            elif req.answer_mode != "concise" and effective_route not in (QuestionRoute.DOCUMENT_SUMMARY, QuestionRoute.CROSS_DOCUMENT_COMPARISON):
+                _sys2_mode = _dual_ctrl.determine_mode(effective_query, effective_route.value, answer_mode=req.answer_mode)
+                if _sys2_mode == "SYSTEM_2_DELIBERATE":
+                    _chain_desc = "Phân tích đa chiều"
+                    if len(citations_data) >= 2:
+                        try:
+                            from src.reasoning.multi_hop_dag import MultiHopEvidenceDAG
+                            _dag = MultiHopEvidenceDAG()
+                            _graph = _dag.build_dag(citations_data, query=effective_query)
+                            _chain = _dag.find_optimal_evidence_chain(_graph, max_hops=3)
+                            if _chain and len(_chain.nodes) >= 2:
+                                _chain_narrative = _dag.compose_chain_narrative(_chain)
+                                if _chain_narrative and len(_chain_narrative) > 50:
+                                    _doc_title = citations_data[0].get("document_title", "tài liệu")
+                                    body = f"Dựa trên tài liệu **{_doc_title}**, chuỗi phân tích nơ-ron đa chặng (System 2) ghi nhận như sau:\n\n{_chain_narrative}"
+                                    _chain_desc = " ➔ ".join(n.role.title() for n in _chain.nodes)
+                        except Exception:
+                            pass
+
+                    _certainty_tag = "[Chắc chắn]" if is_grounded else "[Có khả năng cao]"
+                    _reasoning_header = (
+                        f"🧠 **Tiến trình nơ-ron suy ngẫm (System 2):**\n"
+                        f"- **Ý định & Phân loại**: {effective_route.value.replace('_', ' ').title()}\n"
+                        f"- **Kích hoạt SA-CMS**: g₁={mem_diag['g1']} · g₂={mem_diag['g2']} · g₃={mem_diag['g3']} (Entropy: {mem_diag.get('entropy_nats', 1.05)} nats · {mem_diag.get('dominant_level', 'SA-CMS')})\n"
+                        f"- **Chuỗi lập luận**: {_chain_desc}\n"
+                        f"- **Độ tin cậy tri thức**: {_certainty_tag} ({len(citations_data)} căn cứ đối chiếu trực tiếp từ tài liệu)"
+                    )
+                    body = f"{_reasoning_header}\n\n{body}"
+
             seen_source_keys = set()
             sources_list = []
             for c in citations_data:
@@ -1423,22 +1470,14 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
         citations=[c["passage_id"] for c in citations_data],
     )
 
-    mem_diag = {}
-    if service.pipeline:
-        try:
-            mem_diag = service.pipeline.extract_memory_diagnostics(effective_query)
-        except Exception:
-            pass
-    if not mem_diag or not mem_diag.get("has_cms"):
-        mem_diag = {
-            "has_cms": True,
-            "g1": 0.842,
-            "g2": 0.615,
-            "g3": 0.927,
-            "l1_norm": 1.42,
-            "l2_norm": 2.18,
-            "l3_norm": 3.65,
-        }
+    if not mem_diag:
+        from src.reasoning.dynamic_gating import compute_dynamic_memory_diagnostics
+        mem_diag = compute_dynamic_memory_diagnostics(
+            query=effective_query,
+            route=effective_route,
+            citations_data=citations_data,
+            pipeline_service=service,
+        )
 
     return {
         "session_id": session_id,
@@ -1694,22 +1733,13 @@ async def chat_query(req: ChatRequest):
         confidence=refusal_decision.confidence if refusal_decision else 1.0,
     )
 
-    mem_diag = {}
-    if service.pipeline:
-        try:
-            mem_diag = service.pipeline.extract_memory_diagnostics(query)
-        except Exception:
-            pass
-    if not mem_diag or not mem_diag.get("has_cms"):
-        mem_diag = {
-            "has_cms": True,
-            "g1": 0.842,
-            "g2": 0.615,
-            "g3": 0.927,
-            "l1_norm": 1.42,
-            "l2_norm": 2.18,
-            "l3_norm": 3.65,
-        }
+    from src.reasoning.dynamic_gating import compute_dynamic_memory_diagnostics
+    mem_diag = compute_dynamic_memory_diagnostics(
+        query=query,
+        route=effective_route if "effective_route" in locals() else route,
+        citations_data=citations if "citations" in locals() else None,
+        pipeline_service=service,
+    )
 
     return {
         "question": query,

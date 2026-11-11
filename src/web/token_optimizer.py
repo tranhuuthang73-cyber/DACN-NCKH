@@ -415,7 +415,7 @@ def synthesize_accurate_grounded_answer(
         if not summary_points:
             best = all_candidates[0]
             summary_points.append(f"- {_ensure_period(best['sentence'])} {best['citation_label']}")
-        return "Tài liệu này tập trung vào các nội dung trọng tâm sau:\n" + "\n".join(summary_points)
+        return "Tài liệu này đề cập đến các vấn đề chính sau đây:\n" + "\n".join(summary_points)
 
     # Route 2: Cross-Document Comparison
     if route == "CROSS_DOCUMENT_COMPARISON":

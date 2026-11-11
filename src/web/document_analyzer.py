@@ -158,7 +158,7 @@ class DocumentAnalyzer:
                 # Skip generic headers
                 if any(g in sec_name.lower() for g in ["tài liệu tham khảo", "mục lục", "references", "phụ lục", "overview"]):
                     continue
-                q = f"Nội dung trọng tâm được trình bày tại mục '{sec_name}' là gì?"
+                q = f"Thông tin cốt lõi được trình bày tại mục '{sec_name}' là gì?"
                 add_q(q, "Tra cứu Chương mục", sec_name)
             if len(questions) >= 3:
                 break

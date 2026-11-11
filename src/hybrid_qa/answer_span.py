@@ -667,9 +667,9 @@ def generate_followup_questions(
         if "%" in num or "phần trăm" in num.lower():
             candidates.append(f"Chỉ số {num} phản ánh kết quả hoặc tiêu chí nào?")
 
-    # 9. Clean topic question (guarded against recursive or generic topics)
+    # 9. Clean topic question with varied natural phrasing (not repeating "nội dung trọng tâm")
     if topic and topic != "nội dung này" and not any(topic.lower() in c.lower() for c in candidates):
-        candidates.append(f"Nội dung trọng tâm liên quan đến '{topic}' gồm những gì?")
+        candidates.append(f"Điểm nổi bật hoặc yêu cầu liên quan đến '{topic}' gồm những gì?")
 
     # 10. Only suggest "biện pháp/giải pháp" if the document context actually mentions them
     if any(k in ctx_low for k in ["biện pháp", "giải pháp", "khắc phục", "đề xuất", "phương án", "kiến nghị"]):

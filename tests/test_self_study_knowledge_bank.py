@@ -157,3 +157,55 @@ def test_get_knowledge_bank_singleton():
     k1 = get_knowledge_bank()
     k2 = get_knowledge_bank()
     assert k1 is k2
+
+
+def test_synthesize_learned_answer_comparison_and_security():
+    bank = SelfStudyKnowledgeBank()
+    bank.learn_document("DOC_SLIDE_CRYPTO", "Mã Hóa", SAMPLE_SLIDE_TEXT)
+
+    res = bank.synthesize_learned_answer("ưu nhược điểm của hệ mã hoá dòng")
+    assert res is not None
+    assert res["blueprint"] == "COMPARISON_AND_SECURITY"
+    ans = res["answer"].lower()
+    assert "ưu điểm" in ans or "nhược điểm" in ans or "đặc tính" in ans
+
+    # Security query
+    res_sec = bank.synthesize_learned_answer("an ninh và khả năng phá mã của hệ mã")
+    assert res_sec is not None
+    assert res_sec["blueprint"] == "COMPARISON_AND_SECURITY"
+
+
+def test_synthesize_learned_answer_step_by_step():
+    bank = SelfStudyKnowledgeBank()
+    bank.learn_document("DOC_SLIDE_CRYPTO", "Mã Hóa", SAMPLE_SLIDE_TEXT)
+
+    res = bank.synthesize_learned_answer("các bước thực hiện và quy trình của hệ mã hóa Autokey")
+    assert res is not None
+    assert res["blueprint"] == "MECHANISM_AND_FORMULA"
+    assert "bước" in res["answer"].lower() or "quy trình" in res["answer"].lower()
+
+
+def test_multi_domain_exports_and_routing():
+    from src.self_study import (
+        AcademicDomain,
+        AcademicDomainRegistry,
+        expand_all_academic_synonyms,
+        parse_vietnamese_academic_blocks,
+        synthesize_pros_cons_and_comparison,
+        synthesize_step_by_step_process,
+    )
+    # Check domain routing
+    reg = AcademicDomainRegistry()
+    route_res = reg.route_query("Định tuyến OSPF và bắt tay TCP 3 bước")
+    assert route_res.primary_domain == AcademicDomain.NETWORKS.value
+
+    # Check academic synonyms expansion
+    syns = expand_all_academic_synonyms("deadlock trong hệ điều hành")
+    assert len(syns) > 0
+
+    # Check academic blocks parsing
+    blocks = parse_vietnamese_academic_blocks("Định nghĩa 1.1: Mã hóa đối xứng là phương pháp dùng chung một khóa bí mật.")
+    assert len(blocks) >= 1
+    assert blocks[0]["block_type"] == "dinh_nghia"
+    assert blocks[0]["metadata"]["is_definition"] is True
+

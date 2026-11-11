@@ -76,7 +76,7 @@ def test_extract_taxonomy_crypto_slide_passages():
     # 1. Definitions
     assert len(result["definitions"]) >= 1
     assert "Mã hóa đối xứng là phương pháp mã hóa mà trong đó bên gửi và bên nhận dùng chung một khóa bí mật" in result["definitions"][0]
-    # Check aliases for trainer-6
+    # Check aliases for extractive text stitcher
     assert result["intro_sents"] == result["introductory_definitions"]
     assert len(result["intro_sents"]) >= 1
 

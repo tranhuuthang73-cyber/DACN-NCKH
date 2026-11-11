@@ -448,6 +448,60 @@ class SelfStudyKnowledgeBank:
             }
 
         # ----------------------------------------------------------------------
+        # Case C: COMPARISON_AND_SECURITY (Pros/Cons, Comparisons, Security)
+        # ----------------------------------------------------------------------
+        is_explicit_sec_heading = bool(re.search(r"^\s*\d+\.\s+", query.strip()) or re.search(r"['\"][^'\"]+['\"]", query))
+        if not is_explicit_sec_heading and (
+            blueprint == "COMPARISON_AND_SECURITY"
+            or any(k in q_norm for k in ["uu nhuoc diem", "so sanh", "phan biet", "diem manh", "diem yeu", "an ninh", "tham ma"])
+        ):
+            try:
+                from src.self_study.datasets.comparison_and_pros_cons_stitcher import synthesize_pros_cons_and_comparison
+                passages = []
+                for s in sections:
+                    passages.append({
+                        "text": f"{s['heading']}\n" + "\n".join(s.get('lines', [])),
+                        "section_title": s.get("heading", ""),
+                        "passage_id": f"[{s.get('prefix', 'SEC')}]",
+                    })
+                res_comp = synthesize_pros_cons_and_comparison(query, passages)
+                if res_comp and (res_comp.get("has_sufficient_evidence") or res_comp.get("pros") or res_comp.get("cons") or res_comp.get("security_facets")):
+                    return {
+                        "answer": res_comp["answer"],
+                        "blueprint": "COMPARISON_AND_SECURITY",
+                        "citations": res_comp.get("citations", ["[1]"]),
+                        "grounded": True,
+                        "metadata": res_comp.get("metadata", {}),
+                    }
+            except Exception:
+                pass
+
+        # ----------------------------------------------------------------------
+        # Case D: MECHANISM_AND_FORMULA / STEP-BY-STEP PROCESS
+        # ----------------------------------------------------------------------
+        if any(k in q_norm for k in ["cac buoc", "quy trinh", "thuat toan"]):
+            try:
+                from src.self_study.datasets.step_by_step_process_stitcher import synthesize_step_by_step_process
+                passages = []
+                for s in sections:
+                    passages.append({
+                        "text": f"{s['heading']}\n" + "\n".join(s.get('lines', [])),
+                        "section_title": s.get("heading", ""),
+                        "passage_id": f"[{s.get('prefix', 'SEC')}]",
+                    })
+                res_proc = synthesize_step_by_step_process(query, passages)
+                if res_proc and res_proc.get("steps"):
+                    return {
+                        "answer": res_proc["answer"],
+                        "blueprint": "MECHANISM_AND_FORMULA",
+                        "citations": res_proc.get("citations", ["[1]"]),
+                        "grounded": True,
+                        "metadata": {"steps_count": len(res_proc.get("steps", []))},
+                    }
+            except Exception:
+                pass
+
+        # ----------------------------------------------------------------------
         # Case B: SECTION_FULL_EXPLANATION / Specific Topic (e.g. "3. PHÁ MÃ", "'PHÁ MÃ'")
         # ----------------------------------------------------------------------
         # Look for section matching query

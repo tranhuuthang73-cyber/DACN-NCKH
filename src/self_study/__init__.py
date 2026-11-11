@@ -30,6 +30,13 @@ from src.self_study.datasets import (
     SelfCurriculumGenerator,
     CurriculumLevel,
     ExtractiveTextStitcher,
+    # Wave 5.5 Multi-Domain
+    AcademicDomain,
+    AcademicDomainRegistry,
+    expand_all_academic_synonyms,
+    parse_vietnamese_academic_blocks,
+    synthesize_pros_cons_and_comparison,
+    synthesize_step_by_step_process,
 )
 
 __all__ = [
@@ -53,5 +60,10 @@ __all__ = [
     "SelfCurriculumGenerator",
     "CurriculumLevel",
     "ExtractiveTextStitcher",
+    "AcademicDomain",
+    "AcademicDomainRegistry",
+    "expand_all_academic_synonyms",
+    "parse_vietnamese_academic_blocks",
+    "synthesize_pros_cons_and_comparison",
+    "synthesize_step_by_step_process",
 ]
-

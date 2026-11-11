@@ -1,6 +1,5 @@
 """
 Red-Team Test Suite: PDF Page Boundary Bleed Prevention & Bullet Preservation.
-Exclusively owned by @redteam-4 (Sovereign Brain v5.0 / Gemini 3.8 Flash High).
 
 Verifies:
 1. Complete immunity against PDF page bleed (=== Page 1 === .. === Page 36 ===).

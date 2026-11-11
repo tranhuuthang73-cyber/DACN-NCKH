@@ -1,7 +1,6 @@
 """
 Red-Team QA Verification Suite: Suggested Questions 100% Click-Through & Zero-Robotic Templates.
 Target File: tests/test_redteam_suggested_questions_clickthrough.py
-Author: redteam-2 (Red-Team QA & Performance Verification Specialist, Sovereign Brain v5.0)
 
 Rigorous Verification Scope:
 1. Zero Robotic Phrasing:

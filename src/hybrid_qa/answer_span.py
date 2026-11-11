@@ -119,7 +119,7 @@ def _clean(text: str) -> str:
     return re.sub(r"[ \t]+", " ", text).strip()
 
 
-def split_sentences(text: str, min_len: int = 18) -> List[str]:
+def split_sentences(text: str, min_len: int = 6) -> List[str]:
     """
     Splits into sentences on terminal punctuation and line breaks.
 
@@ -475,7 +475,7 @@ def relevance_score(query: str, sentence: str, extra: str = "") -> float:
     repeats the topic. Used as a refusal gate: below threshold the system refuses
     instead of guessing.
     """
-    # Alias + N matching: if query has alias+N and passage section/text has any alias+N with the same N, rel = 1.0
+    # 1. Alias + N matching: if query has alias+N and passage section/text has any alias+N with the same N, rel = 1.0
     alias_re = re.compile(
         r"\b(?:topic|chủ đề|chu de|bài|bai|mục|muc|chương|chuong|phần|phan|section|chapter|lesson|unit)\s*(\d+)\b",
         re.IGNORECASE,
@@ -487,13 +487,40 @@ def relevance_score(query: str, sentence: str, extra: str = "") -> float:
         if q_aliases & p_aliases:
             return 1.0
 
-    q_tokens = _tokens(query)
+    # 2. Quoted phrase matching: e.g. 'PHÁ MÃ' or "1. GIỚI THIỆU"
+    quoted_matches = re.findall(r"['\"]([^'\"]{2,60})['\"]", query or "")
+    for qm in quoted_matches:
+        qm_clean = strip_accents(qm.strip().lower())
+        haystack_raw = strip_accents(f"{sentence or ''} {extra or ''}".lower())
+        if qm_clean in haystack_raw:
+            return 1.0
+
+    # 3. Direct section title matching: query refers directly to section title
+    if extra:
+        extra_clean = strip_accents(extra.strip().lower())
+        extra_core = re.sub(r"^(?:\d+(?:\.\d+)*\s*[:.\-–]?\s*)", "", extra_clean).strip()
+        query_clean = strip_accents((query or "").lower())
+        if extra_core and len(extra_core) >= 4 and (extra_core in query_clean or query_clean in extra_core):
+            return 0.95
+
+    # 4. Remove meta-question wrapper words before computing lexical coverage
+    META_QUESTION_TOKENS = {
+        "yeu", "cau", "chi", "tiet", "cu", "the", "lien", "quan", "den", "noi", "dung",
+        "cach", "trien", "khai", "duoc", "mo", "ta", "ra", "sao", "gom", "nhung", "gi",
+        "chinh", "trong", "muc", "khai", "niem", "nguyen", "ly", "dac", "diem", "nhu",
+        "the", "nao", "cho", "biet", "giai", "thich", "trinh", "bay", "vi", "du", "bao",
+        "nhieu", "loai", "cac", "nhung", "mot", "he", "thong"
+    }
+    raw_q_tokens = _tokens(query)
+    filtered_q_tokens = {t for t in raw_q_tokens if t not in META_QUESTION_TOKENS}
+    q_tokens = filtered_q_tokens if filtered_q_tokens else raw_q_tokens
+
     if not q_tokens:
         return 0.0
     haystack = _tokens(sentence) | _tokens(extra or "")
     if not haystack:
         return 0.0
-    return len(q_tokens & haystack) / float(len(q_tokens))
+    return min(1.0, len(q_tokens & haystack) / float(len(q_tokens)))
 
 
 def select_best_sentence(query: str, sentences: Sequence[str], section_titles: Optional[Sequence[str]] = None) -> str:
@@ -501,35 +528,72 @@ def select_best_sentence(query: str, sentences: Sequence[str], section_titles: O
     Picks the sentence with the strongest alignment to the query.
 
     `section_titles`, when supplied, must be parallel to `sentences`. A section whose
-    heading matches the question intent (e.g. asking for "hạn chế" inside a section
-    titled "Hạn chế và Thách thức") gets a boost, which is what makes limitation and
-    definition lookups land in the right part of the document.
+    heading matches the question intent gets a boost.
     """
-    q_tokens = _tokens(query)
+    META_QUESTION_TOKENS = {
+        "yeu", "cau", "chi", "tiet", "cu", "the", "lien", "quan", "den", "noi", "dung",
+        "cach", "trien", "khai", "duoc", "mo", "ta", "ra", "sao", "gom", "nhung", "gi",
+        "chinh", "trong", "muc", "khai", "niem", "nguyen", "ly", "dac", "diem", "nhu",
+        "the", "nao", "cho", "biet", "giai", "thich", "trinh", "bay", "vi", "du", "bao",
+        "nhieu", "loai"
+    }
+    raw_q_tokens = _tokens(query)
+    filtered_q_tokens = {t for t in raw_q_tokens if t not in META_QUESTION_TOKENS}
+    q_tokens = filtered_q_tokens if filtered_q_tokens else raw_q_tokens
     q_type = detect_answer_type(query)
+
+    q_low = strip_accents(query.lower())
+    is_general_concept = any(w in q_low for w in ["la gi", "gioi thieu", "khai niem", "bao nhieu loai", "cac loai", "phuong phap", "phan loai"])
+    quoted_matches = [strip_accents(qm.strip().lower()) for qm in re.findall(r"['\"]([^'\"]{2,60})['\"]", query or "")]
+
     best, best_score = "", -1.0
     for index, sentence in enumerate(sentences):
-        sentence = _clean(sentence)
-        if len(sentence) < 18:
+        sentence_clean = _clean(sentence)
+        if len(sentence_clean) < 6:
             continue
-        score = len(q_tokens & _tokens(sentence)) * 2.0
-        if q_type == "number" and NUMBER_RE.search(sentence):
+        s_norm = strip_accents(sentence_clean.lower())
+        score = len(q_tokens & _tokens(sentence_clean)) * 2.0
+
+        # Quoted entity match bonus
+        for qm in quoted_matches:
+            if qm in s_norm:
+                score += 8.0
+
+        if q_type == "number" and NUMBER_RE.search(sentence_clean):
             score += 4.0
-        if q_type == "limitation" and _has_cue(sentence, LIMITATION_CUES):
+        if q_type == "limitation" and _has_cue(sentence_clean, LIMITATION_CUES):
             score += 4.5
-        if q_type == "definition" and _has_cue(sentence, DEFINITION_CUES):
+        if q_type == "definition" and _has_cue(sentence_clean, DEFINITION_CUES):
             score += 4.0
+
+        # Preference for overview/definition/classification when asking general questions
+        if is_general_concept:
+            if any(term in s_norm for term in ["gioi thieu", "khai niem", "dinh nghia", "phuong phap pho bien", "bao gom", "co 2 phuong phap", "co 2 loai", "khoa doi xung"]):
+                score += 5.0
+            if sentence_clean.strip().startswith(("*", "-", "•", "+")):
+                score += 3.0
+            # Deprioritize isolated formulas when asking for concept
+            if any(term in s_norm for term in ["zi = fi", "= z26", "= (pi +", "mod 26", "ta co:"]):
+                score -= 5.0
+
         if section_titles is not None and index < len(section_titles):
             title = section_titles[index] or ""
+            t_norm = strip_accents(title.lower())
+            for qm in quoted_matches:
+                if qm in t_norm:
+                    score += 6.0
             if q_type == "limitation" and _has_cue(title, LIMITATION_CUES):
                 score += 3.5
             if q_type == "definition" and _has_cue(title, DEFINITION_CUES):
                 score += 1.5
+            if is_general_concept and any(term in t_norm for term in ["1. ", "gioi thieu", "khai niem"]):
+                score += 4.0
             score += len(q_tokens & _tokens(title)) * 0.5
-        if re.match(r"^\d+(?:\.\d+)*\s+[A-ZÀ-Ỹ]", sentence):
+
+        if re.match(r"^\d+(?:\.\d+)*\s+[A-ZÀ-Ỹ]", sentence_clean) and not is_general_concept:
             score -= 1.5
         if score > best_score:
-            best_score, best = score, sentence
+            best_score, best = score, sentence_clean
     return best
 
 
@@ -694,10 +758,11 @@ def generate_followup_questions(
         if "%" in num or "phần trăm" in num.lower():
             candidates.append(f"Chỉ số {num} phản ánh kết quả hoặc tiêu chí nào?")
 
-    # 9. Clean topic questions (ZERO summary trigger words)
+    # 9. Clean topic questions (ZERO summary trigger words, natural and directly answerable)
     if topic and topic != "nội dung này" and not any(topic.lower() in c.lower() for c in candidates):
-        candidates.append(f"Yêu cầu và chi tiết cụ thể liên quan đến '{topic}' gồm những gì?")
-        candidates.append(f"Nội dung và cách triển khai '{topic}' được mô tả ra sao?")
+        candidates.append(f"Khái niệm và các ý chính của '{topic}' gồm những gì?")
+        candidates.append(f"Nguyên lý và đặc điểm của '{topic}' như thế nào?")
+        candidates.append(f"Nội dung chi tiết của mục '{topic}' gồm những điểm nào?")
 
     # 10. Only suggest "biện pháp/giải pháp" if context literally mentions them
     if any(k in ctx_low for k in ["biện pháp", "giải pháp"]):
@@ -731,9 +796,9 @@ def generate_followup_questions(
 
         # Secondary fallback using topic
         topic_fallbacks = [
-            f"Chi tiết cụ thể liên quan đến '{topic}' được trình bày ra sao?",
-            f"Yêu cầu và đặc điểm của '{topic}' gồm những gì?",
-            f"Các yếu tố cần lưu ý về '{topic}' là gì?",
+            f"Khái niệm và các ý chính của '{topic}' gồm những gì?",
+            f"Nguyên lý và đặc điểm của '{topic}' như thế nào?",
+            f"Nội dung chi tiết của mục '{topic}' gồm những điểm nào?",
         ]
         for tf in topic_fallbacks:
             if len(unique) >= count:

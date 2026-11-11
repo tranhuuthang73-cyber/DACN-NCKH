@@ -6,25 +6,27 @@ Design:
 - Falls back to fixed-token chunking if no sentence boundaries found.
 - Assigns passage IDs in format DOC{id}::P{idx}.
 - Preserves character and token offsets for citation traceability.
-- Adaptive Structural Boundary Overlap: zero-overlap across paragraph boundaries
-  and strict zero-overlap on section / topic boundaries (Topic N, Chủ đề N, etc.).
+- Adaptive Structural Boundary Overlap: zero-overlap across paragraph boundaries,
+  strict zero-overlap on section / topic boundaries (Topic N, Chủ đề N, etc.),
+  and absolute zero-overlap across document page breaks (=== Page N ===).
 """
 
 import re
-from typing import List, Optional, Tuple
+from typing import List, Optional, Tuple, Any
 from src.hybrid_qa.document_store import Passage, DocumentRecord
 
 
 TOPIC_HEADING_KEYWORDS = (
     r"topic|chủ đề|chu de|bài|bai|mục|muc|chương|chuong|phần|phan|section|chapter|lesson|unit"
 )
+ROMAN_NUMERALS = r"[IVXLCDM]+"
 
 
 class DocumentChunker:
     """
     Chunks a document into passages suitable for retrieval.
     Supports sentence-aware and fixed-size chunking strategies.
-    Strictly enforces structural isolation on heading / topic boundaries.
+    Strictly enforces structural isolation on heading / topic / page boundaries.
     """
 
     SENTENCE_BOUNDARY = re.compile(
@@ -32,15 +34,28 @@ class DocumentChunker:
         r'(?<=\n)\s*\n+'                             # Blank line
     )
 
-    # Shared Heading Regex: recognizes Markdown headers, topic headers, and numbered sections
+    # Page Marker Regex: recognizes page dividers like === Page 1 ===
+    PAGE_MARKER_RE = re.compile(r"^\s*===\s*Page\s*(\d+)\s*===\s*$", re.IGNORECASE)
+
+    # Shared Heading Regex: recognizes Markdown headers, topic headers, page headers, and numbered sections
     HEADING_RE = re.compile(
-        rf"^\s*(?:#{{1,6}}\s+\S.*|(?:{TOPIC_HEADING_KEYWORDS})\s*\d+\s*[:.\-–].*|\d+(?:\.\d+)*\.\s+[A-ZÀ-Ỹ].*)$",
+        rf"^\s*(?:"
+        rf"===\s*Page\s*\d+\s*===(?:\s+.*)?|"
+        rf"#{{1,6}}\s+\S.*|"
+        rf"(?:{TOPIC_HEADING_KEYWORDS})\s*\d+\s*[:.\-–].*|"
+        rf"(?:\d+(?:\.\d+)*|{ROMAN_NUMERALS})\.\s+[A-ZÀ-Ỹ0-9].*"
+        rf")$",
         re.MULTILINE | re.IGNORECASE,
     )
 
     # Heading Finder Regex: locates headings occurring at line start or inline after sentence boundaries
     HEADING_FINDER = re.compile(
-        rf"(?:^|(?<=[\n.!?]))\s*(?P<heading>(?:#{{1,6}}\s+\S[^\n]*|(?:{TOPIC_HEADING_KEYWORDS})\s*\d+\s*[:.\-–][^\n]*|\d+(?:\.\d+)*\.\s+[A-ZÀ-Ỹ][^\n]*))",
+        rf"(?:^|(?<=[\n.!?]))\s*(?P<heading>("
+        rf"===\s*Page\s*\d+\s*===[^\n]*|"
+        rf"#{{1,6}}\s+\S[^\n]*|"
+        rf"(?:{TOPIC_HEADING_KEYWORDS})\s*\d+\s*[:.\-–][^\n]*|"
+        rf"(?:\d+(?:\.\d+)*|{ROMAN_NUMERALS})\.\s+[A-ZÀ-Ỹ0-9][^\n]*"
+        rf"))",
         re.IGNORECASE | re.MULTILINE,
     )
 
@@ -68,9 +83,14 @@ class DocumentChunker:
         """Checks if a string represents or starts with a recognized section/topic heading."""
         if not text:
             return False
-        clean = text.strip()
+        clean = re.sub(r"^\s*===\s*Page\s*\d+\s*===\s*", "", text.strip()).strip()
         first_line = clean.split("\n")[0].strip()
-        return bool(cls.HEADING_RE.match(first_line))
+        return bool(cls.HEADING_RE.match(first_line)) or bool(cls.PAGE_MARKER_RE.match(text.strip()))
+
+    @classmethod
+    def is_page_marker(cls, text: str) -> bool:
+        """Checks if a string is a standalone page marker like === Page 1 ===."""
+        return bool(cls.PAGE_MARKER_RE.match(text.strip()))
 
     def chunk_document(self, doc: DocumentRecord) -> List[Passage]:
         """
@@ -118,11 +138,11 @@ class DocumentChunker:
     def _sentence_chunk(self, text: str) -> List[Tuple[str, int, int]]:
         """
         Sentence-aware chunking with Adaptive Structural Boundary Overlap:
-        - If a candidate sentence is a section/topic heading (HEADING_RE), the accumulated
-          sentences are immediately flushed with ZERO overlap. Overlap never crosses a heading.
-        - If a chunk ends at a natural paragraph boundary (blank line) or before a new section heading,
-          overlap is set to 0 to eliminate redundant token duplication across paragraphs.
-        - If a single long paragraph is split mid-paragraph, sentence overlap is preserved.
+        - Standalone page markers (=== Page N ===) are absolute boundaries: current sentences are
+          flushed immediately with ZERO overlap, and page markers are stripped from passage text.
+        - Section/topic headings (HEADING_RE) are flushed immediately with ZERO overlap.
+        - Natural paragraph boundaries have ZERO overlap.
+        - Overlap never crosses a heading or page break.
         """
         sentences = self._split_sentences(text)
         if not sentences:
@@ -134,30 +154,44 @@ class DocumentChunker:
         current_start = 0
 
         for sent_text, sent_start, sent_end in sentences:
-            sent_len = len(sent_text)
-            sent_is_heading = self.is_heading(sent_text)
+            # 1. Standalone page marker: flush immediately with ZERO overlap and discard marker
+            if self.is_page_marker(sent_text):
+                if current_sentences:
+                    chunk_text = " ".join(s[0] for s in current_sentences).strip()
+                    if chunk_text:
+                        chunks.append((chunk_text, current_sentences[0][1], current_sentences[-1][2]))
+                    current_sentences = []
+                    current_len = 0
+                current_start = sent_end
+                continue
 
-            # RULE: A heading must never be conjoined with previous section/topic sentences!
+            # 2. Strip inline page marker prefix (e.g. "=== Page 31 === 10. HỆ MÃ HOÁ...")
+            clean_sent = re.sub(r"^\s*===\s*Page\s*\d+\s*===\s*", "", sent_text).strip()
+            if not clean_sent:
+                continue
+
+            sent_len = len(clean_sent)
+            sent_is_heading = self.is_heading(clean_sent)
+
+            # 3. RULE: A heading must never be conjoined with previous section/topic sentences!
             if sent_is_heading and current_sentences:
-                chunk_text = " ".join(s[0] for s in current_sentences)
-                chunk_start = current_sentences[0][1]
-                chunk_end = current_sentences[-1][2]
-                chunks.append((chunk_text.strip(), chunk_start, chunk_end))
+                chunk_text = " ".join(s[0] for s in current_sentences).strip()
+                if chunk_text:
+                    chunks.append((chunk_text, current_sentences[0][1], current_sentences[-1][2]))
                 # Strict ZERO overlap across heading boundaries
                 current_sentences = []
                 current_len = 0
                 current_start = sent_start
 
             elif current_len + sent_len > self.chunk_size and current_sentences:
-                # Emit current chunk
-                chunk_text = " ".join(s[0] for s in current_sentences)
-                chunk_start = current_sentences[0][1]
+                chunk_text = " ".join(s[0] for s in current_sentences).strip()
                 chunk_end = current_sentences[-1][2]
-                chunks.append((chunk_text.strip(), chunk_start, chunk_end))
+                if chunk_text:
+                    chunks.append((chunk_text, current_sentences[0][1], chunk_end))
 
                 # Check if boundary between chunk_end and sent_start is a natural paragraph/section break
                 gap_text = text[chunk_end:sent_start] if sent_start >= chunk_end else ""
-                is_natural_boundary = ("\n\n" in gap_text) or sent_text.lstrip().startswith("#") or sent_is_heading
+                is_natural_boundary = ("\n\n" in gap_text) or clean_sent.lstrip().startswith("#") or sent_is_heading
 
                 if self.adaptive_overlap and is_natural_boundary:
                     # Zero-overlap on natural structural boundaries to save tokens
@@ -182,27 +216,35 @@ class DocumentChunker:
                     current_len = sum(len(s[0]) for s in current_sentences)
                     current_start = current_sentences[0][1] if current_sentences else sent_start
 
-            current_sentences.append((sent_text, sent_start, sent_end))
+            current_sentences.append((clean_sent, sent_start, sent_end))
             current_len += sent_len
 
         # Emit remaining
         if current_sentences:
-            chunk_text = " ".join(s[0] for s in current_sentences)
-            chunk_start = current_sentences[0][1]
-            chunk_end = current_sentences[-1][2]
-            if len(chunk_text.strip()) >= self.min_chunk_size:
-                chunks.append((chunk_text.strip(), chunk_start, chunk_end))
+            chunk_text = " ".join(s[0] for s in current_sentences).strip()
+            if len(chunk_text) >= self.min_chunk_size:
+                chunks.append((chunk_text, current_sentences[0][1], current_sentences[-1][2]))
             elif chunks:
-                # Only merge trailing chunk if both chunks share the same section and neither is a heading
+                # Only merge trailing chunk if both chunks share the same section, neither is a heading,
+                # and no page break separates them
                 prev_text, prev_start, prev_end = chunks[-1]
                 prev_sec = self._find_section_title(text, prev_start)
-                curr_sec = self._find_section_title(text, chunk_start)
-                if prev_sec == curr_sec and not any(self.is_heading(s[0]) for s in current_sentences):
-                    chunks[-1] = (prev_text + " " + chunk_text.strip(), prev_start, chunk_end)
+                curr_sec = self._find_section_title(text, current_sentences[0][1])
+                gap_between = text[prev_end:current_sentences[0][1]]
+                has_page_break = bool(re.search(r"===\s*Page\s*\d+\s*===", gap_between, re.IGNORECASE))
+
+                if (
+                    prev_sec
+                    and curr_sec
+                    and prev_sec == curr_sec
+                    and not has_page_break
+                    and not any(self.is_heading(s[0]) for s in current_sentences)
+                ):
+                    chunks[-1] = (prev_text + " " + chunk_text, prev_start, current_sentences[-1][2])
                 else:
-                    chunks.append((chunk_text.strip(), chunk_start, chunk_end))
+                    chunks.append((chunk_text, current_sentences[0][1], current_sentences[-1][2]))
             else:
-                chunks.append((chunk_text.strip(), chunk_start, chunk_end))
+                chunks.append((chunk_text, current_sentences[0][1], current_sentences[-1][2]))
 
         return chunks
 
@@ -221,8 +263,8 @@ class DocumentChunker:
     def _split_sentences(self, text: str) -> List[Tuple[str, int, int]]:
         """
         Split text into (sentence_text, start_char, end_char) tuples.
-        Protects common Vietnamese/English abbreviations and numbering from false splits.
-        Isolates section headings (Markdown, Topic N, Chủ đề N, etc.) as distinct units.
+        Protects common abbreviations, numbered headings (1. 2. 10. I.), and decimals.
+        Isolates section headings and page markers as distinct structural boundaries.
         """
         if not text.strip():
             return []
@@ -233,7 +275,7 @@ class DocumentChunker:
         for match in self.SENTENCE_BOUNDARY.finditer(text):
             boundaries.append((match.start(), match.end(), "std"))
 
-        # 2. Structural heading boundaries (lines or inline occurrences)
+        # 2. Structural heading / page marker boundaries
         for match in self.HEADING_FINDER.finditer(text):
             h_start = match.start("heading")
             h_end = match.end("heading")
@@ -268,10 +310,13 @@ class DocumentChunker:
                 last_end = max(last_end, b_end)
                 continue
 
-            # Check if split occurred right after an abbreviation (e.g. 'TS.', 'Tp.', 'Fig.')
-            last_word = cand.split()[-1].lower() if cand.split() else ""
-            if last_word in self.ABBREVIATIONS and b_type == "std" and "\n" not in text[b_start:b_end]:
-                continue
+            last_word = cand.split()[-1] if cand.split() else ""
+            # Protect numbered section prefixes (e.g. '1.', '3.', '10.', 'I.') from premature splitting
+            if b_type == "std" and "\n" not in text[b_start:b_end]:
+                if re.match(rf"^(?:\d+(?:\.\d+)*|{ROMAN_NUMERALS})\.$", last_word, re.IGNORECASE):
+                    continue
+                if last_word.lower() in self.ABBREVIATIONS:
+                    continue
 
             lead = len(segment) - len(segment.lstrip())
             s_start = last_end + lead
@@ -293,19 +338,33 @@ class DocumentChunker:
         """Find the nearest preceding section heading for a character position."""
         best_title = ""
         best_pos = -1
+        last_page = ""
         for match in cls.HEADING_FINDER.finditer(full_text):
             h_start = match.start("heading")
-            if h_start <= (char_pos + 2) and h_start > best_pos:
-                best_pos = h_start
-                best_title = match.group("heading").strip().lstrip("#").strip()
-        return best_title
+            raw_h = match.group("heading").strip().lstrip("#").strip()
+            pm = cls.PAGE_MARKER_RE.match(raw_h)
+            clean_h = re.sub(r"^===\s*Page\s*\d+\s*===\s*", "", raw_h).strip()
+
+            if h_start <= (char_pos + 2):
+                if clean_h and h_start > best_pos:
+                    best_pos = h_start
+                    best_title = clean_h
+                elif pm and not best_title:
+                    last_page = pm.group(0).strip("= ")
+
+        return best_title or last_page
 
     @classmethod
     def _find_section_id(cls, full_text: str, char_pos: int) -> str:
         """Find the section ID (e.g. SEC001) for a character position."""
         headings = []
         for match in cls.HEADING_FINDER.finditer(full_text):
-            headings.append((match.start("heading"), match.group("heading").strip()))
+            raw_h = match.group("heading").strip()
+            clean_h = re.sub(r"^===\s*Page\s*\d+\s*===\s*", "", raw_h).strip()
+            if clean_h:
+                headings.append((match.start("heading"), clean_h))
+            elif cls.PAGE_MARKER_RE.match(raw_h):
+                headings.append((match.start("heading"), raw_h))
         headings.sort(key=lambda x: x[0])
 
         sec_idx = 0

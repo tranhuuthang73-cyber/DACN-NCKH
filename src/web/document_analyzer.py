@@ -7,7 +7,7 @@ diverse, relevant, document-grounded questions from hierarchical SA-CMS structur
 
 import re
 import unicodedata
-from typing import List, Dict, Any, Optional, Tuple
+from typing import List, Dict, Any, Optional, Tuple, Set
 from pathlib import Path
 
 
@@ -577,9 +577,9 @@ class DocumentAnalyzer:
                 body = " ".join(cross_parts)
                 active_citations = dedup_citations
             else:
-                # Pure prose answer: core sentence [n] plus <=2 (balanced) or <=4 (detailed) supporting sentences
+                # Pure prose answer: core sentence [n] plus supporting sentences
                 # ONLY from the same passage/section_title as the best sentence.
-                max_supporting = 4 if answer_mode == "detailed" else 2
+                max_supporting = 10 if answer_mode in ("detailed", "comprehensive") else 8
                 supporting_sents = []
                 for s in passage_sents:
                     s_clean = s.strip()
@@ -601,6 +601,66 @@ class DocumentAnalyzer:
                 active_citations = [c for c in dedup_citations if c["citation_label"] == cit_1]
                 if not active_citations:
                     active_citations = dedup_citations[:1]
+
+            # Multi-facet synthesis across evidence passages (Concept + Concrete Systems + Examples)
+            q_norm = strip_accents((query or "").lower())
+            asks_types = any(k in q_norm for k in [
+                "bao nhieu loai", "cac loai", "nhung loai", "co may loai", "phan loai",
+                "cac he", "cac he ma", "he ma", "phuong phap", "may phuong phap",
+            ])
+            asks_example = any(k in q_norm for k in ["vi du", "cho vi du", "minh hoa", "bai toan"])
+            asks_concept = any(k in q_norm for k in ["la gi", "khai niem", "gioi thieu", "tong quan"])
+            is_multi_facet = (asks_concept and (asks_types or asks_example)) or (asks_types and asks_example)
+
+            multi_facet_bullets: List[str] = []
+            used_citation_labels: Set[str] = {c["citation_label"] for c in active_citations}
+
+            if is_multi_facet or asks_types:
+                other_systems: List[Tuple[str, str]] = []
+                for p_idx, p in enumerate(evidence_passages):
+                    if p_idx == best_passage_idx:
+                        continue
+                    p_text = getattr(p, "text", "") if hasattr(p, "text") else str(p)
+                    p_sec = getattr(p, "section_title", "") or ""
+                    p_cit = passage_to_cit_label[p_idx] if p_idx < len(passage_to_cit_label) else f"[{p_idx+1}]"
+                    for cand in [p_sec] + p_text.splitlines():
+                        cand_clean = cand.strip().rstrip(".:")
+                        m = re.match(r"^(?:\d+\.)?\s*(Hệ mã\s+[^\n:]+|HỆ MÃ\s+[^\n:]+|Mã hóa\s+[^\n:]+)", cand_clean, re.IGNORECASE)
+                        if m:
+                            raw_name = m.group(1).strip()
+                            norm_name = strip_accents(raw_name.lower())
+                            if not any(strip_accents(existing.lower()) in norm_name or norm_name in strip_accents(existing.lower()) for existing, _ in other_systems):
+                                other_systems.append((raw_name, p_cit))
+                                used_citation_labels.add(p_cit)
+                if other_systems:
+                    sys_list_str = ", ".join(f"{name} {lbl}" for name, lbl in other_systems)
+                    multi_facet_bullets.append(f"- **Các hệ mã hóa cụ thể trong tài liệu bao gồm:** {sys_list_str}.")
+
+            if is_multi_facet or asks_example:
+                examples_found: List[Tuple[str, str]] = []
+                for p_idx, p in enumerate(evidence_passages):
+                    p_text = getattr(p, "text", "") if hasattr(p, "text") else str(p)
+                    p_cit = passage_to_cit_label[p_idx] if p_idx < len(passage_to_cit_label) else f"[{p_idx+1}]"
+                    for line in p_text.splitlines():
+                        line_clean = line.strip().lstrip("-*• ")
+                        line_norm = strip_accents(line_clean.lower())
+                        if any(marker in line_norm for marker in ["cho p =", "vi du", "cong thuc ma hoa", "ta co: zi =", "p = c = k"]):
+                            if line_clean and not any(line_clean in ex for ex, _ in examples_found):
+                                examples_found.append((line_clean, p_cit))
+                                used_citation_labels.add(p_cit)
+                                if len(examples_found) >= 2:
+                                    break
+                    if len(examples_found) >= 2:
+                        break
+                if examples_found:
+                    ex_list_str = "; ".join(f"{ex} {lbl}" for ex, lbl in examples_found)
+                    multi_facet_bullets.append(f"- **Ví dụ và công thức minh họa:** {ex_list_str}.")
+
+            if multi_facet_bullets:
+                body = f"{body}\n\n" + "\n".join(multi_facet_bullets)
+                active_citations = [c for c in dedup_citations if c["citation_label"] in used_citation_labels]
+                if not active_citations:
+                    active_citations = dedup_citations
 
             if answer_mode == "detailed":
                 # Defense Strategist integration (Wave 3)

@@ -336,6 +336,22 @@ class BM25Retriever:
         # Check topic / section pin with aliases
         q_topic_matches = set(TOPIC_ALIAS_PATTERN.findall(query.lower()))
 
+        # Check quoted phrases in query (e.g. 'PHÁ MÃ' or "1. GIỚI THIỆU HỆ MÃ KHÓA ĐỐI XỨNG")
+        quoted_spans = [
+            m.strip().lower()
+            for m in re.findall(r"['\"“«]([^'\"”»]+)['\"”»]", query)
+            if m.strip()
+        ]
+
+        q_lower = query.lower()
+        is_concept_and_types = (
+            ("là gì" in q_lower or "khái niệm" in q_lower or "định nghĩa" in q_lower)
+            and ("bao nhiêu" in q_lower or "các loại" in q_lower or "phương pháp" in q_lower or "phân loại" in q_lower or "các hệ" in q_lower or "ví dụ" in q_lower)
+        ) or (
+            ("là gì" in q_lower or "khái niệm" in q_lower)
+            and ("phương pháp" in q_lower or "loại" in q_lower)
+        )
+
         target_passages_exist = False
         if q_topic_matches:
             for idx in range(self.corpus_size):
@@ -376,6 +392,28 @@ class BM25Retriever:
                     score += 30.0
                 elif text_topics & q_topic_matches:
                     score += 15.0
+
+            # Direct match bonus (+5.0) for quoted entity or section title in query
+            sec_lower = (p.section_title or "").lower()
+            first_line_lower = (p.text.split("\n", 1)[0] if p.text else "").lower()
+
+            if quoted_spans:
+                if any(qs in sec_lower or qs in first_line_lower for qs in quoted_spans):
+                    score += 5.0
+            elif sec_lower:
+                clean_sec = re.sub(r"^\s*\d+[\.:\s\-–]+", "", sec_lower).strip(" :.-–")
+                if clean_sec and len(clean_sec) >= 3 and clean_sec in q_lower:
+                    score += 5.0
+                elif sec_lower and sec_lower in q_lower:
+                    score += 5.0
+
+            # General concept + classification bonus (+3.0)
+            if is_concept_and_types:
+                if any(kw in sec_lower for kw in ["giới thiệu", "khái niệm", "định nghĩa", "phân loại", "1."]):
+                    score += 3.0
+                p_text_lower = (p.text or "").lower()
+                if any(kw in p_text_lower for kw in ["phương pháp phổ biến", "bao gồm", "có 2 phương pháp", "có hai phương pháp"]):
+                    score += 3.0
 
             scores.append((idx, score))
 

@@ -86,6 +86,23 @@ class QuestionRouter:
         r"(?:liên\s+quan\s+đến|liên\s+quan\s+về|về)\s+['\"“]([^'\"”]+)['\"”]",
         re.IGNORECASE,
     )
+    NUMBERED_HEADING_PATTERN = re.compile(
+        r"^\s*(\d+)\.\s*([A-Za-zÀ-ỹ\s]+)",
+        re.IGNORECASE,
+    )
+    GENERAL_QUOTED_PATTERN = re.compile(
+        r"['\"“]([^'\"”]{2,80})['\"”]",
+        re.IGNORECASE,
+    )
+
+    META_QUESTION_STOPWORDS = {
+        "yêu", "cầu", "chi", "tiết", "cụ", "thể", "liên", "quan", "đến", "nội", "dung",
+        "triển", "khai", "mô", "tả", "trình", "bày", "giải", "thích", "chính", "mục",
+        "gồm", "những", "gì", "bao", "nhiêu", "loại", "cách", "thức", "cho", "biết",
+        "hãy", "nêu", "tìm", "hiểu", "về", "là", "và", "của", "trong", "có", "các",
+        "được", "ra", "sao", "thế", "nào", "khái", "niệm", "nguyên", "lý", "đặc", "điểm",
+        "ví", "dụ", "như", "nào", "ở", "tại", "với", "theo", "hỏi", "đáp", "bài",
+    }
 
     # Page lookup patterns
     PAGE_PATTERNS = [
@@ -150,7 +167,7 @@ class QuestionRouter:
                     "explanation": "Tra cứu thông tin theo trang cụ thể.",
                 }
 
-        # 4. Scope Check BEFORE SUMMARY: any alias+N or quoted span after "liên quan đến/về"
+        # 4. Scope Check BEFORE SUMMARY: any alias+N or quoted span or numbered heading
         topic_match = cls.TOPIC_SCOPE_PATTERN.search(q_norm)
         if topic_match:
             alias_name = topic_match.group(1).title()
@@ -163,11 +180,24 @@ class QuestionRouter:
                 "explanation": f"Tra cứu thông tin theo {target} cụ thể.",
             }
 
+        numbered_match = cls.NUMBERED_HEADING_PATTERN.match(query.strip())
+        if numbered_match:
+            target = query.strip()
+            return QuestionRoute.SECTION_LOOKUP, {
+                "matched_pattern": cls.NUMBERED_HEADING_PATTERN.pattern,
+                "target_section": target,
+                "scope_type": "numbered_heading",
+                "explanation": f"Tra cứu thông tin theo mục '{target}' cụ thể.",
+            }
+
         quoted_match = cls.QUOTED_SCOPE_PATTERN.search(query)
+        if not quoted_match:
+            quoted_match = cls.GENERAL_QUOTED_PATTERN.search(query)
+
         if quoted_match:
             target = quoted_match.group(1).strip()
             return QuestionRoute.SECTION_LOOKUP, {
-                "matched_pattern": cls.QUOTED_SCOPE_PATTERN.pattern,
+                "matched_pattern": getattr(quoted_match, "re", cls.GENERAL_QUOTED_PATTERN).pattern,
                 "target_section": target,
                 "scope_type": "quoted_scope",
                 "explanation": f"Tra cứu thông tin theo phạm vi '{target}'.",
@@ -286,3 +316,43 @@ class QuestionRouter:
             True,
             "Đã tìm thấy bằng chứng xác thực trong tài liệu.",
         )
+
+    @classmethod
+    def _extract_query_terms(cls, query: str) -> List[str]:
+        """
+        Extract core informative terms from query, stripping meta-question boilerplate.
+        If query contains a quoted entity, tokens from that entity are prioritized as #1 target.
+        """
+        if not query or not query.strip():
+            return []
+
+        # 1. Check for quoted entity
+        quoted_match = cls.GENERAL_QUOTED_PATTERN.search(query)
+        priority_terms: List[str] = []
+        if quoted_match:
+            quoted_text = quoted_match.group(1).strip()
+            raw_quoted_tokens = re.findall(r"[\w]+", quoted_text.lower(), re.UNICODE)
+            priority_terms = [t for t in raw_quoted_tokens if t not in cls.META_QUESTION_STOPWORDS and (len(t) >= 2 or t.isdigit())]
+            if not priority_terms:
+                priority_terms = [t for t in raw_quoted_tokens if len(t) >= 2 or t.isdigit()]
+
+        # 2. Extract remaining words from query
+        raw_tokens = re.findall(r"[\w]+", query.lower(), re.UNICODE)
+        core_terms: List[str] = []
+        for t in raw_tokens:
+            if t not in cls.META_QUESTION_STOPWORDS and (len(t) >= 2 or t.isdigit()):
+                if t not in priority_terms and t not in core_terms:
+                    core_terms.append(t)
+
+        final_terms = priority_terms + core_terms
+        return final_terms if final_terms else [t for t in raw_tokens if len(t) >= 2 or t.isdigit()]
+
+    @classmethod
+    def extract_query_terms(cls, query: str) -> List[str]:
+        return cls._extract_query_terms(query)
+
+
+# Module-level alias
+_extract_query_terms = QuestionRouter._extract_query_terms
+extract_query_terms = QuestionRouter.extract_query_terms
+

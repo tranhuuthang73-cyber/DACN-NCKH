@@ -16,6 +16,21 @@ from src.self_study.reader import (
     detect_query_intent,
     split_clean_sentences,
 )
+from src.self_study.knowledge_bank import (
+    ANSWER_INSTRUCTION_BLUEPRINTS,
+    SelfStudyKnowledgeBank,
+    get_knowledge_bank,
+)
+from src.self_study.datasets import (
+    expand_domain_query_terms,
+    extract_taxonomy_and_types,
+    extract_examples_and_formulas,
+    normalize_student_question,
+    QuestionParaphraseNormalizer,
+    SelfCurriculumGenerator,
+    CurriculumLevel,
+    ExtractiveTextStitcher,
+)
 
 __all__ = [
     "QARuleType",
@@ -27,5 +42,16 @@ __all__ = [
     "NeuralReaderResult",
     "detect_query_intent",
     "split_clean_sentences",
+    "ANSWER_INSTRUCTION_BLUEPRINTS",
+    "SelfStudyKnowledgeBank",
+    "get_knowledge_bank",
+    "expand_domain_query_terms",
+    "extract_taxonomy_and_types",
+    "extract_examples_and_formulas",
+    "normalize_student_question",
+    "QuestionParaphraseNormalizer",
+    "SelfCurriculumGenerator",
+    "CurriculumLevel",
+    "ExtractiveTextStitcher",
 ]
 

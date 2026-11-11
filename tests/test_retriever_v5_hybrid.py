@@ -234,6 +234,31 @@ class TestRetrieverV5Hybrid(unittest.TestCase):
         res = self.retriever.retrieve("tri tue nhan tao", top_k=1)
         self.assertEqual(res[0].passage_id, "DOC003::P000")
 
+    def test_quoted_entity_and_concept_boost(self):
+        """Verify +5.0 boost for quoted entity / section match and +3.0 boost for concept+types queries."""
+        p_intro = make_passage(
+            passage_id="CRYPTO::P001",
+            document_id="CRYPTO",
+            text="Xuất hiện đầu tiên trong ngành mã hóa. Có 2 phương pháp phổ biến: * Mã hóa thay thế. * Mã hóa hoán vị.",
+            section_title="1. GIỚI THIỆU HỆ MÃ KHÓA ĐỐI XỨNG",
+        )
+        p_attack = make_passage(
+            passage_id="CRYPTO::P003",
+            document_id="CRYPTO",
+            text="3. PHÁ MÃ: An ninh hệ mã khóa. Các phương pháp thám mã phổ biến gồm tấn công vét cạn và phân tích thống kê mã hóa.",
+            section_title="3. PHÁ MÃ",
+        )
+        retriever = BM25Retriever()
+        retriever.build_index([p_intro, p_attack])
+
+        # 1. Quoted entity 'PHÁ MÃ' boosts P003
+        results_quoted = retriever.retrieve("Yêu cầu liên quan đến 'PHÁ MÃ' gồm những gì?", top_k=2)
+        self.assertEqual(results_quoted[0].passage_id, "CRYPTO::P003")
+
+        # 2. General concept + types query boosts P001 to Top 1
+        results_concept = retriever.retrieve("mã hóa đối xứng là gì, có bao nhiêu loại mã hóa, cho ví dụ", top_k=2)
+        self.assertEqual(results_concept[0].passage_id, "CRYPTO::P001")
+
 
 if __name__ == "__main__":
     unittest.main()

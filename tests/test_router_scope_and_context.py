@@ -153,3 +153,21 @@ def test_session_manager_quoted_anchor_carry_over(tmp_path):
 
     resolved = mgr.resolve_conversation_context(session.session_id, "nội dung này có ưu điểm gì")
     assert "SA-CMS" in resolved
+
+
+def test_question_router_numbered_heading_and_extract_terms():
+    """Verify that '3. PHÁ MÃ' routes to SECTION_LOOKUP and _extract_query_terms strips boilerplate."""
+    router = QuestionRouter()
+    route, meta = router.classify_intent("3. PHÁ MÃ")
+    assert route == QuestionRoute.SECTION_LOOKUP
+    assert meta.get("target_section") == "3. PHÁ MÃ"
+
+    terms = router._extract_query_terms("Yêu cầu và chi tiết cụ thể liên quan đến 'PHÁ MÃ' gồm những gì?")
+    assert terms == ["phá", "mã"]
+
+    terms_natural = router._extract_query_terms("phá mã trong hệ mã khóa đối xứng là gì")
+    assert "phá" in terms_natural
+    assert "mã" in terms_natural
+    assert "gì" not in terms_natural
+    assert "trong" not in terms_natural
+

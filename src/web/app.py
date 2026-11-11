@@ -122,7 +122,13 @@ class PipelineService:
         self._initialize_retriever()
 
     def rechunk_all_documents(self):
-        """Re-chunks every stored document with the current chunker and rebuilds index passages."""
+        """Re-chunks every stored document with the current chunker (v5.0) and rebuilds index passages."""
+        try:
+            from src.self_study.knowledge_bank import get_knowledge_bank
+            kb = get_knowledge_bank()
+        except Exception:
+            kb = None
+
         try:
             for doc_info in self.store.list_documents():
                 doc_id = doc_info.get("document_id")
@@ -131,8 +137,26 @@ class PipelineService:
                 try:
                     doc_record = self.store.get_document(doc_id)
                     if doc_record and doc_record.raw_text:
+                        # Feed into knowledge bank
+                        if kb is not None:
+                            try:
+                                kb.learn_document(
+                                    doc_id=doc_id,
+                                    title=doc_record.title or "",
+                                    raw_text=doc_record.raw_text or "",
+                                    passages=doc_record.passages,
+                                )
+                            except Exception:
+                                pass
+
+                        meta = doc_record.metadata if hasattr(doc_record, "metadata") and doc_record.metadata is not None else {}
+                        if meta.get("chunker_version") == "v5.0":
+                            continue
+
                         passages = self.chunker.chunk_document(doc_record)
                         doc_record.passages = passages
+                        meta["chunker_version"] = "v5.0"
+                        doc_record.metadata = meta
                         doc_file = self.store.docs_dir / doc_id / f"v{doc_record.version}.json"
                         with open(doc_file, "w", encoding="utf-8") as f:
                             json.dump(doc_record.to_dict(), f, indent=2, ensure_ascii=False)
@@ -410,6 +434,7 @@ async def upload_document(
             "file_name": filename,
             "file_size": size_str,
             "file_size_bytes": file_size_bytes,
+            "chunker_version": "v5.0",
         },
     )
 
@@ -422,6 +447,17 @@ async def upload_document(
 
     # Update BM25 index
     service._initialize_retriever()
+
+    try:
+        from src.self_study.knowledge_bank import get_knowledge_bank
+        get_knowledge_bank().learn_document(
+            doc_id=doc_id,
+            title=doc_title,
+            raw_text=raw_text,
+            passages=passages,
+        )
+    except Exception:
+        pass
 
     # Trigger formal offline memory ingestion lifecycle (Steps 3, 4, 7)
     service.memory_manager.run_ingestion_lifecycle(
@@ -487,13 +523,13 @@ async def create_raw_document(req: RawDocumentRequest):
 
     doc_id = req.document_id or f"DOC_{int(time.time() * 1000)}_{uuid.uuid4().hex[:6]}"
     if doc_id in service.store._index:
-        raise HTTPException(status_code=400, detail=f"Document {doc_id} already exists.")
+        service.store.remove_document(doc_id)
 
     doc_record = service.store.add_document(
         title=doc_title,
         raw_text=cleaned_text,
         document_id=doc_id,
-        metadata={"category": req.category, "token_reduction": reduction_stats},
+        metadata={"category": req.category, "token_reduction": reduction_stats, "chunker_version": "v5.0"},
     )
 
     passages = service.chunker.chunk_document(doc_record)
@@ -503,6 +539,17 @@ async def create_raw_document(req: RawDocumentRequest):
         json.dump(doc_record.to_dict(), f, indent=2, ensure_ascii=False)
 
     service._initialize_retriever()
+
+    try:
+        from src.self_study.knowledge_bank import get_knowledge_bank
+        get_knowledge_bank().learn_document(
+            doc_id=doc_id,
+            title=doc_title,
+            raw_text=cleaned_text,
+            passages=passages,
+        )
+    except Exception:
+        pass
 
     # Trigger formal offline memory ingestion lifecycle (Steps 3, 4, 7)
     service.memory_manager.run_ingestion_lifecycle(
@@ -1043,9 +1090,9 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
             citations=[],
             evidence=[],
             telemetry={
-                "input_tokens": int(len(effective_query.split()) * 1.35),
-                "output_tokens": int(len(no_doc_msg.split()) * 1.35),
-                "total_tokens": int(len(effective_query.split()) * 1.35) + int(len(no_doc_msg.split()) * 1.35),
+                "input_tokens": count_text_tokens(effective_query, service.tokenizer),
+                "output_tokens": count_text_tokens(no_doc_msg, service.tokenizer),
+                "total_tokens": count_text_tokens(effective_query, service.tokenizer) + count_text_tokens(no_doc_msg, service.tokenizer),
                 "tokens_saved": 0,
                 "compression_ratio_pct": 0.0,
                 "total_latency_ms": round((time.perf_counter() - t_start) * 1000, 2),
@@ -1105,9 +1152,15 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
     t_ret_start = time.perf_counter()
     retrieval_candidates = []
 
+    is_multi_facet = (
+        route in (QuestionRoute.CROSS_DOCUMENT_COMPARISON, QuestionRoute.DOCUMENT_SUMMARY, QuestionRoute.MULTI_PASSAGE_SYNTHESIS)
+        or len(attached_docs) > 1
+        or any(kw in effective_query.lower() for kw in ["bao nhiêu", "loại", "phương pháp", "ví dụ", "cac he", "các hệ", "phân loại", "tong quan", "tổng quan"])
+    )
+
     if route != QuestionRoute.UNANSWERABLE:
         # Retrieve more candidates if comparing or synthesizing across docs
-        top_k_retrieve = req.top_k * 3 if (route in (QuestionRoute.CROSS_DOCUMENT_COMPARISON, QuestionRoute.DOCUMENT_SUMMARY) or len(attached_docs) > 1) else req.top_k * 2
+        top_k_retrieve = max(req.top_k * 3, 15) if is_multi_facet else req.top_k * 2
         expanded_query_text, _ = expand_query_semantics(effective_query)
 
         # Pre-filter strictly at BM25 level: ONLY passages from attached_docs are even scored
@@ -1208,11 +1261,13 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
     retrieval_ms = (t_ret_end - t_ret_start) * 1000
 
     # Step 5: Evidence Selection & Grounding Verification (Task 8 & 30)
-    use_dynamic_k = route in (QuestionRoute.DIRECT_LOOKUP, QuestionRoute.SECTION_LOOKUP, QuestionRoute.PAGE_LOOKUP)
+    use_dynamic_k = (not is_multi_facet) and (route in (QuestionRoute.DIRECT_LOOKUP, QuestionRoute.SECTION_LOOKUP, QuestionRoute.PAGE_LOOKUP))
+    eff_max_ev = max(req.top_k, 6) if is_multi_facet else req.top_k
     evidence = service.evidence_selector.select_evidence(
         effective_query,
         retrieval_candidates,
         dynamic_top_k=use_dynamic_k,
+        max_evidence=eff_max_ev,
     )
     refusal_decision = service.refusal_controller.decide(evidence, language=req.language or "vi")
 
@@ -1423,31 +1478,50 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
             if smart_sec_body and not smart_sec_body.startswith("Không tìm thấy đủ thông tin"):
                 body = smart_sec_body
             else:
-                salient_source = select_best_sentence(effective_query, sentences) or (sentences[0] if sentences else best_passage[:180])
-                salient = extract_answer_span(effective_query, salient_source) or salient_source
-                body = f"Tại mục được tra cứu, tài liệu ghi nhận: {salient}. {cit_1}"
+                body_points = [s.strip() for s in sentences[:3] if len(s.strip()) > 10]
+                if body_points:
+                    body = "\n".join(f"- {p}" for p in body_points) + f" {cit_1}"
+                else:
+                    body = f"{best_passage[:300].strip()} {cit_1}"
         else:
-            # Smart sentence selection: select the sentence with highest semantic match to the query
-            smart_answer, _ = DocumentAnalyzer.find_best_grounded_answer(
-                query=effective_query,
-                evidence_passages=evidence.evidence_passages,
-                answer_mode=req.answer_mode,
-            )
-            # Extract body (strip out Sources section if present, handled below)
-            if "### Nguồn tham khảo" in smart_answer:
-                body = smart_answer.split("### Nguồn tham khảo")[0].strip()
-            else:
-                body = smart_answer.strip()
+            # Check Knowledge Bank first for structured multi-facet answers
+            kb_synth = None
+            try:
+                from src.self_study.knowledge_bank import get_knowledge_bank
+                kb = get_knowledge_bank()
+                kb_synth = kb.synthesize_learned_answer(
+                    query=effective_query,
+                    doc_ids=attached_docs,
+                )
+            except Exception:
+                pass
 
-            # The analyzer refused internally (no on-topic evidence): propagate the refusal
-            # instead of dressing it up with citations that were never used.
-            if body.startswith("Không tìm thấy đủ thông tin bằng chứng"):
-                refused = True
-                refusal_reason = "insufficient_coverage"
-                citations_data = []
-                evidence_passages_out = []
-                if not refusal_message:
-                    target_title = "tài liệu đang chọn"
+            if kb_synth and kb_synth.get("blueprint") in ("DEFINITION_AND_TYPES", "SECTION_FULL_EXPLANATION") and kb_synth.get("answer"):
+                body = kb_synth["answer"]
+            else:
+                smart_answer, _ = DocumentAnalyzer.find_best_grounded_answer(
+                    query=effective_query,
+                    evidence_passages=evidence.evidence_passages,
+                    answer_mode=req.answer_mode,
+                )
+                # Extract body (strip out Sources section if present, handled below)
+                if "### Nguồn tham khảo" in smart_answer:
+                    body = smart_answer.split("### Nguồn tham khảo")[0].strip()
+                else:
+                    body = smart_answer.strip()
+
+                # The analyzer refused internally (no on-topic evidence): propagate the refusal
+                # unless Knowledge Bank can fulfill the query grounded in the attached document.
+                if body.startswith("Không tìm thấy đủ thông tin bằng chứng"):
+                    if kb_synth and kb_synth.get("answer"):
+                        body = kb_synth["answer"]
+                    else:
+                        refused = True
+                        refusal_reason = "insufficient_coverage"
+                        citations_data = []
+                        evidence_passages_out = []
+                        if not refusal_message:
+                            target_title = "tài liệu đang chọn"
                     if attached_docs:
                         try:
                             target_doc = service.store.get_document(attached_docs[0])
@@ -1869,8 +1943,8 @@ async def chat_query(req: ChatRequest):
         citations = []
         evidence_passages_out = []
         answer = refusal_message or "Không tìm thấy đủ thông tin trong tài liệu để trả lời chắc chắn."
-        input_tokens = len(query.split()) + 30
-        output_tokens = len(answer.split())
+        input_tokens = count_text_tokens(query, service.tokenizer)
+        output_tokens = count_text_tokens(answer, service.tokenizer)
     else:
         # Answer span extraction first: the model-free path keeps the exact clause.
         evidence_pool = [
@@ -1900,7 +1974,7 @@ async def chat_query(req: ChatRequest):
             language=req.language or "vi",
         )
 
-        input_tokens = int(len(prompt.split()) * 1.35)
+        input_tokens = count_text_tokens(prompt, service.tokenizer)
 
         if service.model_loaded and service.model is not None and service.tokenizer is not None:
             raw_answer = service.pipeline._generate_answer(prompt)

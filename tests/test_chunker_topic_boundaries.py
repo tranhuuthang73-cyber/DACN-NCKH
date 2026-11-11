@@ -216,3 +216,108 @@ def test_chunker_no_passage_contains_two_different_topic_numbers():
         assert len(unique_topics) <= 1, (
             f"Passage {p.passage_id} contains multiple distinct topic numbers {unique_topics}: {p.text}"
         )
+
+
+def test_chunker_page_break_and_slide_headings_isolation():
+    """
+    Verifies that === Page N === is treated as a hard boundary with zero overlap,
+    page markers are stripped from passage text, and slide headings are cleanly isolated.
+    """
+    slide_text = (
+        "=== Page 1 ===\n"
+        "1. GIỚI THIỆU HỆ MÃ KHÓA ĐỐI XỨNG:\n"
+        "- Xuất hiện đầu tiên trong ngành mã hóa.\n"
+        "- Các hệ mã này phần có từ trước năm 1970.\n"
+        "- Hệ mã khóa bí mật hoặc hệ mã khóa cổ điển.\n"
+        "- Các phương pháp này là cơ sở để phát triển các thuật toán mã hóa đối xứng hiện nay.\n"
+        "- Có 2 phương pháp phổ biến:\n"
+        "* Mã hóa thay thế.\n"
+        "* Mã hóa hoán vị.\n\n"
+        "=== Page 10 ===\n"
+        "3. PHÁ MÃ:\n"
+        "An ninh hệ mã khóa:\n"
+        "- An ninh vô điều kiện: Không thể phá mã dù có thời gian và tài nguyên vô hạn.\n"
+        "- An ninh tính toán: Chi phí để phá vỡ vượt quá giá trị của thông tin mã hóa.\n\n"
+        "=== Page 30 ===\n"
+        "8. HỆ MÃ HOÁ ĐỘN MỘT LẦN:\n"
+        "- Hệ mã hóa hoàn hảo (Vernam Cipher / One-Time Pad).\n\n"
+        "9. HỆ MÃ HOÁ DÒNG:\n"
+        "- Sinh ra một chuỗi khóa z = z1, z2, z3...\n"
+        "- Ta có: zi = fi (K, x1, ..., xi-1).\n"
+        "- Bản rõ được mã hóa từng bit hoặc từng byte bằng phép XOR với dòng khóa z.\n\n"
+        "=== Page 31 ===\n"
+        "10. HỆ MÃ HOÁ AUTOKEY:\n"
+        "- Cho P = C = K = Z26.\n"
+        "- Khóa k = k1, k2, ... ban đầu được mở rộng bằng chính các ký tự của bản rõ.\n\n"
+        "=== Page 36 ===\n"
+        "11. HỆ MÃ HOÁ PLAYFAIR:\n"
+        "- Sử dụng ma trận ký tự 5x5 để mã hóa từng cặp ký tự."
+    )
+
+    doc = DocumentRecord(
+        document_id="SLIDE_TEST_DOC",
+        version=1,
+        title="Slide 2: Các Hệ Mã Hóa Đối Xứng",
+        raw_text=slide_text,
+    )
+
+    chunker = DocumentChunker(chunk_size=300, chunk_overlap=50)
+    passages = chunker.chunk_document(doc)
+
+    assert len(passages) >= 4
+
+    # 1. Page artifacts must not pollute passage texts
+    for p in passages:
+        assert "=== Page" not in p.text, f"Passage {p.passage_id} contains page artifact: {p.text}"
+
+    # 2. Topic/Section 9 (HỆ MÃ HOÁ DÒNG) must NOT contain Topic/Section 10 (HỆ MÃ HOÁ AUTOKEY)
+    stream_passages = [
+        p for p in passages
+        if "HỆ MÃ HOÁ DÒNG" in (p.section_title or "") or "HỆ MÃ HOÁ DÒNG" in p.text
+    ]
+    assert len(stream_passages) > 0
+    for sp in stream_passages:
+        assert "10. HỆ MÃ HOÁ AUTOKEY" not in sp.text
+        assert "HỆ MÃ HOÁ AUTOKEY" not in (sp.section_title or "")
+
+    # 3. Section 1 must preserve short bullet points (* Mã hóa thay thế, * Mã hóa hoán vị)
+    sec1_passages = [
+        p for p in passages
+        if "GIỚI THIỆU HỆ MÃ KHÓA ĐỐI XỨNG" in (p.section_title or "") or "GIỚI THIỆU HỆ MÃ KHÓA ĐỐI XỨNG" in p.text
+    ]
+    assert len(sec1_passages) > 0
+    sec1_combined = " ".join(p.text for p in sec1_passages)
+    assert "Mã hóa thay thế" in sec1_combined
+    assert "Mã hóa hoán vị" in sec1_combined
+
+
+def test_chunker_roman_numerals_and_slide_caps_headings():
+    """
+    Verifies that Roman numerals (I., II., III.) and slide uppercase headings
+    are recognized as headings without splitting the number from the title.
+    """
+    text = (
+        "I. GIỚI THIỆU TỔNG QUAN\n"
+        "Hệ thống thông tin bảo mật đóng vai trò thiết yếu.\n"
+        "II. CÁC PHƯƠNG PHÁP MÃ HÓA CỔ ĐIỂN\n"
+        "Bao gồm mã hóa thay thế và mã hóa hoán vị."
+    )
+
+    doc = DocumentRecord(
+        document_id="ROMAN_TEST_DOC",
+        version=1,
+        title="Roman Heading Test",
+        raw_text=text,
+    )
+
+    chunker = DocumentChunker(chunk_size=150, chunk_overlap=30)
+    passages = chunker.chunk_document(doc)
+
+    assert len(passages) == 2
+    assert passages[0].section_title.startswith("I. GIỚI THIỆU TỔNG QUAN")
+    assert passages[0].metadata["section_id"] == "SEC001"
+    assert passages[1].section_title.startswith("II. CÁC PHƯƠNG PHÁP MÃ HÓA CỔ ĐIỂN")
+    assert passages[1].metadata["section_id"] == "SEC002"
+    assert "II. CÁC PHƯƠNG PHÁP" not in passages[0].text
+    assert "I. GIỚI THIỆU" not in passages[1].text
+

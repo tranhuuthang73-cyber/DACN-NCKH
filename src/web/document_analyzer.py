@@ -69,41 +69,48 @@ class DocumentAnalyzer:
                 "key_points": [f"Nội dung tài liệu '{title}' bao gồm các phần kiến trúc và dữ kiện kỹ thuật liên quan."],
             }
 
-        # Select sentences with strong informational markers
-        scored_sentences = []
-        for s in all_sentences:
-            score = 0.0
-            s_lower = s.lower()
-            # Informational keywords
-            if any(k in s_lower for k in ["mục tiêu", "nghiên cứu", "đề xuất", "hệ thống", "kiến trúc", "mô hình"]):
-                score += 3.0
-            if any(k in s_lower for k in ["kết quả", "hiệu năng", "đạt", "đánh giá", "tối ưu"]):
-                score += 2.5
-            if any(k in s_lower for k in ["hạn chế", "thách thức", "vấn đề", "khó khăn"]):
-                score += 2.0
-            if re.search(r"\d+(\.\d+)?\s*(%|token|ms|gb|mb|triệu|nghìn)", s_lower):
-                score += 2.0
-            # Length sanity check (prefer 40 - 200 chars)
-            if 40 <= len(s) <= 220:
-                score += 1.0
-
-            scored_sentences.append((score, s))
-
-        scored_sentences.sort(key=lambda x: x[0], reverse=True)
-
-        # Pick top distinct points
         key_points = []
-        seen = set()
-        for _, s in scored_sentences:
-            first_few = " ".join(s.split()[:4]).lower()
-            if first_few not in seen:
-                seen.add(first_few)
-                key_points.append(s)
-            if len(key_points) >= max_points:
-                break
+        try:
+            from src.brain.textrank_salience import select_key_points
+            key_points = select_key_points(all_sentences, k=max_points)
+        except Exception:
+            key_points = []
 
         if not key_points:
-            key_points = all_sentences[:max_points]
+            # Fallback to legacy heuristic scoring + distinct prefix selection
+            scored_sentences = []
+            for s in all_sentences:
+                score = 0.0
+                s_lower = s.lower()
+                # Informational keywords
+                if any(k in s_lower for k in ["mục tiêu", "nghiên cứu", "đề xuất", "hệ thống", "kiến trúc", "mô hình"]):
+                    score += 3.0
+                if any(k in s_lower for k in ["kết quả", "hiệu năng", "đạt", "đánh giá", "tối ưu"]):
+                    score += 2.5
+                if any(k in s_lower for k in ["hạn chế", "thách thức", "vấn đề", "khó khăn"]):
+                    score += 2.0
+                if re.search(r"\d+(\.\d+)?\s*(%|token|ms|gb|mb|triệu|nghìn)", s_lower):
+                    score += 2.0
+                # Length sanity check (prefer 40 - 200 chars)
+                if 40 <= len(s) <= 220:
+                    score += 1.0
+
+                scored_sentences.append((score, s))
+
+            scored_sentences.sort(key=lambda x: x[0], reverse=True)
+
+            # Pick top distinct points
+            seen = set()
+            for _, s in scored_sentences:
+                first_few = " ".join(s.split()[:4]).lower()
+                if first_few not in seen:
+                    seen.add(first_few)
+                    key_points.append(s)
+                if len(key_points) >= max_points:
+                    break
+
+            if not key_points:
+                key_points = all_sentences[:max_points]
 
         lead = key_points[0] if key_points else "Tài liệu kỹ thuật chuyên ngành."
         overview = f"Tài liệu '{title}' tập trung vào các nội dung trọng tâm: {lead}"
@@ -350,9 +357,13 @@ class DocumentAnalyzer:
         matched_section = ""
         if best_sentence in sentence_pool:
             matched_section = sentence_sections[sentence_pool.index(best_sentence)]
+        combined_pool_text = " ".join(sentence_pool[:4])
+        combined_sec_text = " ".join(sentence_sections[:4])
         rel = max(
             relevance_score(query, best_sentence, extra=matched_section),
             relevance_score(exp_query, best_sentence, extra=matched_section),
+            relevance_score(query, combined_pool_text, extra=combined_sec_text) * 0.85,
+            relevance_score(exp_query, combined_pool_text, extra=combined_sec_text) * 0.85,
         )
         if not best_sentence or rel < MIN_RELEVANCE:
             return "Không tìm thấy đủ thông tin bằng chứng trong tài liệu để trả lời câu hỏi này.", []
@@ -561,6 +572,26 @@ class DocumentAnalyzer:
                 parts.append("📌 **Phân tích đa chiều từ tài liệu:**\n" + "\n".join(bullet_lines))
 
             if answer_mode == "detailed":
+                # Defense Strategist integration (Wave 3)
+                try:
+                    from src.brain.defense_strategist import DefenseStrategist
+                    strategist = DefenseStrategist()
+                    plan = strategist.plan(query)
+                    if plan.archetype != "GENERIC" and plan.confidence >= 0.35:
+                        cand_dicts = [
+                            {
+                                "sentence": s,
+                                "citation_label": lbl,
+                                "section_title": sec,
+                            }
+                            for s, lbl, sec in zip(sentence_pool, sentence_cit_labels, sentence_sections)
+                        ]
+                        arg_block = strategist.assemble_argument(plan, cand_dicts)
+                        if arg_block and "- **" in arg_block:
+                            parts.append(arg_block)
+                except Exception:
+                    pass
+
                 sec_list = sorted({c["section_title"] for c in dedup_citations if c.get("section_title")})
                 sec_summary = ", ".join(f"`{s}`" for s in sec_list[:3]) if sec_list else f"**{doc_display_title}**"
                 cit_badges = " ".join(c["citation_label"] for c in dedup_citations[:3])

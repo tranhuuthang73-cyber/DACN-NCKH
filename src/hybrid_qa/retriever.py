@@ -6,14 +6,23 @@ Design decisions:
 - Falls back to TF-IDF if rank_bm25 is unavailable.
 - Retriever is independent of SA-CMS — they are separate branches.
 - Returns structured results with passage_id, score, source document info.
+- Pure Python stdlib implementation, 100% offline.
 """
 
 import math
 import re
+import unicodedata
 from collections import Counter
-from typing import List, Dict, Any, Optional, Collection
+from typing import List, Dict, Any, Optional, Collection, Tuple, Set
 
 from src.hybrid_qa.document_store import Passage
+
+
+def strip_accents(text: str) -> str:
+    """Removes Vietnamese tone marks for accent-insensitive matching."""
+    text = unicodedata.normalize("NFD", text)
+    text = "".join(ch for ch in text if unicodedata.category(ch) != "Mn")
+    return text.replace("đ", "d").replace("Đ", "D")
 
 
 class RetrievalResult:
@@ -64,12 +73,18 @@ class BM25Retriever:
         retrieve(query: str, top_k: int) -> List[RetrievalResult]
     """
 
-    def __init__(self, k1: float = 1.5, b: float = 0.75):
+    def __init__(self, k1: float = 1.5, b: float = 0.75, proximity_weight: float = 0.0):
         self.k1 = k1
         self.b = b
+        self.proximity_weight = proximity_weight
         self.passages: List[Passage] = []
         self.tokenized_corpus: List[List[str]] = []
+        self._term_freqs: List[Counter] = []
+        self._folded_term_freqs: List[Counter] = []
+        self._doc_term_positions: List[Dict[str, List[int]]] = []
+        self._folded_doc_term_positions: List[Dict[str, List[int]]] = []
         self.doc_freqs: Dict[str, int] = {}
+        self._folded_df: Dict[str, int] = {}
         self.doc_lengths: List[int] = []
         self.avg_dl: float = 0.0
         self.corpus_size: int = 0
@@ -86,7 +101,12 @@ class BM25Retriever:
         """Build BM25 index from a list of passages."""
         self.passages = list(passages)
         self.tokenized_corpus = []
+        self._term_freqs = []
+        self._folded_term_freqs = []
+        self._doc_term_positions = []
+        self._folded_doc_term_positions = []
         self.doc_freqs = {}
+        self._folded_df = {}
         self.doc_lengths = []
 
         for passage in self.passages:
@@ -94,14 +114,189 @@ class BM25Retriever:
             self.tokenized_corpus.append(tokens)
             self.doc_lengths.append(len(tokens))
 
-            # Count document frequency (each term counted once per doc)
-            unique_terms = set(tokens)
-            for term in unique_terms:
+            # Raw term frequencies
+            tf = Counter(tokens)
+            self._term_freqs.append(tf)
+            for term in tf.keys():
                 self.doc_freqs[term] = self.doc_freqs.get(term, 0) + 1
+
+            # Raw & folded token positions
+            doc_pos: Dict[str, List[int]] = {}
+            folded_pos: Dict[str, List[int]] = {}
+            folded_tokens: List[str] = []
+            for pos, token in enumerate(tokens):
+                doc_pos.setdefault(token, []).append(pos)
+                f_token = strip_accents(token)
+                folded_tokens.append(f_token)
+                folded_pos.setdefault(f_token, []).append(pos)
+
+            self._doc_term_positions.append(doc_pos)
+            self._folded_doc_term_positions.append(folded_pos)
+
+            # Folded term frequencies and doc frequencies
+            folded_tf = Counter(folded_tokens)
+            self._folded_term_freqs.append(folded_tf)
+            for f_term in folded_tf.keys():
+                self._folded_df[f_term] = self._folded_df.get(f_term, 0) + 1
 
         self.corpus_size = len(self.passages)
         self.avg_dl = sum(self.doc_lengths) / max(1, self.corpus_size)
         self._indexed = True
+
+    def _compute_proximity_bonus(self, query_tokens: List[str], doc_idx: int) -> float:
+        """
+        Compute proximity bonus for doc_idx.
+        Finds minimal window covering >= 2 distinct query terms and calculates:
+        (m - 1) / (1 + log(1 + span))
+        """
+        # Deduplicate query tokens preserving order
+        seen_terms: Set[str] = set()
+        unique_terms: List[str] = []
+        for t in query_tokens:
+            if t not in seen_terms:
+                seen_terms.add(t)
+                unique_terms.append(t)
+
+        if len(unique_terms) < 2:
+            return 0.0
+
+        doc_positions = self._doc_term_positions[doc_idx]
+        folded_positions = self._folded_doc_term_positions[doc_idx]
+
+        occurrences: List[Tuple[int, str]] = []
+        matched_term_ids: Set[str] = set()
+
+        for term in unique_terms:
+            if term in self.doc_freqs:
+                term_id = term
+                pos_list = doc_positions.get(term, [])
+            else:
+                f_term = strip_accents(term)
+                if f_term in self._folded_df:
+                    term_id = f_term
+                    pos_list = folded_positions.get(f_term, [])
+                else:
+                    pos_list = []
+
+            if pos_list:
+                matched_term_ids.add(term_id)
+                for p in pos_list:
+                    occurrences.append((p, term_id))
+
+        if len(matched_term_ids) < 2 or len(occurrences) < 2:
+            return 0.0
+
+        occurrences.sort(key=lambda x: x[0])
+
+        best_bonus = 0.0
+        n = len(occurrences)
+        total_matched = len(matched_term_ids)
+
+        for i in range(n):
+            terms_in_window = {occurrences[i][1]}
+            for j in range(i + 1, n):
+                terms_in_window.add(occurrences[j][1])
+                m = len(terms_in_window)
+                if m >= 2:
+                    span = occurrences[j][0] - occurrences[i][0]
+                    bonus = (m - 1) / (1.0 + math.log(1.0 + span))
+                    if bonus > best_bonus:
+                        best_bonus = bonus
+                if len(terms_in_window) == total_matched:
+                    break
+
+        return best_bonus
+
+    def _score_document(self, query_tokens: List[str], doc_idx: int) -> float:
+        """Compute BM25 score for a single document."""
+        dl = self.doc_lengths[doc_idx]
+        term_freqs = self._term_freqs[doc_idx]
+        folded_term_freqs = self._folded_term_freqs[doc_idx]
+
+        score = 0.0
+        for term in query_tokens:
+            if term in self.doc_freqs:
+                tf = term_freqs.get(term, 0)
+                df = self.doc_freqs[term]
+            else:
+                folded_term = strip_accents(term)
+                if folded_term in self._folded_df:
+                    tf = folded_term_freqs.get(folded_term, 0)
+                    df = self._folded_df[folded_term]
+                else:
+                    continue
+
+            # IDF with log smoothing
+            idf = math.log((self.corpus_size - df + 0.5) / (df + 0.5) + 1.0)
+
+            # BM25 term score
+            numerator = tf * (self.k1 + 1)
+            denominator = tf + self.k1 * (1 - self.b + self.b * dl / self.avg_dl)
+            score += idf * numerator / denominator
+
+        if self.proximity_weight > 0.0:
+            score += self.proximity_weight * self._compute_proximity_bonus(query_tokens, doc_idx)
+
+        return score
+
+    def _mmr_rerank(
+        self,
+        candidate_scores: List[Tuple[int, float]],
+        top_k: int,
+        mmr_lambda: float = 0.7,
+    ) -> List[Tuple[int, float]]:
+        """
+        MMR rerank candidates over top candidates using Jaccard token similarity
+        plus a 0.15 penalty for repeated section_title.
+        """
+        if not candidate_scores:
+            return []
+
+        max_score = candidate_scores[0][1]
+
+        # Precompute token sets and normalized section titles
+        doc_token_sets = {idx: set(self.tokenized_corpus[idx]) for idx, _ in candidate_scores}
+        doc_sections = {idx: (self.passages[idx].section_title or "").strip().lower() for idx, _ in candidate_scores}
+
+        selected: List[Tuple[int, float]] = [candidate_scores[0]]
+        remaining = list(candidate_scores[1:])
+
+        while remaining and len(selected) < top_k:
+            best_mmr = -float("inf")
+            best_cand = None
+
+            for cand in remaining:
+                cand_idx, cand_score = cand
+                cand_tokens = doc_token_sets[cand_idx]
+                cand_sec = doc_sections[cand_idx]
+
+                rel = (cand_score / max_score) if max_score > 0 else 0.0
+
+                max_redundancy = 0.0
+                for sel_idx, _ in selected:
+                    sel_tokens = doc_token_sets[sel_idx]
+                    sel_sec = doc_sections[sel_idx]
+
+                    union_size = len(cand_tokens | sel_tokens)
+                    jaccard = (len(cand_tokens & sel_tokens) / union_size) if union_size > 0 else 0.0
+
+                    section_penalty = 0.15 if (cand_sec and sel_sec and cand_sec == sel_sec) else 0.0
+                    redundancy = jaccard + section_penalty
+                    if redundancy > max_redundancy:
+                        max_redundancy = redundancy
+
+                mmr = mmr_lambda * rel - (1.0 - mmr_lambda) * max_redundancy
+                if mmr > best_mmr:
+                    best_mmr = mmr
+                    best_cand = cand
+
+            if best_cand is not None:
+                selected.append(best_cand)
+                remaining.remove(best_cand)
+            else:
+                break
+
+        return selected
 
     def retrieve(
         self,
@@ -109,12 +304,15 @@ class BM25Retriever:
         top_k: int = 5,
         document_id: Optional[str] = None,
         allowed_document_ids: Optional[Collection[str]] = None,
+        diversify: bool = False,
+        mmr_lambda: float = 0.7,
     ) -> List[RetrievalResult]:
         """
-        Retrieve top-k passages for a query with optional document_id filter or allowed_document_ids set.
+        Retrieve top-k passages for a query with optional document_id filter, allowed_document_ids set,
+        and optional MMR diversification.
         
         Returns:
-            List[RetrievalResult] sorted by descending BM25 score.
+            List[RetrievalResult] sorted by descending score.
         """
         if not self._indexed or not self.passages:
             return []
@@ -146,8 +344,17 @@ class BM25Retriever:
         # Sort by score descending
         scores.sort(key=lambda x: x[1], reverse=True)
 
+        if not diversify or len(scores) <= 1 or top_k <= 1:
+            selected_candidates = scores[:top_k]
+        else:
+            selected_candidates = self._mmr_rerank(
+                candidate_scores=scores[: min(len(scores), 3 * top_k)],
+                top_k=top_k,
+                mmr_lambda=mmr_lambda,
+            )
+
         results = []
-        for idx, score in scores[:top_k]:
+        for idx, score in selected_candidates:
             passage = self.passages[idx]
             results.append(RetrievalResult(
                 passage_id=passage.passage_id,
@@ -161,30 +368,6 @@ class BM25Retriever:
             ))
 
         return results
-
-    def _score_document(self, query_tokens: List[str], doc_idx: int) -> float:
-        """Compute BM25 score for a single document."""
-        doc_tokens = self.tokenized_corpus[doc_idx]
-        dl = self.doc_lengths[doc_idx]
-        term_freqs = Counter(doc_tokens)
-
-        score = 0.0
-        for term in query_tokens:
-            if term not in self.doc_freqs:
-                continue
-
-            tf = term_freqs.get(term, 0)
-            df = self.doc_freqs[term]
-
-            # IDF with log smoothing
-            idf = math.log((self.corpus_size - df + 0.5) / (df + 0.5) + 1.0)
-
-            # BM25 term score
-            numerator = tf * (self.k1 + 1)
-            denominator = tf + self.k1 * (1 - self.b + self.b * dl / self.avg_dl)
-            score += idf * numerator / denominator
-
-        return score
 
     def add_passages(self, new_passages: List[Passage]) -> None:
         """Incrementally add passages and rebuild index."""

@@ -1008,19 +1008,28 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
 
         # Pre-filter strictly at BM25 level: ONLY passages from attached_docs are even scored
         if attached_docs:
+            _retrieve_kwargs = {"allowed_document_ids": attached_docs}
+            if req.answer_mode == "detailed":
+                try:
+                    import inspect
+                    if "diversify" in inspect.signature(service.retriever.retrieve).parameters:
+                        _retrieve_kwargs["diversify"] = True
+                except Exception:
+                    pass
+
             retrieval_candidates = service.retriever.retrieve(
                 expanded_query_text,
                 top_k=top_k_retrieve,
-                allowed_document_ids=attached_docs,
+                **_retrieve_kwargs,
             )
 
-            # Query Decomposition (Trụ cột 2): also retrieve candidates for decomposed sub-queries
+            # Query Decomposition (Trụ cột 2): also retrieve candidates for decomposed sub-queries & focus entities
             try:
                 from src.reasoning.query_decomposer import QueryDecomposer
                 _decomposer = QueryDecomposer()
                 _decomp_res = _decomposer.decompose(effective_query)
+                seen_p_ids = {h.passage_id for h in retrieval_candidates}
                 if _decomp_res.is_compound and len(_decomp_res.sub_queries) >= 2:
-                    seen_p_ids = {h.passage_id for h in retrieval_candidates}
                     for _sq in _decomp_res.sub_queries:
                         _sq_expanded, _ = expand_query_semantics(_sq.text)
                         _sub_hits = service.retriever.retrieve(
@@ -1032,6 +1041,20 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
                             if _sh.passage_id not in seen_p_ids:
                                 seen_p_ids.add(_sh.passage_id)
                                 retrieval_candidates.append(_sh)
+
+                # Focus entities pinned retrieval (Wave 3)
+                if hasattr(_decomposer, "extract_focus_entities"):
+                    _focus_entities = _decomposer.extract_focus_entities(effective_query)
+                    for _fe in _focus_entities[:3]:
+                        _fe_hits = service.retriever.retrieve(
+                            _fe,
+                            top_k=2,
+                            allowed_document_ids=attached_docs,
+                        )
+                        for _fh in _fe_hits:
+                            if _fh.passage_id not in seen_p_ids:
+                                seen_p_ids.add(_fh.passage_id)
+                                retrieval_candidates.append(_fh)
             except Exception:
                 pass
 
@@ -1464,6 +1487,43 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
         "suggested_questions": follow_up_questions if not refused else [],
     }
 
+    # Epistemic Calibration Deep Integration (Wave 3)
+    epistemic_data = {}
+    try:
+        from src.brain.epistemic_calibrator import EpistemicCalibrator
+        calibrator = EpistemicCalibrator()
+        gw = (mem_diag.get("g1", 0.33), mem_diag.get("g2", 0.33), mem_diag.get("g3", 0.34)) if mem_diag else (0.33, 0.33, 0.34)
+        ev_texts = [c["text"] for c in citations_data if "text" in c]
+        if hasattr(calibrator, "calibrate_deep"):
+            ep_rep = calibrator.calibrate_deep(
+                query=effective_query,
+                evidence_texts=ev_texts,
+                gating_weights=gw,
+                answer_text=answer_text if not refused else None,
+            )
+        else:
+            ep_rep = calibrator.calibrate(
+                query=effective_query,
+                evidence_texts=ev_texts,
+                gating_weights=gw,
+            )
+        epistemic_data = {
+            "uncertainty_score": ep_rep.uncertainty_score,
+            "gating_entropy": ep_rep.gating_entropy,
+            "semantic_drift": ep_rep.semantic_drift,
+            "evidence_density": ep_rep.evidence_density,
+            "epistemic_label": ep_rep.epistemic_label,
+            "explanation": ep_rep.calibration_explanation,
+            "evidence_quality": getattr(ep_rep, "evidence_quality", 0.0),
+            "conflicts": getattr(ep_rep, "conflicts", []),
+            "claim_support": getattr(ep_rep, "claim_support", 1.0),
+        }
+    except Exception:
+        pass
+
+    if epistemic_data:
+        diagnostics_data["epistemic_calibration"] = epistemic_data
+
     # Step 8: Add assistant message to session & persist
     assistant_msg = session.add_message(
         role="assistant",
@@ -1519,6 +1579,7 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
         "telemetry": telemetry_data,
         "diagnostics": diagnostics_data,
         "memory_diagnostics": mem_diag,
+        "epistemic_calibration": epistemic_data,
     }
 
 

@@ -1265,11 +1265,19 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
                         from src.brain.progressive_summarizer import ProgressiveSummarizer
                         prog_sum = ProgressiveSummarizer()
                         digest = prog_sum.generate_digest(attached_doc.raw_text, doc_title=attached_doc.title)
+                        intel = DocumentAnalyzer.extract_key_points_and_summary(attached_doc.raw_text, title=attached_doc.title, max_points=4)
+                        kp_lines = []
+                        for kp in intel.get("key_points", []):
+                            kp_clean = kp.lstrip("- ").strip()
+                            if kp_clean and kp_clean not in (digest.l1_tldr or "") and kp_clean not in (digest.l2_executive or ""):
+                                kp_lines.append(f"  - {kp_clean}")
+                        kp_block = ("\n- **Các luận điểm & nội dung chi tiết**:\n" + "\n".join(kp_lines)) if kp_lines else ""
                         body = (
                             f"### 📖 Tóm lược Toàn văn Tài liệu: **{doc_title}**\n\n"
                             f"Dựa trên việc phân tích cấu trúc đa tầng SA-CMS của tài liệu, hệ thống tổng hợp các nội dung then chốt sau:\n\n"
                             f"- **Tóm lược cốt lõi**: {digest.l1_tldr}\n"
                             f"- **Tổng quan thực nghiệm & Giải pháp**: {digest.l2_executive} {cit_1}"
+                            f"{kp_block}"
                         )
                 except Exception:
                     intel = DocumentAnalyzer.extract_key_points_and_summary(attached_doc.raw_text, title=attached_doc.title, max_points=4)
@@ -1353,11 +1361,11 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
                             _graph = _dag.build_dag(citations_data, query=effective_query)
                             _chain = _dag.find_optimal_evidence_chain(_graph, max_hops=3)
                             if _chain and len(_chain.nodes) >= 2:
+                                _chain_desc = " ➔ ".join(n.role.title() for n in _chain.nodes)
                                 _chain_narrative = _dag.compose_chain_narrative(_chain)
-                                if _chain_narrative and len(_chain_narrative) > 50:
+                                if _chain_narrative and len(_chain_narrative) > 50 and "📌" not in body:
                                     _doc_title = citations_data[0].get("document_title", "tài liệu")
                                     body = f"Dựa trên tài liệu **{_doc_title}**, chuỗi phân tích nơ-ron đa chặng (System 2) ghi nhận như sau:\n\n{_chain_narrative}"
-                                    _chain_desc = " ➔ ".join(n.role.title() for n in _chain.nodes)
                         except Exception:
                             pass
 

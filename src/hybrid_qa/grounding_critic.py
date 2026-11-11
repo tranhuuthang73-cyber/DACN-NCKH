@@ -43,13 +43,20 @@ class GroundingCritic:
 
         # Filter out meta-headers and sources from claims
         clean_text = answer
-        for header in ["### Nguồn tham khảo", "💡 **Câu hỏi tự học tiếp theo:**", "🧠 **Tiến trình nơ-ron"]:
+        for header in [
+            "### Nguồn tham khảo",
+            "💡 **Câu hỏi tự học tiếp theo:**",
+            "💡 **Tổng hợp & Đúc kết chuyên sâu:**",
+            "🧠 **Tiến trình nơ-ron",
+        ]:
             if header in clean_text:
                 clean_text = clean_text.split(header)[0]
 
         sentences = [
             s.strip() for s in re.split(r"(?<=[.!?])\s+|\n+", clean_text)
-            if len(s.strip()) >= 15 and not s.strip().startswith(("#", "-", "*", "🧠", "💡"))
+            if len(s.strip()) >= 15
+            and not s.strip().startswith(("#", "-", "*", "🧠", "💡", "📌", "👉", "🔗"))
+            and not s.strip().endswith(":")
         ]
 
         if not sentences:

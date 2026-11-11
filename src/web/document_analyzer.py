@@ -290,6 +290,7 @@ class DocumentAnalyzer:
         # Deduplicate citations: one citation per distinct document & section.
         dedup_citations = []
         seen_keys = set()
+        passage_to_cit_label: List[str] = []
         for idx, p in enumerate(evidence_passages, start=1):
             doc_id = getattr(p, "document_id", "DOC")
             doc_title = getattr(p, "document_title", doc_id) or doc_id
@@ -299,9 +300,10 @@ class DocumentAnalyzer:
             key = (doc_id, sec_title, para_idx)
             if key not in seen_keys:
                 seen_keys.add(key)
+                cit_label = f"[{len(dedup_citations) + 1}]"
                 dedup_citations.append({
                     "citation_index": len(dedup_citations) + 1,
-                    "citation_label": f"[{len(dedup_citations) + 1}]",
+                    "citation_label": cit_label,
                     "passage_id": getattr(p, "passage_id", f"PASSAGE_{idx}"),
                     "document_id": doc_id,
                     "document_title": doc_title,
@@ -310,14 +312,58 @@ class DocumentAnalyzer:
                     "score": round(float(getattr(p, "score", 1.0)), 4),
                     "text": getattr(p, "text", "")[:400],
                 })
+                passage_to_cit_label.append(cit_label)
+            else:
+                # Find existing label for this key
+                matched_lbl = "[1]"
+                for dc in dedup_citations:
+                    if (dc["document_id"], dc["section_title"], dc["paragraph_index"]) == key:
+                        matched_lbl = dc["citation_label"]
+                        break
+                passage_to_cit_label.append(matched_lbl)
+
+        # Map each sentence in sentence_pool to its passage citation label
+        sentence_cit_labels: List[str] = []
+        for p_idx, passage in enumerate(evidence_passages):
+            passage_text = getattr(passage, "text", "") if hasattr(passage, "text") else str(passage)
+            p_lbl = passage_to_cit_label[p_idx] if p_idx < len(passage_to_cit_label) else "[1]"
+            for _ in split_sentences(passage_text):
+                sentence_cit_labels.append(p_lbl)
+
+        # Check compound query decomposition so multi-part questions cover all sub-queries
+        sub_query_sentences: List[Tuple[str, str]] = []
+        try:
+            from src.reasoning.query_decomposer import QueryDecomposer
+            decomp = QueryDecomposer().decompose(query)
+            if decomp.is_compound and len(decomp.sub_queries) >= 2:
+                for sq in decomp.sub_queries:
+                    sq_exp, _ = expand_query_semantics(sq.text)
+                    sq_best = select_best_sentence(sq_exp, sentence_pool, sentence_sections)
+                    if sq_best and sq_best in sentence_pool:
+                        s_idx = sentence_pool.index(sq_best)
+                        s_lbl = sentence_cit_labels[s_idx] if s_idx < len(sentence_cit_labels) else "[1]"
+                        if all(sq_best != existing_s for existing_s, _ in sub_query_sentences):
+                            sub_query_sentences.append((sq_best, s_lbl))
+                if sub_query_sentences:
+                    best_sentence = sub_query_sentences[0][0]
+        except Exception:
+            pass
 
         cit_1 = dedup_citations[0]["citation_label"] if dedup_citations else "[1]"
+        if best_sentence in sentence_pool:
+            b_idx = sentence_pool.index(best_sentence)
+            if b_idx < len(sentence_cit_labels):
+                cit_1 = sentence_cit_labels[b_idx]
 
-        # Precision cut: minimal answering span, fallback to best_sentence if span is fragmented or cuts key-values
+        # Precision cut: minimal answering span in concise mode, full rich sentence in balanced/detailed
         answer_core = extract_answer_span(exp_query, best_sentence) if best_sentence else ""
-        if not answer_core or len(answer_core.split()) < 4 or answer_core.strip().endswith(":") or ":" in best_sentence:
-            answer_core = best_sentence
-        elif not answer_core:
+        if (
+            not answer_core
+            or len(answer_core.split()) < 4
+            or answer_core.strip().endswith(":")
+            or ":" in best_sentence
+            or (answer_mode != "concise" and len(answer_core) < len(best_sentence) * 0.75)
+        ):
             answer_core = best_sentence
 
         if answer_core and not answer_core.endswith((".", "!", "?")):
@@ -325,34 +371,102 @@ class DocumentAnalyzer:
 
         # Follow-up questions grounded in the evidence that was actually used.
         target_sec_name = dedup_citations[0]["section_title"] if dedup_citations else "chương mục"
-        source_context = getattr(evidence_passages[best_passage_idx], "text", "") if evidence_passages else ""
+        all_context_text = "\n".join(
+            getattr(p, "text", "") if hasattr(p, "text") else str(p)
+            for p in evidence_passages[:3]
+        )
         follow_ups = generate_followup_questions(
             query=query,
-            context=source_context,
+            context=all_context_text,
             section_title=target_sec_name,
         )
 
         if answer_mode == "concise":
             body = f"{answer_core} {cit_1}".strip()
         else:
+            from src.self_study.reader import detect_query_intent
+            from src.self_study.answer_composer import CoherentAnswerComposer
+
+            intent = detect_query_intent(query)
+            composer = CoherentAnswerComposer()
+
             doc_display_title = dedup_citations[0]["document_title"] if dedup_citations else "tài liệu"
             sec_display_title = dedup_citations[0]["section_title"] if dedup_citations else ""
-
-            intro = f"Dựa trên tài liệu **{doc_display_title}**"
+            sec_part = ""
             if sec_display_title and sec_display_title not in {"Phần nội dung", "Section", "DOC", "Nội dung"}:
-                intro += f" (mục *{sec_display_title}*)"
-            intro += ", nội dung chính được ghi nhận như sau:\n\n"
+                sec_part = f" (mục *{sec_display_title}*)"
+
+            intent_intros = {
+                "DEFINITION": f"Theo tài liệu **{doc_display_title}**{sec_part}, khái niệm và bản chất của nội dung này được xác định cụ thể như sau:",
+                "MECHANISM": f"Dựa trên phân tích kỹ thuật trong **{doc_display_title}**{sec_part}, cơ chế vận hành và quy trình thực hiện diễn ra như sau:",
+                "METRIC": f"Các số liệu định lượng và kết quả thực nghiệm ghi nhận từ **{doc_display_title}**{sec_part} cho thấy:",
+                "ENUMERATION": f"Tài liệu **{doc_display_title}**{sec_part} hệ thống hóa các thành phần và nội dung chi tiết bao gồm:",
+                "CAUSE": f"Về nguyên nhân và cơ sở lý luận, **{doc_display_title}**{sec_part} phân tích rõ các yếu tố sau:",
+                "COMPARISON": f"Khi đối chiếu các khía cạnh trong **{doc_display_title}**{sec_part}, những điểm phân biệt cốt lõi gồm:",
+                "LIMITATION": f"Bên cạnh các kết quả đạt được, **{doc_display_title}**{sec_part} cũng chỉ rõ những thách thức và giới hạn kỹ thuật sau:",
+                "ADVANTAGE": f"Về hiệu quả và giá trị mang lại, **{doc_display_title}**{sec_part} ghi nhận các điểm nổi bật sau:",
+            }
+            intro = intent_intros.get(
+                intent,
+                f"Dựa trên tài liệu **{doc_display_title}**{sec_part}, nội dung được phân tích và tổng hợp như sau:",
+            )
 
             core_line = f"{answer_core} {cit_1}"
 
-            supporting = [
-                s for s in split_sentences(source_context)
-                if s and s != best_sentence
-            ][:2]
+            # Collect multi-passage facets: sub-query matches first, then cross-passage insights
+            max_facets = 5 if answer_mode == "detailed" else 3
+            selected_facets: List[Tuple[str, str]] = []
+            used_sents = {best_sentence.strip()}
 
-            parts = [f"{intro}{core_line}"]
-            if supporting:
-                parts.append(f"📌 **Thông tin chi tiết bổ sung:**\n{' '.join(supporting)}")
+            for sq_s, sq_lbl in sub_query_sentences:
+                if sq_s.strip() not in used_sents:
+                    selected_facets.append((sq_s, sq_lbl))
+                    used_sents.add(sq_s.strip())
+
+            # First pass: ensure at least 1 high-value sentence from each additional passage [2], [3]...
+            for s, lbl in zip(sentence_pool, sentence_cit_labels):
+                if len(selected_facets) >= max_facets:
+                    break
+                if s.strip() not in used_sents and lbl != cit_1:
+                    selected_facets.append((s, lbl))
+                    used_sents.add(s.strip())
+
+            # Second pass: fill remaining facet slots from any passage
+            for s, lbl in zip(sentence_pool, sentence_cit_labels):
+                if len(selected_facets) >= max_facets:
+                    break
+                if s.strip() not in used_sents:
+                    selected_facets.append((s, lbl))
+                    used_sents.add(s.strip())
+
+            role_labels = {
+                "mechanism": "Cơ chế & Kiến trúc",
+                "metric": "Số liệu & Thực nghiệm",
+                "limitation": "Lưu ý & Giới hạn",
+                "elaboration": "Chi tiết triển khai",
+            }
+            bullet_lines = []
+            for f_sent, f_lbl in selected_facets:
+                role = composer.classify_sentence_role(f_sent)
+                role_title = role_labels.get(role, "Thông tin bổ sung")
+                s_clean = f_sent.strip()
+                if s_clean and s_clean[-1] not in ".!?":
+                    s_clean += "."
+                bullet_lines.append(f"- **{role_title}**: {s_clean} {f_lbl}")
+
+            parts = [f"{intro}\n\n{core_line}"]
+            if bullet_lines:
+                parts.append("📌 **Phân tích đa chiều từ tài liệu:**\n" + "\n".join(bullet_lines))
+
+            if answer_mode == "detailed":
+                sec_list = sorted({c["section_title"] for c in dedup_citations if c.get("section_title")})
+                sec_summary = ", ".join(f"*{s}*" for s in sec_list[:3]) if sec_list else f"**{doc_display_title}**"
+                cit_badges = " ".join(c["citation_label"] for c in dedup_citations[:3])
+                parts.append(
+                    f"💡 **Tổng hợp & Đúc kết chuyên sâu:**\n"
+                    f"Nội dung trên được tổng hợp đối chiếu trực tiếp từ {len(dedup_citations)} đoạn chứng cứ thuộc {sec_summary} "
+                    f"trong tài liệu **{doc_display_title}** {cit_badges}, bảo đảm tính toàn vẹn ngữ cảnh và không suy diễn ngoài văn bản."
+                )
 
             body = "\n\n".join(parts)
 

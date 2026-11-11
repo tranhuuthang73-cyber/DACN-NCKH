@@ -956,20 +956,39 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
     effective_query = service.session_manager.resolve_conversation_context(session_id, raw_query)
 
     # Step 3: Question Routing (Task 4 & 5)
-    attached_docs = list(session.document_ids) if session.document_ids else []
+    raw_attached_docs = list(session.document_ids) if session.document_ids else []
+    all_store_docs = service.store.list_documents()
 
-    # Strict Document Isolation: If no document is explicitly attached, bind to the latest user document
-    if not attached_docs:
-        all_store_docs = service.store.list_documents()
-        if all_store_docs:
-            user_docs = [d for d in all_store_docs if not d.get("document_id", "").startswith("DEMO_DOC_")]
-            target_list = user_docs if user_docs else all_store_docs
-            attached_docs = [target_list[-1]["document_id"]]
-            # Persist binding to session so subsequent messages stay isolated
-            try:
-                service.session_manager.attach_document(session_id, attached_docs[0])
-            except Exception:
-                pass
+    # Filter out dead / deleted document IDs that no longer exist on disk
+    attached_docs = [
+        d_id for d_id in raw_attached_docs
+        if service.store.get_document(d_id) is not None
+    ]
+
+    # If no document is currently attached to the session, try Smart Entity Linking from query title
+    if not attached_docs and all_store_docs:
+        q_norm_lower = effective_query.lower()
+        for d_info in all_store_docs:
+            d_title = d_info.get("title", "").strip().lower()
+            d_fn = d_info.get("metadata", {}).get("file_name", "").strip().lower()
+            if (len(d_title) >= 4 and d_title in q_norm_lower) or (len(d_fn) >= 4 and d_fn in q_norm_lower):
+                matched_id = d_info["document_id"]
+                attached_docs.append(matched_id)
+                break
+
+    # Strict Document Isolation: If still no document is attached, bind to the latest user document
+    if not attached_docs and all_store_docs:
+        user_docs = [d for d in all_store_docs if not d.get("document_id", "").startswith("DEMO_DOC_")]
+        target_list = user_docs if user_docs else all_store_docs
+        attached_docs = [target_list[-1]["document_id"]]
+
+    # Persist updated valid attached docs to session
+    if attached_docs != session.document_ids:
+        session.document_ids = attached_docs
+        try:
+            service.session_manager.save()
+        except Exception:
+            pass
 
     route, route_meta = service.question_router.classify_intent(
         effective_query, num_attached_documents=len(attached_docs)
@@ -1058,11 +1077,35 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
     refusal_message = ""
 
     if not is_grounded or (refusal_decision and refusal_decision.should_refuse and route != QuestionRoute.DOCUMENT_SUMMARY):
-        if attached_docs and route == QuestionRoute.DOCUMENT_SUMMARY and len(retrieval_candidates) > 0:
-            refused = False
-            effective_route = QuestionRoute.DOCUMENT_SUMMARY
+        is_summary_query = route == QuestionRoute.DOCUMENT_SUMMARY or any(kw in effective_query.lower() for kw in ["tóm tắt", "tổng quan", "overview", "tóm lược"])
+        if attached_docs and is_summary_query:
+            if not retrieval_candidates:
+                from src.hybrid_qa.retriever import RetrievalResult
+                for d_id in attached_docs:
+                    d_obj = service.store.get_document(d_id)
+                    if d_obj and d_obj.passages:
+                        for p in d_obj.passages[:req.top_k * 3]:
+                            retrieval_candidates.append(
+                                RetrievalResult(
+                                    passage_id=p.passage_id,
+                                    document_id=p.document_id,
+                                    text=p.text,
+                                    score=10.0,
+                                    start_char=p.start_char,
+                                    end_char=p.end_char,
+                                    section_title=p.section_title,
+                                    metadata=p.metadata,
+                                )
+                            )
+            if retrieval_candidates:
+                refused = False
+                effective_route = QuestionRoute.DOCUMENT_SUMMARY
+            else:
+                refused = True
         else:
             refused = True
+
+        if refused:
             refusal_reason = effective_route.value if not is_grounded else (refusal_decision.reason.value if refusal_decision and refusal_decision.reason else "out_of_domain")
             if attached_docs:
                 try:
@@ -1072,7 +1115,7 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
                     target_title = "tài liệu đang chọn"
                 refusal_message = (
                     f"Không tìm thấy đủ thông tin trong tài liệu để trả lời chắc chắn. "
-                    f"Tài liệu **{target_title}** không có thông tin trả lời cho câu hỏi này. "
+                    f"Tài liệu **{target_title}** không có thông tin trả lời cho câu hỏi này (không chứa thông tin và chưa đủ dữ liệu). "
                     "Hệ thống không sử dụng dữ liệu từ tài liệu khác để bảo đảm độ chính xác tuyệt đối."
                 )
             else:
@@ -1165,27 +1208,48 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
             if attached_docs:
                 try:
                     attached_doc = service.store.get_document(attached_docs[0])
-                    from src.brain.progressive_summarizer import ProgressiveSummarizer
-                    prog_sum = ProgressiveSummarizer()
-                    digest = prog_sum.generate_digest(attached_doc.raw_text, doc_title=attached_doc.title)
-                    body = (
-                        f"Tài liệu **{attached_doc.title}** tập trung vào các nội dung trọng tâm sau:\n"
-                        f"- **Tóm lược cốt lõi**: {digest.l1_tldr}\n"
-                        f"- **Tổng quan thực nghiệm**: {digest.l2_executive} {cit_1}"
+                    doc_title = attached_doc.title
+
+                    # Detect if document has structured topics (like Topic Speak or lesson modules)
+                    topic_matches = re.findall(
+                        r"^\s*(Topic|Chủ đề|Bài|Mục)\s*(\d+)[:\-\.\s]+([^\n\.\?]{3,65})",
+                        attached_doc.raw_text,
+                        re.IGNORECASE | re.MULTILINE,
                     )
+
+                    if topic_matches:
+                        summary_lines = [
+                            f"### 📖 Tổng quan Toàn diện Tài liệu: **{doc_title}**\n",
+                            f"Tài liệu bao gồm **{len(topic_matches)} chủ đề chính** để luyện tập và nghiên cứu. Dưới đây là các phần trọng tâm tiêu biểu:\n",
+                        ]
+                        for tm in topic_matches[:8]:
+                            summary_lines.append(f"- **{tm[0].title()} {tm[1]}**: {tm[2].strip()}")
+                        if len(topic_matches) > 8:
+                            summary_lines.append(f"- *... cùng {len(topic_matches) - 8} chủ đề chuyên biệt khác trong văn bản.*")
+                        body = "\n".join(summary_lines)
+                    else:
+                        from src.brain.progressive_summarizer import ProgressiveSummarizer
+                        prog_sum = ProgressiveSummarizer()
+                        digest = prog_sum.generate_digest(attached_doc.raw_text, doc_title=attached_doc.title)
+                        body = (
+                            f"### 📖 Tóm lược Toàn văn Tài liệu: **{doc_title}**\n\n"
+                            f"Dựa trên việc phân tích cấu trúc đa tầng SA-CMS của tài liệu, hệ thống tổng hợp các nội dung then chốt sau:\n\n"
+                            f"- **Tóm lược cốt lõi**: {digest.l1_tldr}\n"
+                            f"- **Tổng quan thực nghiệm & Giải pháp**: {digest.l2_executive} {cit_1}"
+                        )
                 except Exception:
-                    intel = DocumentAnalyzer.extract_key_points_and_summary(attached_doc.raw_text, title=attached_doc.title, max_points=3)
+                    intel = DocumentAnalyzer.extract_key_points_and_summary(attached_doc.raw_text, title=attached_doc.title, max_points=4)
                     summary_points = [f"- {kp.lstrip('- ').strip()} {cit_1}" for kp in intel["key_points"]]
-                    body = f"Tài liệu **{attached_doc.title}** tập trung vào các nội dung trọng tâm sau:\n" + "\n".join(summary_points)
+                    body = f"### 📖 Tóm lược Tài liệu: **{attached_doc.title}**\n\n" + "\n".join(summary_points)
             else:
                 summary_points = []
-                for c in citations_data[:3]:
+                for c in citations_data[:4]:
                     pts = [s.strip() for s in c["text"].split(".") if len(s.strip()) > 20]
                     if pts:
                         summary_points.append(f"- {pts[0]} {c['citation_label']}")
                 if not summary_points:
                     summary_points = [f"- {sentences[0]} {cit_1}"]
-                body = "Tài liệu này tập trung vào các nội dung trọng tâm sau:\n" + "\n".join(summary_points)
+                body = "### 📖 Tóm lược Tài liệu\n\nTài liệu này tập trung vào các nội dung trọng tâm sau:\n" + "\n".join(summary_points)
         elif effective_route == QuestionRoute.CROSS_DOCUMENT_COMPARISON:
             comp_points = []
             for c in citations_data[:2]:
@@ -1217,9 +1281,23 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
                 refusal_reason = "insufficient_coverage"
                 citations_data = []
                 evidence_passages_out = []
+                if not refusal_message:
+                    target_title = "tài liệu đang chọn"
+                    if attached_docs:
+                        try:
+                            target_doc = service.store.get_document(attached_docs[0])
+                            if target_doc:
+                                target_title = target_doc.title
+                        except Exception:
+                            pass
+                    refusal_message = (
+                        f"Không tìm thấy đủ thông tin trong tài liệu để trả lời chắc chắn. "
+                        f"Tài liệu **{target_title}** không có thông tin trả lời cho câu hỏi này (không chứa thông tin và chưa đủ dữ liệu). "
+                        "Hệ thống không sử dụng dữ liệu từ tài liệu khác để bảo đảm độ chính xác tuyệt đối."
+                    )
 
         if refused:
-            answer_text = (
+            answer_text = refusal_message or (
                 "Tài liệu không có thông tin hoặc chưa đủ căn cứ. "
                 "Không tìm thấy đủ thông tin trong tài liệu để trả lời chắc chắn."
             )

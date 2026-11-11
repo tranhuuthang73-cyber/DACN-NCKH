@@ -137,6 +137,17 @@ class DocumentAnalyzer:
                     "sample_answer_excerpt": sample_ans[:160] if sample_ans else "",
                 })
 
+        # Pattern 0: Specific Topics / Modules (e.g. "Topic 1: ...", "Topic 11: ...", "Chủ đề 2:")
+        topic_pattern = re.compile(
+            r"^\s*(Topic|Chủ đề|Bài|Mục|Section)\s*(\d+)[:\-\.\s]+([^\n\.\?]{3,65})",
+            re.IGNORECASE | re.MULTILINE,
+        )
+        for tm in topic_pattern.finditer(raw_text):
+            pfx, num_str, t_name = tm.group(1).title(), tm.group(2), tm.group(3).strip()
+            add_q(f"Yêu cầu và nội dung chính của {pfx} {num_str} ({t_name[:45]}) là gì?", "Chủ đề bài học", tm.group(0))
+            if len(questions) >= 3:
+                break
+
         # Pattern 1: Section-based Questions (Level 2 SA-CMS structure - highest fidelity)
         lines = [line.strip() for line in raw_text.splitlines() if line.strip()]
         for line in lines:
@@ -324,14 +335,24 @@ class DocumentAnalyzer:
         if answer_mode == "concise":
             body = f"{answer_core} {cit_1}".strip()
         else:
-            parts = [f"**Nội dung cốt lõi:**\n{answer_core} {cit_1}"]
+            doc_display_title = dedup_citations[0]["document_title"] if dedup_citations else "tài liệu"
+            sec_display_title = dedup_citations[0]["section_title"] if dedup_citations else ""
+
+            intro = f"Dựa trên tài liệu **{doc_display_title}**"
+            if sec_display_title and sec_display_title not in {"Phần nội dung", "Section", "DOC", "Nội dung"}:
+                intro += f" (mục *{sec_display_title}*)"
+            intro += ", nội dung chính được ghi nhận như sau:\n\n"
+
+            core_line = f"{answer_core} {cit_1}"
 
             supporting = [
                 s for s in split_sentences(source_context)
                 if s and s != best_sentence
             ][:2]
+
+            parts = [f"{intro}{core_line}"]
             if supporting:
-                parts.append(f"📌 **Bối cảnh bổ sung:**\n{' '.join(supporting)}")
+                parts.append(f"📌 **Thông tin chi tiết bổ sung:**\n{' '.join(supporting)}")
 
             body = "\n\n".join(parts)
 

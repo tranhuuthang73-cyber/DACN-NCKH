@@ -129,11 +129,18 @@ class BM25Retriever:
         if document_id:
             allowed_set = allowed_set.intersection({document_id}) if allowed_set else {document_id}
 
+        q_topic_m = re.search(r"\b(?:topic|chủ đề|bài|mục)\s*(\d+)\b", query.lower())
+        target_topic_num = q_topic_m.group(1) if q_topic_m else None
+
         scores = []
         for idx in range(self.corpus_size):
             if allowed_set and self.passages[idx].document_id not in allowed_set:
                 continue
             score = self._score_document(query_tokens, idx)
+            if target_topic_num:
+                p_text_low = self.passages[idx].text.lower()
+                if re.search(rf"\b(?:topic|chủ đề|bài|mục)\s*{target_topic_num}\b", p_text_low):
+                    score += 15.0
             scores.append((idx, score))
 
         # Sort by score descending

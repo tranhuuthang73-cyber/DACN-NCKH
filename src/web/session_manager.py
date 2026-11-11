@@ -367,14 +367,48 @@ class SessionManager:
         self, session_id: str, current_query: str
     ) -> str:
         """
-        Task 12: Resolves follow-up pronouns and elliptical questions using conversation history.
+        Task 12: Resolves follow-up pronouns, numbered questions ("câu 2"), and elliptical queries using conversation history.
         E.g.:
-        Q1: 'CMS là gì?' -> AI: '...'
-        Q2: 'Nó khác RAG thế nào?' -> Context-aware query: 'CMS khác RAG thế nào'
+        Q1: 'CMS là gì?' -> AI: '...' (with suggested questions)
+        Q2: 'câu 2' -> resolves to the 2nd suggested question from previous turn.
+        Q3: 'Nó khác RAG thế nào?' -> Context-aware query: 'CMS khác RAG thế nào'
         """
         session = self.get_session(session_id)
         if not session or not session.messages:
             return current_query
+
+        import re
+        q_raw = current_query.strip()
+        q_lower = q_raw.lower()
+
+        # Check if user is referencing a suggested question by index:
+        # e.g., "câu 2", "câu hỏi 2", "câu hỏi thứ 2", "trả lời câu 2", "hỏi câu 2", "ý 2", "câu 1", "question 2", "#2"
+        idx_match = re.search(r"^(?:trả lời\s+|hỏi\s+|cho biết\s+|giải thích\s+)?(?:câu(?:\s*hỏi)?|ý|mục|question)\s*(?:thứ\s*)?(\d+)\b", q_lower)
+        if not idx_match:
+            idx_match = re.search(r"^#?(\d+)\.?$", q_lower)
+        if idx_match:
+            target_idx = int(idx_match.group(1)) - 1
+            # Search backwards for the most recent assistant message with suggestions
+            for m in reversed(session.messages):
+                if m.get("role") == "assistant":
+                    s_qs = m.get("suggested_questions") or []
+                    if not s_qs:
+                        # Fallback: extract numbered items from assistant content
+                        c_text = m.get("content", "")
+                        lines = re.findall(r"^\s*(\d+)\.\s*(.+)$", c_text, re.MULTILINE)
+                        s_qs = [item[1].strip() for item in lines]
+                    if 0 <= target_idx < len(s_qs):
+                        resolved_q = s_qs[target_idx]
+                        # Strip any leading category prefix like "[Category]: " or "**[Category]**:"
+                        resolved_q = re.sub(r"^(?:\*\*\[.*?\]\*\*:\s*|\[.*?\]:?\s*)", "", resolved_q).strip()
+                        return resolved_q
+                    break
+
+        # Clean off copy-pasted numbering & category badge: e.g. "1. **[Category]**: Query" -> "Query"
+        clean_pasted = re.sub(r"^\s*\d+[\.\)]\s*(?:\*\*\[.*?\]\*\*:\s*|\[.*?\]:?\s*)?", "", q_raw).strip()
+        if clean_pasted and clean_pasted != q_raw and len(clean_pasted.split()) >= 2:
+            current_query = clean_pasted
+            q_lower = current_query.lower()
 
         # Get prior user query (skip current query if already appended to session)
         user_msgs = [m for m in session.messages if m.get("role") == "user"]

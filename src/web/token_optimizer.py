@@ -45,6 +45,11 @@ def _extract_query_keywords(question: str) -> List[str]:
 
 
 VIETNAMESE_DOMAIN_SYNONYMS: Dict[str, List[str]] = {
+    # Chủ đề, Topic, Bài, Chương, Mục
+    "chủ đề": ["topic", "chủ", "đề", "bài", "mục", "phần", "nội", "dung"],
+    "topic": ["chủ", "đề", "topic", "bài", "mục", "phần", "nội", "dung"],
+    "bài": ["topic", "chủ", "đề", "bài", "học"],
+    "tóm tắt": ["tổng", "quan", "nội", "dung", "chính", "toàn", "bộ", "tài", "liệu"],
     # Nghề nghiệp, chức vụ, công tác
     "nghề": ["chức", "vụ", "công", "tác", "vị", "trí", "công", "việc", "cấp", "bậc", "tổ", "trưởng", "đảm", "nhiệm"],
     "nghiệp": ["chức", "vụ", "công", "tác", "vị", "trí", "công", "việc"],
@@ -100,6 +105,13 @@ def expand_query_semantics(question: str) -> Tuple[str, List[str]]:
             for syn in synonyms:
                 if syn not in expanded_tokens:
                     expanded_tokens.append(syn)
+
+    # Explicit topic number bridge: e.g. "chủ đề 47" -> add "topic 47", "topic", "47"
+    topic_nums = re.findall(r"\b(?:topic|chủ đề|bài|mục)\s*(\d+)\b", q_norm)
+    for num in topic_nums:
+        for t_pfx in ["topic", "chủ", "đề", "bài", num, f"topic {num}", f"chủ đề {num}"]:
+            if t_pfx not in expanded_tokens:
+                expanded_tokens.append(t_pfx)
 
     expanded_query_str = f"{question} " + " ".join(expanded_tokens)
     return expanded_query_str.strip(), expanded_tokens
@@ -218,6 +230,17 @@ def score_sentence_relevance(
             bg = f"{query_keywords[i]} {query_keywords[i + 1]}"
             if bg in s_lower:
                 bigram_bonus += 2.5
+
+    # Specific topic/module number matching: e.g. "topic 1" or "chủ đề 47"
+    q_topic_m = re.search(r"\b(?:topic|chủ đề|bài|mục)\s*(\d+)\b", q_lower)
+    if q_topic_m:
+        target_num = q_topic_m.group(1)
+        s_nums = re.findall(r"\b(?:topic|chủ đề|bài|mục)\s*(\d+)\b", s_lower)
+        if target_num in s_nums or f"topic {target_num}" in s_lower or f"chủ đề {target_num}" in s_lower:
+            bigram_bonus += 12.0
+        elif s_nums and target_num not in s_nums:
+            # Heavily penalize a different topic number (e.g. topic 50 when asked topic 1)
+            bigram_bonus -= 8.0
 
     # Numeric intent alignment
     wants_number = any(cue in q_lower for cue in NUMERIC_QUESTION_CUES)

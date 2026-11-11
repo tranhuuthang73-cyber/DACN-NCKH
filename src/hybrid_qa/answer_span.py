@@ -577,8 +577,14 @@ def _salient_phrase(context: str) -> str:
 
 def _clean_topic(text: str, max_words: int = 9) -> str:
     """Normalises a section heading or query into a short, quotable topic label."""
-    topic = re.sub(r"^(#{1,4}\s*)?(\d+(?:\.\d+)*\.?\s*)?", "", (text or "").strip())
-    topic = _clean(topic)
+    cleaned = (text or "").strip()
+    # Strip nested template prefixes/suffixes to avoid recursion
+    cleaned = re.sub(r"^nội dung trọng tâm (?:liên quan đến|về)\s*['\"]?", "", cleaned, flags=re.IGNORECASE)
+    cleaned = re.sub(r"['\"]?\s*gồm những gì\??$", "", cleaned, flags=re.IGNORECASE)
+    cleaned = re.sub(r"^(?:cho tôi biết|hãy cho biết|cho biết|tìm hiểu về|tóm tắt|về|câu hỏi về)\s+", "", cleaned, flags=re.IGNORECASE)
+    cleaned = re.sub(r"^(#{1,4}\s*)?(\d+(?:\.\d+)*\.?\s*)?", "", cleaned.strip())
+    topic = _clean(cleaned)
+    topic = topic.strip("'\"` ").strip()
     words = topic.split()
     return " ".join(words[:max_words]) if words else "nội dung này"
 
@@ -602,35 +608,72 @@ def generate_followup_questions(
 
     candidates: List[str] = []
 
-    # 1. Identity, Roles, Workplace
+    # 1. Real Topics / Sections from Document Context (e.g., "Topic 1", "Chủ đề 2", "Mục 3")
+    topic_matches = re.findall(
+        r"\b(Topic|Chủ đề|Mục|Bài|Section)\s*(\d+)(?:\s*[:\-\.]\s*([^\n\.\?]{3,60}))?",
+        context,
+        re.IGNORECASE,
+    )
+    for tm in topic_matches:
+        pfx, num_str, title_part = tm[0], tm[1], tm[2].strip() if tm[2] else ""
+        if title_part:
+            candidates.append(f"Yêu cầu hoặc nội dung cụ thể của {pfx} {num_str} ({title_part}) là gì?")
+        else:
+            candidates.append(f"Nội dung chi tiết của {pfx} {num_str} trong tài liệu là gì?")
+
+    # 2. Section headings or key headers from context
+    for line in context.splitlines():
+        line_s = line.strip()
+        h_m = re.match(r"^(?:#{1,4}\s*)?(?:\d+(?:\.\d+)*\.?\s*)?([A-ZÀ-Ỹ][^\n:]{4,50})$", line_s)
+        if h_m:
+            sec_txt = h_m.group(1).strip()
+            if not any(g in sec_txt.lower() for g in ["nguồn tham khảo", "tài liệu", "đoạn", "bài tập", "references", "phụ lục"]):
+                candidates.append(f"Mục tiêu và nội dung của '{sec_txt}' được trình bày ra sao?")
+        if len(candidates) >= 5:
+            break
+
+    # 3. Concept definitions ("là gì", "đóng vai trò là", "được định nghĩa")
+    def_m = re.search(r"([A-ZÀ-Ỹa-zà-ỹ0-9_\-\s]{3,35})\s+(?:là|đóng vai trò là|được định nghĩa là)\s+([^.!?]{10,80})", context)
+    if def_m:
+        term = def_m.group(1).strip()
+        term = re.sub(r"^(ở|tại|theo|trong|với|khi)\s+", "", term, flags=re.IGNORECASE).strip()
+        if 1 <= len(term.split()) <= 5 and not any(w in term.lower() for w in ["điều này", "nó", "chúng", "đây", "tài liệu"]):
+            candidates.append(f"Vai trò và nguyên lý hoạt động của '{term}' là gì?")
+
+    # 4. Identity, Roles, Workplace
     if any(k in q_low or k in ctx_low for k in ["chức vụ", "tổ trưởng", "công tác", "nghề", "làm việc", "tên là", "trần hữu trang", "đơn vị"]):
         candidates.append("Đơn vị công tác cụ thể của tác giả là gì?")
         candidates.append("Kết quả phấn đấu và thành tích đạt được ra sao?")
         candidates.append("Các nhiệm vụ trọng tâm được giao gồm những gì?")
 
-    # 2. Ideology, Study, Guidelines
+    # 5. Ideology, Study, Guidelines
     if any(k in q_low or k in ctx_low for k in ["học tập", "tư tưởng", "đạo đức", "chỉ thị", "chính trị", "hồ chí minh", "phong cách"]):
         candidates.append("Nội dung học tập theo tư tưởng Bác gồm những điểm chính nào?")
         candidates.append("Kế hoạch thực hiện chuyên đề năm 2026 được đề ra như thế nào?")
         candidates.append("Trách nhiệm của người Đảng viên được tài liệu nêu ra sao?")
 
-    # 3. Innovation, Performance, Improvements
+    # 6. Innovation, Performance, Improvements
     if any(k in q_low or k in ctx_low for k in ["kết quả", "sáng kiến", "cải tiến", "quy trình", "công nghệ", "năng suất", "phấn đấu"]):
         candidates.append("Những sáng kiến cải tiến quy trình làm việc gồm những gì?")
         candidates.append("Các biện pháp khắc phục hạn chế, thiếu sót của bản thân là gì?")
 
-    # 4. Dates / Years
+    # 7. Dates / Years
     years = re.findall(r"\b(202[0-9]|2030)\b", context)
     if years:
         candidates.append(f"Mục tiêu hoặc kế hoạch trong năm {years[0]} là gì?")
 
-    # 5. Percentages or Metrics
+    # 8. Percentages or Metrics
     for num in _meaningful_numbers(context):
         if "%" in num or "phần trăm" in num.lower():
             candidates.append(f"Chỉ số {num} phản ánh kết quả hoặc tiêu chí nào?")
 
-    candidates.append(f"Nội dung trọng tâm liên quan đến '{topic}' gồm những gì?")
-    candidates.append("Những biện pháp chính được tài liệu đề xuất là gì?")
+    # 9. Clean topic question (guarded against recursive or generic topics)
+    if topic and topic != "nội dung này" and not any(topic.lower() in c.lower() for c in candidates):
+        candidates.append(f"Nội dung trọng tâm liên quan đến '{topic}' gồm những gì?")
+
+    # 10. Only suggest "biện pháp/giải pháp" if the document context actually mentions them
+    if any(k in ctx_low for k in ["biện pháp", "giải pháp", "khắc phục", "đề xuất", "phương án", "kiến nghị"]):
+        candidates.append("Những biện pháp chính được tài liệu đề xuất là gì?")
 
     # Deduplicate and filter out near-duplicates of the current query
     clean_q = re.sub(r"[^\w\s]", "", q_low).strip()
@@ -642,7 +685,7 @@ def generate_followup_questions(
             continue
         seen.add(clean_cand)
         unique.append(question)
-        if len(unique) >= max(1, count):
+        if len(unique) >= max(3, count):
             break
     return unique
 

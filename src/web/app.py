@@ -1013,6 +1013,28 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
                 top_k=top_k_retrieve,
                 allowed_document_ids=attached_docs,
             )
+
+            # Query Decomposition (Trụ cột 2): also retrieve candidates for decomposed sub-queries
+            try:
+                from src.reasoning.query_decomposer import QueryDecomposer
+                _decomposer = QueryDecomposer()
+                _decomp_res = _decomposer.decompose(effective_query)
+                if _decomp_res.is_compound and len(_decomp_res.sub_queries) >= 2:
+                    seen_p_ids = {h.passage_id for h in retrieval_candidates}
+                    for _sq in _decomp_res.sub_queries:
+                        _sq_expanded, _ = expand_query_semantics(_sq.text)
+                        _sub_hits = service.retriever.retrieve(
+                            _sq_expanded,
+                            top_k=max(2, top_k_retrieve // 2),
+                            allowed_document_ids=attached_docs,
+                        )
+                        for _sh in _sub_hits:
+                            if _sh.passage_id not in seen_p_ids:
+                                seen_p_ids.add(_sh.passage_id)
+                                retrieval_candidates.append(_sh)
+            except Exception:
+                pass
+
             best_score = max((getattr(h, "score", 0.0) for h in retrieval_candidates), default=0.0)
 
             # If document summary or weak hit on exploratory summary, pull document's passages directly
@@ -1371,6 +1393,16 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
                     _b_cond = _b_advisory.clauses[0].condition_text
                     if _b_cond not in body and _b_advisory.advisory_text not in body:
                         body = f"{body}\n\n👉 **{_b_advisory.advisory_text}**"
+            except Exception:
+                pass
+
+            # Reflective Grounding Critic check (Trụ cột 3)
+            try:
+                from src.hybrid_qa.grounding_critic import GroundingCritic
+                _critic = GroundingCritic()
+                _c_report = _critic.verify_answer(body, citations_data)
+                if not _c_report.is_faithful:
+                    body = _critic.correct_answer(body, _c_report)
             except Exception:
                 pass
 

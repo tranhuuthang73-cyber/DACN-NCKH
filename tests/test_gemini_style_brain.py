@@ -121,3 +121,4 @@ def test_progressive_depth_across_modes(sample_passages):
     assert len(c_body) < len(b_body)
     assert len(b_body) < len(d_body)
     assert "Tổng hợp" in d_body or "Đúc kết" in d_body
+

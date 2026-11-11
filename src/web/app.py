@@ -1253,36 +1253,23 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
 
                     if topic_matches:
                         summary_lines = [
-                            f"### 📖 Tổng quan Toàn diện Tài liệu: **{doc_title}**\n",
+                            f"📖 **Tổng quan Toàn diện Tài liệu: {doc_title}**\n",
                             f"Tài liệu bao gồm **{len(topic_matches)} chủ đề chính** để luyện tập và nghiên cứu. Dưới đây là các phần trọng tâm tiêu biểu:\n",
                         ]
                         for tm in topic_matches[:8]:
                             summary_lines.append(f"- **{tm[0].title()} {tm[1]}**: {tm[2].strip()}")
                         if len(topic_matches) > 8:
-                            summary_lines.append(f"- *... cùng {len(topic_matches) - 8} chủ đề chuyên biệt khác trong văn bản.*")
+                            summary_lines.append(f"- **Mở rộng**: Cùng {len(topic_matches) - 8} chủ đề chuyên biệt khác trong văn bản.")
                         body = "\n".join(summary_lines)
                     else:
-                        from src.brain.progressive_summarizer import ProgressiveSummarizer
-                        prog_sum = ProgressiveSummarizer()
-                        digest = prog_sum.generate_digest(attached_doc.raw_text, doc_title=attached_doc.title)
-                        intel = DocumentAnalyzer.extract_key_points_and_summary(attached_doc.raw_text, title=attached_doc.title, max_points=4)
-                        kp_lines = []
-                        for kp in intel.get("key_points", []):
-                            kp_clean = kp.lstrip("- ").strip()
-                            if kp_clean and kp_clean not in (digest.l1_tldr or "") and kp_clean not in (digest.l2_executive or ""):
-                                kp_lines.append(f"  - {kp_clean}")
-                        kp_block = ("\n- **Các luận điểm & nội dung chi tiết**:\n" + "\n".join(kp_lines)) if kp_lines else ""
-                        body = (
-                            f"### 📖 Tóm lược Toàn văn Tài liệu: **{doc_title}**\n\n"
-                            f"Dựa trên việc phân tích cấu trúc đa tầng SA-CMS của tài liệu, hệ thống tổng hợp các nội dung then chốt sau:\n\n"
-                            f"- **Tóm lược cốt lõi**: {digest.l1_tldr}\n"
-                            f"- **Tổng quan thực nghiệm & Giải pháp**: {digest.l2_executive} {cit_1}"
-                            f"{kp_block}"
+                        blueprint = DocumentAnalyzer.build_document_knowledge_blueprint(
+                            attached_doc.raw_text, title=attached_doc.title
                         )
+                        body = f"{blueprint} {cit_1}"
                 except Exception:
                     intel = DocumentAnalyzer.extract_key_points_and_summary(attached_doc.raw_text, title=attached_doc.title, max_points=4)
                     summary_points = [f"- {kp.lstrip('- ').strip()} {cit_1}" for kp in intel["key_points"]]
-                    body = f"### 📖 Tóm lược Tài liệu: **{attached_doc.title}**\n\n" + "\n".join(summary_points)
+                    body = f"📖 **Tóm lược Tài liệu: {attached_doc.title}**\n\n" + "\n".join(summary_points)
             else:
                 summary_points = []
                 for c in citations_data[:4]:
@@ -1291,7 +1278,7 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
                         summary_points.append(f"- {pts[0]} {c['citation_label']}")
                 if not summary_points:
                     summary_points = [f"- {sentences[0]} {cit_1}"]
-                body = "### 📖 Tóm lược Tài liệu\n\nTài liệu này tập trung vào các nội dung trọng tâm sau:\n" + "\n".join(summary_points)
+                body = "📖 **Tóm lược Tài liệu**\n\nTài liệu này tập trung vào các nội dung trọng tâm sau:\n" + "\n".join(summary_points)
         elif effective_route == QuestionRoute.CROSS_DOCUMENT_COMPARISON:
             comp_points = []
             for c in citations_data[:2]:

@@ -114,6 +114,76 @@ class DocumentAnalyzer:
         }
 
     @classmethod
+    def build_document_knowledge_blueprint(
+        cls,
+        raw_text: str,
+        title: str = "Tài liệu",
+    ) -> str:
+        """
+        Synthesizes a comprehensive VIP Multi-Tier Document Knowledge Blueprint:
+        - L1 TL;DR & L2 Executive Synthesis (via ProgressiveSummarizer)
+        - Key structural points & headings
+        - Extracted quantitative metrics & benchmarks (% / MB / GB / ms / parameters)
+        Uses zero raw '###' or single-asterisk '*italic*' so frontend renders cleanly.
+        """
+        summary_data = cls.extract_key_points_and_summary(raw_text, title=title, max_points=6)
+        overview = summary_data.get("overview", "")
+        key_points = summary_data.get("key_points", [])
+
+        l1_tldr = overview
+        l2_exec = ""
+        try:
+            from src.brain.progressive_summarizer import ProgressiveSummarizer
+            ps = ProgressiveSummarizer().generate_digest(raw_text, doc_title=title)
+            if ps.l1_tldr:
+                l1_tldr = ps.l1_tldr
+            if ps.l2_executive:
+                l2_exec = ps.l2_executive
+        except Exception:
+            pass
+
+        # Extract section headings if present
+        headings = []
+        for line in raw_text.splitlines():
+            l_str = line.strip()
+            if l_str.startswith("#"):
+                h_clean = l_str.lstrip("#").strip()
+                if h_clean and h_clean not in headings:
+                    headings.append(h_clean)
+
+        # Extract quantitative metrics
+        metrics_found = []
+        for m in re.finditer(
+            r"\b(\d+(?:[.,]\d+)?\s*(?:%|(?:MB|GB|KB|ms|s|tokens?|triệu(?:\s+tham\s+số)?|tỷ|tầng|lớp)\b))",
+            raw_text,
+            re.IGNORECASE,
+        ):
+            val_str = m.group(1).strip()
+            if val_str not in metrics_found:
+                metrics_found.append(val_str)
+
+        blocks = [
+            f"📖 **BẢN ĐỒ TRI THỨC TÀI LIỆU: {title}**",
+            f"🎯 **Tóm lược cốt lõi (TL;DR):** {l1_tldr}",
+        ]
+        if l2_exec and l2_exec.strip() != l1_tldr.strip():
+            blocks.append(f"🧭 **Tổng hợp điều hành:**\n{l2_exec}")
+
+        if headings:
+            h_badges = " • ".join(f"`{h}`" for h in headings[:6])
+            blocks.append(f"🗂️ **Cấu trúc chương mục:** {h_badges}")
+
+        if key_points:
+            pts_str = "\n".join(f"- {pt}" for pt in key_points[:6])
+            blocks.append(f"📌 **Các luận điểm & phát hiện trọng tâm:**\n{pts_str}")
+
+        if metrics_found:
+            m_badges = ", ".join(f"**{m}**" for m in metrics_found[:8])
+            blocks.append(f"📊 **Chỉ số & thông số định lượng nổi bật:** {m_badges}")
+
+        return "\n\n".join(blocks)
+
+    @classmethod
     def generate_suggested_questions(
         cls,
         raw_text: str,
@@ -394,7 +464,7 @@ class DocumentAnalyzer:
             sec_display_title = dedup_citations[0]["section_title"] if dedup_citations else ""
             sec_part = ""
             if sec_display_title and sec_display_title not in {"Phần nội dung", "Section", "DOC", "Nội dung"}:
-                sec_part = f" (mục *{sec_display_title}*)"
+                sec_part = f" (mục `{sec_display_title}`)"
 
             intent_intros = {
                 "DEFINITION": f"Theo tài liệu **{doc_display_title}**{sec_part}, khái niệm và bản chất của nội dung này được xác định cụ thể như sau:",
@@ -454,13 +524,45 @@ class DocumentAnalyzer:
                     s_clean += "."
                 bullet_lines.append(f"- **{role_title}**: {s_clean} {f_lbl}")
 
+            # Automatic Quantitative Delta Reasoner across primary claim & selected facets
+            all_used_pairs = [(best_sentence, cit_1)] + selected_facets
+            unit_buckets: Dict[str, List[Tuple[float, str, str]]] = {}
+            for u_sent, u_lbl in all_used_pairs:
+                for nm in re.finditer(
+                    r"(\d+(?:[.,]\d+)?)\s*(%|(?:mb|gb|ms|s|tokens?|triệu|tỷ)\b)",
+                    u_sent,
+                    re.IGNORECASE,
+                ):
+                    raw_num = nm.group(1).replace(",", ".")
+                    unit_key = nm.group(2).lower()
+                    try:
+                        num_val = float(raw_num)
+                    except ValueError:
+                        continue
+                    unit_buckets.setdefault(unit_key, [])
+                    if all(abs(num_val - existing[0]) > 1e-6 for existing in unit_buckets[unit_key]):
+                        unit_buckets[unit_key].append((num_val, nm.group(0).strip(), u_lbl))
+
+            for unit_key, entries in unit_buckets.items():
+                if len(entries) >= 2:
+                    v1, raw1, lbl1 = entries[0]
+                    v2, raw2, lbl2 = entries[1]
+                    delta_val = round(abs(v1 - v2), 2)
+                    delta_str = f"{delta_val:g}"
+                    unit_disp = "%" if unit_key == "%" else f" { entries[0][1].split()[-1] if ' ' in entries[0][1] else unit_key }"
+                    cit_pair = lbl1 if lbl1 == lbl2 else f"{lbl1} {lbl2}"
+                    bullet_lines.append(
+                        f"- **Đối chiếu định lượng tự động**: Mức chênh lệch giữa hai mốc số liệu được ghi nhận là **{delta_str}{unit_disp}** ({raw1} so với {raw2}). {cit_pair}"
+                    )
+                    break
+
             parts = [f"{intro}\n\n{core_line}"]
             if bullet_lines:
                 parts.append("📌 **Phân tích đa chiều từ tài liệu:**\n" + "\n".join(bullet_lines))
 
             if answer_mode == "detailed":
                 sec_list = sorted({c["section_title"] for c in dedup_citations if c.get("section_title")})
-                sec_summary = ", ".join(f"*{s}*" for s in sec_list[:3]) if sec_list else f"**{doc_display_title}**"
+                sec_summary = ", ".join(f"`{s}`" for s in sec_list[:3]) if sec_list else f"**{doc_display_title}**"
                 cit_badges = " ".join(c["citation_label"] for c in dedup_citations[:3])
                 parts.append(
                     f"💡 **Tổng hợp & Đúc kết chuyên sâu:**\n"

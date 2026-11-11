@@ -381,27 +381,54 @@ class SessionManager:
         q_raw = current_query.strip()
         q_lower = q_raw.lower()
 
-        # Check if user is referencing a suggested question by index:
-        # e.g., "câu 2", "câu hỏi 2", "câu hỏi thứ 2", "trả lời câu 2", "hỏi câu 2", "ý 2", "câu 1", "question 2", "#2"
-        idx_match = re.search(r"^(?:trả lời\s+|hỏi\s+|cho biết\s+|giải thích\s+)?(?:câu(?:\s*hỏi)?|ý|mục|question)\s*(?:thứ\s*)?(\d+)\b", q_lower)
-        if not idx_match:
-            idx_match = re.search(r"^#?(\d+)\.?$", q_lower)
+        # Check if user is referencing a suggested question or answer facet by index:
+        # e.g., "câu 2", "câu hỏi 2", "giải thích kỹ hơn ý thứ 2", "phân tích điểm 1", "question 2", "#2"
+        idx_match = re.search(
+            r"^(?:trả lời\s+|hỏi\s+|cho biết\s+|giải thích(?:\s+kỹ(?:\s+hơn)?|\s+chi tiết(?:\s+hơn)?|\s+rõ(?:\s+hơn)?)?\s+|phân tích(?:\s+kỹ(?:\s+hơn)?)?\s+|làm rõ\s+)?"
+            r"(câu(?:\s*hỏi)?|ý|điểm|luận điểm|mục|question)\s*(?:thứ\s*|số\s*)?(\d+)\b",
+            q_lower,
+        )
+        kind_token = ""
         if idx_match:
-            target_idx = int(idx_match.group(1)) - 1
-            # Search backwards for the most recent assistant message with suggestions
+            kind_token = idx_match.group(1)
+            target_idx = int(idx_match.group(2)) - 1
+        else:
+            hash_match = re.search(r"^#?(\d+)\.?$", q_lower)
+            if hash_match:
+                kind_token = "câu"
+                target_idx = int(hash_match.group(1)) - 1
+            else:
+                target_idx = -1
+
+        if target_idx >= 0:
+            prefer_bullets = kind_token in ("ý", "điểm", "luận điểm", "mục")
             for m in reversed(session.messages):
                 if m.get("role") == "assistant":
-                    s_qs = m.get("suggested_questions") or []
+                    c_text = m.get("content", "")
+                    body_only = c_text.split("### Nguồn")[0].split("💡")[0]
+                    bullet_lines = re.findall(r"^\s*[-•]\s+(.+)$", body_only, re.MULTILINE)
+
+                    s_qs = list(m.get("suggested_questions") or [])
                     if not s_qs:
-                        # Fallback: extract numbered items from assistant content
-                        c_text = m.get("content", "")
-                        lines = re.findall(r"^\s*(\d+)\.\s*(.+)$", c_text, re.MULTILINE)
-                        s_qs = [item[1].strip() for item in lines]
+                        numbered_lines = re.findall(r"^\s*(\d+)\.\s*(.+)$", c_text, re.MULTILINE)
+                        s_qs = [item[1].strip() for item in numbered_lines]
+
+                    if prefer_bullets and 0 <= target_idx < len(bullet_lines):
+                        facet_text = bullet_lines[target_idx].strip()
+                        facet_text = re.sub(r"\[\d+\]", "", facet_text)
+                        facet_text = facet_text.replace("**", "").strip()
+                        return f"Giải thích chi tiết nội dung: {facet_text}"
+
                     if 0 <= target_idx < len(s_qs):
                         resolved_q = s_qs[target_idx]
-                        # Strip any leading category prefix like "[Category]: " or "**[Category]**:"
                         resolved_q = re.sub(r"^(?:\*\*\[.*?\]\*\*:\s*|\[.*?\]:?\s*)", "", resolved_q).strip()
                         return resolved_q
+
+                    if 0 <= target_idx < len(bullet_lines):
+                        facet_text = bullet_lines[target_idx].strip()
+                        facet_text = re.sub(r"\[\d+\]", "", facet_text)
+                        facet_text = facet_text.replace("**", "").strip()
+                        return f"Giải thích chi tiết nội dung: {facet_text}"
                     break
 
         # Clean off copy-pasted numbering & category badge: e.g. "1. **[Category]**: Query" -> "Query"

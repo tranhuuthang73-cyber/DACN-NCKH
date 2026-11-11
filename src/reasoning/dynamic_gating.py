@@ -125,3 +125,4 @@ def compute_dynamic_memory_diagnostics(
             "level_3_document": {"gate": g3, "norm": l3_norm},
         },
     }
+

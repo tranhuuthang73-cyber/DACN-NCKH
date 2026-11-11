@@ -138,3 +138,4 @@ def test_premise_refutation_on_false_presupposition(test_client):
     # Should refute rather than hallucinate justification
     if "không phù hợp với tài liệu" in answer:
         assert "chứ không phải như giả định" in answer or "chỉ ra rằng" in answer
+

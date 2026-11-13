@@ -371,10 +371,36 @@ class SelfStudyKnowledgeBank:
         q_norm = strip_accents((query or "").lower())
         blueprint = self.classify_answer_blueprint(query)
 
+        # Check if query targets a specific non-intro section/topic (should bypass general Case A)
+        m_quote_top = re.search(r"['\"]([^'\"]+)['\"]", query or "")
+        quoted_target_norm = strip_accents(m_quote_top.group(1).lower()) if m_quote_top else ""
+        has_numbered_target = bool(
+            re.search(r"\b(?:topic|chu de|bai|muc|chuong|phan)\s*\d+\b", q_norm)
+            or re.search(r"^\s*\d+\.\s+[a-z0-9]", q_norm)
+        )
+        is_intro_target = bool(
+            quoted_target_norm and any(k in quoted_target_norm for k in ["gioi thieu", "tong quan", "mo dau"])
+        )
+        asks_doc_wide_enum = any(
+            k in q_norm
+            for k in [
+                "bao nhieu loai", "phan loai", "liet ke", "may loai",
+                "nhung loai nao", "he ma nao", "phuong phap nao", "cac he ma",
+            ]
+        )
+        skip_case_a_for_specific_target = (
+            (bool(quoted_target_norm) or has_numbered_target)
+            and not is_intro_target
+            and not asks_doc_wide_enum
+        )
+
         # ----------------------------------------------------------------------
         # Case A: DEFINITION_AND_TYPES (e.g. "mã hóa đối xứng là gì, có bao nhiêu loại mã hóa, cho ví dụ")
         # ----------------------------------------------------------------------
-        if blueprint == "DEFINITION_AND_TYPES" or ("la gi" in q_norm and ("loai" in q_norm or "phuong phap" in q_norm or "vi du" in q_norm)):
+        if not skip_case_a_for_specific_target and (
+            blueprint == "DEFINITION_AND_TYPES"
+            or ("la gi" in q_norm and ("loai" in q_norm or "phuong phap" in q_norm or "vi du" in q_norm))
+        ):
             # 1. Concept: find introduction/overview section
             intro_sec = next(
                 (s for s in sections if any(k in strip_accents(s["heading"].lower()) for k in ["gioi thieu", "khai niem", "tong quan"])),
@@ -572,23 +598,85 @@ class SelfStudyKnowledgeBank:
 
         if target_sec:
             h_title = target_sec["heading"]
-            sec_lines = []
-            for line in target_sec["lines"]:
-                sec_lines.append(f"- {line.lstrip('-*• ').strip()}" if not line.startswith(("-", "*", "•")) else line)
+            raw_items = [line.lstrip("-*• ").strip() for line in target_sec.get("lines", []) if line.strip()]
+            sec_lines = [
+                f"- {line.lstrip('-*• ').strip()}" if not line.startswith(("-", "*", "•")) else line
+                for line in target_sec.get("lines", [])
+            ]
 
-            try:
-                from src.self_study.datasets.extractive_text_stitcher import ExtractiveTextStitcher
-                full_answer = ExtractiveTextStitcher.stitch_section_detail(
-                    section_title=h_title,
-                    bullets=target_sec.get("bullets", []),
-                    paragraphs=target_sec.get("paragraphs", []),
-                )
-            except Exception:
-                content_body = "\n".join(sec_lines) if sec_lines else target_sec["title"]
-                full_answer = (
-                    f"Trong mục **{h_title}**, tài liệu ghi nhận thông tin chi tiết như sau:\n\n"
-                    f"{content_body}"
-                )
+            has_example_cue = any(k in q_norm for k in ["vi du", "minh hoa", "ung dung", "ap dung", "thuc te"])
+            has_mech_cue = any(
+                k in q_norm
+                for k in [
+                    "nguyen ly", "co che", "cach hoat dong", "hoat dong", "dac diem",
+                    "cong thuc", "phep toan", "quy tac", "thuat toan", "uu diem",
+                    "nhuoc diem", "uu nhuoc diem",
+                ]
+            )
+            has_concept_cue = any(k in q_norm for k in ["khai niem", "dinh nghia", "la gi", "y chinh", "tom tat", "trong tam"])
+            asks_full = any(k in q_norm for k in ["chi tiet", "toan bo", "day du"]) or (
+                "noi dung" in q_norm and not (has_example_cue or has_mech_cue or has_concept_cue)
+            )
+
+            full_answer: Optional[str] = None
+            if not asks_full and len(raw_items) > 1:
+                if has_example_cue:
+                    app_cues = ["thoi gian thuc", "truyen thong", "ung dung", "ap dung", "vi du", "minh hoa", "gia su", "cho "]
+                    focused = list(dict.fromkeys(
+                        [x.lstrip("-*• ").strip() for x in target_sec.get("examples", []) if x.strip()]
+                        + [x.lstrip("-*• ").strip() for x in target_sec.get("formulas", []) if x.strip()]
+                        + [item for item in raw_items if any(c in strip_accents(item.lower()) for c in app_cues)]
+                    ))
+                    if focused:
+                        full_answer = (
+                            f"Ví dụ, công thức minh họa và ứng dụng của **{h_title}**:\n\n"
+                            + "\n".join(f"- {item}" for item in focused)
+                        )
+                elif has_mech_cue:
+                    formula_set = {x.lstrip("-*• ").strip() for x in target_sec.get("formulas", [])}
+                    mech_cues = [
+                        "=", "mod", "xor", "phep", "cong thuc", "sinh ra", "ma hoa", "giai ma",
+                        "quy tac", "ma tran", "thay the", "hoan vi", "mo rong", "buoc",
+                        "uu diem", "nhuoc diem", "dac diem", "toc do", "do tre", "tan cong",
+                        "tham ma", "an ninh",
+                    ]
+                    focused = [
+                        item for item in raw_items
+                        if item in formula_set or any(c in strip_accents(item.lower()) for c in mech_cues)
+                    ]
+                    if focused:
+                        full_answer = (
+                            f"Nguyên lý, cơ chế và đặc điểm của **{h_title}**:\n\n"
+                            + "\n".join(f"- {item}" for item in focused)
+                        )
+                elif has_concept_cue:
+                    def_cues = ["la ", "duoc dinh nghia", "hoan hao", "co so", "dung de", "con goi la", "muc dich"]
+                    para_items = [p.lstrip("-*• ").strip() for p in target_sec.get("paragraphs", []) if p.strip()]
+                    primary = next(
+                        (item for item in raw_items if any(c in strip_accents(item.lower()) for c in def_cues)),
+                        para_items[0] if para_items else raw_items[0],
+                    )
+                    formula_set = {x.lstrip("-*• ").strip() for x in target_sec.get("formulas", [])}
+                    rest = [item for item in raw_items if item != primary]
+                    non_formula_rest = [item for item in rest if item not in formula_set]
+                    summary_rest = (non_formula_rest if non_formula_rest else rest)[:2]
+                    full_answer = f"Khái niệm và ý chính của **{h_title}**:\n\n**Khái niệm cốt lõi:** {primary}"
+                    if summary_rest:
+                        full_answer += "\n\n**Ý chính liên quan:**\n" + "\n".join(f"- {item}" for item in summary_rest)
+
+            if full_answer is None:
+                try:
+                    from src.self_study.datasets.extractive_text_stitcher import ExtractiveTextStitcher
+                    full_answer = ExtractiveTextStitcher.stitch_section_detail(
+                        section_title=h_title,
+                        content_lines=target_sec.get("lines", []),
+                    )
+                except Exception:
+                    content_body = "\n".join(sec_lines) if sec_lines else target_sec["title"]
+                    full_answer = (
+                        f"Trong mục **{h_title}**, tài liệu ghi nhận thông tin chi tiết như sau:\n\n"
+                        f"{content_body}"
+                    )
             return {
                 "answer": full_answer,
                 "blueprint": "SECTION_FULL_EXPLANATION",

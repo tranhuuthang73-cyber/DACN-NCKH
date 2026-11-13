@@ -1702,9 +1702,59 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
             top_citations = citations_data[:3] if citations_data else []
             source_context = "\n\n".join(c["text"] for c in top_citations) if top_citations else best_passage
             source_section = top_citations[0]["section_title"] if top_citations else ""
+            def _fmt_sec_block(sec, txt):
+                sec = (sec or "").strip()
+                txt = (txt or "").strip()
+                if sec and txt and not txt.startswith(sec) and not txt.startswith(f"## {sec}"):
+                    return f"## {sec}\n{txt}"
+                return txt
+
+            followup_context = (
+                "\n\n".join(_fmt_sec_block(c.get("section_title"), c.get("text")) for c in top_citations)
+                if top_citations
+                else best_passage
+            )
+            _ctx_sents = [
+                s for s in source_context.replace("!", ".").replace("?", ".").replace("\n", ".").split(".")
+                if len(s.strip().split()) >= 4
+            ]
+            if attached_docs and (len(top_citations) < 3 or len(_ctx_sents) < 4):
+                _cit_doc = top_citations[0].get("document_id") if top_citations else None
+                _target_doc_id = _cit_doc if _cit_doc in attached_docs else attached_docs[0]
+                try:
+                    _target_doc = service.store.get_document(_target_doc_id)
+                except Exception:
+                    _target_doc = None
+                _doc_passages = getattr(_target_doc, "passages", None) if _target_doc else None
+                if _doc_passages:
+                    _seen_pids = {c.get("passage_id") for c in top_citations if c.get("passage_id")}
+                    _seen_secs = {c.get("section_title") for c in top_citations if c.get("section_title")}
+                    _extra_texts = []
+                    for _prefer_new_sec in (True, False):
+                        for _p in _doc_passages:
+                            if len(_extra_texts) >= 3:
+                                break
+                            _pid = getattr(_p, "passage_id", None)
+                            _ptext = (getattr(_p, "text", "") or "").strip()
+                            _psec = getattr(_p, "section_title", "") or ""
+                            if not _ptext or (_pid and _pid in _seen_pids):
+                                continue
+                            if _prefer_new_sec and _psec in _seen_secs:
+                                continue
+                            _extra_texts.append(_fmt_sec_block(_psec, _ptext))
+                            if _pid:
+                                _seen_pids.add(_pid)
+                            if _psec:
+                                _seen_secs.add(_psec)
+                    if _extra_texts:
+                        followup_context = (
+                            "\n\n".join([followup_context] + _extra_texts)
+                            if followup_context
+                            else "\n\n".join(_extra_texts)
+                        )
             follow_up_questions = generate_followup_questions(
                 query=effective_query,
-                context=source_context,
+                context=followup_context,
                 section_title=source_section,
             )
             answer_text = ensure_trailing_question(answer_text, follow_up_questions)

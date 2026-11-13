@@ -450,22 +450,110 @@ class DocumentAnalyzer:
             if b_idx < len(sentence_cit_labels):
                 cit_1 = sentence_cit_labels[b_idx]
 
-        # Check if best_sentence is a heading or equals section_title
-        is_heading = (
-            bool(re.match(
-                r"^\s*(?:#{1,6}\s+|(?:\b(?:topic|chủ đề|chu de|bài|bai|mục|muc|chương|chuong|phần|phan|section|chapter|lesson|unit)\s*\d+[:.\-–]?)|(?:\d+(?:\.\d+)*\.\s+[A-ZÀ-Ỹ]))",
-                best_sentence.strip(),
-                re.IGNORECASE,
-            ))
-            or (matched_section and (
-                best_sentence.strip().lower() == matched_section.strip().lower()
-                or best_sentence.strip().rstrip(".:") in matched_section.strip()
-            ))
+        q_norm = strip_accents((query or "").lower())
+        general_section_markers = (
+            "noi dung chi tiet", "thong tin cot loi", "yeu cau cua muc",
+            "tong quan", "tom tat", "gioi thieu chung", "noi dung chinh",
+            "noi dung cua muc", "trinh bay muc", "bao gom nhung gi",
         )
+        is_general_section_query = any(m in q_norm for m in general_section_markers)
+        aspect_concept = any(k in q_norm for k in ("khai niem", "dinh nghia", "la gi", "y nghia", "vai tro", "muc dich"))
+        aspect_mechanism = any(k in q_norm for k in (
+            "nguyen ly", "co che", "cong thuc", "dac diem", "tinh chat",
+            "cach hoat dong", "hoat dong nhu the nao", "hoat dong the nao",
+            "quy trinh", "thuat toan", "ky thuat", "trien khai",
+        ))
+        aspect_example = any(k in q_norm for k in ("vi du", "minh hoa", "bai toan", "truong hop", "ap dung"))
+        aspect_eval = any(k in q_norm for k in (
+            "uu diem", "nhuoc diem", "han che", "loi ich", "ket qua",
+            "so lieu", "hieu nang", "hieu qua", "do chinh xac", "toc do", "bao nhieu", "%",
+        ))
+        has_specific_aspect = aspect_concept or aspect_mechanism or aspect_example or aspect_eval
+
+        q_intent_tokens = {
+            t for t in re.findall(r"[a-z0-9_]+", q_norm)
+            if len(t) >= 2 and t not in {
+                "la", "gi", "cua", "muc", "trong", "nay", "nao", "nhu", "the", "cho",
+                "biet", "ve", "co", "duoc", "cac", "nhung", "mot", "va", "voi",
+            }
+        }
+        exp_norm = strip_accents((exp_query or "").lower())
+        exp_tokens = {
+            t for t in re.findall(r"[a-z0-9_]+", exp_norm)
+            if len(t) >= 2 and t not in q_intent_tokens
+        }
+
+        def _is_heading_sent(sent: str, sec: str = "") -> bool:
+            st = (sent or "").strip()
+            if not st:
+                return True
+            if re.match(
+                r"^\s*(?:#{1,6}\s+|(?:\b(?:topic|chủ đề|chu de|bài|bai|mục|muc|chương|chuong|phần|phan|section|chapter|lesson|unit)\s*\d+[:.\-–]?)|(?:\d+(?:\.\d+)*\.\s+[A-ZÀ-Ỹ]))",
+                st,
+                re.IGNORECASE,
+            ):
+                return True
+            if sec and (
+                st.lower() == sec.strip().lower()
+                or (len(st) >= 4 and st.rstrip(".:") in sec.strip())
+            ):
+                return True
+            return False
+
+        def _score_body_sentence(sent: str) -> float:
+            s_norm = strip_accents(sent.lower())
+            s_tokens = set(re.findall(r"[a-z0-9_]+", s_norm))
+            score = len(q_intent_tokens & s_tokens) * 2.0 + len(exp_tokens & s_tokens) * 0.75
+            is_ex_sent = any(c in s_norm for c in ("vi du", "minh hoa", "gia su", "cho p =", "ta co", "chang han"))
+            if aspect_concept:
+                if not is_ex_sent and any(c in s_norm for c in (" la ", "duoc dinh nghia", "khai niem", "phuong phap", "he thong", "dung de", "nham", "bao gom")):
+                    score += 6.0
+                if is_ex_sent or any(c in s_norm for c in ("cho p =", "ta co:", "mod 26")):
+                    score -= 4.0
+            if aspect_mechanism:
+                mech_cues = ("nguyen ly", "co che", "hoat dong", "cong thuc", "dac diem", "tinh chat", "quy trinh", "buoc", "thuat toan", "thong qua", "dua tren", "=", "mod ")
+                mech_hits = sum(1 for c in mech_cues if c in s_norm)
+                if mech_hits:
+                    score += min(9.0, 4.5 + mech_hits * 2.0)
+                if "cong thuc" in q_norm and ("cong thuc" in s_norm or "=" in s_norm):
+                    score += 4.0
+            if aspect_example:
+                if is_ex_sent or any(c in s_norm for c in ("ap dung", "bai toan", "truong hop")) or re.search(r"\d", s_norm):
+                    score += 6.5
+            if aspect_eval:
+                if any(c in s_norm for c in ("uu diem", "loi ich", "nhuoc diem", "han che", "kho khan", "rui ro", "ket qua", "dat ", "cai thien", "tang", "giam", "%")) or re.search(r"\d+(?:[.,]\d+)?\s*%", s_norm):
+                    score += 6.5
+            return score
+
+        # Check if best_sentence is a heading or equals section_title
+        is_heading = _is_heading_sent(best_sentence, matched_section)
 
         best_passage = evidence_passages[best_passage_idx]
         best_passage_text = getattr(best_passage, "text", "") if hasattr(best_passage, "text") else str(best_passage)
         passage_sents = split_sentences(best_passage_text)
+
+        body_sents = [
+            s.strip() for s in passage_sents
+            if s.strip() and not _is_heading_sent(s, matched_section)
+        ]
+        if is_heading:
+            if not is_general_section_query and len(body_sents) >= 2 and (has_specific_aspect or len(q_intent_tokens) >= 2):
+                ranked_body = sorted(
+                    enumerate(body_sents),
+                    key=lambda item: (_score_body_sentence(item[1]), -item[0]),
+                    reverse=True,
+                )
+                best_sentence = ranked_body[0][1]
+                is_heading = False
+        elif has_specific_aspect and not is_general_section_query and len(body_sents) >= 2:
+            ranked_body = sorted(
+                enumerate(body_sents),
+                key=lambda item: (_score_body_sentence(item[1]), -item[0]),
+                reverse=True,
+            )
+            top_body = ranked_body[0][1]
+            if _score_body_sentence(top_body) >= _score_body_sentence(best_sentence) + 3.0:
+                best_sentence = top_body
 
         if is_heading:
             # If best sentence is a heading, answer with heading plus next 2-3 body sentences
@@ -593,18 +681,42 @@ class DocumentAnalyzer:
             else:
                 # Pure prose answer: core sentence [n] plus supporting sentences
                 # ONLY from the same passage/section_title as the best sentence.
-                max_supporting = 10 if answer_mode in ("detailed", "comprehensive") else 8
-                supporting_sents = []
-                for s in passage_sents:
-                    s_clean = s.strip()
-                    if not s_clean:
-                        continue
-                    if s_clean in answer_core or answer_core.startswith(s_clean):
-                        continue
-                    if s_clean not in supporting_sents:
-                        supporting_sents.append(s_clean)
-                        if len(supporting_sents) >= max_supporting:
-                            break
+                if answer_mode in ("detailed", "comprehensive"):
+                    max_supporting = 10
+                    supporting_sents = []
+                    for s in passage_sents:
+                        s_clean = s.strip()
+                        if not s_clean:
+                            continue
+                        if s_clean in answer_core or answer_core.startswith(s_clean):
+                            continue
+                        if s_clean not in supporting_sents:
+                            supporting_sents.append(s_clean)
+                            if len(supporting_sents) >= max_supporting:
+                                break
+                else:
+                    cand_sents = []
+                    seen_cands = set()
+                    for idx_s, s in enumerate(passage_sents):
+                        s_clean = s.strip()
+                        if not s_clean:
+                            continue
+                        if s_clean in answer_core or answer_core.startswith(s_clean):
+                            continue
+                        if s_clean not in seen_cands:
+                            seen_cands.add(s_clean)
+                            cand_sents.append((idx_s, s_clean))
+
+                    if is_general_section_query:
+                        supporting_sents = [s_clean for _, s_clean in cand_sents[:6]]
+                    else:
+                        scored_cands = sorted(
+                            cand_sents,
+                            key=lambda item: (_score_body_sentence(item[1]), -item[0]),
+                            reverse=True,
+                        )
+                        relevant_cands = [s_clean for _, s_clean in scored_cands if _score_body_sentence(s_clean) > 0]
+                        supporting_sents = relevant_cands[:2] if relevant_cands else [s_clean for _, s_clean in cand_sents[:2]]
 
                 prose_parts = [f"{answer_core} {cit_1}"]
                 for s in supporting_sents:

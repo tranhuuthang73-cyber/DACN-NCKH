@@ -676,6 +676,109 @@ def _clean_topic(text: str, max_words: int = 12) -> str:
     return topic.rstrip(" (,-–—:;")
 
 
+def _norm_topic_key(text: str) -> str:
+    """Normalizes a topic/heading label for diversity deduplication."""
+    cleaned = strip_accents(re.sub(r"[^\w\s]", " ", (text or "").lower()))
+    return re.sub(r"\s+", " ", cleaned).strip()
+
+
+def _extract_topic_num_key(text: str) -> Optional[str]:
+    """Extracts canonical 'topic N' / 'muc N' / 'chuong N' key if present."""
+    norm = _norm_topic_key(text)
+    m = re.search(r"\b(topic|chu de|muc|bai|section|chuong|phan)\s*(\d+)\b", norm)
+    return f"{m.group(1)} {m.group(2)}" if m else None
+
+
+def _clean_heading_title(raw_title: str, max_words: int = 10) -> str:
+    """Cleans a topic/section title without mid-word truncation or body-text bleed."""
+    cleaned = _clean(raw_title or "")
+    # Stop before body-text clause separators or page markers
+    cleaned = re.split(r"===\s*Page|\s+[–—-]\s+(?=[a-zà-ỹA-ZÀ-Ỹ])|[.!?;]\s+", cleaned, maxsplit=1)[0].strip()
+    if cleaned.count("(") > cleaned.count(")"):
+        cleaned = re.sub(r"\([^\)]*$", "", cleaned).strip()
+    elif cleaned.count(")") > cleaned.count("("):
+        cleaned = cleaned.replace(")", "").strip()
+    words = cleaned.split()
+    if len(words) > max_words:
+        cleaned = " ".join(words[:max_words])
+    return cleaned.strip(" .,:;!?-–—(\"'`…")
+
+
+def _is_covered_topic(label: str, used_keys: set) -> bool:
+    """True when `label` targets a topic/heading already in `used_keys`."""
+    num_key = _extract_topic_num_key(label)
+    if num_key and num_key in used_keys:
+        return True
+    norm = _norm_topic_key(label)
+    if not norm:
+        return False
+    if norm in used_keys:
+        return True
+    label_tokens = {w for w in norm.split() if len(w) > 2 and w not in STOPWORDS}
+    if len(label_tokens) >= 2:
+        for existing in used_keys:
+            ex_tokens = {w for w in existing.split() if len(w) > 2 and w not in STOPWORDS}
+            if len(ex_tokens) >= 2:
+                overlap = len(label_tokens & ex_tokens) / min(len(label_tokens), len(ex_tokens))
+                if overlap >= 0.8:
+                    return True
+    return False
+
+
+def _mark_used_topic(label: str, used_keys: set) -> None:
+    num_key = _extract_topic_num_key(label)
+    if num_key:
+        used_keys.add(num_key)
+    norm = _norm_topic_key(label)
+    if norm:
+        used_keys.add(norm)
+
+
+def _clean_snippet_with_balanced_parens(text: str, max_words: int = 8) -> str:
+    """Caps `text` at `max_words` while ensuring parentheses are never left unclosed."""
+    words = _clean(text).split()
+    if not words:
+        return ""
+    snippet = " ".join(words[:max_words]).rstrip(".,:;!?…")
+    if snippet.count("(") > snippet.count(")"):
+        # Try extending up to 3 words if that closes the parenthetical cleanly
+        extended = False
+        for extra in range(1, 4):
+            if max_words + extra > len(words):
+                break
+            cand = " ".join(words[: max_words + extra]).rstrip(".,:;!?…")
+            if cand.count("(") == cand.count(")"):
+                snippet = cand
+                extended = True
+                break
+        if not extended:
+            snippet = re.sub(r"\s*\([^\)]*$", "", snippet).strip()
+    elif snippet.count(")") > snippet.count("("):
+        snippet = snippet.replace(")", "").strip()
+    return snippet.rstrip(".,:;!?…-–—(")
+
+
+def _noun_context_for_number(
+    num: str,
+    ctx_sents: Sequence[str],
+    used_sent_indices: set,
+) -> Tuple[str, int]:
+    """Finds an unused sentence containing `num` and returns (noun_context, sent_idx)."""
+    for idx, sent in enumerate(ctx_sents):
+        if idx in used_sent_indices or num not in sent:
+            continue
+        cleaned = _clean(sent)
+        content_words = [
+            w for w in re.findall(r"[A-Za-zÀ-Ỹà-ỹ][\w\-]{1,}", cleaned)
+            if strip_accents(w.lower()) not in STOPWORDS
+        ]
+        if len(content_words) < 2:
+            continue
+        snippet = _clean_snippet_with_balanced_parens(cleaned, 8)
+        return snippet, idx
+    return "", -1
+
+
 def generate_followup_questions(
     query: str,
     context: str = "",
@@ -684,11 +787,16 @@ def generate_followup_questions(
 ) -> List[str]:
     """
     Produces fluent, natural, grounded follow-up questions tied to the answered topic and document.
-    Anchored on real document content and entities so they stay directly answerable.
+    Prioritizes topic/entity/sentence diversity and context-anchored retrieval.
     Guarantees exactly `count` questions when context is non-empty.
     """
+    if count <= 0:
+        return []
+
     q_low = (query or "").lower()
     ctx_low = (context or "").lower()
+    norm_query = _norm_topic_key(query)
+    query_num_key = _extract_topic_num_key(query)
 
     # Prefer clean section_title over query for Topic label
     sec_clean = (section_title or "").strip()
@@ -697,39 +805,86 @@ def generate_followup_questions(
     else:
         topic = _clean_topic(query, max_words=12)
 
-    candidates: List[str] = []
+    ctx_sents = [s.strip() for s in split_sentences(context) if len(s.strip().split()) >= 4]
+    used_topic_keys: set = set()
+    used_entities: set = set()
+    used_sent_indices: set = set()
 
-    # 1. Real Topics / Sections from Document Context (e.g., "Topic 1", "Chủ đề 2", "Mục 3")
+    candidates: List[str] = []
+    deferred_candidates: List[str] = []
+
+    # 1. Distinct Topics / Sections from Document Context (e.g., "Topic 1", "Chủ đề 2", "Mục 3", "Chương 1")
     topic_matches = re.findall(
-        r"\b(Topic|Chủ đề|Mục|Bài|Section)\s*(\d+)(?:\s*[:\-\.]\s*([^\n\.\?]{3,60}))?",
+        r"\b(Topic|Chủ đề|Mục|Bài|Section|Chương|Phần)\s*(\d+)(?:\s*[:\-\.]\s*([^\n\.!\?;]+))?",
         context,
         re.IGNORECASE,
     )
     for tm in topic_matches:
-        pfx, num_str, title_part = tm[0], tm[1], tm[2].strip() if tm[2] else ""
+        pfx, num_str = tm[0], tm[1]
+        title_part = _clean_heading_title(tm[2], max_words=10) if tm[2] else ""
+        label = f"{pfx} {num_str}"
+        num_key = _extract_topic_num_key(label)
+        if num_key and num_key in used_topic_keys:
+            continue
+        _mark_used_topic(label, used_topic_keys)
         if title_part:
-            candidates.append(f"Yêu cầu hoặc nội dung cụ thể của {pfx} {num_str} ({title_part}) là gì?")
+            _mark_used_topic(title_part, used_topic_keys)
+            q_text = f"Yêu cầu hoặc nội dung cụ thể của {pfx} {num_str} ({title_part}) là gì?"
         else:
-            candidates.append(f"Nội dung chi tiết của {pfx} {num_str} trong tài liệu là gì?")
+            q_text = f"Nội dung chi tiết của {pfx} {num_str} trong tài liệu là gì?"
 
-    # 2. Section headings or key headers from context
+        # Mark sentence(s) that open with this heading so fallback won't repeat the same topic
+        for idx, sent in enumerate(ctx_sents):
+            if num_key and _extract_topic_num_key(sent[:40]) == num_key:
+                used_sent_indices.add(idx)
+
+        if query_num_key and num_key == query_num_key:
+            deferred_candidates.append(q_text)
+        else:
+            candidates.append(q_text)
+
+    # 2. Distinct section headings or key headers from context
     for line in context.splitlines():
         line_s = line.strip()
-        h_m = re.match(r"^(?:#{1,4}\s*)?(?:\d+(?:\.\d+)*\.?\s*)?([A-ZÀ-Ỹ][^\n:]{4,50})$", line_s)
+        has_marker = bool(re.match(r"^(?:#{1,4}\s+|\d+(?:\.\d+)*\.?\s+)", line_s))
+        if not has_marker and (line_s.endswith((".", "!", "?")) or len(line_s.split()) > 10):
+            continue
+        h_m = re.match(r"^(?:#{1,4}\s*)?(?:\d+(?:\.\d+)*\.?\s*)?([A-ZÀ-Ỹ][^\n:]{4,100})$", line_s)
         if h_m:
-            sec_txt = h_m.group(1).strip()
-            if not any(g in sec_txt.lower() for g in ["nguồn tham khảo", "tài liệu", "đoạn", "bài tập", "references", "phụ lục"]):
+            sec_txt = _clean_heading_title(h_m.group(1), max_words=10)
+            if (
+                len(sec_txt) >= 4
+                and not any(g in sec_txt.lower() for g in ["nguồn tham khảo", "tài liệu", "đoạn", "bài tập", "references", "phụ lục"])
+                and not _is_covered_topic(sec_txt, used_topic_keys)
+            ):
+                _mark_used_topic(sec_txt, used_topic_keys)
+                for idx, sent in enumerate(ctx_sents):
+                    if _norm_topic_key(sec_txt) in _norm_topic_key(sent) and len(sent.split()) <= 12:
+                        used_sent_indices.add(idx)
                 candidates.append(f"Mục tiêu và phạm vi của '{sec_txt}' được trình bày ra sao?")
-        if len(candidates) >= 5:
+        if len(candidates) >= count + 3:
             break
 
-    # 3. Concept definitions ("là gì", "đóng vai trò là", "được định nghĩa")
-    def_m = re.search(r"([A-ZÀ-Ỹa-zà-ỹ0-9_\-\s]{3,35})\s+(?:là|đóng vai trò là|được định nghĩa là)\s+([^.!?]{10,80})", context)
-    if def_m:
-        term = def_m.group(1).strip()
+    # 3. Distinct concept definitions ("là", "đóng vai trò là", "được định nghĩa là", "được gọi là")
+    for def_m in re.finditer(
+        r"([A-ZÀ-Ỹa-zà-ỹ0-9_\- ]{3,35})\s+(?:là|đóng vai trò là|được định nghĩa là|được gọi là)\s+([^.!?\n]{10,80})",
+        context,
+    ):
+        term = re.sub(r"^[-–—•*:\s]+", "", def_m.group(1)).strip()
         term = re.sub(r"^(ở|tại|theo|trong|với|khi)\s+", "", term, flags=re.IGNORECASE).strip()
-        if 1 <= len(term.split()) <= 5 and not any(w in term.lower() for w in ["điều này", "nó", "chúng", "đây", "tài liệu"]):
+        norm_term = _norm_topic_key(term)
+        if (
+            1 <= len(term.split()) <= 5
+            and norm_term
+            and norm_term not in used_entities
+            and norm_term != norm_query
+            and not _is_covered_topic(term, used_topic_keys)
+            and not any(w in term.lower() for w in ["điều này", "nó", "chúng", "đây", "tài liệu", "nội dung này", "nhận được", "thu được", "tìm được", "sau đây", "nêu trên"])
+        ):
+            used_entities.add(norm_term)
             candidates.append(f"Vai trò và nguyên lý hoạt động của '{term}' là gì?")
+        if len(candidates) >= count + 4:
+            break
 
     # 4. Identity, Roles, Workplace — ONLY when context literally contains them
     if any(k in ctx_low for k in ["trần hữu trang", "công tác tại", "tổ trưởng", "đơn vị công tác"]):
@@ -748,21 +903,54 @@ def generate_followup_questions(
         candidates.append("Những sáng kiến cải tiến quy trình làm việc gồm những gì?")
         candidates.append("Các giải pháp khắc phục hạn chế, thiếu sót của bản thân là gì?")
 
-    # 7. Dates / Years from context
+    # 7. Dates / Years from context (anchored with sentence noun context when available)
     years = re.findall(r"\b(202[0-9]|2030)\b", context)
     if years:
-        candidates.append(f"Mục tiêu hoặc kế hoạch trong năm {years[0]} là gì?")
+        yr = years[0]
+        yr_ctx, yr_idx = _noun_context_for_number(yr, ctx_sents, used_sent_indices)
+        if yr_ctx:
+            used_sent_indices.add(yr_idx)
+            candidates.append(f"Mục tiêu hoặc kế hoạch năm {yr} liên quan đến '{yr_ctx}' là gì?")
+        else:
+            candidates.append(f"Mục tiêu hoặc kế hoạch trong năm {yr} là gì?")
 
-    # 8. Percentages or Metrics from context
+    # 8. Percentages or Metrics from context — MUST include noun context from source sentence for BM25
     for num in _meaningful_numbers(context):
         if "%" in num or "phần trăm" in num.lower():
-            candidates.append(f"Chỉ số {num} phản ánh kết quả hoặc tiêu chí nào?")
+            num_ctx, num_idx = _noun_context_for_number(num, ctx_sents, used_sent_indices)
+            if num_ctx:
+                used_sent_indices.add(num_idx)
+                candidates.append(f"Số liệu {num} liên quan đến '{num_ctx}' được giải thích như thế nào?")
 
-    # 9. Clean topic questions (ZERO summary trigger words, natural and directly answerable)
-    if topic and topic != "nội dung này" and not any(topic.lower() in c.lower() for c in candidates):
-        candidates.append(f"Khái niệm và các ý chính của '{topic}' gồm những gì?")
-        candidates.append(f"Nguyên lý và đặc điểm của '{topic}' như thế nào?")
-        candidates.append(f"Nội dung chi tiết của mục '{topic}' gồm những điểm nào?")
+    # 9. Orthogonal aspect questions for single `topic` — ONLY when context has signal for that aspect
+    deferred_sent_indices: set = set()
+    if topic and topic != "nội dung này" and not _is_covered_topic(topic, used_topic_keys):
+        unused_sent_count = sum(1 for i in range(len(ctx_sents)) if i not in used_sent_indices)
+        topic_aspects: List[str] = []
+        if any(k in ctx_low for k in ["là ", "vai trò", "khái niệm", "chức năng", "định nghĩa", "cơ chế", "nguyên lý", "hoạt động"]):
+            topic_aspects.append(f"Khái niệm và vai trò chính của '{topic}' gồm những gì?")
+        if any(k in ctx_low for k in ["ví dụ", "minh họa", "công thức", "quy trình", "các bước", "mô hình", "thuật toán"]):
+            topic_aspects.append(f"Ví dụ hoặc quy trình áp dụng cụ thể của '{topic}' được mô tả như thế nào?")
+        if any(k in ctx_low for k in LIMITATION_CUES):
+            topic_aspects.append(f"Những hạn chế hoặc thách thức của '{topic}' được tài liệu nêu ra là gì?")
+        elif any(k in ctx_low for k in ["ứng dụng", "lợi ích", "ưu điểm", "hiệu quả", "áp dụng"]):
+            topic_aspects.append(f"Ứng dụng và ưu điểm nổi bật của '{topic}' gồm những gì?")
+        if topic_aspects:
+            _mark_used_topic(topic, used_topic_keys)
+            max_aspects = (
+                len(topic_aspects)
+                if (len(candidates) == 0 and len(ctx_sents) >= 4 and unused_sent_count >= 4)
+                else 1
+            )
+            candidates.extend(topic_aspects[:max_aspects])
+            # Defer the lead body sentence right under `topic` so Fallback 1 picks subsequent sentences first
+            for idx, sent in enumerate(ctx_sents):
+                if idx not in used_sent_indices:
+                    if idx == 0 or _is_covered_topic(sent, {_norm_topic_key(topic)}):
+                        deferred_sent_indices.add(idx)
+                        if idx == 0 and idx + 1 < len(ctx_sents) and _is_covered_topic(sent, {_norm_topic_key(topic)}):
+                            deferred_sent_indices.add(idx + 1)
+                    break
 
     # 10. Only suggest "biện pháp/giải pháp" if context literally mentions them
     if any(k in ctx_low for k in ["biện pháp", "giải pháp"]):
@@ -772,41 +960,60 @@ def generate_followup_questions(
     clean_q = re.sub(r"[^\w\s]", "", q_low).strip()
     seen: set = set()
     unique: List[str] = []
-    for question in candidates:
+
+    def _try_add(question: str) -> bool:
         clean_cand = re.sub(r"[^\w\s]", "", question.lower()).strip()
-        if clean_cand == clean_q or clean_cand in seen:
-            continue
+        if not clean_cand or clean_cand == clean_q or clean_cand in seen:
+            return False
         seen.add(clean_cand)
         unique.append(question)
+        return True
+
+    for question in candidates:
+        _try_add(question)
         if len(unique) >= count:
             break
 
-    # Fallback to guarantee EXACTLY `count` questions when context is non-empty
+    # Fallback 1: Prefer extracting from distinct unused sentences (`ctx_sents`) with real keywords
     if len(unique) < count and context.strip():
-        ctx_sents = [s.strip() for s in split_sentences(context) if len(s.strip().split()) >= 4]
-        for sent in ctx_sents:
+        ordered_sent_indices = [
+            i for i in range(len(ctx_sents))
+            if i not in used_sent_indices and i not in deferred_sent_indices
+        ] + [
+            i for i in range(len(ctx_sents))
+            if i not in used_sent_indices and i in deferred_sent_indices
+        ]
+        for idx in ordered_sent_indices:
             if len(unique) >= count:
                 break
-            snippet = _cap_words(sent, 8).rstrip(".,:;!?")
+            sent = ctx_sents[idx]
+            if len(sent.split()) <= 10 and _is_covered_topic(sent, used_topic_keys):
+                continue
+            snippet = _clean_snippet_with_balanced_parens(sent, 8)
             clean_snip = re.sub(r"[^\w\s]", "", snippet.lower()).strip()
             if clean_snip and clean_snip not in seen:
                 cand_q = f"Thông tin về '{snippet}' được giải thích như thế nào?"
-                seen.add(clean_snip)
-                unique.append(cand_q)
+                if _try_add(cand_q):
+                    seen.add(clean_snip)
+                    used_sent_indices.add(idx)
 
-        # Secondary fallback using topic
+        # Fallback 2: Deferred candidates (e.g. topic already in query when no other topics remain)
+        for dc in deferred_candidates:
+            if len(unique) >= count:
+                break
+            _try_add(dc)
+
+        # Fallback 3: Orthogonal single-topic fallbacks ONLY if still below `count`
         topic_fallbacks = [
-            f"Khái niệm và các ý chính của '{topic}' gồm những gì?",
+            f"Khái niệm và vai trò của '{topic}' gồm những gì?",
             f"Nguyên lý và đặc điểm của '{topic}' như thế nào?",
             f"Nội dung chi tiết của mục '{topic}' gồm những điểm nào?",
+            f"Ý nghĩa và phạm vi áp dụng của '{topic}' được nêu ra sao?",
         ]
         for tf in topic_fallbacks:
             if len(unique) >= count:
                 break
-            clean_tf = re.sub(r"[^\w\s]", "", tf.lower()).strip()
-            if clean_tf not in seen:
-                seen.add(clean_tf)
-                unique.append(tf)
+            _try_add(tf)
 
     return unique[:count]
 

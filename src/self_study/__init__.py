@@ -38,6 +38,16 @@ from src.self_study.datasets import (
     synthesize_pros_cons_and_comparison,
     synthesize_step_by_step_process,
 )
+from src.self_study.persona import (
+    AcademicIntent,
+    PedagogicalTier,
+    PedagogicalResponse,
+    AcademicPersonaEngine,
+    ACADEMIC_PERSONA_DATASET,
+    get_academic_persona_dataset,
+    export_sft_training_samples,
+    get_academic_persona_engine,
+)
 
 __all__ = [
     "QARuleType",
@@ -66,4 +76,13 @@ __all__ = [
     "parse_vietnamese_academic_blocks",
     "synthesize_pros_cons_and_comparison",
     "synthesize_step_by_step_process",
+    # Pillar 4 Academic Persona
+    "AcademicIntent",
+    "PedagogicalTier",
+    "PedagogicalResponse",
+    "AcademicPersonaEngine",
+    "ACADEMIC_PERSONA_DATASET",
+    "get_academic_persona_dataset",
+    "export_sft_training_samples",
+    "get_academic_persona_engine",
 ]

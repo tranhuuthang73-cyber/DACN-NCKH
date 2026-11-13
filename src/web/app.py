@@ -14,7 +14,7 @@ import math
 import uuid
 import asyncio
 from pathlib import Path
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any, Optional, Tuple
 
 from fastapi import FastAPI, UploadFile, File, Form, Query, HTTPException, Request, BackgroundTasks
 from fastapi.responses import JSONResponse, HTMLResponse, StreamingResponse
@@ -1003,6 +1003,24 @@ async def detach_document_from_session(session_id: str, doc_id: str):
     return {"success": True, "session_id": session_id, "document_ids": session.document_ids}
 
 
+def _maybe_handle_social_persona_query(query: str) -> Optional[Tuple[str, str]]:
+    """Checks if query is a pure social/capability prompt handled by AcademicPersonaEngine."""
+    from src.self_study.persona.academic_persona import (
+        AcademicIntent,
+        get_academic_persona_engine,
+    )
+    persona = get_academic_persona_engine()
+    intent = persona.classify_intent(query)
+    if intent in (
+        AcademicIntent.GREETING,
+        AcademicIntent.FAREWELL,
+        AcademicIntent.GRATITUDE,
+        AcademicIntent.SYSTEM_CAPABILITY,
+    ):
+        return persona.handle_social_query(query, intent=intent), intent.value
+    return None
+
+
 @app.post("/api/chat/sessions/{session_id}/messages")
 async def send_session_message(session_id: str, req: SessionMessageRequest):
     service = PipelineService.get_instance()
@@ -1023,6 +1041,67 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
     # Step 2: Conversation Context Memory (Task 12)
     # E.g. "Nó khác RAG thế nào?" -> resolves "nó" to prior entity
     effective_query = service.session_manager.resolve_conversation_context(session_id, raw_query)
+
+    # Step 2b: Academic Persona Social & Capability Fast Path (Zero Hallucination, 100% Offline)
+    social_hit = _maybe_handle_social_persona_query(raw_query)
+    if social_hit is not None:
+        social_ans, social_intent = social_hit
+        in_tok = count_text_tokens(raw_query, service.tokenizer)
+        out_tok = count_text_tokens(social_ans, service.tokenizer)
+        lat_ms = round((time.perf_counter() - t_start) * 1000, 2)
+        assistant_msg = session.add_message(
+            role="assistant",
+            content=social_ans,
+            citations=[],
+            evidence=[],
+            telemetry={
+                "input_tokens": in_tok,
+                "output_tokens": out_tok,
+                "total_tokens": in_tok + out_tok,
+                "tokens_saved": 0,
+                "compression_ratio_pct": 0.0,
+                "total_latency_ms": lat_ms,
+                "retrieval_ms": 0.0,
+                "generation_ms": lat_ms,
+            },
+            routing=f"PERSONA_{social_intent.upper()}",
+            refused=False,
+            refusal_reason=None,
+            diagnostics={
+                "mode": (req.mode or "hybrid").lower(),
+                "method": "P2",
+                "routing": f"PERSONA_{social_intent.upper()}",
+                "route_explanation": f"Xã giao / Năng lực Trợ lý NCKH ({social_intent})",
+                "effective_query": effective_query,
+                "is_follow_up": False,
+                "attached_document_count": len(session.document_ids or []),
+                "evidence_count": 0,
+                "dynamic_top_k": False,
+                "context_compression": {},
+                "refusal_reason": None,
+                "memory_level": "Persona",
+                "suggested_questions": [],
+            },
+            suggested_questions=[],
+        )
+        try:
+            service.session_manager.save()
+        except Exception:
+            pass
+        return {
+            "session_id": session_id,
+            "session_title": session.title,
+            "message": assistant_msg,
+            "answer": social_ans,
+            "effective_query": effective_query,
+            "routing": f"PERSONA_{social_intent.upper()}",
+            "refused": False,
+            "citations": [],
+            "evidence": [],
+            "suggested_questions": [],
+            "telemetry": assistant_msg.get("telemetry", {}),
+            "diagnostics": assistant_msg.get("diagnostics", {}),
+        }
 
     # Step 3: Question Routing (Task 4 & 5)
     raw_attached_docs = list(session.document_ids) if session.document_ids else []
@@ -1839,22 +1918,62 @@ async def chat_query(req: ChatRequest):
         qa_mode = QAMode.HYBRID
         method_name = "P2"
 
-    resolved_doc_id = req.document_id
-    if resolved_doc_id and resolved_doc_id not in service.store._index:
-        resolved_doc_id = None
+    # Social & Academic Persona Fast Path
+    social_hit = _maybe_handle_social_persona_query(query)
+    if social_hit is not None:
+        social_ans, social_intent = social_hit
+        in_tok = count_text_tokens(query, service.tokenizer)
+        out_tok = count_text_tokens(social_ans, service.tokenizer)
+        lat_ms = round((time.perf_counter() - t_start) * 1000, 2)
+        return {
+            "question": query,
+            "answer": social_ans,
+            "mode": mode_str,
+            "answer_mode": req.answer_mode,
+            "refused": False,
+            "refusal_reason": None,
+            "refusal_message": "",
+            "citations": [],
+            "evidence": [],
+            "memory_diagnostics": {"memory_level": "Persona", "intent": social_intent},
+            "telemetry": {
+                "input_tokens": in_tok,
+                "output_tokens": out_tok,
+                "total_tokens": in_tok + out_tok,
+                "total_latency_ms": lat_ms,
+                "retrieval_ms": 0.0,
+                "generation_ms": lat_ms,
+            },
+            "research_diagnostics": {
+                "retrieval_count": 0,
+                "evidence_count": 0,
+                "evidence_diagnostics": {},
+                "memory_level": "Persona",
+                "device": service.device,
+            },
+        }
 
-    # Step 1: Retrieval (for Hybrid mode or when context is requested)
+    resolved_doc_id = req.document_id
+    doc_exists = bool(resolved_doc_id and resolved_doc_id in service.store._index)
+
+    # Step 1: Question Routing & Document-Scoped Retrieval
+    route, route_meta = service.question_router.classify_intent(
+        query, num_attached_documents=1 if resolved_doc_id else 0
+    )
+
     t_ret_start = time.perf_counter()
     retrieval_results = []
     if qa_mode in (QAMode.HYBRID, QAMode.CONTEXT):
-        expanded_query, _ = expand_query_semantics(query)
-        retrieval_results = service.retriever.retrieve(expanded_query, top_k=req.top_k)
-        if resolved_doc_id:
-            # Filter or prioritize current document
-            doc_passages = [r for r in retrieval_results if getattr(r, "document_id", "") == resolved_doc_id]
-            if doc_passages:
-                retrieval_results = doc_passages
-            else:
+        if resolved_doc_id and not doc_exists:
+            retrieval_results = []
+        else:
+            expanded_query, _ = expand_query_semantics(query)
+            retrieval_results = service.retriever.retrieve(
+                expanded_query,
+                top_k=req.top_k,
+                document_id=resolved_doc_id,
+            )
+            if resolved_doc_id and not retrieval_results and route == QuestionRoute.DOCUMENT_SUMMARY:
                 from src.hybrid_qa.retriever import RetrievalResult
                 try:
                     d_obj = service.store.get_document(resolved_doc_id)
@@ -1877,11 +1996,7 @@ async def chat_query(req: ChatRequest):
     t_ret_end = time.perf_counter()
     retrieval_ms = (t_ret_end - t_ret_start) * 1000
 
-    # Step 2: Question Routing & Evidence Selection & Refusal Controller
-    route, route_meta = service.question_router.classify_intent(
-        query, num_attached_documents=1 if resolved_doc_id else 0
-    )
-
+    # Step 2: Evidence Selection & Refusal Controller
     use_dynamic_k = route in (QuestionRoute.DIRECT_LOOKUP, QuestionRoute.SECTION_LOOKUP, QuestionRoute.PAGE_LOOKUP)
     evidence = service.evidence_selector.select_evidence(
         query,
@@ -1903,7 +2018,7 @@ async def chat_query(req: ChatRequest):
     evidence_diagnostics = {}
 
     if qa_mode == QAMode.HYBRID:
-        if not is_grounded or (refusal_decision and refusal_decision.should_refuse and route != QuestionRoute.DOCUMENT_SUMMARY and not resolved_doc_id):
+        if not is_grounded or (refusal_decision and refusal_decision.should_refuse and route != QuestionRoute.DOCUMENT_SUMMARY):
             refused = True
             refusal_reason = effective_route.value if not is_grounded else (refusal_decision.reason.value if refusal_decision and refusal_decision.reason else "no_evidence")
             refusal_message = "Không tìm thấy đủ thông tin trong tài liệu để trả lời chắc chắn."

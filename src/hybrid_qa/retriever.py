@@ -23,6 +23,42 @@ TOPIC_ALIAS_PATTERN = re.compile(
     re.IGNORECASE,
 )
 
+NUMBERED_HEADING_PIN_PATTERN = re.compile(
+    r"(?:^\s*|(?<=['\"“«\(]))(\d{1,3})\s*[\.\:\-\–]\s+(?=[A-Za-zÀ-ỹ])"
+    r"|(?<=[\s])(\d{1,2})\s*[\.\:\-\–]\s+([^\W\d_]{2,})"
+)
+
+LEADING_SECTION_PATTERN = re.compile(
+    r"^\s*(?:"
+    r"(?:topic|chủ đề|chu de|bài|bai|mục|muc|chương|chuong|phần|phan|section|chapter|lesson|unit)\s*(\d+)\b"
+    r"|(\d{1,3})\s*[\.\:\-\–]\s+(?=[A-Za-zÀ-ỹ])"
+    r")",
+    re.IGNORECASE,
+)
+
+
+def extract_topic_and_section_numbers(text: str) -> Set[str]:
+    """Extract explicit topic alias numbers and numbered section digits (e.g. 'Topic 1', '9. HỆ MÃ...')."""
+    if not text:
+        return set()
+    matches = set(TOPIC_ALIAS_PATTERN.findall(text))
+    for g1, g2, g2_word in NUMBERED_HEADING_PIN_PATTERN.findall(text):
+        if g1:
+            matches.add(g1)
+        if g2 and g2_word.isupper():
+            matches.add(g2)
+    return matches
+
+
+def extract_leading_section_number(text: str) -> Optional[str]:
+    """Extract leading topic/section number if text starts with a section heading."""
+    if not text:
+        return None
+    m = LEADING_SECTION_PATTERN.match(text)
+    if not m:
+        return None
+    return m.group(1) or m.group(2)
+
 
 def strip_accents(text: str) -> str:
     """Removes Vietnamese tone marks for accent-insensitive matching."""
@@ -327,14 +363,16 @@ class BM25Retriever:
         if not query_tokens:
             return []
 
-        allowed_set = None
-        if allowed_document_ids:
+        allowed_set: Optional[Set[str]] = None
+        if allowed_document_ids is not None:
             allowed_set = set(allowed_document_ids)
         if document_id:
-            allowed_set = allowed_set.intersection({document_id}) if allowed_set else {document_id}
+            allowed_set = (allowed_set & {document_id}) if allowed_set is not None else {document_id}
+        if allowed_set is not None and not allowed_set:
+            return []
 
-        # Check topic / section pin with aliases
-        q_topic_matches = set(TOPIC_ALIAS_PATTERN.findall(query.lower()))
+        # Check topic / numbered-section pin
+        q_topic_matches = extract_topic_and_section_numbers(query)
 
         # Check quoted phrases in query (e.g. 'PHÁ MÃ' or "1. GIỚI THIỆU HỆ MÃ KHÓA ĐỐI XỨNG")
         quoted_spans = [
@@ -355,33 +393,35 @@ class BM25Retriever:
         target_passages_exist = False
         if q_topic_matches:
             for idx in range(self.corpus_size):
-                if allowed_set and self.passages[idx].document_id not in allowed_set:
+                if allowed_set is not None and self.passages[idx].document_id not in allowed_set:
                     continue
                 p = self.passages[idx]
-                sec_topics = set(TOPIC_ALIAS_PATTERN.findall((p.section_title or "").lower()))
+                sec_topics = extract_topic_and_section_numbers(p.section_title or "")
                 text_topics = set(TOPIC_ALIAS_PATTERN.findall((p.text or "").lower()))
+                head_sec_num = extract_leading_section_number(p.text or "")
+                if head_sec_num:
+                    text_topics.add(head_sec_num)
                 if (sec_topics & q_topic_matches) or (text_topics & q_topic_matches):
                     target_passages_exist = True
                     break
 
         scores = []
         for idx in range(self.corpus_size):
-            if allowed_set and self.passages[idx].document_id not in allowed_set:
+            if allowed_set is not None and self.passages[idx].document_id not in allowed_set:
                 continue
 
             p = self.passages[idx]
-            sec_topics = set(TOPIC_ALIAS_PATTERN.findall((p.section_title or "").lower()))
+            sec_topics = extract_topic_and_section_numbers(p.section_title or "")
             text_topics = set(TOPIC_ALIAS_PATTERN.findall((p.text or "").lower()))
+            head_sec_num = extract_leading_section_number(p.text or "")
+            if head_sec_num:
+                text_topics.add(head_sec_num)
 
             # If >= 1 passage matches target topic N, exclude passages declaring a different number
             if target_passages_exist:
                 if sec_topics and not (sec_topics & q_topic_matches):
                     continue
-                text_head_m = re.match(
-                    r"^\s*(?:topic|chủ đề|chu de|bài|bai|mục|muc|chương|chuong|phần|phan|section|chapter|lesson|unit)\s*(\d+)\b",
-                    (p.text or "").lower(),
-                )
-                if text_head_m and text_head_m.group(1) not in q_topic_matches:
+                if head_sec_num and head_sec_num not in q_topic_matches:
                     continue
 
             score = self._score_document(query_tokens, idx)

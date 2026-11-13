@@ -299,10 +299,21 @@ class SelfStudyKnowledgeBank:
         if _has_cue(["tong quan", "tom tat", "toan bo tai lieu", "noi dung chinh"]):
             return "SUMMARY_OVERVIEW"
 
-        # Check DEFINITION_AND_TYPES: asks definition + types/methods/examples
+        # Check DEFINITION_AND_TYPES: asks definition + types/methods/examples or enumerating types/methods/ciphers
         has_def = _has_cue(["la gi", "khai niem", "dinh nghia"])
-        has_types = _has_cue(["bao nhieu loai", "phan loai", "cac phuong phap", "cac he", "may loai", "cho vi du", "vi du"])
+        has_enum_types = _has_cue([
+            "bao nhieu loai", "phan loai", "cac phuong phap", "cac he", "may loai",
+            "nhung loai nao", "he ma nao", "phuong phap nao", "liet ke", "cac loai",
+            "bao nhieu phuong phap", "cac he ma",
+        ])
+        has_types = has_enum_types or _has_cue(["cho vi du", "vi du"])
+        is_specific_section = bool(
+            re.search(r"\b(?:topic|chu de|bai|muc|chuong|phan)\s*\d+\b", q_norm)
+            or re.search(r"^\s*\d+\.\s+[a-z0-9]", q_norm)
+        )
         if has_def and has_types:
+            return "DEFINITION_AND_TYPES"
+        if has_enum_types and not is_specific_section:
             return "DEFINITION_AND_TYPES"
         if has_def:
             if _has_cue(["loai", "he", "phuong phap"]):
@@ -341,13 +352,15 @@ class SelfStudyKnowledgeBank:
         if not self._documents:
             return None
 
-        # Select target documents
+        # Select target documents (Strict Document Scope Lock when doc_ids is provided)
         target_docs = []
-        if doc_ids:
+        if doc_ids is not None:
             for did in doc_ids:
                 if did in self._documents:
                     target_docs.append(self._documents[did])
-        if not target_docs:
+            if not target_docs:
+                return None
+        else:
             target_docs = list(self._documents.values())
 
         if not target_docs:
@@ -386,13 +399,33 @@ class SelfStudyKnowledgeBank:
                     if clean_b:
                         bullet_methods.append(f"- {clean_b}")
 
-            # Specific systems across the whole document
-            system_names = []
-            for s in sections[1:]:
+            # Specific systems across the whole document (skip intro/cryptanalysis headings, keep all ciphers/methods)
+            system_names: List[str] = []
+            seen_sys_norm: set = set()
+            sys_cues = (
+                "he ma", "ma hoa", "ma ", "thuat toan", "cipher", "don mot lan",
+                "autokey", "playfair", "caesar", "affine", "vigenere", "hill",
+                "vernam", "feistel", "des", "aes", "rsa", "ecc", "topic",
+            )
+            non_sys_cues = ("gioi thieu", "pha ma", "tong quan", "khai niem", "mo dau", "ket luan")
+            for s in sections:
+                if s is intro_sec:
+                    continue
                 h = s["heading"]
-                clean_name = re.sub(r"^\d+\.\s*", "", h).strip()
-                if any(w in clean_name.lower() for w in ["hệ mã", "he ma", "độn", "dòng", "autokey", "playfair", "cipher", "topic"]):
-                    system_names.append(clean_name)
+                clean_name = re.sub(r"^(?:\d+(?:\.\d+)*|[IVXLCDM]+)\.\s*", "", h, flags=re.IGNORECASE).strip()
+                norm_name = strip_accents(clean_name.lower())
+                if any(ex in norm_name for ex in non_sys_cues):
+                    continue
+                if any(w in norm_name for w in sys_cues):
+                    if norm_name not in seen_sys_norm:
+                        seen_sys_norm.add(norm_name)
+                        system_names.append(clean_name)
+            for extra_sys in doc.get("systems", []):
+                clean_extra = re.sub(r"^(?:\d+(?:\.\d+)*|[IVXLCDM]+)\.\s*", "", extra_sys, flags=re.IGNORECASE).strip()
+                norm_extra = strip_accents(clean_extra.lower())
+                if clean_extra and not any(ex in norm_extra for ex in non_sys_cues) and norm_extra not in seen_sys_norm:
+                    seen_sys_norm.add(norm_extra)
+                    system_names.append(clean_extra)
 
             # 3. Examples from sections
             example_snippets = []

@@ -213,6 +213,70 @@ class TestRetrieverTopicPin(unittest.TestCase):
         self.assertEqual(len(results), 1)
         self.assertEqual(results[0].passage_id, "P1")
 
+    def test_numbered_section_digit_pin_excludes_neighbors(self):
+        """'9. HỆ MÃ HOÁ DÒNG' pins section 9 and strictly excludes sections 8 and 10."""
+        passages = [
+            make_passage(
+                passage_id="P008",
+                document_id="DOC_CRYPTO",
+                text="8. HỆ MÃ HOÁ ĐỘN MỘT LẦN:\nHệ mã hóa hoàn hảo dùng khóa ngẫu nhiên một lần.",
+                section_title="8. HỆ MÃ HOÁ ĐỘN MỘT LẦN:",
+            ),
+            make_passage(
+                passage_id="P009",
+                document_id="DOC_CRYPTO",
+                text="9. HỆ MÃ HOÁ DÒNG:\nSinh ra chuỗi khóa z = z1, z2, z3 và mã hóa XOR.",
+                section_title="9. HỆ MÃ HOÁ DÒNG:",
+            ),
+            make_passage(
+                passage_id="P010",
+                document_id="DOC_CRYPTO",
+                text="10. HỆ MÃ HOÁ AUTOKEY:\nKhóa k được mở rộng bằng ký tự bản rõ.",
+                section_title="10. HỆ MÃ HOÁ AUTOKEY:",
+            ),
+        ]
+        retriever = BM25Retriever()
+        retriever.build_index(passages)
+
+        res9 = retriever.retrieve("9. HỆ MÃ HOÁ DÒNG", top_k=5)
+        self.assertEqual([r.passage_id for r in res9], ["P009"])
+
+        res10 = retriever.retrieve("10. HỆ MÃ HOÁ AUTOKEY", top_k=5)
+        self.assertEqual([r.passage_id for r in res10], ["P010"])
+
+        # Cross-format bridge: 'mục 9' pins '9. HỆ MÃ HOÁ DÒNG:'
+        res_muc9 = retriever.retrieve("mục 9", top_k=5)
+        self.assertEqual([r.passage_id for r in res_muc9], ["P009"])
+
+    def test_non_heading_numbers_not_pinned(self):
+        """Years or inline constants like 'năm 1970.' or 'k = 3.' do not trigger false topic pinning."""
+        from src.hybrid_qa.retriever import extract_topic_and_section_numbers
+        self.assertEqual(
+            extract_topic_and_section_numbers("Các hệ mã trước năm 1970. Có bao nhiêu phương pháp?"),
+            set(),
+        )
+        self.assertEqual(
+            extract_topic_and_section_numbers("Với k = 3. Kết quả là gì?"),
+            set(),
+        )
+
+    def test_document_scope_lock_empty_and_mismatched_allowed_ids(self):
+        """Empty allowed_document_ids or disjoint document_id returns [] instead of global corpus."""
+        passages = [
+            make_passage("P1", "DOC_A", "Hệ mã dịch vòng Caesar cipher", "2. HỆ MÃ DỊCH VÒNG"),
+            make_passage("P2", "DOC_B", "Hệ mã hóa dòng Stream cipher", "9. HỆ MÃ HOÁ DÒNG"),
+        ]
+        retriever = BM25Retriever()
+        retriever.build_index(passages)
+
+        self.assertEqual(retriever.retrieve("hệ mã", top_k=5, allowed_document_ids=[]), [])
+        self.assertEqual(
+            retriever.retrieve("hệ mã", top_k=5, document_id="DOC_A", allowed_document_ids=["DOC_B"]),
+            [],
+        )
+        res_a = retriever.retrieve("hệ mã", top_k=5, allowed_document_ids=["DOC_A"])
+        self.assertEqual([r.document_id for r in res_a], ["DOC_A"])
+
 
 if __name__ == "__main__":
     unittest.main()

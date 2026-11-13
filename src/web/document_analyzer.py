@@ -326,6 +326,20 @@ class DocumentAnalyzer:
 
         MIN_RELEVANCE = 0.34
 
+        from src.self_study.persona.academic_persona import (
+            AcademicIntent,
+            get_academic_persona_engine,
+        )
+        persona = get_academic_persona_engine()
+        persona_intent = persona.classify_intent(query)
+        if persona_intent in (
+            AcademicIntent.GREETING,
+            AcademicIntent.FAREWELL,
+            AcademicIntent.GRATITUDE,
+            AcademicIntent.SYSTEM_CAPABILITY,
+        ):
+            return persona.handle_social_query(query, intent=persona_intent), []
+
         if not evidence_passages:
             return "Không tìm thấy đủ thông tin bằng chứng trong tài liệu để trả lời câu hỏi này.", []
 

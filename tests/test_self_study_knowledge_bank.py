@@ -209,3 +209,30 @@ def test_multi_domain_exports_and_routing():
     assert blocks[0]["block_type"] == "dinh_nghia"
     assert blocks[0]["metadata"]["is_definition"] is True
 
+
+def test_knowledge_bank_scope_lock_and_lossless_cipher_enumeration():
+    bank = SelfStudyKnowledgeBank()
+    slide_with_short_cipher = (
+        "1. GIỚI THIỆU HỆ MÃ KHÓA ĐỐI XỨNG:\n"
+        "Mã hóa đối xứng dùng chung khóa bí mật.\n"
+        "* Mã hóa thay thế.\n"
+        "* Mã hóa hoán vị.\n\n"
+        "2. MÃ CAESAR:\n"
+        "Dịch chuyển k vị trí trên Z26.\n\n"
+        "3. HỆ MÃ HOÁ DÒNG:\n"
+        "Mã hóa từng bit bằng phép XOR.\n"
+    )
+    bank.learn_document("DOC_CRYPTO_X", "Crypto", slide_with_short_cipher)
+
+    # Strict scope lock: unknown doc_ids must return None instead of leaking DOC_CRYPTO_X
+    assert bank.synthesize_learned_answer("mã hóa đối xứng là gì", doc_ids=["DOC_OTHER"]) is None
+    assert bank.synthesize_learned_answer("mã hóa đối xứng là gì", doc_ids=[]) is None
+
+    # Enumeration query without 'là gì' still returns full cipher list including MÃ CAESAR
+    res = bank.synthesize_learned_answer("liệt kê các hệ mã trong tài liệu", doc_ids=["DOC_CRYPTO_X"])
+    assert res is not None
+    assert res["blueprint"] == "DEFINITION_AND_TYPES"
+    ans_lower = res["answer"].lower()
+    assert "caesar" in ans_lower
+    assert "dòng" in ans_lower
+

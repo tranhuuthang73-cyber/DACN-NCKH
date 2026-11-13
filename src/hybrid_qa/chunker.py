@@ -183,7 +183,11 @@ class DocumentChunker:
                 current_len = 0
                 current_start = sent_start
 
-            elif current_len + sent_len > self.chunk_size and current_sentences:
+            elif (
+                current_len + sent_len > self.chunk_size
+                and current_sentences
+                and not (len(current_sentences) == 1 and self.is_heading(current_sentences[0][0]))
+            ):
                 chunk_text = " ".join(s[0] for s in current_sentences).strip()
                 chunk_end = current_sentences[-1][2]
                 if chunk_text:
@@ -205,7 +209,7 @@ class DocumentChunker:
                     overlap_start = len(current_sentences)
                     for i in range(len(current_sentences) - 1, -1, -1):
                         if self.is_heading(current_sentences[i][0]):
-                            overlap_start = i
+                            overlap_start = i + 1
                             break
                         overlap_len += len(current_sentences[i][0])
                         if overlap_len >= self.chunk_overlap:

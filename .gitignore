@@ -60,3 +60,7 @@ checkpoints/train_5m/
 checkpoints/train_10m/
 checkpoints/*.pt
 logs/*.log
+
+checkpoints/train_20m/*.pt
+!checkpoints/train_20m/training_20m_log.json
+!checkpoints/train_20m/training_20m_manifest.json

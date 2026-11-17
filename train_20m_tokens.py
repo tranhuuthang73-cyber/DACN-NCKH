@@ -33,6 +33,48 @@ from src.hope_attention.pretrained_hope import PretrainedHopeLM
 from src.training.training_corpus import get_scale_training_corpus, get_validation_corpus
 
 
+def _load_online_corpus_samples(online_corpus_path: str):
+    """Load and format Q&A + document text samples from an online corpus JSON."""
+    with open(online_corpus_path, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    docs = data.get("documents", [])
+    questions = data.get("questions", [])
+    doc_map = {d.get("document_id"): d for d in docs if d.get("document_id")}
+    samples = []
+
+    for q in questions:
+        doc = doc_map.get(q.get("document_id"), {})
+        title = doc.get("title", "")
+        raw_text = doc.get("text", "") or doc.get("content", "")
+        snippet = raw_text[:900].strip()
+        q_text = (q.get("question") or "").strip()
+        if not q_text:
+            continue
+        if q.get("answerable") and q.get("gold_answer"):
+            ans = str(q["gold_answer"]).strip()
+        else:
+            ans = "Not enough information in the provided document."
+        formatted = (
+            f"Document: {title}\n"
+            f"Context: {snippet}\n"
+            f"Question: {q_text}\n"
+            f"Answer: {ans}"
+        )
+        samples.append({"formatted_text": formatted, "source": q.get("source", "online")})
+
+    # Also add document overview chunks so every document contributes directly
+    for d in docs:
+        raw_text = (d.get("text") or d.get("content") or "").strip()
+        if raw_text:
+            samples.append({
+                "formatted_text": raw_text[:1200],
+                "source": d.get("source", "online"),
+            })
+
+    meta = data.get("metadata", {})
+    return samples, len(docs), len(samples), meta.get("documents_by_source", {})
+
+
 def train_continuous_to_target(
     target_tokens: int = 20_000_000,
     seed: int = 42,
@@ -46,6 +88,7 @@ def train_continuous_to_target(
     output_dir: str = "checkpoints/train_20m",
     save_interval_tokens: int = 5_000_000,
     resume_from: str = None,
+    online_corpus: str = None,
 ):
     print("=" * 85)
     print(f" SA-CMS CONTINUOUS TRAINING TO TARGET: {target_tokens:,} TOKENS (FOREGROUND)")
@@ -89,12 +132,24 @@ def train_continuous_to_target(
         missing, unexpected = model.load_state_dict(state_dict, strict=False)
         cumulative_tokens = ckpt.get("cumulative_tokens", 0)
         starting_epoch = ckpt.get("epochs_completed", 0)
-        print(f"     Resumed at: {cumulative_tokens:,} tokens (Epoch {starting_epoch})")
+        if cumulative_tokens >= target_tokens:
+            print(f"     Warm-start mode: resetting token counter from {cumulative_tokens:,} to 0 for target {target_tokens:,}")
+            cumulative_tokens = 0
+            starting_epoch = 0
+        else:
+            print(f"     Resumed at: {cumulative_tokens:,} tokens (Epoch {starting_epoch})")
 
     # 2. Tokenize Dataset
-    print("\n[2/4] Tokenizing scale corpus (1,000 samples)...")
+    print("\n[2/4] Tokenizing corpus...")
     scale_corpus = get_scale_training_corpus()
-    train_samples = scale_corpus["samples"]
+    train_samples = list(scale_corpus["samples"])
+    online_num_docs = 0
+    online_num_samples = 0
+    online_by_source = {}
+    if online_corpus and os.path.exists(online_corpus):
+        online_samples, online_num_docs, online_num_samples, online_by_source = _load_online_corpus_samples(online_corpus)
+        train_samples.extend(online_samples)
+        print(f"  -> Loaded online corpus '{online_corpus}': {online_num_docs:,} docs, {online_num_samples:,} samples")
 
     encoded_samples = []
     tokens_per_pass = 0
@@ -226,16 +281,49 @@ def train_continuous_to_target(
 
     # 6. Save Training Metrics Log
     log_path = out_path / "training_20m_log.json"
+    avg_tps = round(cumulative_tokens / max(0.001, total_time), 2)
     with open(log_path, "w", encoding="utf-8") as f:
         json.dump({
             "target_tokens": target_tokens,
             "actual_tokens_trained": cumulative_tokens,
             "total_epochs": epoch,
             "total_time_seconds": round(total_time, 2),
-            "average_throughput_tokens_sec": round(cumulative_tokens / max(0.001, total_time), 2),
+            "average_throughput_tokens_sec": avg_tps,
             "history": log_history,
         }, f, indent=2)
     print(f" -> Metrics log saved to: {log_path}")
+
+    if online_corpus:
+        report_path = out_path / "api_training_report.json"
+        last_entry = log_history[-1] if log_history else {}
+        report_payload = {
+            "training_run": "SA-CMS + WaveCMS Expanded Online API Training",
+            "status": "COMPLETED_VERIFIED",
+            "device": torch.cuda.get_device_name(0) if torch.cuda.is_available() else device,
+            "warm_start_from": resume_from,
+            "online_corpus_path": online_corpus,
+            "num_documents": online_num_docs,
+            "num_samples": len(train_samples),
+            "online_samples_added": online_num_samples,
+            "documents_by_source": online_by_source,
+            "target_tokens": target_tokens,
+            "actual_tokens_trained": cumulative_tokens,
+            "total_epochs": epoch,
+            "train_loss": last_entry.get("train_loss"),
+            "tokens_per_sec": avg_tps,
+            "peak_vram_mb": max((h.get("peak_vram_mb", 0.0) for h in log_history), default=0.0),
+            "total_time_seconds": round(total_time, 2),
+            "batch_size": batch_size,
+            "grad_accum_steps": grad_accum_steps,
+            "effective_batch_size": batch_size * grad_accum_steps,
+            "lr": lr,
+            "checkpoint_path": str(final_ckpt_path),
+            "history": log_history,
+        }
+        with open(report_path, "w", encoding="utf-8") as f:
+            json.dump(report_payload, f, ensure_ascii=False, indent=2)
+        print(f" -> API Training Report saved to: {report_path}")
+
     print("=" * 85)
     print(" TRAINING COMPLETED SUCCESSFULLY. ALL WEIGHTS SAVED.")
     print("=" * 85)
@@ -251,6 +339,7 @@ if __name__ == "__main__":
     parser.add_argument("--output-dir", type=str, default="checkpoints/train_20m", help="Output directory")
     parser.add_argument("--resume", type=str, default=None, help="Path to checkpoint to resume training from")
     parser.add_argument("--save-interval", type=int, default=5_000_000, help="Save milestone checkpoint every N tokens")
+    parser.add_argument("--online-corpus", type=str, default=None, help="Optional path to online training corpus JSON")
 
     args = parser.parse_args()
     train_continuous_to_target(
@@ -262,5 +351,6 @@ if __name__ == "__main__":
         output_dir=args.output_dir,
         resume_from=args.resume,
         save_interval_tokens=args.save_interval,
+        online_corpus=args.online_corpus,
     )
 

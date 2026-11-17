@@ -537,7 +537,7 @@ class DocumentAnalyzer:
             if s.strip() and not _is_heading_sent(s, matched_section)
         ]
         if is_heading:
-            if not is_general_section_query and len(body_sents) >= 2 and (has_specific_aspect or len(q_intent_tokens) >= 2):
+            if not is_general_section_query and len(body_sents) >= 2 and has_specific_aspect:
                 ranked_body = sorted(
                     enumerate(body_sents),
                     key=lambda item: (_score_body_sentence(item[1]), -item[0]),

@@ -28,6 +28,8 @@ checkpoints:
   base_phase4_checkpoint: "local_runtime/checkpoints/cms_3lvl_seed_42.pt"
   final_external_checkpoint: "local_runtime/checkpoints/cms_3lvl_full_dataset.pt"
   final_external_status: "READY_VERIFIED_GPU"
+  expanded_api_checkpoint: "checkpoints/train_api_expanded/cms_20m_tokens_final.pt"
+  expanded_api_status: "READY_API_EXPANDED"
 
 retrieval:
   algorithm: "BM25"

@@ -64,3 +64,6 @@ logs/*.log
 checkpoints/train_20m/*.pt
 !checkpoints/train_20m/training_20m_log.json
 !checkpoints/train_20m/training_20m_manifest.json
+checkpoints/train_api_expanded/*.pt
+!checkpoints/train_api_expanded/api_training_report.json
+!checkpoints/train_api_expanded/training_20m_log.json

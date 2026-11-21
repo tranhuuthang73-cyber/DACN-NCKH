@@ -409,6 +409,13 @@
                 <button type="button" class="composer-pill-btn composer-online-pill" id="btn-toggle-online-api" aria-pressed="false" title="Mặc định Tắt (Air-Gap Offline). Bật để cho phép tự gọi Wikipedia/arXiv/OpenAlex/EuropePMC khi câu hỏi vượt kho local.">
                   <span id="lbl-online-api">🌐 Auto API ngoài</span>
                 </button>
+
+                <div class="thinking-mode-segmented" id="thinking-mode-selector" role="group" aria-label="Chế độ tư duy WaveCMS-R²">
+                  <button type="button" class="thinking-seg-btn active" data-thinking-mode="fast" aria-pressed="true" title="Trả lời nhanh trực tiếp (mặc định)">⚡ Nhanh</button>
+                  <button type="button" class="thinking-seg-btn" data-thinking-mode="deep" aria-pressed="false" title="Suy nghĩ sâu đa bước và tự kiểm chứng công thức">🧠 Suy nghĩ sâu</button>
+                  <button type="button" class="thinking-seg-btn" data-thinking-mode="broad" aria-pressed="false" title="Tư duy rộng 5 khía cạnh × 4 mức phân giải Haar">🌐 Tư duy rộng</button>
+                  <button type="button" class="thinking-seg-btn" data-thinking-mode="deep_broad" aria-pressed="false" title="Kết hợp Suy nghĩ sâu và Tư duy rộng">🔥 Sâu + Rộng</button>
+                </div>
               </div>
 
               <button type="submit" class="composer-send-btn" id="btn-send" disabled aria-label="Gửi câu hỏi" title="Gửi câu hỏi (Enter)">

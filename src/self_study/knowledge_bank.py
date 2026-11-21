@@ -23,6 +23,96 @@ def strip_accents(text: str) -> str:
     return text.replace("đ", "d").replace("Đ", "D")
 
 
+def _is_one_edit_away(a: str, b: str) -> bool:
+    """Returns True if two tokens (>= 3 chars) differ by exactly 1 edit (sub/ins/del)."""
+    if a == b:
+        return False
+    la, lb = len(a), len(b)
+    if abs(la - lb) > 1 or la < 3 or lb < 3:
+        return False
+    if la == lb:
+        return sum(1 for ca, cb in zip(a, b) if ca != cb) == 1
+    if la < lb:
+        a, b = b, a
+    i = j = diffs = 0
+    while i < len(a) and j < len(b):
+        if a[i] != b[j]:
+            diffs += 1
+            if diffs > 1:
+                return False
+            i += 1
+        else:
+            i += 1
+            j += 1
+    return True
+
+
+_KB_STOP_TOKENS = {
+    "la", "gi", "cua", "va", "voi", "cac", "nhung", "mot", "cho", "biet",
+    "ve", "co", "duoc", "trong", "nay", "nao", "nhu", "the", "bao", "nhieu",
+    "loai", "phan", "liet", "ke", "vi", "du", "tai", "lieu", "khai", "niem",
+    "dinh", "nghia", "hay", "giai", "thich", "trinh", "bay", "muc", "bai",
+}
+
+
+def _score_doc_relevance(query: str, doc: Dict[str, Any]) -> float:
+    """Scores a learned document against query using normalized + 1-edit fuzzy tokens."""
+    q_norm = strip_accents((query or "").lower())
+    raw_q_tokens = re.findall(r"[a-z0-9_]+", q_norm)
+    q_tokens = [t for t in raw_q_tokens if len(t) >= 2 and t not in _KB_STOP_TOKENS]
+    if not q_tokens:
+        q_tokens = [t for t in raw_q_tokens if len(t) >= 2]
+    if not q_tokens:
+        return 0.0
+
+    title_norm = strip_accents((doc.get("title") or "").lower())
+    headings_norm = strip_accents(
+        " ".join(s.get("heading", "") for s in doc.get("sections", [])).lower()
+    )
+    raw_norm = strip_accents((doc.get("raw_text") or "").lower())
+    if not raw_norm:
+        raw_norm = strip_accents(
+            " ".join(
+                " ".join(s.get("lines", [])) for s in doc.get("sections", [])
+            ).lower()
+        )
+
+    title_tokens = set(re.findall(r"[a-z0-9_]+", f"{title_norm} {headings_norm}"))
+    doc_tokens = set(re.findall(r"[a-z0-9_]+", raw_norm)) | title_tokens
+    if not doc_tokens:
+        return 0.0
+
+    exact_hits = 0
+    fuzzy_score = 0.0
+    score = 0.0
+    for qt in q_tokens:
+        if qt in title_tokens:
+            score += 3.0
+            exact_hits += 1
+        elif qt in doc_tokens:
+            score += 1.5
+            exact_hits += 1
+        elif len(qt) >= 3:
+            if any(_is_one_edit_away(qt, dt) for dt in title_tokens):
+                fuzzy_score += 1.5
+            elif any(_is_one_edit_away(qt, dt) for dt in doc_tokens):
+                fuzzy_score += 0.8
+
+    # Only credit fuzzy typo hits when corroborated by context (or single-token query)
+    if exact_hits > 0 or len(q_tokens) == 1:
+        score += fuzzy_score
+
+    # Bigram phrase bonus
+    for i in range(len(q_tokens) - 1):
+        bg = f"{q_tokens[i]} {q_tokens[i + 1]}"
+        if bg in title_norm or bg in headings_norm:
+            score += 2.5
+        elif bg in raw_norm:
+            score += 1.5
+
+    return score
+
+
 ANSWER_INSTRUCTION_BLUEPRINTS: Dict[str, Dict[str, Any]] = {
     "DEFINITION_AND_TYPES": {
         "intent": "Định nghĩa, phân loại và các hệ/phương pháp",
@@ -366,7 +456,13 @@ class SelfStudyKnowledgeBank:
         if not target_docs:
             return None
 
-        doc = target_docs[0]
+        if len(target_docs) > 1:
+            scored_docs = [(_score_doc_relevance(query, d), d) for d in target_docs]
+            best_doc_score, doc = max(scored_docs, key=lambda item: item[0])
+            if best_doc_score <= 0.0:
+                return None
+        else:
+            doc = target_docs[0]
         sections = doc.get("sections", [])
         q_norm = strip_accents((query or "").lower())
         blueprint = self.classify_answer_blueprint(query)
@@ -386,7 +482,22 @@ class SelfStudyKnowledgeBank:
             for k in [
                 "bao nhieu loai", "phan loai", "liet ke", "may loai",
                 "nhung loai nao", "he ma nao", "phuong phap nao", "cac he ma",
+                "cac phuong phap", "cac loai", "cho vi du", "bao nhieu phuong phap",
             ]
+        )
+        intro_sec = next(
+            (s for s in sections if any(k in strip_accents(s["heading"].lower()) for k in ["gioi thieu", "khai niem", "tong quan"])),
+            sections[0] if sections else None,
+        )
+        doc_title_norm = strip_accents((doc.get("title") or "").lower())
+        q_subject = re.sub(r"\b(?:la gi|khai niem|dinh nghia|cho biet|hay|giai thich|cua|ve)\b", " ", q_norm)
+        q_subject_tokens = [t for t in re.findall(r"[a-z0-9_]+", q_subject) if len(t) >= 2]
+        is_compound_def = bool(re.search(r"\b(?:va|voi|hay)\b", q_subject)) and len(q_subject_tokens) >= 2
+        main_topic_tokens = set(re.findall(r"[a-z0-9_]+", doc_title_norm))
+        asks_main_doc_topic = bool(
+            q_subject_tokens
+            and not is_compound_def
+            and sum(1 for t in q_subject_tokens if t in main_topic_tokens) >= max(2, (len(q_subject_tokens) + 1) // 2)
         )
         skip_case_a_for_specific_target = (
             (bool(quoted_target_norm) or has_numbered_target)
@@ -395,27 +506,40 @@ class SelfStudyKnowledgeBank:
         )
 
         # ----------------------------------------------------------------------
-        # Case A: DEFINITION_AND_TYPES (e.g. "mã hóa đối xứng là gì, có bao nhiêu loại mã hóa, cho ví dụ")
+        # Case A: DEFINITION_AND_TYPES (only for doc-wide enumeration or main doc topic)
         # ----------------------------------------------------------------------
         if not skip_case_a_for_specific_target and (
-            blueprint == "DEFINITION_AND_TYPES"
-            or ("la gi" in q_norm and ("loai" in q_norm or "phuong phap" in q_norm or "vi du" in q_norm))
+            asks_doc_wide_enum
+            or (blueprint == "DEFINITION_AND_TYPES" and asks_main_doc_topic)
         ):
-            # 1. Concept: find introduction/overview section
-            intro_sec = next(
-                (s for s in sections if any(k in strip_accents(s["heading"].lower()) for k in ["gioi thieu", "khai niem", "tong quan"])),
-                sections[0] if sections else None,
-            )
-
             concept_points = []
             if intro_sec:
                 for line in intro_sec["lines"]:
                     if not line.startswith(("-", "*", "•")) or len(line) > 20:
-                        concept_points.append(line.lstrip("-*• ").strip())
+                        cleaned_l = line.lstrip("-*• ").strip()
+                        if cleaned_l:
+                            concept_points.append(cleaned_l)
+                if not concept_points:
+                    for b in intro_sec.get("bullets", []):
+                        cleaned_b = b.lstrip("-*• ").strip()
+                        if cleaned_b:
+                            concept_points.append(cleaned_b)
 
-            concept_text = " ".join(concept_points[:3]) if concept_points else (
-                f"{doc.get('title', 'Tài liệu')} đề cập đến các phương pháp và hệ mã khóa đối xứng cổ điển."
-            )
+            if not concept_points:
+                for s in sections:
+                    for line in s.get("lines", []) or s.get("bullets", []):
+                        cleaned_l = line.lstrip("-*• ").strip()
+                        if cleaned_l:
+                            concept_points.append(cleaned_l)
+                            if len(concept_points) >= 3:
+                                break
+                    if concept_points:
+                        break
+
+            if not concept_points:
+                return None
+
+            concept_text = " ".join(concept_points[:3])
 
             # 2. Methods / Classifications: collect from intro bullets and section titles
             bullet_methods = []
@@ -469,10 +593,7 @@ class SelfStudyKnowledgeBank:
                     intro_sents=concept_points[:3] if concept_points else [concept_text],
                     bullet_types=[b.lstrip("-*• ").strip() for b in bullet_methods],
                     section_systems=system_names,
-                    examples=example_snippets[:3] if example_snippets else [
-                        "Hệ mã hóa dòng: Mã hóa từng bit/byte bằng phép XOR với dòng khóa z.",
-                        "Hệ mã hóa Autokey: Cho P = C = K = Z26 với công thức ci = (pi + ki) mod 26.",
-                    ],
+                    examples=example_snippets[:3],
                 )
             except Exception:
                 parts = []
@@ -489,13 +610,9 @@ class SelfStudyKnowledgeBank:
                     for sys_name in system_names:
                         parts.append(f"  * {sys_name}")
 
-                if "vi du" in q_norm or "cho vi du" in q_norm or example_snippets:
+                if example_snippets:
                     parts.append(f"\n3. **Ví dụ và công thức minh họa:**")
-                    if example_snippets:
-                        parts.extend(example_snippets[:3])
-                    else:
-                        parts.append("- Hệ mã hóa dòng: Mã hóa từng bit/byte bằng phép XOR với dòng khóa z.")
-                        parts.append("- Hệ mã hóa Autokey: Cho P = C = K = Z26 với công thức ci = (pi + ki) mod 26.")
+                    parts.extend(example_snippets[:3])
 
                 full_answer = "\n".join(parts)
 
@@ -560,6 +677,21 @@ class SelfStudyKnowledgeBank:
             except Exception:
                 pass
 
+        # Do not hijack specific term definition or causal reasoning queries (e.g. "chất khử và chất oxi hóa là gì",
+        # "tại sao ... phải bảo toàn electron") into dumping a section/heading; yield to DocumentAnalyzer.find_best_grounded_answer.
+        has_def_cue = any(
+            re.search(r"\b" + re.escape(c) + r"\b", q_norm)
+            for c in ("la gi", "khai niem", "dinh nghia", "tai sao", "vi sao", "nguyen nhan", "ly do")
+        )
+        if (
+            has_def_cue
+            and not asks_doc_wide_enum
+            and not is_explicit_sec_heading
+            and not has_numbered_target
+            and not asks_main_doc_topic
+        ):
+            return None
+
         # ----------------------------------------------------------------------
         # Case B: SECTION_FULL_EXPLANATION / Specific Topic (e.g. "3. PHÁ MÃ", "'PHÁ MÃ'")
         # ----------------------------------------------------------------------
@@ -599,6 +731,8 @@ class SelfStudyKnowledgeBank:
         if target_sec:
             h_title = target_sec["heading"]
             raw_items = [line.lstrip("-*• ").strip() for line in target_sec.get("lines", []) if line.strip()]
+            if not raw_items:
+                return None
             sec_lines = [
                 f"- {line.lstrip('-*• ').strip()}" if not line.startswith(("-", "*", "•")) else line
                 for line in target_sec.get("lines", [])

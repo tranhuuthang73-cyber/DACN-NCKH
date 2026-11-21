@@ -130,6 +130,7 @@
     theme: "light",
     mode: "hybrid",
     answerMode: "balanced",
+    thinkingMode: "fast",
     allowOnlineApi: false,
     showTelemetry: true,
     presentationMode: false,
@@ -436,6 +437,7 @@
     lblComposerLength: document.getElementById("lbl-composer-length"),
     btnToggleOnlineApi: document.getElementById("btn-toggle-online-api"),
     lblOnlineApi: document.getElementById("lbl-online-api"),
+    thinkingModeSelector: document.getElementById("thinking-mode-selector"),
     btnSend: document.getElementById("btn-send"),
     hiddenFileInput: document.getElementById("hidden-file-input"),
 
@@ -611,6 +613,13 @@
       if (dom.lblOnlineApi) {
         dom.lblOnlineApi.textContent = enabled ? "🌐 Auto API ngoài: Bật" : "🌐 Auto API ngoài";
       }
+    }
+    if (dom.thinkingModeSelector) {
+      dom.thinkingModeSelector.querySelectorAll("[data-thinking-mode]").forEach((btn) => {
+        const isActive = btn.dataset.thinkingMode === state.thinkingMode;
+        btn.classList.toggle("active", isActive);
+        btn.setAttribute("aria-pressed", isActive ? "true" : "false");
+      });
     }
     dom.app.classList.toggle("hide-telemetry", !state.showTelemetry);
   }
@@ -1163,6 +1172,189 @@
     scrollToBottom();
   }
 
+  const STEP_TYPE_BADGES = {
+    premise: { label: "Tiền đề", cls: "step-badge-premise" },
+    mechanism: { label: "Cơ chế", cls: "step-badge-mechanism" },
+    formula: { label: "Công thức ✓", cls: "step-badge-formula" },
+    critique: { label: "Phản biện", cls: "step-badge-critique" },
+    conclusion: { label: "Kết luận", cls: "step-badge-conclusion" },
+  };
+
+  const HAAR_LEVEL_ORDER = ["LEAF_PARAGRAPH", "SECTION", "DOCUMENT", "CORPUS"];
+
+  function renderReasoningTraceHtml(trace) {
+    if (!trace || typeof trace !== "object") return "";
+    const mode = String(trace.mode || "").toLowerCase();
+    const steps = Array.isArray(trace.steps) ? trace.steps : [];
+    const facets = Array.isArray(trace.facets) ? trace.facets : [];
+    const hasRichTrace =
+      mode === "deep" ||
+      mode === "broad" ||
+      mode === "deep_broad" ||
+      steps.length > 0 ||
+      facets.length > 0;
+    if (!hasRichTrace) return "";
+
+    const modeTitles = {
+      deep: "🧠 Tiến trình Suy nghĩ Sâu",
+      broad: "🌐 Bản đồ Tư duy Rộng",
+      deep_broad: "🔥 Suy nghĩ Sâu + Tư duy Rộng",
+      fast: "⚡ Tiến trình Tư duy",
+    };
+    const headerTitle = modeTitles[mode] || "🧠 Tiến trình Tư duy WaveCMS-R²";
+    const isOpen = mode !== "fast";
+
+    const hopsVal = toFiniteNumber(trace.hops ?? trace.num_hops);
+    const rhoVal = toFiniteNumber(trace.rho_hat ?? trace.contraction_rho);
+    const roundsVal = toFiniteNumber(trace.rounds ?? trace.num_rounds);
+    const conf = trace.conformal && typeof trace.conformal === "object" ? trace.conformal : {};
+    const confScore = toFiniteNumber(conf.score ?? trace.conformal_score);
+    const lambdaG = toFiniteNumber(conf.lambda_g ?? conf.lambda_hat ?? trace.lambda_g);
+    const confGroup = conf.group || trace.group || "";
+
+    const metaPills = [];
+    if (hopsVal !== null) metaPills.push(`<span class="trace-meta-pill">hops: ${Math.round(hopsVal)}</span>`);
+    if (rhoVal !== null) metaPills.push(`<span class="trace-meta-pill">ρ̂ = ${rhoVal.toFixed(3)}</span>`);
+    if (roundsVal !== null) metaPills.push(`<span class="trace-meta-pill">rounds: ${Math.round(roundsVal)}</span>`);
+    if (confScore !== null || lambdaG !== null) {
+      const scoreStr = confScore !== null ? confScore.toFixed(3) : "—";
+      const lamStr = lambdaG !== null ? lambdaG.toFixed(3) : "—";
+      const grpStr = confGroup ? ` (${escapeHtml(String(confGroup))})` : "";
+      metaPills.push(`<span class="trace-meta-pill">Conformal: ${scoreStr} vs λ̂_g = ${lamStr}${grpStr}</span>`);
+    }
+
+    let stepsHtml = "";
+    if (steps.length > 0) {
+      const itemsHtml = steps
+        .map((st, idx) => {
+          const stType = String(st.type || st.kind || "premise").toLowerCase();
+          const badgeMeta = STEP_TYPE_BADGES[stType] || { label: st.type || `Bước ${idx + 1}`, cls: "step-badge-premise" };
+          const text = st.content || st.text || st.claim || "";
+          const cits = Array.isArray(st.citations)
+            ? st.citations
+            : Array.isArray(st.citation_indices)
+              ? st.citation_indices
+              : [];
+          const citStr = cits.length
+            ? `<span class="trace-step-cits">${cits.map((c) => `[${escapeHtml(String(c).replace(/^\[|\]$/g, ""))}]`).join(" ")}</span>`
+            : "";
+          const verifiedTag = st.verified
+            ? `<span class="trace-verified-tag">✓ Đã tự kiểm chứng</span>`
+            : "";
+          return `
+            <li class="trace-step-item">
+              <div class="trace-step-head">
+                <span class="trace-step-badge ${badgeMeta.cls}">${escapeHtml(badgeMeta.label)}</span>
+                ${citStr}
+                ${verifiedTag}
+              </div>
+              <div class="trace-step-text">${escapeHtml(text)}</div>
+            </li>
+          `;
+        })
+        .join("");
+
+      const removedClaims = Array.isArray(trace.removed_claims) ? trace.removed_claims : [];
+      const selfVerified = Boolean(trace.verified || trace.self_verified);
+      let verifyBannerHtml = "";
+      if (selfVerified || removedClaims.length > 0) {
+        const removedListHtml = removedClaims.length
+          ? `<ul class="trace-removed-list">${removedClaims
+              .map((rc) => `<li>${escapeHtml(typeof rc === "string" ? rc : rc.claim || rc.text || JSON.stringify(rc))}</li>`)
+              .join("")}</ul>`
+          : "";
+        verifyBannerHtml = `
+          <div class="trace-verify-box">
+            <div class="trace-verify-title">
+              ${selfVerified ? "✓ Đã tự kiểm chứng" : "Kiểm chứng Claim"}
+              ${removedClaims.length > 0 ? ` · Đã gỡ ${removedClaims.length} claim thiếu căn cứ` : ""}
+            </div>
+            ${removedListHtml}
+          </div>
+        `;
+      }
+
+      stepsHtml = `
+        <div class="trace-section-block">
+          <div class="trace-section-label">Chuỗi suy luận sâu (${steps.length} bước)</div>
+          <ol class="trace-steps-list">${itemsHtml}</ol>
+          ${verifyBannerHtml}
+        </div>
+      `;
+    }
+
+    let facetsHtml = "";
+    if (facets.length > 0) {
+      const rowsHtml = facets
+        .map((fc) => {
+          const name = fc.facet || fc.name || fc.label || "Khía cạnh";
+          const level = String(fc.haar_level || fc.level || fc.resolution || "LEAF_PARAGRAPH");
+          const status = String(fc.status || (fc.dropped ? "dropped" : "ok")).toLowerCase();
+          const isDropped = status === "dropped" || fc.dropped === true;
+          const cits = Array.isArray(fc.citations)
+            ? fc.citations
+            : Array.isArray(fc.citation_indices)
+              ? fc.citation_indices
+              : [];
+          const citStr = cits.length
+            ? cits.map((c) => `[${escapeHtml(String(c).replace(/^\[|\]$/g, ""))}]`).join(" ")
+            : "";
+          const detailText = isDropped
+            ? "Không đủ căn cứ trong tài liệu"
+            : fc.summary || fc.content || fc.text || "Đủ căn cứ";
+          const levelBadge = HAAR_LEVEL_ORDER.includes(level) ? level : level;
+          return `
+            <tr class="${isDropped ? "trace-facet-row-dropped" : "trace-facet-row-ok"}">
+              <td><strong>${escapeHtml(name)}</strong></td>
+              <td><code class="trace-haar-code">${escapeHtml(levelBadge)}</code></td>
+              <td>
+                <span class="trace-facet-status ${isDropped ? "is-dropped" : "is-ok"}">
+                  ${isDropped ? "✕ Không đủ căn cứ" : "✓ Đủ căn cứ"}
+                </span>
+              </td>
+              <td>
+                <span class="trace-facet-detail">${escapeHtml(detailText)}</span>
+                ${!isDropped && citStr ? `<span class="trace-step-cits"> ${citStr}</span>` : ""}
+              </td>
+            </tr>
+          `;
+        })
+        .join("");
+
+      facetsHtml = `
+        <div class="trace-section-block">
+          <div class="trace-section-label">Bản đồ Tư duy Rộng (${facets.length} facet × Haar Multi-Resolution)</div>
+          <div class="doc-table-wrap">
+            <table class="doc-table trace-facets-table">
+              <thead>
+                <tr>
+                  <th>Khía cạnh (Facet)</th>
+                  <th>Mức Haar</th>
+                  <th>Trạng thái</th>
+                  <th>Nội dung &amp; Trích dẫn</th>
+                </tr>
+              </thead>
+              <tbody>${rowsHtml}</tbody>
+            </table>
+          </div>
+        </div>
+      `;
+    }
+
+    return `
+      <details class="thinking-trace-panel" ${isOpen ? "open" : ""}>
+        <summary class="thinking-trace-summary">
+          <span class="thinking-trace-title">${escapeHtml(headerTitle)}</span>
+          <span class="thinking-trace-metrics">${metaPills.join("")}</span>
+        </summary>
+        <div class="thinking-trace-body">
+          ${stepsHtml}
+          ${facetsHtml}
+        </div>
+      </details>
+    `;
+  }
+
   function renderSingleMessageHtml(msg) {
     if (msg.role === "system") {
       return `
@@ -1196,6 +1388,7 @@
     const modeKey = diag.mode || state.mode || "hybrid";
     const modeBadge = MODE_SHORT_BADGES[modeKey] || MODE_SHORT_BADGES.hybrid;
     const isRefused = Boolean(msg.refused);
+    const reasoningTraceHtml = renderReasoningTraceHtml(msg.reasoning_trace || diag.reasoning_trace);
 
     let answerBodyHtml = "";
     if (isRefused) {
@@ -1333,6 +1526,7 @@
             <p class="msg-author">NL DocChat</p>
             <span class="msg-mode-pill">${escapeHtml(modeBadge)}</span>
           </div>
+          ${reasoningTraceHtml}
           <div class="section-label-header">TRẢ LỜI</div>
           ${answerBodyHtml}
           ${evidenceBlockHtml}
@@ -1383,10 +1577,16 @@
 
       renderConversationViewport();
       dom.thinkingIndicator.hidden = false;
+      const thinkingStatusLabels = {
+        deep: "Đang suy nghĩ sâu đa bước & tự kiểm chứng công thức...",
+        broad: "Đang quét bản đồ tư duy rộng 5 facet × 4 mức Haar...",
+        deep_broad: "Đang tổng hợp Suy nghĩ Sâu + Tư duy Rộng...",
+      };
       dom.thinkingStatusText.textContent =
-        state.mode === "memory"
+        thinkingStatusLabels[state.thinkingMode] ||
+        (state.mode === "memory"
           ? "Đang truy xuất bộ nhớ tham số 3 tầng SA-CMS (P1)..."
-          : "Đang truy xuất bằng chứng và đối soát bộ nhớ SA-CMS...";
+          : "Đang truy xuất bằng chứng và đối soát bộ nhớ SA-CMS...");
       scrollToBottom();
 
       const res = await apiFetch(
@@ -1397,6 +1597,7 @@
             query,
             mode: state.mode,
             answer_mode: state.answerMode,
+            thinking_mode: state.thinkingMode,
             allow_online_api: Boolean(state.allowOnlineApi),
             top_k: 5,
             language: "vi",
@@ -1410,6 +1611,9 @@
         if (!res.message.suggested_questions && res.suggested_questions) {
           res.message.suggested_questions = res.suggested_questions;
         }
+        if (!res.message.reasoning_trace && res.reasoning_trace) {
+          res.message.reasoning_trace = res.reasoning_trace;
+        }
         state.activeMessages.push(res.message);
       } else {
         state.activeMessages.push({
@@ -1418,6 +1622,7 @@
           citations: res.citations || [],
           telemetry: res.telemetry || {},
           diagnostics: res.diagnostics || {},
+          reasoning_trace: res.reasoning_trace || (res.diagnostics && res.diagnostics.reasoning_trace) || null,
           refused: Boolean(res.refused),
           suggested_questions: res.suggested_questions || [],
         });
@@ -2478,6 +2683,123 @@
             .join("")
         : `<tr><td colspan="9" style="color: var(--text-muted); text-align:center;">Chưa có dữ liệu so sánh thông số huấn luyện.</td></tr>`;
 
+      const ablationW7 = data.ablation_w7 || null;
+      const ablationW7Rows = Array.isArray(ablationW7)
+        ? ablationW7
+        : ablationW7 && typeof ablationW7 === "object"
+          ? Array.isArray(ablationW7.rows)
+            ? ablationW7.rows
+            : Array.isArray(ablationW7.variants)
+              ? ablationW7.variants
+              : Object.entries(ablationW7)
+                  .filter(([k]) => /^w[0-6]/i.test(k))
+                  .map(([k, v]) => Object.assign({ variant: k }, v && typeof v === "object" ? v : { value: v }))
+          : [];
+
+      const ablationW7Html = ablationW7
+        ? `
+        <div class="bc-section-card">
+          <h4 class="bc-section-title">🔬 Ablation Chuẩn Phản Biện WaveCMS-R² (W0–W6)</h4>
+          <div class="doc-table-wrap">
+            <table class="doc-table">
+              <thead>
+                <tr>
+                  <th>Biến thể</th>
+                  <th>Mô tả / Cấu hình</th>
+                  <th>Accuracy / Hit@1</th>
+                  <th>Faithfulness</th>
+                  <th>Refusal / Risk</th>
+                  <th>Ghi chú / Delta</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${
+                  ablationW7Rows.length
+                    ? ablationW7Rows
+                        .map((row) => {
+                          const vName = row.variant || row.id || row.name || row.code || "N/A";
+                          const desc = row.description || row.config || row.label || "—";
+                          const acc = toFiniteNumber(row.accuracy_pct ?? row.routing_hit_at_1_pct ?? row.accuracy ?? row.hit_at_1);
+                          const faith = toFiniteNumber(row.faithfulness_pct ?? row.citation_faithfulness_pct ?? row.faithfulness);
+                          const ref = toFiniteNumber(row.refusal_pct ?? row.refusal_acc_pct ?? row.risk_pct ?? row.false_answer_rate_pct);
+                          const note = row.delta || row.note || row.status || "—";
+                          return `
+                            <tr>
+                              <td><strong>${escapeHtml(String(vName))}</strong></td>
+                              <td>${escapeHtml(String(desc))}</td>
+                              <td><code>${acc !== null ? (acc <= 1 && row.hit_at_1 !== undefined ? `${(acc * 100).toFixed(1)}%` : formatPct(acc)) : "Chưa có dữ liệu"}</code></td>
+                              <td><code>${faith !== null ? formatPct(faith) : "—"}</code></td>
+                              <td><code>${ref !== null ? formatPct(ref) : "—"}</code></td>
+                              <td>${escapeHtml(String(note))}</td>
+                            </tr>
+                          `;
+                        })
+                        .join("")
+                    : `<tr><td colspan="6" style="color: var(--text-muted); text-align:center;">Chưa có dữ liệu</td></tr>`
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `
+        : "";
+
+      const pillar1W7 = data.pillar1_sparse_lse_w7 || null;
+      const pillar1W7Rows = Array.isArray(pillar1W7)
+        ? pillar1W7
+        : pillar1W7 && typeof pillar1W7 === "object"
+          ? Array.isArray(pillar1W7.rows)
+            ? pillar1W7.rows
+            : Array.isArray(pillar1W7.sweeps)
+              ? pillar1W7.sweeps
+              : Array.isArray(pillar1W7.results)
+                ? pillar1W7.results
+                : []
+          : [];
+
+      const pillar1W7Html = pillar1W7
+        ? `
+        <div class="bc-section-card">
+          <h4 class="bc-section-title">🧭 Pillar 1: Định tuyến mean_key vs sparse_lse (N = 0..64 tài liệu nhiễu)</h4>
+          <div class="doc-table-wrap">
+            <table class="doc-table">
+              <thead>
+                <tr>
+                  <th>Số tài liệu nhiễu (N)</th>
+                  <th>mean_key (Hit@1)</th>
+                  <th>sparse_lse (Hit@1)</th>
+                  <th>Chênh lệch (Δ)</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${
+                  pillar1W7Rows.length
+                    ? pillar1W7Rows
+                        .map((row) => {
+                          const nVal = row.n ?? row.noise_docs ?? row.N ?? "N/A";
+                          const mk = toFiniteNumber(row.mean_key_pct ?? row.mean_key ?? row.mean_key_hit_at_1);
+                          const sl = toFiniteNumber(row.sparse_lse_pct ?? row.sparse_lse ?? row.sparse_lse_hit_at_1);
+                          const mkPct = mk !== null && mk <= 1 && row.mean_key_pct === undefined ? mk * 100 : mk;
+                          const slPct = sl !== null && sl <= 1 && row.sparse_lse_pct === undefined ? sl * 100 : sl;
+                          return `
+                            <tr>
+                              <td><strong>N = ${escapeHtml(String(nVal))}</strong></td>
+                              <td><code>${formatPct(mkPct)}</code></td>
+                              <td><strong><code>${formatPct(slPct)}</code></strong></td>
+                              <td><span class="bc-delta-pill">${escapeHtml(formatDelta(mkPct, slPct))}</span></td>
+                            </tr>
+                          `;
+                        })
+                        .join("")
+                    : `<tr><td colspan="4" style="color: var(--text-muted); text-align:center;">Chưa có dữ liệu</td></tr>`
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `
+        : "";
+
       container.innerHTML = `
         <div class="bc-header-bar">
           <div>
@@ -2687,6 +3009,8 @@
             </table>
           </div>
         </div>
+        ${ablationW7Html}
+        ${pillar1W7Html}
       `;
 
       const btnBcFetchOnline = document.getElementById("btn-bc-fetch-online");
@@ -2707,6 +3031,123 @@
         }
       });
     } catch (err) {
+      const ablationW7 = data.ablation_w7 || null;
+      const ablationW7Rows = Array.isArray(ablationW7)
+        ? ablationW7
+        : ablationW7 && typeof ablationW7 === "object"
+          ? Array.isArray(ablationW7.rows)
+            ? ablationW7.rows
+            : Array.isArray(ablationW7.variants)
+              ? ablationW7.variants
+              : Object.entries(ablationW7)
+                  .filter(([k]) => /^w[0-6]/i.test(k))
+                  .map(([k, v]) => Object.assign({ variant: k }, v && typeof v === "object" ? v : { value: v }))
+          : [];
+
+      const ablationW7Html = ablationW7
+        ? `
+        <div class="bc-section-card">
+          <h4 class="bc-section-title">🔬 Ablation Chuẩn Phản Biện WaveCMS-R² (W0–W6)</h4>
+          <div class="doc-table-wrap">
+            <table class="doc-table">
+              <thead>
+                <tr>
+                  <th>Biến thể</th>
+                  <th>Mô tả / Cấu hình</th>
+                  <th>Accuracy / Hit@1</th>
+                  <th>Faithfulness</th>
+                  <th>Refusal / Risk</th>
+                  <th>Ghi chú / Delta</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${
+                  ablationW7Rows.length
+                    ? ablationW7Rows
+                        .map((row) => {
+                          const vName = row.variant || row.id || row.name || row.code || "N/A";
+                          const desc = row.description || row.config || row.label || "—";
+                          const acc = toFiniteNumber(row.accuracy_pct ?? row.routing_hit_at_1_pct ?? row.accuracy ?? row.hit_at_1);
+                          const faith = toFiniteNumber(row.faithfulness_pct ?? row.citation_faithfulness_pct ?? row.faithfulness);
+                          const ref = toFiniteNumber(row.refusal_pct ?? row.refusal_acc_pct ?? row.risk_pct ?? row.false_answer_rate_pct);
+                          const note = row.delta || row.note || row.status || "—";
+                          return `
+                            <tr>
+                              <td><strong>${escapeHtml(String(vName))}</strong></td>
+                              <td>${escapeHtml(String(desc))}</td>
+                              <td><code>${acc !== null ? (acc <= 1 && row.hit_at_1 !== undefined ? `${(acc * 100).toFixed(1)}%` : formatPct(acc)) : "Chưa có dữ liệu"}</code></td>
+                              <td><code>${faith !== null ? formatPct(faith) : "—"}</code></td>
+                              <td><code>${ref !== null ? formatPct(ref) : "—"}</code></td>
+                              <td>${escapeHtml(String(note))}</td>
+                            </tr>
+                          `;
+                        })
+                        .join("")
+                    : `<tr><td colspan="6" style="color: var(--text-muted); text-align:center;">Chưa có dữ liệu</td></tr>`
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `
+        : "";
+
+      const pillar1W7 = data.pillar1_sparse_lse_w7 || null;
+      const pillar1W7Rows = Array.isArray(pillar1W7)
+        ? pillar1W7
+        : pillar1W7 && typeof pillar1W7 === "object"
+          ? Array.isArray(pillar1W7.rows)
+            ? pillar1W7.rows
+            : Array.isArray(pillar1W7.sweeps)
+              ? pillar1W7.sweeps
+              : Array.isArray(pillar1W7.results)
+                ? pillar1W7.results
+                : []
+          : [];
+
+      const pillar1W7Html = pillar1W7
+        ? `
+        <div class="bc-section-card">
+          <h4 class="bc-section-title">🧭 Pillar 1: Định tuyến mean_key vs sparse_lse (N = 0..64 tài liệu nhiễu)</h4>
+          <div class="doc-table-wrap">
+            <table class="doc-table">
+              <thead>
+                <tr>
+                  <th>Số tài liệu nhiễu (N)</th>
+                  <th>mean_key (Hit@1)</th>
+                  <th>sparse_lse (Hit@1)</th>
+                  <th>Chênh lệch (Δ)</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${
+                  pillar1W7Rows.length
+                    ? pillar1W7Rows
+                        .map((row) => {
+                          const nVal = row.n ?? row.noise_docs ?? row.N ?? "N/A";
+                          const mk = toFiniteNumber(row.mean_key_pct ?? row.mean_key ?? row.mean_key_hit_at_1);
+                          const sl = toFiniteNumber(row.sparse_lse_pct ?? row.sparse_lse ?? row.sparse_lse_hit_at_1);
+                          const mkPct = mk !== null && mk <= 1 && row.mean_key_pct === undefined ? mk * 100 : mk;
+                          const slPct = sl !== null && sl <= 1 && row.sparse_lse_pct === undefined ? sl * 100 : sl;
+                          return `
+                            <tr>
+                              <td><strong>N = ${escapeHtml(String(nVal))}</strong></td>
+                              <td><code>${formatPct(mkPct)}</code></td>
+                              <td><strong><code>${formatPct(slPct)}</code></strong></td>
+                              <td><span class="bc-delta-pill">${escapeHtml(formatDelta(mkPct, slPct))}</span></td>
+                            </tr>
+                          `;
+                        })
+                        .join("")
+                    : `<tr><td colspan="4" style="color: var(--text-muted); text-align:center;">Chưa có dữ liệu</td></tr>`
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `
+        : "";
+
       container.innerHTML = `<div style="color: var(--danger); padding: 12px;">Không thể tải bảng so sánh: ${escapeHtml(err.message)}</div>`;
     }
   }
@@ -3053,6 +3494,17 @@
             ? "Đã bật Auto API ngoài (tự gọi Wikipedia/arXiv/OpenAlex/EuropePMC khi vượt kho local)."
             : "Đã tắt Auto API ngoài — bảo toàn chế độ Offline Air-Gap."
         );
+      });
+    }
+
+    if (dom.thinkingModeSelector) {
+      dom.thinkingModeSelector.addEventListener("click", (e) => {
+        const btn = e.target.closest("[data-thinking-mode]");
+        if (!btn) return;
+        const nextMode = btn.dataset.thinkingMode;
+        if (!nextMode || nextMode === state.thinkingMode) return;
+        state.thinkingMode = nextMode;
+        syncModeAndLengthUI();
       });
     }
 

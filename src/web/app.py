@@ -112,7 +112,7 @@ class PipelineService:
         self.memory_manager = OfflineMemoryManager.get_instance()
         try:
             from src.wave_cms.wave_engine import WaveCMSEngine
-            self.wave_engine: Optional[WaveCMSEngine] = WaveCMSEngine()
+            self.wave_engine: Optional[WaveCMSEngine] = WaveCMSEngine(routing_mode="sparse_lse")
         except Exception:
             self.wave_engine = None
         self.last_unlearn_audit: Optional[Dict[str, Any]] = None
@@ -357,6 +357,7 @@ class ChatRequest(BaseModel):
     top_k: int = 5
     language: Optional[str] = None
     allow_online_api: bool = False
+    thinking_mode: str = "fast"  # fast, deep, broad, deep_broad
 
 
 class CompareRequest(BaseModel):
@@ -395,6 +396,7 @@ class SessionMessageRequest(BaseModel):
     top_k: int = 5
     language: Optional[str] = "vi"
     allow_online_api: bool = False
+    thinking_mode: str = "fast"  # fast, deep, broad, deep_broad
 
 
 class RetrieveRequest(BaseModel):
@@ -413,6 +415,239 @@ class UnifiedChatRequest(BaseModel):
     top_k: int = 5
     language: Optional[str] = "vi"
     allow_online_api: bool = False
+    thinking_mode: str = "fast"  # fast, deep, broad, deep_broad
+
+
+VALID_THINKING_MODES = ("fast", "deep", "broad", "deep_broad")
+
+
+def _normalize_thinking_mode(mode: Optional[str]) -> str:
+    """Normalize thinking_mode to one of fast|deep|broad|deep_broad, defaulting to fast."""
+    m = (mode or "fast").strip().lower()
+    return m if m in VALID_THINKING_MODES else "fast"
+
+
+def _build_conformal_summary(
+    service: Any,
+    query: str,
+    candidate_answer: str,
+    evidence_docs: List[Dict[str, Any]],
+    attached_docs: List[str],
+    routing_info: Optional[Dict[str, Any]],
+) -> Dict[str, Any]:
+    """Extract WaveCMS-R^2 nonconformity signals and Mondrian group metadata."""
+    from src.wave_cms.nonconformity import assign_group, extract_signals
+
+    doc_meta: Dict[str, Any] = {}
+    doc_len = 0
+    if attached_docs:
+        try:
+            d_obj = service.store.get_document(attached_docs[0])
+            if d_obj is not None:
+                doc_meta = dict(getattr(d_obj, "metadata", {}) or {})
+                doc_meta.setdefault("title", getattr(d_obj, "title", ""))
+                doc_len = len(getattr(d_obj, "raw_text", "") or "")
+        except Exception:
+            pass
+
+    signals = extract_signals(
+        query=query,
+        candidate_answer=candidate_answer or "",
+        evidence=evidence_docs,
+        routing=routing_info,
+    )
+    raw_score = (
+        0.35 * float(signals.get("bm25_max", 0.0))
+        + 0.25 * float(signals.get("salient_cov", 0.0))
+        + 0.20 * float(signals.get("margin", 0.0))
+        + 0.20 * float(signals.get("answer_type_ok", 0.0))
+        - 0.15 * float(signals.get("negation_mismatch", 0.0))
+    )
+    score = round(max(0.0, min(1.0, raw_score)), 4)
+    group = assign_group(doc_meta=doc_meta, query=query, doc_length_chars=doc_len)
+    lambda_g = 0.40
+    if getattr(service, "wave_engine", None) is not None:
+        rc = getattr(service.wave_engine, "risk_controller", None)
+        if rc is not None:
+            lambda_g = float(getattr(rc, "default_threshold", 0.40))
+
+    return {
+        "score": score,
+        "group": group,
+        "lambda_g": round(lambda_g, 4),
+        "signals": {k: round(float(v), 4) for k, v in signals.items()},
+    }
+
+
+def _run_unified_reasoning_for_chat(
+    service: Any,
+    query: str,
+    thinking_mode: str,
+    attached_docs: List[str],
+    citations_data: List[Dict[str, Any]],
+    base_answer: str,
+    routing_info: Optional[Dict[str, Any]] = None,
+) -> Tuple[str, Dict[str, Any]]:
+    """
+    Run WaveCMS-R^2 UnifiedReasoner + nonconformity signals + symbolic_solver.
+    In 'fast' mode, preserves `base_answer` untouched (0% regression) and emits
+    a compact §5 reasoning_trace. In 'deep', 'broad', or 'deep_broad' mode,
+    runs UnifiedReasoner.run(...) and enriches `base_answer` with verified
+    symbolic solver steps or facet coverage while keeping citations clean.
+    """
+    mode = _normalize_thinking_mode(thinking_mode)
+
+    evidence_docs: List[Dict[str, Any]] = []
+    cit_label_by_pid: Dict[str, str] = {}
+    for idx, c in enumerate(citations_data or [], start=1):
+        p_id = str(c.get("passage_id") or f"p_{idx}")
+        cit_lbl = str(c.get("citation_label") or f"[{idx}]")
+        cit_label_by_pid[p_id] = cit_lbl
+        evidence_docs.append(
+            {
+                "passage_id": p_id,
+                "document_id": str(c.get("document_id") or "DOC"),
+                "section_title": str(c.get("section_title") or f"Section {idx}"),
+                "citation_label": cit_lbl,
+                "resolution": str(c.get("resolution") or "LEAF_PARAGRAPH"),
+                "text": str(c.get("text") or ""),
+                "score": float(c.get("score", 0.0)),
+            }
+        )
+
+    conformal = _build_conformal_summary(
+        service=service,
+        query=query,
+        candidate_answer=base_answer,
+        evidence_docs=evidence_docs,
+        attached_docs=attached_docs,
+        routing_info=routing_info,
+    )
+    rho_hat = float((routing_info or {}).get("rho_hat") or 0.0)
+    if rho_hat <= 0.0:
+        omega = float(getattr(getattr(service, "wave_engine", None), "omega", 0.5))
+        rho_hat = round(omega * 0.5, 4)
+
+    if mode == "fast":
+        fast_steps = []
+        if base_answer:
+            fast_steps.append(
+                {
+                    "kind": "conclusion",
+                    "text": base_answer[:400],
+                    "citations": [d["citation_label"] for d in evidence_docs[:3]],
+                    "verified": bool(evidence_docs),
+                }
+            )
+        return base_answer, {
+            "mode": "fast",
+            "hops": 1,
+            "rho_hat": round(rho_hat, 4),
+            "rounds": 1,
+            "conformal": conformal,
+            "steps": fast_steps,
+            "facets": [],
+            "removed_claims": [],
+        }
+
+    from src.reasoning.reasoning_loop import UnifiedReasoner
+
+    def _retrieve_for_reasoner(
+        q: str, top_k: int = 5, resolution: Optional[str] = None
+    ) -> List[Dict[str, Any]]:
+        res_level = resolution or "LEAF_PARAGRAPH"
+        out: List[Dict[str, Any]] = []
+        seen_pids: set = set()
+        try:
+            kwargs: Dict[str, Any] = {"top_k": top_k}
+            if attached_docs:
+                kwargs["allowed_document_ids"] = attached_docs
+            hits = service.retriever.retrieve(q, **kwargs)
+        except Exception:
+            hits = []
+
+        for idx, h in enumerate(hits or [], start=1):
+            p_id = str(getattr(h, "passage_id", f"r_{idx}"))
+            if p_id in seen_pids:
+                continue
+            seen_pids.add(p_id)
+            out.append(
+                {
+                    "passage_id": p_id,
+                    "document_id": str(getattr(h, "document_id", "DOC")),
+                    "section_title": str(getattr(h, "section_title", "") or f"Section {idx}"),
+                    "citation_label": cit_label_by_pid.get(p_id, f"[{len(out) + 1}]"),
+                    "resolution": res_level,
+                    "text": str(getattr(h, "text", "") or ""),
+                    "score": float(getattr(h, "score", 0.0)),
+                }
+            )
+
+        if len(out) < top_k and attached_docs and res_level in ("SECTION", "DOCUMENT", "CORPUS"):
+            for d_id in attached_docs:
+                try:
+                    d_obj = service.store.get_document(d_id)
+                    for p in getattr(d_obj, "passages", None) or []:
+                        if p.passage_id in seen_pids:
+                            continue
+                        seen_pids.add(p.passage_id)
+                        out.append(
+                            {
+                                "passage_id": p.passage_id,
+                                "document_id": d_id,
+                                "section_title": str(getattr(p, "section_title", "") or "Section"),
+                                "citation_label": cit_label_by_pid.get(p.passage_id, f"[{len(out) + 1}]"),
+                                "resolution": res_level,
+                                "text": str(getattr(p, "text", "") or ""),
+                                "score": 1.0,
+                            }
+                        )
+                        if len(out) >= top_k:
+                            break
+                except Exception:
+                    continue
+                if len(out) >= top_k:
+                    break
+
+        return out[:top_k]
+
+    reasoner = UnifiedReasoner(retrieve_fn=_retrieve_for_reasoner)
+    trace = reasoner.run(
+        query,
+        mode=mode,
+        context_docs=evidence_docs,
+        base_routing={"rho_hat": round(rho_hat, 4), "conformal": conformal},
+    )
+    trace_dict = trace.to_dict()
+
+    enriched_body = base_answer or ""
+    if trace.solver_traces:
+        solver_block = "\n".join(f"- {tr}" for tr in trace.solver_traces[:3])
+        if solver_block not in enriched_body:
+            enriched_body = f"{enriched_body}\n\n**Kiểm chứng công thức:**\n{solver_block}".strip()
+
+    if mode in ("broad", "deep_broad") and trace.facets:
+        ok_facets = [f for f in trace.facets if f.status == "ok"]
+        if ok_facets:
+            facet_lines = []
+            for f in ok_facets:
+                if f.text and f.text[:40] not in enriched_body:
+                    cits = " ".join(f.citations[:2])
+                    facet_lines.append(f"- **{f.facet}** ({f.resolution}): {f.text[:180].strip()} {cits}".strip())
+            if facet_lines:
+                enriched_body = f"{enriched_body}\n\n**Góc nhìn đa độ phân giải:**\n" + "\n".join(facet_lines[:3])
+
+    return enriched_body.strip(), {
+        "mode": trace_dict.get("mode", mode),
+        "hops": trace_dict.get("hops", 1),
+        "rho_hat": trace_dict.get("rho_hat", round(rho_hat, 4)),
+        "rounds": trace_dict.get("rounds", 1),
+        "conformal": trace_dict.get("conformal", conformal),
+        "steps": trace_dict.get("steps", []),
+        "facets": trace_dict.get("facets", []),
+        "removed_claims": trace_dict.get("removed_claims", []),
+        "solver_traces": trace_dict.get("solver_traces", []),
+    }
 
 
 
@@ -1565,6 +1800,80 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
                 except Exception:
                     pass
 
+                # Multi-document typo-tolerant retrieval & primary-doc coverage
+                if len(attached_docs) > 1 and route != QuestionRoute.CROSS_DOCUMENT_COMPARISON:
+                    try:
+                        def _is_edit_dist_1(a: str, b: str) -> bool:
+                            if a == b or abs(len(a) - len(b)) > 1:
+                                return False
+                            if len(a) == len(b):
+                                return sum(ca != cb for ca, cb in zip(a, b)) == 1
+                            if len(a) > len(b):
+                                a, b = b, a
+                            i = j = diffs = 0
+                            while i < len(a) and j < len(b):
+                                if a[i] != b[j]:
+                                    diffs += 1
+                                    if diffs > 1:
+                                        return False
+                                    j += 1
+                                else:
+                                    i += 1
+                                    j += 1
+                            return True
+
+                        q_words = [w for w in re.findall(r"\w+", effective_query.lower()) if len(w) >= 3]
+                        doc_vocab: Dict[str, set] = {}
+                        for d_id in attached_docs:
+                            d_obj = service.store.get_document(d_id)
+                            if d_obj and getattr(d_obj, "passages", None):
+                                d_toks = set()
+                                for p in d_obj.passages:
+                                    d_toks.update(re.findall(r"\w+", (p.text or "").lower()))
+                                doc_vocab[d_id] = d_toks
+
+                        # Find 1-char typo replacements from attached_docs vocabulary
+                        fuzzy_replacements = {}
+                        for qw in q_words:
+                            for d_toks in doc_vocab.values():
+                                for dt in d_toks:
+                                    if len(dt) >= 3 and _is_edit_dist_1(qw, dt):
+                                        fuzzy_replacements.setdefault(qw, set()).add(dt)
+
+                        if fuzzy_replacements:
+                            corrected_tokens = []
+                            for tok in re.findall(r"\w+", effective_query.lower()):
+                                if tok in fuzzy_replacements:
+                                    # Prefer replacement from doc that shares other query tokens
+                                    best_rep = next(iter(fuzzy_replacements[tok]))
+                                    best_overlap = -1
+                                    for rep in fuzzy_replacements[tok]:
+                                        for d_id, d_toks in doc_vocab.items():
+                                            if rep in d_toks:
+                                                ov = sum(1 for w in q_words if w in d_toks)
+                                                if ov > best_overlap:
+                                                    best_overlap = ov
+                                                    best_rep = rep
+                                    corrected_tokens.append(best_rep)
+                                else:
+                                    corrected_tokens.append(tok)
+                            corrected_q = " ".join(corrected_tokens)
+                            if corrected_q != effective_query.lower():
+                                corr_expanded, _ = expand_query_semantics(corrected_q)
+                                corr_hits = service.retriever.retrieve(
+                                    corr_expanded,
+                                    top_k=top_k_retrieve,
+                                    **_retrieve_kwargs,
+                                )
+                                seen_p_ids = {h.passage_id for h in retrieval_candidates}
+                                for ch in corr_hits:
+                                    if ch.passage_id not in seen_p_ids:
+                                        seen_p_ids.add(ch.passage_id)
+                                        retrieval_candidates.append(ch)
+                                retrieval_candidates.sort(key=lambda r: getattr(r, "score", 0.0), reverse=True)
+                    except Exception:
+                        pass
+
                 best_score = max((getattr(h, "score", 0.0) for h in retrieval_candidates), default=0.0)
 
                 # If document summary or weak hit on exploratory summary, pull document's passages directly
@@ -1619,6 +1928,48 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
             dynamic_top_k=use_dynamic_k,
             max_evidence=eff_max_ev,
         )
+
+        # For multi-doc attached_docs (non-comparison), ensure evidence_passages covers
+        # matching keyword passages from the most relevant document rather than stray docs.
+        if len(attached_docs) > 1 and route != QuestionRoute.CROSS_DOCUMENT_COMPARISON and evidence.evidence_passages:
+            try:
+                from src.hybrid_qa.evidence import Citation
+                doc_scores: Dict[str, float] = {}
+                for r in retrieval_candidates:
+                    d_id = getattr(r, "document_id", "")
+                    if d_id:
+                        doc_scores[d_id] = doc_scores.get(d_id, 0.0) + max(0.0, float(getattr(r, "score", 0.0)))
+                primary_doc_id = max(doc_scores, key=doc_scores.get) if doc_scores else evidence.evidence_passages[0].document_id
+                primary_passages = [c for c in evidence.evidence_passages if c.document_id == primary_doc_id]
+                if primary_passages:
+                    evidence.evidence_passages = primary_passages
+                primary_doc = service.store.get_document(primary_doc_id)
+                if primary_doc and getattr(primary_doc, "passages", None):
+                    q_kw = [w for w in re.findall(r"\w+", effective_query.lower()) if len(w) >= 3]
+                    seen_ev_pids = {c.passage_id for c in evidence.evidence_passages}
+                    base_score = max((c.score for c in evidence.evidence_passages), default=1.0)
+                    for p in primary_doc.passages:
+                        if p.passage_id in seen_ev_pids:
+                            continue
+                        p_low = (p.text or "").lower()
+                        p_toks = set(re.findall(r"\w+", p_low))
+                        if any(w in p_toks or (len(w) >= 4 and w in p_low) for w in q_kw):
+                            evidence.evidence_passages.append(
+                                Citation(
+                                    passage_id=p.passage_id,
+                                    document_id=p.document_id,
+                                    text=p.text,
+                                    score=round(base_score * 0.9, 4),
+                                    section_title=p.section_title,
+                                    metadata=p.metadata,
+                                )
+                            )
+                            seen_ev_pids.add(p.passage_id)
+                            if len(evidence.evidence_passages) >= max(eff_max_ev, 6):
+                                break
+            except Exception:
+                pass
+
         refusal_decision = service.refusal_controller.decide(evidence, language=req.language or "vi")
 
         effective_route, is_grounded, ground_explanation = service.question_router.evaluate_evidence_grounding(
@@ -1752,10 +2103,30 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
     # Step 7: Answer Generation with Sub-Passage Context Pruning & Clean Grounded Synthesis
     t_gen_start = time.perf_counter()
     compression_stats = {"raw_context_tokens": 0, "compressed_context_tokens": 0, "tokens_saved": 0, "compression_ratio_pct": 0.0}
+    thinking_mode = _normalize_thinking_mode(getattr(req, "thinking_mode", "fast"))
+    reasoning_trace = None
+    unified_trace: Optional[Dict[str, Any]] = None
 
     if refused:
         answer_text = refusal_message
         citations_data = []  # Clear citations when refused
+        unified_trace = {
+            "mode": thinking_mode,
+            "hops": 0,
+            "rho_hat": 0.0,
+            "rounds": 0,
+            "conformal": _build_conformal_summary(
+                service=service,
+                query=effective_query,
+                candidate_answer="",
+                evidence_docs=[],
+                attached_docs=attached_docs,
+                routing_info=mem_diag,
+            ),
+            "steps": [],
+            "facets": [],
+            "removed_claims": [],
+        }
     else:
         _, compression_stats = compress_evidence_context(
             question=effective_query,
@@ -1785,6 +2156,7 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
             ]
         )
 
+        kb_synth = None
         if wants_suggested_questions and attached_docs:
             try:
                 attached_doc = service.store.get_document(attached_docs[0])
@@ -1899,25 +2271,41 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
                         evidence_passages_out = []
                         if not refusal_message:
                             target_title = "tài liệu đang chọn"
-                    if attached_docs:
-                        try:
-                            target_doc = service.store.get_document(attached_docs[0])
-                            if target_doc:
-                                target_title = target_doc.title
-                        except Exception:
-                            pass
-                    refusal_message = (
-                        f"Không tìm thấy đủ thông tin trong tài liệu để trả lời chắc chắn. "
-                        f"Tài liệu **{target_title}** không có thông tin trả lời cho câu hỏi này (không chứa thông tin và chưa đủ dữ liệu). "
-                        "Hệ thống không sử dụng dữ liệu từ tài liệu khác để bảo đảm độ chính xác tuyệt đối."
-                    )
+                            if attached_docs:
+                                try:
+                                    target_doc = service.store.get_document(attached_docs[0])
+                                    if target_doc:
+                                        target_title = target_doc.title
+                                except Exception:
+                                    pass
+                            refusal_message = (
+                                f"Không tìm thấy đủ thông tin trong tài liệu để trả lời chắc chắn. "
+                                f"Tài liệu **{target_title}** không có thông tin trả lời cho câu hỏi này (không chứa thông tin và chưa đủ dữ liệu). "
+                                "Hệ thống không sử dụng dữ liệu từ tài liệu khác để bảo đảm độ chính xác tuyệt đối."
+                            )
 
-        reasoning_trace = None
         if refused:
             answer_text = refusal_message or (
                 "Tài liệu không có thông tin hoặc chưa đủ căn cứ. "
                 "Không tìm thấy đủ thông tin trong tài liệu để trả lời chắc chắn."
             )
+            unified_trace = {
+                "mode": thinking_mode,
+                "hops": 0,
+                "rho_hat": 0.0,
+                "rounds": 0,
+                "conformal": _build_conformal_summary(
+                    service=service,
+                    query=effective_query,
+                    candidate_answer="",
+                    evidence_docs=[],
+                    attached_docs=attached_docs,
+                    routing_info=mem_diag,
+                ),
+                "steps": [],
+                "facets": [],
+                "removed_claims": [],
+            }
         else:
             # Dual-Process Reasoning & Premise Invalidation Check
             from src.reasoning.dual_process import DualProcessController
@@ -1985,11 +2373,48 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
             try:
                 from src.hybrid_qa.grounding_critic import GroundingCritic
                 _critic = GroundingCritic()
-                _c_report = _critic.verify_answer(body, citations_data)
+                critic_citations = list(citations_data)
+                _seen_critic_pids = {c.get("passage_id") for c in critic_citations if c.get("passage_id")}
+                _used_doc_ids = list(dict.fromkeys(
+                    [c.get("document_id") for c in citations_data if c.get("document_id")]
+                    + (attached_docs if (not citations_data or (isinstance(kb_synth, dict) and kb_synth.get("answer") == body)) else [])
+                ))
+                if not _used_doc_ids and attached_docs:
+                    _used_doc_ids = list(attached_docs)
+                for _d_id in _used_doc_ids:
+                    try:
+                        _d_obj = service.store.get_document(_d_id)
+                        if _d_obj and getattr(_d_obj, "passages", None):
+                            for _p in _d_obj.passages:
+                                if _p.passage_id not in _seen_critic_pids:
+                                    _seen_critic_pids.add(_p.passage_id)
+                                    critic_citations.append({
+                                        "passage_id": _p.passage_id,
+                                        "document_id": _d_id,
+                                        "document_title": getattr(_d_obj, "title", _d_id),
+                                        "section_title": getattr(_p, "section_title", ""),
+                                        "text": _p.text,
+                                    })
+                    except Exception:
+                        pass
+                _c_report = _critic.verify_answer(body, critic_citations)
                 if not _c_report.is_faithful:
                     body = _critic.correct_answer(body, _c_report)
             except Exception:
                 pass
+
+            legacy_trace = reasoning_trace
+            body, unified_trace = _run_unified_reasoning_for_chat(
+                service=service,
+                query=effective_query,
+                thinking_mode=thinking_mode,
+                attached_docs=attached_docs,
+                citations_data=citations_data,
+                base_answer=body,
+                routing_info=mem_diag,
+            )
+            if thinking_mode != "fast" or legacy_trace is None:
+                reasoning_trace = unified_trace
 
             if sources_list:
                 answer_text = f"{body}\n\n### Nguồn tham khảo\n" + "\n\n".join(sources_list)
@@ -2102,6 +2527,7 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
         "context_compression": compression_stats,
         "refusal_reason": refusal_reason,
         "memory_level": memory_level_label,
+        "thinking_mode": thinking_mode,
         "reasoning_trace": reasoning_trace,
         "suggested_questions": follow_up_questions if not refused else [],
     }
@@ -2201,6 +2627,8 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
         "diagnostics": diagnostics_data,
         "memory_diagnostics": mem_diag,
         "epistemic_calibration": epistemic_data,
+        "thinking_mode": thinking_mode,
+        "reasoning_trace": unified_trace,
     }
 
 
@@ -2405,12 +2833,31 @@ async def chat_query(req: ChatRequest):
         })
 
     t_gen_start = time.perf_counter()
+    thinking_mode = _normalize_thinking_mode(getattr(req, "thinking_mode", "fast"))
+    unified_trace: Optional[Dict[str, Any]] = None
     if refused:
         citations = []
         evidence_passages_out = []
         answer = refusal_message or "Không tìm thấy đủ thông tin trong tài liệu để trả lời chắc chắn."
         input_tokens = count_text_tokens(query, service.tokenizer)
         output_tokens = count_text_tokens(answer, service.tokenizer)
+        unified_trace = {
+            "mode": thinking_mode,
+            "hops": 0,
+            "rho_hat": 0.0,
+            "rounds": 0,
+            "conformal": _build_conformal_summary(
+                service=service,
+                query=query,
+                candidate_answer="",
+                evidence_docs=[],
+                attached_docs=[resolved_doc_id] if resolved_doc_id else [],
+                routing_info=None,
+            ),
+            "steps": [],
+            "facets": [],
+            "removed_claims": [],
+        }
     else:
         # Answer span extraction first: the model-free path keeps the exact clause.
         evidence_pool = [
@@ -2483,15 +2930,28 @@ async def chat_query(req: ChatRequest):
     mem_diag = compute_dynamic_memory_diagnostics(
         query=query,
         route=effective_route if "effective_route" in locals() else route,
-        citations_data=citations if "citations" in locals() else None,
+        citations_data=evidence_passages_out if "evidence_passages_out" in locals() else None,
         pipeline_service=service,
     )
+
+    if not refused:
+        answer, unified_trace = _run_unified_reasoning_for_chat(
+            service=service,
+            query=query,
+            thinking_mode=thinking_mode,
+            attached_docs=[resolved_doc_id] if resolved_doc_id else [],
+            citations_data=evidence_passages_out,
+            base_answer=answer,
+            routing_info=mem_diag,
+        )
 
     return {
         "question": query,
         "answer": answer,
         "mode": mode_str,
         "answer_mode": req.answer_mode,
+        "thinking_mode": thinking_mode,
+        "reasoning_trace": unified_trace,
         "refused": refused,
         "refusal_reason": refusal_reason,
         "refusal_message": refusal_message if refused else "",
@@ -2909,6 +3369,8 @@ async def api_root_chat(req: UnifiedChatRequest):
         mode=req.mode,
         top_k=req.top_k,
         language=req.language or "vi",
+        allow_online_api=req.allow_online_api,
+        thinking_mode=req.thinking_mode,
     )
     return await send_session_message(session_id, msg_req)
 
@@ -3198,6 +3660,8 @@ async def get_comparison_dashboard():
     manifest = _load_json_safe(PROJECT_ROOT / "checkpoints" / "train_20m" / "training_20m_manifest.json") or {}
     train_log = _load_json_safe(PROJECT_ROOT / "checkpoints" / "train_20m" / "training_20m_log.json") or {}
     train_params_raw = _load_json_safe(PROJECT_ROOT / "results" / "training_params_comparison.json") or {}
+    ablation_w7 = _load_json_safe(PROJECT_ROOT / "results" / "wavecms_r2_ablation.json")
+    pillar1_sparse_lse_w7 = _load_json_safe(PROJECT_ROOT / "results" / "wave_cms_vs_baselines_w7.json")
 
     pillars = wave_bench.get("pillars") or {}
     p2 = pillars.get("pillar_2_exact_unlearning") or {}
@@ -3789,6 +4253,8 @@ async def get_comparison_dashboard():
         "offline_innovations": offline_innovations,
         "online_vs_offline_comparison": online_vs_offline_comparison,
         "sample_comparisons": sample_comparisons,
+        "ablation_w7": ablation_w7,
+        "pillar1_sparse_lse_w7": pillar1_sparse_lse_w7,
     }
 
 

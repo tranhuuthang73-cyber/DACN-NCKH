@@ -34,6 +34,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
+from src.wave_cms.nonconformity import SIGNAL_NAMES
 from src.wave_cms.tree_memory import (
     DocumentTreeNode,
     TreeLevel,
@@ -106,9 +107,14 @@ class RefusalDecision:
     is_calibrated: bool                # True if calibrated on exchangeable data
     risk_guarantee: str                # Formal risk bound specification
     reason: str                        # Diagnostic explanation of the verdict
+    group: Optional[str] = None
+    lambda_g: Optional[float] = None
+    epsilon_g: Optional[float] = None
+    score: Optional[float] = None
+    top_risk_factors: List[Dict[str, Any]] = field(default_factory=list)
 
     def to_dict(self) -> Dict[str, Any]:
-        return {
+        out: Dict[str, Any] = {
             "refused": self.refused,
             "confidence": round(self.confidence, 6),
             "threshold": round(self.threshold, 6),
@@ -119,6 +125,13 @@ class RefusalDecision:
             "risk_guarantee": self.risk_guarantee,
             "reason": self.reason,
         }
+        if self.group is not None or self.score is not None:
+            out["group"] = self.group
+            out["lambda_g"] = round(self.lambda_g, 6) if self.lambda_g is not None else None
+            out["epsilon_g"] = self.epsilon_g
+            out["score"] = round(self.score, 6) if self.score is not None else None
+            out["top_risk_factors"] = self.top_risk_factors
+        return out
 
 
 class CounterfactualLeafAttributor:
@@ -684,4 +697,371 @@ class ConformalRiskController:
             is_calibrated=self.is_calibrated,
             risk_guarantee=risk_guarantee,
             reason=reason,
+        )
+
+
+class MondrianConformalRiskController(ConformalRiskController):
+    """
+    Mondrian Conformal Risk Control (Theorem 5, WaveCMS-R²).
+
+    Learns a nonconformity/confidence scorer s_w(x) = sigmoid(w^T f_tilde(x) + b)
+    strictly on the Fit split, selects per-group risk tolerances on Fit, and
+    calibrates group-conditional thresholds lambda_hat_g strictly on the Cal split:
+        lambda_hat_g = inf { lambda in [0, 1] :
+            (n_g / (n_g + 1)) * R_hat_g(lambda) + 1 / (n_g + 1) <= epsilon_g }
+    where ell_i(lambda) = 1{s_i >= lambda} * (1 - y_i).
+    """
+
+    def __init__(
+        self,
+        epsilon: float = 0.10,
+        default_threshold: float = 0.45,
+        l2_reg: float = 1.0,
+        seed: int = 42,
+    ) -> None:
+        super().__init__(epsilon=epsilon, default_threshold=default_threshold)
+        self.l2_reg = float(l2_reg)
+        self.seed = int(seed)
+        self.signal_names: Tuple[str, ...] = tuple(SIGNAL_NAMES)
+        self._pmi_idx: int = self.signal_names.index("pmi")
+        self.pmi_fit_mean_: float = 0.0
+        self.feature_means_: Optional[np.ndarray] = None
+        self.feature_stds_: Optional[np.ndarray] = None
+        self.weights_: Optional[np.ndarray] = None
+        self.bias_: float = 0.0
+        self.fit_auroc_: float = 0.5
+        self.group_thresholds_: Dict[str, float] = {}
+        self.group_epsilons_: Dict[str, float] = {}
+        self.group_cal_stats_: Dict[str, Dict[str, Any]] = {}
+        self.global_threshold_: float = self.default_threshold
+
+    def _extract_raw_vector(
+        self,
+        signals: Dict[str, float],
+        pmi_impute_value: float,
+    ) -> np.ndarray:
+        vec = np.zeros(len(self.signal_names), dtype=np.float64)
+        pmi_missing = float(signals.get("pmi_missing", 0.0)) >= 0.5
+        for idx, name in enumerate(self.signal_names):
+            raw_val = signals.get(name)
+            if name == "pmi" and (pmi_missing or raw_val is None or not math.isfinite(float(raw_val))):
+                vec[idx] = pmi_impute_value
+            else:
+                val = 0.0 if raw_val is None else float(raw_val)
+                vec[idx] = val if math.isfinite(val) else 0.0
+        return vec
+
+    @staticmethod
+    def _compute_auroc(y_true: np.ndarray, y_score: np.ndarray) -> float:
+        pos = y_true == 1
+        neg = y_true == 0
+        n_pos = int(np.sum(pos))
+        n_neg = int(np.sum(neg))
+        if n_pos == 0 or n_neg == 0:
+            return 0.5
+        order = np.argsort(y_score, kind="mergesort")
+        ranks = np.empty_like(y_score, dtype=np.float64)
+        sorted_scores = y_score[order]
+        i = 0
+        n = len(sorted_scores)
+        while i < n:
+            j = i + 1
+            while j < n and sorted_scores[j] == sorted_scores[i]:
+                j += 1
+            avg_rank = 0.5 * (i + j - 1) + 1.0
+            ranks[order[i:j]] = avg_rank
+            i = j
+        sum_pos_ranks = float(np.sum(ranks[pos]))
+        auc = (sum_pos_ranks - 0.5 * n_pos * (n_pos + 1)) / float(n_pos * n_neg)
+        return float(max(0.0, min(1.0, auc)))
+
+    def _fit_numpy_gd(
+        self,
+        X_std: np.ndarray,
+        y_arr: np.ndarray,
+        lr: float = 0.2,
+        steps: int = 300,
+    ) -> Tuple[np.ndarray, float]:
+        n, d = X_std.shape
+        w = np.zeros(d, dtype=np.float64)
+        b = 0.0
+        y_f = y_arr.astype(np.float64)
+        for _ in range(steps):
+            logits = np.clip(X_std @ w + b, -60.0, 60.0)
+            probs = 1.0 / (1.0 + np.exp(-logits))
+            err = probs - y_f
+            grad_w = (X_std.T @ err) / float(n) + (self.l2_reg / float(n)) * w
+            grad_b = float(np.mean(err))
+            w -= lr * grad_w
+            b -= lr * grad_b
+        return w, float(b)
+
+    def fit_weights(self, fit_rows: Sequence[Dict[str, Any]]) -> Dict[str, Any]:
+        """Fits feature standardization and L2 logistic regression strictly on Fit rows."""
+        if not fit_rows:
+            raise ValueError("fit_rows must not be empty")
+
+        pmi_vals: List[float] = []
+        for row in fit_rows:
+            sigs = row.get("signals", row)
+            pmi_missing = float(sigs.get("pmi_missing", 0.0)) >= 0.5
+            raw_pmi = sigs.get("pmi")
+            if not pmi_missing and raw_pmi is not None and math.isfinite(float(raw_pmi)):
+                pmi_vals.append(float(raw_pmi))
+        self.pmi_fit_mean_ = float(np.mean(pmi_vals)) if pmi_vals else 0.0
+
+        X_raw = np.vstack([
+            self._extract_raw_vector(row.get("signals", row), self.pmi_fit_mean_)
+            for row in fit_rows
+        ])
+        y_arr = np.array(
+            [1 if int(row.get("y", row.get("is_correct", 0))) == 1 else 0 for row in fit_rows],
+            dtype=np.int32,
+        )
+
+        means = np.mean(X_raw, axis=0)
+        stds = np.std(X_raw, axis=0)
+        safe_stds = np.where(stds > 1e-8, stds, 1.0)
+        self.feature_means_ = means
+        self.feature_stds_ = safe_stds
+
+        X_std = (X_raw - means) / safe_stds
+
+        if len(np.unique(y_arr)) >= 2:
+            from sklearn.linear_model import LogisticRegression
+
+            clf = LogisticRegression(
+                C=1.0 / max(1e-6, self.l2_reg),
+                penalty="l2",
+                solver="lbfgs",
+                max_iter=1000,
+                random_state=self.seed,
+            )
+            clf.fit(X_std, y_arr)
+            self.weights_ = clf.coef_[0].astype(np.float64).copy()
+            self.bias_ = float(clf.intercept_[0])
+        else:
+            self.weights_, self.bias_ = self._fit_numpy_gd(X_std, y_arr)
+
+        logits = np.clip(X_std @ self.weights_ + self.bias_, -60.0, 60.0)
+        probs = 1.0 / (1.0 + np.exp(-logits))
+        self.fit_auroc_ = self._compute_auroc(y_arr, probs)
+
+        return {
+            "status": "SUCCESS",
+            "n_fit": len(fit_rows),
+            "fit_auroc": self.fit_auroc_,
+            "pmi_fit_mean": self.pmi_fit_mean_,
+            "bias": self.bias_,
+            "weights": {name: float(w) for name, w in zip(self.signal_names, self.weights_)},
+        }
+
+    def score_signals(self, signals: Dict[str, float]) -> float:
+        """Computes s_w(x) = sigmoid(w^T f_tilde(x) + b) in [0, 1]."""
+        if self.weights_ is None or self.feature_means_ is None or self.feature_stds_ is None:
+            raise RuntimeError("Model weights are not fitted. Call fit_weights() first.")
+        vec = self._extract_raw_vector(signals, self.pmi_fit_mean_)
+        x_std = (vec - self.feature_means_) / self.feature_stds_
+        logit = float(np.dot(self.weights_, x_std) + self.bias_)
+        return float(self._sigmoid(max(-60.0, min(60.0, logit))))
+
+    @staticmethod
+    def _calibrate_group_scores(
+        scores_arr: np.ndarray,
+        labels_arr: np.ndarray,
+        eps_g: float,
+    ) -> Dict[str, Any]:
+        n_g = len(scores_arr)
+        eps_g = max(1e-6, min(1.0, float(eps_g)))
+        infeasible = n_g == 0 or (float(n_g) < (1.0 / eps_g) - 1.0)
+        if infeasible:
+            return {
+                "lambda_g": 1.0 + 1e-9,
+                "epsilon_g": eps_g,
+                "n_g": n_g,
+                "empirical_risk": 0.0,
+                "crc_bound": 1.0 / float(n_g + 1),
+                "infeasible_group_size": True,
+            }
+
+        wrong = labels_arr == 0
+        candidates = np.unique(np.concatenate([np.array([0.0, 1.0]), scores_arr]))
+        candidates.sort()
+
+        best_lambda: Optional[float] = None
+        best_emp_risk = 0.0
+        best_bound = 1.0
+
+        for lam in candidates:
+            answered = scores_arr >= lam
+            emp_risk = float(np.mean(answered & wrong))
+            crc_bound = (n_g / float(n_g + 1)) * emp_risk + (1.0 / float(n_g + 1))
+            if crc_bound <= eps_g:
+                best_lambda = float(lam)
+                best_emp_risk = emp_risk
+                best_bound = crc_bound
+                break
+
+        if best_lambda is None:
+            best_lambda = 1.0 + 1e-9
+            best_emp_risk = 0.0
+            best_bound = 1.0 / float(n_g + 1)
+
+        return {
+            "lambda_g": best_lambda,
+            "epsilon_g": eps_g,
+            "n_g": n_g,
+            "empirical_risk": best_emp_risk,
+            "crc_bound": best_bound,
+            "infeasible_group_size": False,
+        }
+
+    def _row_score_and_label(self, row: Dict[str, Any]) -> Tuple[float, int, str]:
+        if "score" in row:
+            s = max(0.0, min(1.0, float(row["score"])))
+        else:
+            s = self.score_signals(row.get("signals", row))
+        y = 1 if int(row.get("y", row.get("is_correct", 0))) == 1 else 0
+        g = str(row.get("group", "DEFAULT"))
+        return s, y, g
+
+    def calibrate_groups(
+        self,
+        cal_rows: Sequence[Dict[str, Any]],
+        eps_by_group: Union[float, Dict[str, float]] = 0.10,
+    ) -> Dict[str, Dict[str, Any]]:
+        """Calibrates group-conditional thresholds lambda_hat_g strictly on Cal rows."""
+        if not cal_rows:
+            self.is_calibrated = False
+            self.group_thresholds_ = {}
+            self.group_epsilons_ = {}
+            self.group_cal_stats_ = {}
+            return {}
+
+        grouped: Dict[str, Tuple[List[float], List[int]]] = {}
+        all_scores: List[float] = []
+        all_labels: List[int] = []
+
+        for row in cal_rows:
+            s, y, g = self._row_score_and_label(row)
+            if g not in grouped:
+                grouped[g] = ([], [])
+            grouped[g][0].append(s)
+            grouped[g][1].append(y)
+            all_scores.append(s)
+            all_labels.append(y)
+
+        stats_by_group: Dict[str, Dict[str, Any]] = {}
+        self.group_thresholds_ = {}
+        self.group_epsilons_ = {}
+
+        for g, (s_list, y_list) in grouped.items():
+            eps_g = (
+                float(eps_by_group.get(g, self.epsilon))
+                if isinstance(eps_by_group, dict)
+                else float(eps_by_group)
+            )
+            res = self._calibrate_group_scores(
+                np.array(s_list, dtype=np.float64),
+                np.array(y_list, dtype=np.int32),
+                eps_g,
+            )
+            stats_by_group[g] = res
+            self.group_thresholds_[g] = float(res["lambda_g"])
+            self.group_epsilons_[g] = float(res["epsilon_g"])
+
+        default_eps = (
+            float(np.mean(list(eps_by_group.values())))
+            if isinstance(eps_by_group, dict) and eps_by_group
+            else (float(eps_by_group) if not isinstance(eps_by_group, dict) else self.epsilon)
+        )
+        global_res = self._calibrate_group_scores(
+            np.array(all_scores, dtype=np.float64),
+            np.array(all_labels, dtype=np.int32),
+            default_eps,
+        )
+        self.global_threshold_ = float(global_res["lambda_g"])
+        self.group_cal_stats_ = stats_by_group
+        self.calibration_sample_size = len(cal_rows)
+        self.is_calibrated = True
+        return stats_by_group
+
+    def select_eps_on_fit(
+        self,
+        fit_rows: Sequence[Dict[str, Any]],
+        candidate_eps: Sequence[float] = (0.05, 0.08, 0.10, 0.12, 0.15, 0.20, 0.25),
+    ) -> Dict[str, float]:
+        """Selects per-group epsilon_g maximizing selective decision accuracy on Fit."""
+        grouped: Dict[str, Tuple[List[float], List[int]]] = {}
+        for row in fit_rows:
+            s, y, g = self._row_score_and_label(row)
+            if g not in grouped:
+                grouped[g] = ([], [])
+            grouped[g][0].append(s)
+            grouped[g][1].append(y)
+
+        selected: Dict[str, float] = {}
+        for g, (s_list, y_list) in grouped.items():
+            s_arr = np.array(s_list, dtype=np.float64)
+            y_arr = np.array(y_list, dtype=np.int32)
+            best_eps = float(candidate_eps[0])
+            best_acc = -1.0
+            for eps in sorted(float(e) for e in candidate_eps):
+                res = self._calibrate_group_scores(s_arr, y_arr, eps)
+                lam = float(res["lambda_g"])
+                answered = s_arr >= lam
+                correct_decisions = (answered & (y_arr == 1)) | ((~answered) & (y_arr == 0))
+                acc = float(np.mean(correct_decisions))
+                if acc > best_acc + 1e-12:
+                    best_acc = acc
+                    best_eps = eps
+            selected[g] = best_eps
+        return selected
+
+    def evaluate_signals(self, signals: Dict[str, float], group: str) -> RefusalDecision:
+        """Evaluates nonconformity signals for a Mondrian group against lambda_hat_g."""
+        score = self.score_signals(signals)
+        lambda_g = float(self.group_thresholds_.get(group, self.global_threshold_))
+        eps_g = float(self.group_epsilons_.get(group, self.epsilon))
+        refused = bool(score < lambda_g)
+
+        vec = self._extract_raw_vector(signals, self.pmi_fit_mean_)
+        x_std = (vec - self.feature_means_) / self.feature_stds_
+        contributions = self.weights_ * x_std
+        ranked_indices = np.argsort(contributions)
+        top_risk_factors = [
+            {
+                "signal": self.signal_names[idx],
+                "contribution": round(float(contributions[idx]), 6),
+                "value": round(float(vec[idx]), 6),
+            }
+            for idx in ranked_indices[:3]
+        ]
+
+        reason = (
+            f"Group '{group}' score ({score:.4f}) below calibrated threshold ({lambda_g:.4f})"
+            if refused
+            else f"Group '{group}' conformal safety satisfied: score ({score:.4f}) >= ({lambda_g:.4f})"
+        )
+        risk_guarantee = (
+            f"E[answered and wrong | group={group}] <= {eps_g:.4f} under group exchangeability"
+            if self.is_calibrated
+            else "Heuristic uncalibrated safety threshold"
+        )
+
+        return RefusalDecision(
+            refused=refused,
+            confidence=score,
+            threshold=lambda_g,
+            max_alpha=float(signals.get("margin", 0.0)),
+            memory_reliance=float(signals.get("lolo_drop", 0.0)),
+            epsilon=eps_g,
+            is_calibrated=self.is_calibrated,
+            risk_guarantee=risk_guarantee,
+            reason=reason,
+            group=group,
+            lambda_g=lambda_g,
+            epsilon_g=eps_g,
+            score=score,
+            top_risk_factors=top_risk_factors,
         )

@@ -167,12 +167,39 @@ class GroundingCritic:
 
         return contrasts
 
+    STRUCTURAL_NUM_PATTERNS = (
+        re.compile(r"\[\s*\d+(?:\s*,\s*\d+)*\s*\]"),
+        re.compile(
+            r"\b(?:bước|ví dụ|mục|phần|chương|bài|câu|hình|bảng|phụ lục|khoản|điều|điểm)\s+\d+(?:[.,]\d+)*\b",
+            re.IGNORECASE,
+        ),
+        re.compile(r"^\s*\d+(?:[.,]\d+)*[.)]\s*"),
+    )
+
+    REASONING_STOPWORDS = frozenset({
+        "từ", "các", "dữ", "kiện", "đã", "trích", "hai", "đối", "tượng",
+        "thể", "hiện", "mối", "quan", "hệ", "ứng", "trực", "tiếp", "một",
+        "vế", "gắn", "với", "cơ", "chế", "còn", "lại", "là", "và", "của",
+        "trong", "khi", "nên", "do", "đó", "vì", "vậy", "theo", "tài",
+        "liệu", "qua", "trên", "cho", "thấy", "giữa", "cùng", "nhau",
+        "luôn", "được", "có", "không", "như", "nếu", "thì", "mà", "để",
+        "những", "mỗi", "bởi", "tổng", "hợp", "liên", "suy", "luận",
+    })
+
+    @staticmethod
+    def _normalize_numeric_text(text: str) -> str:
+        """Normalize Vietnamese/international decimal commas and spaces before %/° units."""
+        norm = re.sub(r"(\d),(\d)", r"\1.\2", text.lower())
+        norm = re.sub(r"(\d)\s+([%°])", r"\1\2", norm)
+        return norm
+
     def verify_answer(self, answer: str, citations: List[Dict[str, Any]]) -> CriticReport:
         if not citations:
             return CriticReport(is_faithful=False, faithfulness_score=0.0, unsupported_claims=[answer])
 
         # Aggregate citation text for fast verification
         all_citation_text = " ".join(c.get("text", "") for c in citations).lower()
+        norm_citation_text = self._normalize_numeric_text(all_citation_text)
         citation_tokens = set(re.findall(r"\w+", all_citation_text))
 
         # Filter out meta-headers and sources from claims
@@ -186,33 +213,56 @@ class GroundingCritic:
             if header in clean_text:
                 clean_text = clean_text.split(header)[0]
 
-        sentences = [
-            s.strip() for s in re.split(r"(?<=[.!?])\s+|\n+", clean_text)
-            if len(s.strip()) >= 15
-            and not s.strip().startswith(("#", "-", "*", "🧠", "💡", "📌", "👉", "🔗"))
-            and not s.strip().endswith(":")
-        ]
+        sentences_with_context = []
+        in_reasoning_section = False
+        for raw_line in re.split(r"\n+", clean_text):
+            line = raw_line.strip()
+            if not line:
+                continue
+            if re.match(r"^\*\*2\.\s*suy luận", line, re.IGNORECASE):
+                in_reasoning_section = True
+                line = re.sub(r"^\*\*2\.\s*suy luận[^*]*\*\*\s*", "", line, flags=re.IGNORECASE).strip()
+                if not line:
+                    continue
+            elif re.match(r"^\*\*\d+\.", line) or line.startswith("###"):
+                in_reasoning_section = False
+                if re.match(r"^\*\*\d+\.[^*]*:\*\*$", line) or line.startswith("###"):
+                    continue
 
-        if not sentences:
+            for s in re.split(r"(?<=[.!?])\s+", line):
+                s_clean = s.strip()
+                if (
+                    len(s_clean) >= 15
+                    and not s_clean.startswith(("#", "-", "*", "🧠", "💡", "📌", "👉", "🔗"))
+                    and not s_clean.rstrip("*").endswith(":")
+                ):
+                    sentences_with_context.append((s_clean, in_reasoning_section))
+
+        if not sentences_with_context:
             return CriticReport(is_faithful=True, faithfulness_score=1.0)
 
         claims_res: List[ClaimVerificationResult] = []
         unsupported: List[str] = []
 
-        for sentence in sentences:
+        for sentence, is_reasoning in sentences_with_context:
             s_low = sentence.lower()
             s_tokens = set(re.findall(r"\w+", s_low))
             if not s_tokens:
                 continue
 
-            # 1. Check numbers/metrics (literal presence or derived arithmetic)
-            numbers_in_sentence = self.NUMERIC_ENTITY_PATTERN.findall(sentence)
+            # 1. Check numbers/metrics (ignoring structural/ordinal numbering)
+            s_for_nums = sentence
+            for pat in self.STRUCTURAL_NUM_PATTERNS:
+                s_for_nums = pat.sub(" ", s_for_nums)
+
+            numbers_in_sentence = self.NUMERIC_ENTITY_PATTERN.findall(s_for_nums)
             unsupported_nums = []
             for n in numbers_in_sentence:
                 n_clean = n.strip()
-                if n_clean.lower() in all_citation_text:
+                n_norm = self._normalize_numeric_text(n_clean)
+                if n_clean.lower() in all_citation_text or n_norm in norm_citation_text:
                     continue
-                if self._is_derived_number_supported(n_clean, all_citation_text):
+                if self._is_derived_number_supported(n_clean, norm_citation_text):
                     continue
                 unsupported_nums.append(n_clean)
 
@@ -220,8 +270,18 @@ class GroundingCritic:
             overlap_count = len(s_tokens.intersection(citation_tokens))
             overlap_score = overlap_count / max(1, len(s_tokens))
 
-            # Supported if reasonable token overlap AND no hallucinated numbers
-            is_supported = (overlap_score >= 0.30) and (len(unsupported_nums) == 0)
+            if is_reasoning:
+                content_tokens = (s_tokens - self.REASONING_STOPWORDS) or s_tokens
+                content_overlap_count = len(content_tokens.intersection(citation_tokens))
+                content_overlap_score = content_overlap_count / max(1, len(content_tokens))
+                has_citation_ref = bool(re.search(r"\[\s*\d+(?:\s*,\s*\d+)*\s*\]", sentence))
+                is_supported = (len(unsupported_nums) == 0) and (
+                    content_overlap_score >= 0.12
+                    or (has_citation_ref and content_overlap_count >= 2)
+                )
+            else:
+                # Supported if reasonable token overlap AND no hallucinated numbers
+                is_supported = (overlap_score >= 0.30) and (len(unsupported_nums) == 0)
 
             if not is_supported:
                 unsupported.append(sentence)
@@ -249,21 +309,29 @@ class GroundingCritic:
     def correct_answer(self, answer: str, report: CriticReport) -> str:
         """
         Reflectively corrects an answer by appending an explicit boundary advisory
-        or pruning unsubstantiated claims.
+        or pruning unsubstantiated claims (deduplicated).
         """
         if report.is_faithful or not report.unsupported_claims:
             return answer
 
-        # If answer contains hallucinated metrics, append an advisory warning
-        advisories = []
+        if "*(Lưu ý đối soát:" in answer:
+            return answer
+
+        unique_entities: List[str] = []
+        seen_entities = set()
         for claim in report.claims:
             if not claim.is_supported and claim.unsupported_entities:
-                advisories.append(
-                    f"*(Lưu ý đối soát: Chi tiết '{', '.join(claim.unsupported_entities)}' không có trong tài liệu đối chiếu)*"
-                )
+                for ent in claim.unsupported_entities:
+                    ent_clean = ent.strip()
+                    ent_key = ent_clean.lower()
+                    if ent_clean and ent_key not in seen_entities:
+                        seen_entities.add(ent_key)
+                        unique_entities.append(ent_clean)
 
-        if advisories:
-            return f"{answer}\n\n" + "\n".join(advisories)
+        if unique_entities:
+            advisory = f"*(Lưu ý đối soát: Chi tiết '{', '.join(unique_entities)}' không có trong tài liệu đối chiếu)*"
+        else:
+            advisory = "*(Lưu ý đối soát: Một số nhận định trên không có trong tài liệu trực tiếp)*"
 
-        return f"{answer}\n\n*(Lưu ý đối soát: Một số nhận định trên không có trong tài liệu trực tiếp)*"
+        return f"{answer}\n\n{advisory}"
 

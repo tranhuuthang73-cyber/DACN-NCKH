@@ -18,6 +18,115 @@ def strip_accents(s: str) -> str:
     return s.replace("đ", "d").replace("Đ", "D")
 
 
+def _is_one_edit_away(a: str, b: str) -> bool:
+    """Returns True if two tokens (>= 3 chars) differ by exactly 1 edit (sub/ins/del)."""
+    if a == b:
+        return False
+    la, lb = len(a), len(b)
+    if abs(la - lb) > 1 or la < 3 or lb < 3:
+        return False
+    if la == lb:
+        return sum(1 for ca, cb in zip(a, b) if ca != cb) == 1
+    if la < lb:
+        a, b = b, a
+    i = j = diffs = 0
+    while i < len(a) and j < len(b):
+        if a[i] != b[j]:
+            diffs += 1
+            if diffs > 1:
+                return False
+            i += 1
+        else:
+            i += 1
+            j += 1
+    return True
+
+
+def _fuzzy_token_overlap(q_tokens: Set[str], s_tokens: Set[str]) -> Tuple[int, int]:
+    """Returns (exact_hits, fuzzy_hits) where fuzzy_hits require context corroboration."""
+    if not q_tokens or not s_tokens:
+        return 0, 0
+    exact_hits = len(q_tokens & s_tokens)
+    fuzzy_hits = 0
+    if exact_hits > 0 or len(q_tokens) == 1:
+        for qt in q_tokens - s_tokens:
+            if len(qt) >= 3 and any(_is_one_edit_away(qt, st) for st in s_tokens):
+                fuzzy_hits += 1
+    return exact_hits, fuzzy_hits
+
+
+def _extract_compound_concept_parts(query: str) -> List[str]:
+    """Splits compound concept/comparison queries ('A và B là gì', 'phân biệt A với B') into parts."""
+    q = (query or "").strip().rstrip("?!.")
+    q = re.sub(
+        r"^(?:hãy\s+|cho\s+biết\s+|trình\s+bày\s+|giải\s+thích\s+|nêu\s+)?(?:khái\s+niệm\s+|định\s+nghĩa\s+|so\s+sánh\s+|phân\s+biệt\s+)?(?:giữa\s+)?",
+        "",
+        q,
+        flags=re.IGNORECASE,
+    ).strip()
+    q = re.sub(
+        r"\s+(?:là\s+gì|như\s+thế\s+nào|ra\s+sao|có\s+gì\s+khác\s+nhau|khác\s+nhau\s+như\s+thế\s+nào)$",
+        "",
+        q,
+        flags=re.IGNORECASE,
+    ).strip()
+    parts = [p.strip() for p in re.split(r"\s+(?:và|với|so\s+với|cùng\s+với)\s+|,\s*", q, flags=re.IGNORECASE) if len(p.strip()) >= 2]
+    return parts if len(parts) >= 2 else []
+
+
+def _build_grounded_reasoning(
+    query: str,
+    evidence_items: List[Tuple[str, str]],
+    is_comparison: bool,
+    has_sub_queries: bool,
+) -> str:
+    """Synthesizes document-grounded reasoning strictly from extracted evidence sentences."""
+    if len(evidence_items) < 2:
+        return ""
+    s1, lbl1 = evidence_items[0]
+    s2, lbl2 = evidence_items[1]
+    n1 = strip_accents(s1.lower())
+    n2 = strip_accents(s2.lower())
+    q_norm = strip_accents((query or "").lower())
+
+    contrast_pairs = [
+        ("nhuong electron", "nhan electron", "nhường electron", "nhận electron"),
+        ("nhuong e", "nhan e", "nhường e", "nhận e"),
+        ("nhuong", "nhan", "nhường", "nhận"),
+        ("tang", "giam", "tăng", "giảm"),
+        ("thu", "toa", "thu", "tỏa"),
+        ("uu diem", "nhuoc diem", "ưu điểm", "nhược điểm"),
+    ]
+    for a_key, b_key, a_disp, b_disp in contrast_pairs:
+        if (a_key in n1 and b_key in n2) or (b_key in n1 and a_key in n2):
+            first_lbl, second_lbl = (lbl1, lbl2) if a_key in n1 else (lbl2, lbl1)
+            return (
+                f"Từ các dữ kiện đã trích, hai đối tượng thể hiện mối quan hệ đối ứng trực tiếp: "
+                f"một vế gắn với cơ chế **{a_disp}** {first_lbl}, đối ứng với vế còn lại gắn với cơ chế **{b_disp}** {second_lbl}."
+            )
+
+    if is_comparison or has_sub_queries or any(k in q_norm for k in ("phan biet", "khac nhau", "giong nhau")):
+        cits = " ".join(dict.fromkeys(lbl for _, lbl in evidence_items))
+        return (
+            f"Các dữ kiện từ {cits} xác định rõ đặc trưng riêng của từng khái niệm trong cùng chủ đề, "
+            f"giúp đối chiếu trực tiếp bản chất và vai trò của từng vế dựa trên định nghĩa gốc trong tài liệu."
+        )
+
+    causal_cues = ("do ", "vi ", "nen ", "dan den", "giup ", "tao ra", "nho ", "thong qua", "bang cach")
+    if any(c in n1 or c in n2 for c in causal_cues):
+        cits = " ".join(dict.fromkeys(lbl for _, lbl in evidence_items))
+        return (
+            f"Các bằng chứng từ {cits} liên kết theo mạch nguyên nhân – cơ chế – kết quả: "
+            f"dữ kiện mở đầu nêu cơ sở vận hành {lbl1}, từ đó dẫn trực tiếp tới hệ quả hoặc ứng dụng được ghi nhận ở {lbl2}."
+        )
+
+    cits = " ".join(dict.fromkeys(lbl for _, lbl in evidence_items))
+    return (
+        f"Tổng hợp {len(evidence_items)} luận điểm từ {cits} cho thấy các dữ kiện bổ sung trực tiếp cho nhau "
+        f"trong phạm vi tài liệu để làm rõ trọng tâm câu hỏi."
+    )
+
+
 class DocumentAnalyzer:
     """
     Analyzes document structures to synthesize key points and generate
@@ -379,6 +488,25 @@ class DocumentAnalyzer:
             relevance_score(query, combined_pool_text, extra=combined_sec_text) * 0.85,
             relevance_score(exp_query, combined_pool_text, extra=combined_sec_text) * 0.85,
         )
+        if rel < MIN_RELEVANCE and sentence_pool:
+            q_norm_rel = strip_accents((query or "").lower())
+            q_rel_tokens = {
+                t for t in re.findall(r"[a-z0-9_]+", q_norm_rel)
+                if len(t) >= 2 and t not in {
+                    "la", "gi", "cua", "va", "voi", "cac", "nhung", "mot", "cho",
+                    "biet", "ve", "co", "duoc", "trong", "nay", "nao", "nhu", "the",
+                }
+            }
+            if q_rel_tokens:
+                for idx_p, s_p in enumerate(sentence_pool):
+                    sec_p = sentence_sections[idx_p] if idx_p < len(sentence_sections) else ""
+                    s_rel_tokens = set(re.findall(r"[a-z0-9_]+", strip_accents(f"{s_p} {sec_p}".lower())))
+                    ex_h, fz_h = _fuzzy_token_overlap(q_rel_tokens, s_rel_tokens)
+                    fuzzy_rel = min(1.0, (ex_h + 0.85 * fz_h) / float(len(q_rel_tokens)))
+                    if fuzzy_rel > rel:
+                        rel = fuzzy_rel
+                        best_sentence = s_p
+                        matched_section = sec_p
         if not best_sentence or rel < MIN_RELEVANCE:
             return "Không tìm thấy đủ thông tin bằng chứng trong tài liệu để trả lời câu hỏi này.", []
 
@@ -468,7 +596,10 @@ class DocumentAnalyzer:
             "uu diem", "nhuoc diem", "han che", "loi ich", "ket qua",
             "so lieu", "hieu nang", "hieu qua", "do chinh xac", "toc do", "bao nhieu", "%",
         ))
-        has_specific_aspect = aspect_concept or aspect_mechanism or aspect_example or aspect_eval
+        aspect_reasoning = any(k in q_norm for k in (
+            "tai sao", "vi sao", "nguyen nhan", "ban chat", "nguyen tac", "bao toan", "ly do",
+        ))
+        has_specific_aspect = aspect_concept or aspect_mechanism or aspect_example or aspect_eval or aspect_reasoning
 
         q_intent_tokens = {
             t for t in re.findall(r"[a-z0-9_]+", q_norm)
@@ -493,6 +624,9 @@ class DocumentAnalyzer:
                 re.IGNORECASE,
             ):
                 return True
+            letters = [ch for ch in st if ch.isalpha()]
+            if len(letters) >= 4 and all(ch.isupper() for ch in letters) and "=" not in st:
+                return True
             if sec and (
                 st.lower() == sec.strip().lower()
                 or (len(st) >= 4 and st.rstrip(".:") in sec.strip())
@@ -500,16 +634,41 @@ class DocumentAnalyzer:
                 return True
             return False
 
-        def _score_body_sentence(sent: str) -> float:
+        def _score_sentence_for_tokens(
+            sent: str,
+            target_tokens: Set[str],
+            extra_tokens: Optional[Set[str]] = None,
+            subject_phrase_norm: str = "",
+        ) -> float:
             s_norm = strip_accents(sent.lower())
             s_tokens = set(re.findall(r"[a-z0-9_]+", s_norm))
-            score = len(q_intent_tokens & s_tokens) * 2.0 + len(exp_tokens & s_tokens) * 0.75
-            is_ex_sent = any(c in s_norm for c in ("vi du", "minh hoa", "gia su", "cho p =", "ta co", "chang han"))
+            ex_hits, fz_hits = _fuzzy_token_overlap(target_tokens, s_tokens)
+            score = ex_hits * 2.5 + fz_hits * 1.8
+            if subject_phrase_norm:
+                subj_part = s_norm.split(" la ", 1)[0] if " la " in s_norm else s_norm[:len(subject_phrase_norm) + 12]
+                if s_norm.startswith(subject_phrase_norm) or subject_phrase_norm in subj_part:
+                    score += 10.0
+                else:
+                    subj_tokens = set(re.findall(r"[a-z0-9_]+", subj_part))
+                    s_ex, s_fz = _fuzzy_token_overlap(target_tokens, subj_tokens)
+                    score += s_ex * 3.0 + s_fz * 2.0
+            if extra_tokens:
+                score += len(extra_tokens & s_tokens) * 0.75
+            is_ex_sent = (
+                any(c in s_norm for c in ("vi du", "minh hoa", "gia su", "cho p =", "ta co", "chang han", "de bai", "bai tap", "buoc 1", "buoc 2", "loi giai", "huong dan giai"))
+                or bool(re.match(r"^\s*(?:vi du|bai|buoc)\s*\d", s_norm))
+            )
             if aspect_concept:
-                if not is_ex_sent and any(c in s_norm for c in (" la ", "duoc dinh nghia", "khai niem", "phuong phap", "he thong", "dung de", "nham", "bao gom")):
-                    score += 6.0
-                if is_ex_sent or any(c in s_norm for c in ("cho p =", "ta co:", "mod 26")):
-                    score -= 4.0
+                def_cues = (
+                    "la chat", "duoc dinh nghia la", "nhuong electron", "nhan electron",
+                    "la qua trinh", "la phuong trinh", "la dinh luat", "la he thuc",
+                    " la ", "duoc dinh nghia", "khai niem", "phuong phap", "he thong",
+                    "dung de", "nham", "bao gom", "la dai luong", "la phan ung",
+                )
+                if not is_ex_sent and any(c in s_norm for c in def_cues):
+                    score += 8.0
+                if not aspect_example and (is_ex_sent or any(c in s_norm for c in ("cho p =", "ta co:", "mod 26"))):
+                    score -= 8.0
             if aspect_mechanism:
                 mech_cues = ("nguyen ly", "co che", "hoat dong", "cong thuc", "dac diem", "tinh chat", "quy trinh", "buoc", "thuat toan", "thong qua", "dua tren", "=", "mod ")
                 mech_hits = sum(1 for c in mech_cues if c in s_norm)
@@ -523,7 +682,89 @@ class DocumentAnalyzer:
             if aspect_eval:
                 if any(c in s_norm for c in ("uu diem", "loi ich", "nhuoc diem", "han che", "kho khan", "rui ro", "ket qua", "dat ", "cai thien", "tang", "giam", "%")) or re.search(r"\d+(?:[.,]\d+)?\s*%", s_norm):
                     score += 6.5
+            if aspect_reasoning:
+                reason_cues = (
+                    "nhuong", "nhan", "bao toan", "ban chat", "nguyen tac",
+                    "do ", "vi ", "nen ", "nho ", "dan den", "boi vi", "=",
+                )
+                reason_hits = sum(1 for c in reason_cues if c in s_norm)
+                if reason_hits and not is_ex_sent:
+                    score += min(10.0, 4.0 + reason_hits * 2.0)
+                if not aspect_example and is_ex_sent:
+                    score -= 6.0
             return score
+
+        def _score_body_sentence(sent: str) -> float:
+            return _score_sentence_for_tokens(sent, q_intent_tokens, exp_tokens)
+
+        # Compound concept decomposition fallback (e.g. "chất thử và chất oxi hóa là gì", "phân biệt A với B")
+        if len(sub_query_sentences) < 2:
+            compound_parts = _extract_compound_concept_parts(query)
+            if len(compound_parts) >= 2 and sentence_pool:
+                sub_query_sentences = []
+                for part in compound_parts:
+                    p_norm = strip_accents(part.lower())
+                    p_tokens = {
+                        t for t in re.findall(r"[a-z0-9_]+", p_norm)
+                        if len(t) >= 2 and t not in {"la", "gi", "cua", "va", "voi", "cac", "nhung", "mot"}
+                    }
+                    if not p_tokens:
+                        continue
+                    best_p_sent = ""
+                    best_p_score = -1e9
+                    best_p_idx = -1
+                    for idx_s, s_cand in enumerate(sentence_pool):
+                        if _is_heading_sent(s_cand, sentence_sections[idx_s] if idx_s < len(sentence_sections) else ""):
+                            continue
+                        sc = _score_sentence_for_tokens(s_cand, p_tokens, subject_phrase_norm=p_norm)
+                        if sc > best_p_score:
+                            best_p_score = sc
+                            best_p_sent = s_cand
+                            best_p_idx = idx_s
+                    if best_p_sent and best_p_score > 0:
+                        s_lbl = sentence_cit_labels[best_p_idx] if 0 <= best_p_idx < len(sentence_cit_labels) else "[1]"
+                        if all(best_p_sent != existing_s for existing_s, _ in sub_query_sentences):
+                            sub_query_sentences.append((best_p_sent, s_lbl))
+                if sub_query_sentences:
+                    best_sentence = sub_query_sentences[0][0]
+                    cit_1 = sub_query_sentences[0][1]
+
+        # Never leave best_sentence as a bare heading when evidence_passages contain real body sentences
+        # (unless this is a general section query whose own passage already has body sentences to append),
+        # and for concept/reasoning queries prefer the highest-scoring body sentence across all passages.
+        is_heading_now = _is_heading_sent(best_sentence, matched_section)
+        best_p_obj = evidence_passages[best_passage_idx]
+        best_p_txt = getattr(best_p_obj, "text", "") if hasattr(best_p_obj, "text") else str(best_p_obj)
+        best_p_has_body = any(
+            s.strip() and not _is_heading_sent(s, matched_section)
+            for s in split_sentences(best_p_txt)
+        )
+        should_replace_heading = is_heading_now and not best_p_has_body
+        if (
+            (should_replace_heading or ((aspect_concept or aspect_reasoning) and not aspect_example and not is_general_section_query))
+            and len(sub_query_sentences) < 2
+            and sentence_pool
+        ):
+            body_pool = [
+                (idx_s, s_cand)
+                for idx_s, s_cand in enumerate(sentence_pool)
+                if not _is_heading_sent(s_cand, sentence_sections[idx_s] if idx_s < len(sentence_sections) else "")
+            ]
+            if body_pool:
+                top_idx, top_sent = max(
+                    body_pool,
+                    key=lambda item: (_score_body_sentence(item[1]), -item[0]),
+                )
+                if should_replace_heading or _score_body_sentence(top_sent) > _score_body_sentence(best_sentence):
+                    best_sentence = top_sent
+                    if top_idx < len(sentence_cit_labels):
+                        cit_1 = sentence_cit_labels[top_idx]
+                    for idx_p, passage in enumerate(evidence_passages):
+                        p_txt = getattr(passage, "text", "") if hasattr(passage, "text") else str(passage)
+                        if best_sentence[:40] in cls._clean_text(p_txt):
+                            best_passage_idx = idx_p
+                            matched_section = getattr(passage, "section_title", "") or matched_section
+                            break
 
         # Check if best_sentence is a heading or equals section_title
         is_heading = _is_heading_sent(best_sentence, matched_section)
@@ -627,11 +868,13 @@ class DocumentAnalyzer:
                 active_citations = dedup_citations[:2]
             elif is_comparison:
                 # Comparison queries: support cross-passage delta reasoning
+                evidence_items: List[Tuple[str, str]] = [(answer_core, cit_1)]
                 cross_parts = [f"{answer_core} {cit_1}"]
                 for sq_s, sq_lbl in sub_query_sentences:
                     if sq_s.strip() not in answer_core:
                         s_fmt = sq_s.strip() if sq_s.strip().endswith((".", "!", "?")) else f"{sq_s.strip()}."
                         cross_parts.append(f"{s_fmt} {sq_lbl}")
+                        evidence_items.append((s_fmt, sq_lbl))
 
                 delta_bullet = None
                 all_used_pairs = [(best_sentence, cit_1)] + [(s, sentence_cit_labels[i]) for i, s in enumerate(sentence_pool) if s != best_sentence]
@@ -665,18 +908,30 @@ class DocumentAnalyzer:
                         )
                         break
 
-                body = " ".join(cross_parts)
+                if len(evidence_items) >= 2:
+                    reasoning_txt = _build_grounded_reasoning(query, evidence_items, is_comparison=True, has_sub_queries=has_sub_queries)
+                    core_bullets = "\n".join(f"- {s} {lbl}" for s, lbl in evidence_items)
+                    body = f"**1. Trả lời trọng tâm:**\n{core_bullets}\n\n**2. Suy luận & Liên hệ từ tài liệu:**\n{reasoning_txt}"
+                else:
+                    body = " ".join(cross_parts)
                 if delta_bullet:
                     body = f"{body}\n\n{delta_bullet}"
                 active_citations = dedup_citations
             elif has_sub_queries:
-                # Decomposed compound queries: include answers for all sub-queries
-                cross_parts = [f"{answer_core} {cit_1}"]
+                # Decomposed compound queries: include answers for all sub-queries + grounded reasoning
+                evidence_items = []
                 for sq_s, sq_lbl in sub_query_sentences:
-                    if sq_s.strip() not in answer_core:
-                        s_fmt = sq_s.strip() if sq_s.strip().endswith((".", "!", "?")) else f"{sq_s.strip()}."
-                        cross_parts.append(f"{s_fmt} {sq_lbl}")
-                body = " ".join(cross_parts)
+                    s_fmt = sq_s.strip() if sq_s.strip().endswith((".", "!", "?")) else f"{sq_s.strip()}."
+                    if all(s_fmt != ex_s for ex_s, _ in evidence_items):
+                        evidence_items.append((s_fmt, sq_lbl))
+                if not evidence_items:
+                    evidence_items.append((answer_core, cit_1))
+                if len(evidence_items) >= 2:
+                    reasoning_txt = _build_grounded_reasoning(query, evidence_items, is_comparison=False, has_sub_queries=True)
+                    core_bullets = "\n".join(f"- {s} {lbl}" for s, lbl in evidence_items)
+                    body = f"**1. Trả lời trọng tâm:**\n{core_bullets}\n\n**2. Suy luận & Liên hệ từ tài liệu:**\n{reasoning_txt}"
+                else:
+                    body = " ".join(f"{s} {lbl}" for s, lbl in evidence_items)
                 active_citations = dedup_citations
             else:
                 # Pure prose answer: core sentence [n] plus supporting sentences
@@ -718,12 +973,26 @@ class DocumentAnalyzer:
                         relevant_cands = [s_clean for _, s_clean in scored_cands if _score_body_sentence(s_clean) > 0]
                         supporting_sents = relevant_cands[:2] if relevant_cands else [s_clean for _, s_clean in cand_sents[:2]]
 
-                prose_parts = [f"{answer_core} {cit_1}"]
+                is_reasoning_cue = any(
+                    k in q_norm
+                    for k in (
+                        "phan biet", "khac nhau", "giong nhau", "tai sao", "vi sao",
+                        "nguyen nhan", "co che", "nhu the nao", "the nao", "vai tro",
+                        "tac dong", "dan den", "suy ra", "ap dung", "he qua", "lien he",
+                        "ban chat", "nguyen tac", "bao toan",
+                    )
+                )
+                evidence_items = [(answer_core, cit_1)]
                 for s in supporting_sents:
                     s_fmt = s if s.endswith((".", "!", "?")) else f"{s}."
-                    prose_parts.append(f"{s_fmt} {cit_1}")
+                    evidence_items.append((s_fmt, cit_1))
 
-                body = " ".join(prose_parts)
+                if is_reasoning_cue and len(evidence_items) >= 2:
+                    reasoning_txt = _build_grounded_reasoning(query, evidence_items, is_comparison=False, has_sub_queries=False)
+                    core_bullets = "\n".join(f"- {s} {lbl}" for s, lbl in evidence_items)
+                    body = f"**1. Trả lời trọng tâm:**\n{core_bullets}\n\n**2. Suy luận & Liên hệ từ tài liệu:**\n{reasoning_txt}"
+                else:
+                    body = " ".join(f"{s} {lbl}" for s, lbl in evidence_items)
                 active_citations = [c for c in dedup_citations if c["citation_label"] == cit_1]
                 if not active_citations:
                     active_citations = dedup_citations[:1]

@@ -12,7 +12,7 @@ import pytest
 import torch
 import torch.nn as nn
 
-from src.slm.pmi_reranker import PMIReranker
+from src.slm.pmi_reranker import PMIReranker, should_run_pmi
 
 
 class _StubTokenizer:
@@ -119,8 +119,8 @@ def test_pmi_exact_math_and_single_null_call():
     ]
     scores = reranker.score(q, passages, use_budget_guard=False)
 
-    # P(q|empty) called once (batch=1), then top-k passages in 1 batch (batch=2)
-    assert lm.call_batches == [1, 2]
+    # Single-batch forward: [null_seq] + top-k passages in 1 batch (1 + 2 = 3)
+    assert lm.call_batches == [3]
 
     # Hand-computed expected PMI
     logp_null = sum(torch.log_softmax(null_vec, dim=-1)[qid].item() for qid in q_ids)
@@ -153,8 +153,8 @@ def test_window_extraction_prefers_keyword_sentence():
 
 def test_budget_guard_reduces_k_then_disables():
     tok = _StubTokenizer()
-    # Each forward call sleeps 15ms -> 2 calls = ~30ms > budget_ms=10ms and > 2.5*10=25ms
-    lm = _DeterministicStubLM(vocab_size=64, sleep_s=0.015)
+    # Single-batch forward sleeps 26ms -> > budget_ms=10ms and > 2.5*10=25ms
+    lm = _DeterministicStubLM(vocab_size=64, sleep_s=0.026)
     reranker = PMIReranker(
         model=lm, tokenizer=tok, device="cpu", window=8, k=5, budget_ms=10.0
     )
@@ -210,3 +210,39 @@ def test_from_checkpoint_real_assets_and_cuda_latency():
             f"latency={reranker_cms.last_latency_ms:.2f}ms "
             f"scores={[round(s, 4) for s in scores]}"
         )
+
+
+def test_margin_gated_selective_pmi():
+    tok = _StubTokenizer()
+    q = "alpha beta"
+    q_ids = tok.encode(q)
+    trig_good_id = tok.encode("good_ctx")[0]
+    vocab_size = 64
+    null_vec = torch.zeros(vocab_size)
+    good_vec = torch.zeros(vocab_size)
+    for qid in q_ids:
+        good_vec[qid] = 3.0
+
+    lm = _DeterministicStubLM(
+        vocab_size=vocab_size,
+        trigger_logits={trig_good_id: good_vec},
+        null_logits=null_vec,
+    )
+    reranker = PMIReranker(model=lm, tokenizer=tok, device="cpu", window=16, k=2)
+    passages = ["good_ctx explains alpha beta.", "other passage."]
+
+    assert should_run_pmi(lse_margin=0.40, cross_agree=0.0) is False
+    assert should_run_pmi(lse_margin=0.10, cross_agree=0.70) is False
+    assert should_run_pmi(lse_margin=0.10, cross_agree=0.20) is True
+
+    # Gated off by high margin -> (None, False), 0 LM calls
+    scores_off, ran_off = reranker.score_passages_gated(q, passages, lse_margin=0.40, cross_agree=0.1)
+    assert scores_off is None
+    assert ran_off is False
+    assert lm.call_batches == []
+
+    # Gated on -> (scores, True), 1 single-batch LM call
+    scores_on, ran_on = reranker.score_passages_gated(q, passages, lse_margin=0.15, cross_agree=0.2, k=2)
+    assert ran_on is True
+    assert scores_on is not None and len(scores_on) == 2
+    assert lm.call_batches == [3]

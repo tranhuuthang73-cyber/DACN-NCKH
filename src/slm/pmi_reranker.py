@@ -52,6 +52,16 @@ def _resolve_device(device: str) -> str:
     return device
 
 
+def should_run_pmi(
+    lse_margin: float,
+    cross_agree: float = 0.0,
+    margin_threshold: float = 0.35,
+    agree_threshold: float = 0.65,
+) -> bool:
+    """Returns False when sparse_lse routing is already decisive, skipping GPU PMI."""
+    return not (float(lse_margin) >= float(margin_threshold) or float(cross_agree) >= float(agree_threshold))
+
+
 class PMIReranker:
     """
     Offline PMI reranker over a local causal LM (SmolLM2-135M or StructureAlignedHopeLM).
@@ -278,11 +288,8 @@ class PMIReranker:
         bos_id = self._get_bos_id()
         sep_ids = self._encode("\n\n")
 
-        # 1. Compute log P_theta(q | empty) exactly once per query
+        # 1. Single-batch forward: [null_seq] + top-k passage windows in 1 LM call
         null_seq = [bos_id] + q_ids
-        log_p_null = float(self._score_query_given_sequences([null_seq], q_ids)[0].item())
-
-        # 2. Extract best window for top-k passages and score in 1 batch
         k_eff = min(self.k, len(passages))
         batch_seqs: List[List[int]] = []
         for p in passages[:k_eff]:
@@ -293,7 +300,9 @@ class PMIReranker:
             seq = [bos_id] + win_ids + sep_ids + q_ids
             batch_seqs.append(seq)
 
-        log_p_cond = self._score_query_given_sequences(batch_seqs, q_ids).tolist()
+        all_ll = self._score_query_given_sequences([null_seq] + batch_seqs, q_ids).tolist()
+        log_p_null = float(all_ll[0])
+        log_p_cond = all_ll[1:]
 
         q_len = float(len(q_ids))
         scored = [(lp - log_p_null) / q_len for lp in log_p_cond]
@@ -325,6 +334,63 @@ class PMIReranker:
                 self._disabled_by_budget = True
 
         return scores
+
+    @staticmethod
+    def should_run_pmi(
+        lse_margin: float,
+        cross_agree: float = 0.0,
+        margin_threshold: float = 0.35,
+        agree_threshold: float = 0.65,
+    ) -> bool:
+        """Margin-gated check: returns False when routing is decisive."""
+        return should_run_pmi(
+            lse_margin=lse_margin,
+            cross_agree=cross_agree,
+            margin_threshold=margin_threshold,
+            agree_threshold=agree_threshold,
+        )
+
+    def score_passages(
+        self,
+        query: str,
+        passages: Sequence[str],
+        k: Optional[int] = None,
+        use_budget_guard: bool = True,
+    ) -> List[float]:
+        """Alias for `score` accepting any Sequence[str] and optional per-call `k`."""
+        passage_list = list(passages)
+        if k is None:
+            return self.score(query, passage_list, use_budget_guard=use_budget_guard)
+        prev_k = self.k
+        self.k = max(1, int(k))
+        try:
+            return self.score(query, passage_list, use_budget_guard=use_budget_guard)
+        finally:
+            if not use_budget_guard or self.k == max(1, int(k)):
+                self.k = prev_k
+
+    def score_passages_gated(
+        self,
+        query: str,
+        passages: Sequence[str],
+        lse_margin: float,
+        cross_agree: float = 0.0,
+        margin_threshold: float = 0.35,
+        agree_threshold: float = 0.65,
+        k: Optional[int] = None,
+        use_budget_guard: bool = True,
+    ) -> Tuple[Optional[List[float]], bool]:
+        """Runs PMI only when `should_run_pmi(...)` is True; otherwise returns (None, False) in 0ms."""
+        if not should_run_pmi(
+            lse_margin=lse_margin,
+            cross_agree=cross_agree,
+            margin_threshold=margin_threshold,
+            agree_threshold=agree_threshold,
+        ):
+            self._last_latency_ms = 0.0
+            return None, False
+        scores = self.score_passages(query, passages, k=k, use_budget_guard=use_budget_guard)
+        return scores, True
 
     @classmethod
     def from_checkpoint(

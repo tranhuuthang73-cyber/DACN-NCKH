@@ -26,6 +26,7 @@ Usage:
 
 from __future__ import annotations
 
+import copy
 import json
 import math
 import random
@@ -85,7 +86,7 @@ from src.wave_cms.equilibrium_readout import (
     _deterministic_text_embedding,
 )
 from src.wave_cms.fast_weights import RidgeAssociativeMemory
-from src.wave_cms.nonconformity import assign_group, extract_signals
+from src.wave_cms.nonconformity import SIGNAL_NAMES, assign_group, extract_signals
 from src.wave_cms.tree_memory import (
     DocumentTreeNode,
     WaveTreeMemory,
@@ -192,6 +193,8 @@ def evaluate_decision(
     candidate_answer: str,
     q_obj: Dict[str, Any],
     latency_ms: float,
+    score: Optional[float] = None,
+    th_15: Optional[float] = None,
 ) -> Dict[str, Any]:
     answerable = bool(q_obj.get("answerable", True))
     y_cand, f1, kw_acc = compute_true_y(candidate_answer, q_obj)
@@ -201,6 +204,18 @@ def evaluate_decision(
     else:
         correct = bool(refused)
         hallucinated = not refused
+
+    correct_at_15: Optional[int] = None
+    hallucinated_at_15: Optional[int] = None
+    if score is not None and th_15 is not None:
+        ref_15 = bool(score < th_15)
+        if answerable:
+            correct_at_15 = int((not ref_15) and (y_cand == 1))
+            hallucinated_at_15 = 0
+        else:
+            correct_at_15 = int(ref_15)
+            hallucinated_at_15 = int(not ref_15)
+
     return {
         "question_id": q_obj["question_id"],
         "source": q_obj.get("source", "unknown"),
@@ -213,7 +228,55 @@ def evaluate_decision(
         "f1": float(f1 if not refused else 0.0),
         "kw_acc": float(kw_acc if not refused else 0.0),
         "latency_ms": float(latency_ms),
+        "score": float(score) if score is not None else None,
+        "correct_at_15": correct_at_15,
+        "hallucinated_at_15": hallucinated_at_15,
     }
+
+
+def compute_aurc_pct(records: Sequence[Dict[str, Any]]) -> Optional[float]:
+    scored = [r for r in records if r.get("score") is not None]
+    n = len(scored)
+    if n == 0:
+        return None
+    ordered = sorted(scored, key=lambda r: float(r["score"]), reverse=True)
+    y_sorted = np.array(
+        [1.0 if (r["answerable"] and r["y_cand"] == 1) else 0.0 for r in ordered],
+        dtype=np.float64,
+    )
+    ks = np.arange(1, n + 1, dtype=np.float64)
+    coverages = ks / float(n)
+    risks = np.cumsum(1.0 - y_sorted) / ks
+    trapz_fn = getattr(np, "trapezoid", None) or np.trapz
+    aurc = float(
+        trapz_fn(
+            np.concatenate([[risks[0]], risks]),
+            np.concatenate([[0.0], coverages]),
+        )
+    )
+    return round(aurc * 100.0, 2)
+
+
+def find_threshold_at_halluc_rate(
+    cal_scores: Sequence[float],
+    cal_answerable: Sequence[bool],
+    target_halluc_rate: float = 0.15,
+) -> float:
+    unans_scores = [
+        float(s) for s, ans in zip(cal_scores, cal_answerable) if not ans
+    ]
+    if not unans_scores:
+        return 0.0
+    unans_arr = np.asarray(unans_scores, dtype=np.float64)
+    candidates = np.unique(
+        np.concatenate([np.array([0.0]), np.asarray(cal_scores, dtype=np.float64), np.array([1.0 + 1e-9])])
+    )
+    candidates.sort()
+    for lam in candidates:
+        h_rate = float(np.mean(unans_arr >= lam))
+        if h_rate <= target_halluc_rate + 1e-12:
+            return float(lam)
+    return float(1.0 + 1e-9)
 
 
 def summarize_records(records: Sequence[Dict[str, Any]]) -> Dict[str, Any]:
@@ -242,6 +305,33 @@ def summarize_records(records: Sequence[Dict[str, Any]]) -> Dict[str, Any]:
     lats = sorted(r["latency_ms"] for r in records)
     p50 = statistics.median(lats)
     p95 = lats[min(len(lats) - 1, int(math.ceil(0.95 * len(lats))) - 1)]
+
+    scored = [r for r in records if r.get("score") is not None]
+    if scored:
+        y_arr = np.array(
+            [1 if (r["answerable"] and r["y_cand"] == 1) else 0 for r in scored],
+            dtype=np.int32,
+        )
+        s_arr = np.array([float(r["score"]) for r in scored], dtype=np.float64)
+        test_auroc = round(float(compute_auroc(y_arr, s_arr)), 4)
+        aurc_pct = compute_aurc_pct(scored)
+    else:
+        test_auroc = None
+        aurc_pct = None
+
+    at15_recs = [r for r in records if r.get("correct_at_15") is not None]
+    if at15_recs:
+        overall_at_15 = round(100.0 * sum(int(r["correct_at_15"]) for r in at15_recs) / len(at15_recs), 2)
+        ans_at15 = [r for r in at15_recs if r["answerable"]]
+        ans_acc_at_15 = (
+            round(100.0 * sum(int(r["correct_at_15"]) for r in ans_at15) / len(ans_at15), 2)
+            if ans_at15
+            else 0.0
+        )
+    else:
+        overall_at_15 = None
+        ans_acc_at_15 = None
+
     return {
         "n_total": n,
         "n_answerable": len(ans_recs),
@@ -251,6 +341,10 @@ def summarize_records(records: Sequence[Dict[str, Any]]) -> Dict[str, Any]:
         "unanswerable_refusal_pct": round(unans_refusal, 2),
         "hallucination_rate_pct": round(halluc_rate, 2),
         "mean_token_f1_pct": round(mean_f1, 2),
+        "test_auroc": test_auroc,
+        "aurc_pct": aurc_pct,
+        "ans_acc_at_halluc_15_pct": ans_acc_at_15,
+        "overall_acc_at_halluc_15_pct": overall_at_15,
         "mean_latency_ms": round(statistics.mean(lats), 2),
         "p50_latency_ms": round(p50, 2),
         "p95_latency_ms": round(p95, 2),
@@ -546,13 +640,13 @@ def extract_candidate_answer(
     query: str,
     passages: Sequence[Dict[str, Any]],
     doc_map: Dict[str, DocumentRecord],
-) -> Tuple[str, bool]:
+) -> Tuple[str, bool, float, List[float]]:
     """
     Extracts concise grounded candidate answer from ranked passages.
-    Returns (candidate_answer, analyzer_refused).
+    Returns (candidate_answer, analyzer_refused, analyzer_conf, sentence_scores).
     """
     if not passages:
-        return "", True
+        return "", True, 0.0, []
     adapters = []
     sent_pool: List[str] = []
     sec_pool: List[str] = []
@@ -591,7 +685,15 @@ def extract_candidate_answer(
         final_ans = best_sent.strip()
     else:
         final_ans = analyzer_core or clean_ans
-    return final_ans, analyzer_refused
+
+    sentence_scores = sorted(
+        (float(relevance_score(query, s, extra=sec)) for s, sec in zip(sent_pool, sec_pool)),
+        reverse=True,
+    )[:10]
+    best_sent_rel = float(sentence_scores[0]) if sentence_scores else 0.0
+    ans_rel = float(relevance_score(query, final_ans)) if final_ans else 0.0
+    analyzer_conf = float(np.clip(max(best_sent_rel, ans_rel), 0.0, 1.0))
+    return final_ans, analyzer_refused, analyzer_conf, sentence_scores
 
 
 def mcnemar_test(a_correct: np.ndarray, b_correct: np.ndarray) -> Dict[str, Any]:
@@ -879,6 +981,10 @@ def main() -> None:
     router_sparse = TreeSoftmaxRouter(d_model=256, temperature=0.2, routing_mode="sparse_lse", tau_sparse=1.0)
     router_mean = TreeSoftmaxRouter(d_model=256, temperature=0.2, routing_mode="mean_key")
     fast_router = FastCorpusRouter(mem, router_sparse, router_mean)
+    idf_map: Dict[str, float] = {
+        term: max(0.0, float(mem.corpus_df.idf(term, fast_router.n_leaves)))
+        for term in fast_router.inv_index.keys()
+    }
     print(f"[INFO] Ingested {len(docs)} docs ({fast_router.n_leaves} leaves) into WaveTreeMemory in {time.perf_counter() - t_mem:.2f}s")
 
     # 4. Load PMI Rerankers (W4a base SmolLM2, W4b SA-CMS adapter)
@@ -944,12 +1050,10 @@ def main() -> None:
              "text": lf.text, "score": w, "alpha": w, "section_title": lf.title}
             for lf, w, _ in routed_w2
         ]
-        ans_w2, an_ref_w2 = extract_candidate_answer(q_text, pass_w2, doc_map)
+        ans_w2, _, an_conf_w2, sents_w2 = extract_candidate_answer(q_text, pass_w2, doc_map)
         rel_w2 = relevance_score(q_text, ans_w2)
         max_a2 = routed_w2[0][1] if routed_w2 else 0.0
         score_w2 = scalar_crc_helper.compute_composite_confidence(max_a2, rel_w2 * 3.0 - 1.5)
-        if an_ref_w2:
-            score_w2 = 0.0
         lat_w2 = (time.perf_counter() - t0) * 1000.0
 
         # --- W3: T4 Sparse-LSE Router (doc_scoped) ---
@@ -962,12 +1066,10 @@ def main() -> None:
              "text": lf.text, "score": lg, "alpha": w, "bm25": bm25_max_w3, "section_title": lf.title}
             for lf, w, lg in routed_w3
         ]
-        ans_w3, an_ref_w3 = extract_candidate_answer(q_text, pass_w3, doc_map)
+        ans_w3, _, an_conf_w3, sents_w3 = extract_candidate_answer(q_text, pass_w3, doc_map)
         rel_w3 = relevance_score(q_text, ans_w3)
         alpha_r3 = 1.0 - math.exp(-0.22 * max(0.0, bm25_max_w3))
         score_w3 = scalar_crc_helper.compute_composite_confidence(alpha_r3, rel_w3 * 3.0 + margin_w3 * 2.0 - 1.5)
-        if an_ref_w3:
-            score_w3 = 0.0
         lat_w3 = (time.perf_counter() - t0) * 1000.0
 
         # --- W3 Open-Corpus (document_id=None) ---
@@ -978,70 +1080,109 @@ def main() -> None:
              "text": lf.text, "score": lg, "alpha": w, "section_title": lf.title}
             for lf, w, lg in routed_w3o
         ]
-        ans_w3o, an_ref_w3o = extract_candidate_answer(q_text, pass_w3o, doc_map)
+        ans_w3o, _, _, _ = extract_candidate_answer(q_text, pass_w3o, doc_map)
         rel_w3o = relevance_score(q_text, ans_w3o)
         max_a3o = routed_w3o[0][1] if routed_w3o else 0.0
         score_w3o = scalar_crc_helper.compute_composite_confidence(min(1.0, max_a3o * 10.0), rel_w3o * 3.0 - 1.5)
-        if an_ref_w3o:
-            score_w3o = 0.0
         lat_w3o = (time.perf_counter() - t0) * 1000.0
 
-        # --- W4a: W3 + PMIReranker (base SmolLM2, enable_cms=False) ---
-        # Merge top-3 sparse_lse + top-3 BM25 passages for reranking
-        seen_texts: Set[str] = set()
-        cand_pool: List[Dict[str, Any]] = []
+        # --- W4a: W3 + PMIReranker (base SmolLM2, enable_cms=False, Margin-Gated) ---
+        # Interleave [sparse_leaf_0, bm25_top_unique_0, sparse_leaf_1, ...] so k=3 scores both retrievers
+        sparse_cands: List[Dict[str, Any]] = []
+        seen_sparse: Set[str] = set()
         for p in pass_w3[:3]:
-            if p["text"] not in seen_texts:
-                seen_texts.add(p["text"])
-                cand_pool.append(dict(p))
+            if p["text"] not in seen_sparse:
+                seen_sparse.add(p["text"])
+                sparse_cands.append(dict(p))
+        bm25_cands: List[Dict[str, Any]] = []
+        seen_bm25: Set[str] = set(seen_sparse)
         for r in bm25_w3[:3]:
-            if r.text not in seen_texts:
-                seen_texts.add(r.text)
-                cand_pool.append({
+            if r.text not in seen_bm25:
+                seen_bm25.add(r.text)
+                bm25_cands.append({
                     "passage_id": r.passage_id, "document_id": r.document_id,
                     "text": r.text, "score": r.score, "alpha": 0.1,
                     "bm25": r.score, "section_title": r.section_title or "",
                 })
+        cand_pool: List[Dict[str, Any]] = []
+        for i_c in range(max(len(sparse_cands), len(bm25_cands))):
+            if i_c < len(sparse_cands):
+                cand_pool.append(sparse_cands[i_c])
+            if i_c < len(bm25_cands):
+                cand_pool.append(bm25_cands[i_c])
         cand_texts = [p["text"] for p in cand_pool]
 
-        pmi_scores_a = pmi_w4a.score(q_text, cand_texts, use_budget_guard=False) if pmi_w4a.available else [0.0] * len(cand_texts)
-        lat_w4a = lat_w3 + (pmi_w4a.last_latency_ms if pmi_w4a.available else 0.0)
-        order_a = sorted(range(len(cand_pool)), key=lambda i: pmi_scores_a[i], reverse=True)
-        pass_w4a = [cand_pool[i] for i in order_a[:3]]
-        ans_w4a, an_ref_w4a = extract_candidate_answer(q_text, pass_w4a, doc_map)
-        pmi_top_a = float(pmi_scores_a[order_a[0]]) if order_a and pmi_w4a.available else None
+        bm25_best_sent = ans_w1 if not ref_w1 else ""
+        if bm25_best_sent and ans_w3:
+            w3_toks = set(normalize_text(ans_w3, fold_accents=True).split())
+            w1_toks = set(normalize_text(bm25_best_sent, fold_accents=True).split())
+            cross_agree_w3_w1 = (len(w3_toks & w1_toks) / max(1, min(len(w3_toks), len(w1_toks)))) if (w3_toks and w1_toks) else 0.0
+        else:
+            cross_agree_w3_w1 = 0.0
+
+        if pmi_w4a.available and cand_texts:
+            pmi_scores_a, pmi_ran_a = pmi_w4a.score_passages_gated(
+                q_text,
+                cand_texts,
+                lse_margin=margin_w3,
+                cross_agree=cross_agree_w3_w1,
+                use_budget_guard=False,
+            )
+        else:
+            pmi_scores_a, pmi_ran_a = None, False
+
+        if pmi_ran_a and pmi_scores_a is not None:
+            lat_w4a = lat_w3 + pmi_w4a.last_latency_ms
+            order_a = sorted(range(len(cand_pool)), key=lambda i: pmi_scores_a[i], reverse=True)
+            pass_w4a = [cand_pool[i] for i in order_a[:3]]
+            ans_w4a, _, an_conf_w4a, sents_w4a = extract_candidate_answer(q_text, pass_w4a, doc_map)
+            pmi_top_a: Optional[float] = float(pmi_scores_a[order_a[0]])
+        else:
+            lat_w4a = lat_w3
+            pass_w4a = pass_w3[:3]
+            ans_w4a = ans_w3
+            an_conf_w4a = an_conf_w3
+            sents_w4a = sents_w3
+            pmi_top_a = None
+
         score_w4a = scalar_crc_helper.compute_composite_confidence(
             alpha_r3, relevance_score(q_text, ans_w4a) * 3.0 + (pmi_top_a or 0.0) * 0.4 - 1.2
         )
-        if an_ref_w4a:
-            score_w4a = 0.0
 
-        # --- W4b: W3 + PMIReranker (SA-CMS adapter, enable_cms=True) ---
+        # --- W4b: W3 + PMIReranker (SA-CMS adapter, enable_cms=True; kept isolated for honest negative reporting) ---
         pmi_scores_b = pmi_w4b.score(q_text, cand_texts, use_budget_guard=False) if pmi_w4b.available else [0.0] * len(cand_texts)
         lat_w4b = lat_w3 + (pmi_w4b.last_latency_ms if pmi_w4b.available else 0.0)
         order_b = sorted(range(len(cand_pool)), key=lambda i: pmi_scores_b[i], reverse=True)
         pass_w4b = [cand_pool[i] for i in order_b[:3]]
-        ans_w4b, an_ref_w4b = extract_candidate_answer(q_text, pass_w4b, doc_map)
+        ans_w4b, _, _, _ = extract_candidate_answer(q_text, pass_w4b, doc_map)
         pmi_top_b = float(pmi_scores_b[order_b[0]]) if order_b and pmi_w4b.available else None
         score_w4b = scalar_crc_helper.compute_composite_confidence(
             alpha_r3, relevance_score(q_text, ans_w4b) * 3.0 + (pmi_top_b or 0.0) * 0.4 - 1.2
         )
-        if an_ref_w4b:
-            score_w4b = 0.0
 
-        # --- 8-Signal Extraction for W5 / W6 ---
+        # --- R³ Signal Extraction for W5 / W6 / LOO ---
         routing_meta = {
             "margin": margin_w3,
             "entropy": ent_w3,
             "bm25_max": bm25_max_w3,
             "bm25_scores": [float(r.score) for r in bm25_w3],
         }
-        sigs_w5 = extract_signals(
+        routing_meta_w2 = {
+            "margin": margin_w2,
+            "entropy": ent_w2,
+            "bm25_max": bm25_max_w3,
+            "bm25_scores": [float(r.score) for r in bm25_w3],
+        }
+        sigs_w5_pmi = extract_signals(
             query=q_text,
-            candidate_answer=ans_w4b,
-            evidence=pass_w4b,
+            candidate_answer=ans_w4a,
+            evidence=pass_w4a,
             routing=routing_meta,
-            pmi=pmi_top_b,
+            pmi=pmi_top_a,
+            bm25_best_sentence=bm25_best_sent,
+            idf_map=idf_map,
+            analyzer_conf=an_conf_w4a,
+            sentence_scores=sents_w4a,
         )
         sigs_no_pmi = extract_signals(
             query=q_text,
@@ -1049,7 +1190,23 @@ def main() -> None:
             evidence=pass_w3,
             routing=routing_meta,
             pmi=None,
+            bm25_best_sentence=bm25_best_sent,
+            idf_map=idf_map,
+            analyzer_conf=an_conf_w3,
+            sentence_scores=sents_w3,
         )
+        sigs_w2 = extract_signals(
+            query=q_text,
+            candidate_answer=ans_w2,
+            evidence=pass_w2,
+            routing=routing_meta_w2,
+            pmi=None,
+            bm25_best_sentence=bm25_best_sent,
+            idf_map=idf_map,
+            analyzer_conf=an_conf_w2,
+            sentence_scores=sents_w2,
+        )
+        y_w4a, _, _ = compute_true_y(ans_w4a, q)
         y_w4b, _, _ = compute_true_y(ans_w4b, q)
         y_w3, _, _ = compute_true_y(ans_w3, q)
         y_w2, _, _ = compute_true_y(ans_w2, q)
@@ -1059,13 +1216,14 @@ def main() -> None:
             "group": group,
             "w0": {"ans": ans_w0, "refused": False, "lat": lat_w0},
             "w1": {"ans": ans_w1, "refused": ref_w1, "lat": lat_w1},
-            "w2": {"ans": ans_w2, "score": score_w2, "y": y_w2, "lat": lat_w2},
+            "w2": {"ans": ans_w2, "score": score_w2, "y": y_w2, "lat": lat_w2, "pass": pass_w2},
             "w3": {"ans": ans_w3, "score": score_w3, "y": y_w3, "lat": lat_w3, "pass": pass_w3},
             "w3_open": {"ans": ans_w3o, "score": score_w3o, "y": compute_true_y(ans_w3o, q)[0], "lat": lat_w3o},
-            "w4a": {"ans": ans_w4a, "score": score_w4a, "y": compute_true_y(ans_w4a, q)[0], "lat": lat_w4a},
+            "w4a": {"ans": ans_w4a, "score": score_w4a, "y": y_w4a, "lat": lat_w4a, "pass": pass_w4a, "pmi": pmi_top_a},
             "w4b": {"ans": ans_w4b, "score": score_w4b, "y": y_w4b, "lat": lat_w4b, "pass": pass_w4b, "pmi": pmi_top_b},
-            "w5_row": {"signals": sigs_w5, "group": group, "y": y_w4b},
-            "w6_no_pmi_row": {"signals": sigs_no_pmi, "group": group, "y": y_w3, "ans": ans_w3, "lat": lat_w3},
+            "w5_pmi_row": {"signals": sigs_w5_pmi, "group": group, "y": y_w4a, "ans": ans_w4a, "lat": lat_w4a, "pass": pass_w4a},
+            "w5_no_pmi_row": {"signals": sigs_no_pmi, "group": group, "y": y_w3, "ans": ans_w3, "lat": lat_w3, "pass": pass_w3},
+            "w2_row": {"signals": sigs_w2, "group": group, "y": y_w2, "ans": ans_w2, "lat": lat_w2, "pass": pass_w2},
         }
         if (idx + 1) % 200 == 0:
             print(f"  [PRECOMPUTE] {idx + 1}/{len(questions)} queries ({time.perf_counter() - t_pre:.1f}s)")
@@ -1120,7 +1278,7 @@ def main() -> None:
             {"passage_id": lf.node_id, "document_id": did, "text": lf.text, "score": 1.0, "section_title": lf.title}
             for lf in scored_r
         ]
-        ans_r, _ = extract_candidate_answer(q["question"], pass_r, doc_map)
+        ans_r, _, _, _ = extract_candidate_answer(q["question"], pass_r, doc_map)
         y_r, _, _ = compute_true_y(ans_r, q)
         ridge_qasper_ok += y_r
 
@@ -1140,7 +1298,114 @@ def main() -> None:
     }
     print(f"[INFO] RidgeAssociativeMemory Fit-QASPER check: base={base_qf_pct:.2f}%, ridge={ridge_qf_pct:.2f}%, delta={ridge_delta_pct:+.2f}% -> killed={ridge_killed}")
 
-    # 7. Evaluate W0–W6 + Leave-One-Out across all 3 seeds (Test 60% ONLY!)
+    # 6b. R3-T4 PMI Kill-Criterion strictly on Fit+Cal (ZERO Test leakage!)
+    pmi_kc_per_seed: Dict[str, Any] = {}
+    delta_aurocs_fc: List[float] = []
+    delta_ans15_fc: List[float] = []
+    for seed_str, sp in splits_obj["splits"].items():
+        fit_ids_kc = sp["fit_ids"]
+        cal_ids_kc = sp["cal_ids"]
+        fit_pmi_kc = [per_query_cache[qid]["w5_pmi_row"] for qid in fit_ids_kc]
+        cal_pmi_kc = [per_query_cache[qid]["w5_pmi_row"] for qid in cal_ids_kc]
+        fit_nopmi_kc = [per_query_cache[qid]["w5_no_pmi_row"] for qid in fit_ids_kc]
+        cal_nopmi_kc = [per_query_cache[qid]["w5_no_pmi_row"] for qid in cal_ids_kc]
+
+        ctrl_pmi_kc = MondrianConformalRiskController(epsilon=0.10, l2_reg=1.0, seed=int(seed_str))
+        ctrl_pmi_kc.fit_weights(fit_pmi_kc, forward_select_r3=True)
+        ctrl_nopmi_kc = MondrianConformalRiskController(epsilon=0.10, l2_reg=1.0, seed=int(seed_str))
+        ctrl_nopmi_kc.fit_weights(fit_nopmi_kc, forward_select_r3=True)
+
+        cal_scores_pmi = [ctrl_pmi_kc.score_signals(r["signals"]) for r in cal_pmi_kc]
+        cal_scores_nopmi = [ctrl_nopmi_kc.score_signals(r["signals"]) for r in cal_nopmi_kc]
+        cal_y_pmi = np.array([int(r["y"]) for r in cal_pmi_kc], dtype=np.int32)
+        cal_y_nopmi = np.array([int(r["y"]) for r in cal_nopmi_kc], dtype=np.int32)
+        cal_ans_flags = [bool(q_by_id[qid].get("answerable", True)) for qid in cal_ids_kc]
+
+        auroc_pmi_kc = compute_auroc(cal_y_pmi, np.array(cal_scores_pmi, dtype=np.float64))
+        auroc_nopmi_kc = compute_auroc(cal_y_nopmi, np.array(cal_scores_nopmi, dtype=np.float64))
+
+        th15_pmi_kc = find_threshold_at_halluc_rate(cal_scores_pmi, cal_ans_flags, 0.15)
+        th15_nopmi_kc = find_threshold_at_halluc_rate(cal_scores_nopmi, cal_ans_flags, 0.15)
+        ans15_pmi_kc = 100.0 * float(np.mean([
+            1 if (s >= th15_pmi_kc and r["y"] == 1) else 0
+            for s, r, is_a in zip(cal_scores_pmi, cal_pmi_kc, cal_ans_flags) if is_a
+        ]))
+        ans15_nopmi_kc = 100.0 * float(np.mean([
+            1 if (s >= th15_nopmi_kc and r["y"] == 1) else 0
+            for s, r, is_a in zip(cal_scores_nopmi, cal_nopmi_kc, cal_ans_flags) if is_a
+        ]))
+
+        d_auc = auroc_pmi_kc - auroc_nopmi_kc
+        d_a15 = ans15_pmi_kc - ans15_nopmi_kc
+        delta_aurocs_fc.append(d_auc)
+        delta_ans15_fc.append(d_a15)
+        pmi_kc_per_seed[seed_str] = {
+            "w5_pmi_cal_auroc": round(auroc_pmi_kc, 4),
+            "w5_nopmi_cal_auroc": round(auroc_nopmi_kc, 4),
+            "delta_auroc": round(d_auc, 4),
+            "w5_pmi_cal_ans_at_halluc_15_pct": round(ans15_pmi_kc, 2),
+            "w5_nopmi_cal_ans_at_halluc_15_pct": round(ans15_nopmi_kc, 2),
+            "delta_ans_at_halluc_15_pp": round(d_a15, 2),
+        }
+
+    mean_delta_auroc_kc = float(statistics.mean(delta_aurocs_fc))
+    mean_delta_ans15_kc = float(statistics.mean(delta_ans15_fc))
+    pmi_killed = (mean_delta_auroc_kc < 0.02) or (mean_delta_ans15_kc < 1.5)
+    active_w5_key = "w5_no_pmi_row" if pmi_killed else "w5_pmi_row"
+    pmi_r3_kill_report = {
+        "evaluation_split": "Fit+Cal ONLY (leak-free)",
+        "mean_delta_auroc": round(mean_delta_auroc_kc, 4),
+        "mean_delta_ans_at_halluc_15_pp": round(mean_delta_ans15_kc, 2),
+        "kill_criterion_thresholds": {
+            "min_delta_auroc": 0.02,
+            "min_delta_ans_at_halluc_15_pp": 1.5,
+        },
+        "kill_criterion_triggered": bool(pmi_killed),
+        "w5_w6_mode": "fast_zero_pmi" if pmi_killed else "gated_w4a_pmi",
+        "per_seed": pmi_kc_per_seed,
+    }
+    print(
+        f"[INFO] R3-T4 PMI Kill-Criterion (Fit+Cal): d_AUROC={mean_delta_auroc_kc:+.4f}, "
+        f"d_Ans@15%={mean_delta_ans15_kc:+.2f}pp -> killed={pmi_killed} (mode={pmi_r3_kill_report['w5_w6_mode']})"
+    )
+
+    def _run_w6_reasoner(
+        ans_base: str,
+        refused_in: bool,
+        ev_passages: Sequence[Dict[str, Any]],
+        q_obj: Dict[str, Any],
+    ) -> Tuple[str, bool, float]:
+        t_r = time.perf_counter()
+        ans_out = ans_base
+        ref_out = refused_in
+        if not ref_out:
+            ev_docs = [
+                {
+                    "passage_id": p["passage_id"],
+                    "document_id": p["document_id"],
+                    "text": p["text"],
+                    "section_title": p.get("section_title", ""),
+                }
+                for p in ev_passages
+            ]
+            reasoner = UnifiedReasoner(
+                retrieve_fn=lambda _q, top_k=3, _ev=ev_docs: _ev[:top_k],
+                max_deep_rounds=1,
+            )
+            norm_docs = reasoner._normalize_docs(ev_docs)
+            prem = reasoner._premise_validator.validate_premise(q_obj["question"], norm_docs)
+            if prem.has_false_premise:
+                ref_out = True
+            else:
+                s_traces = reasoner._run_symbolic_solver(q_obj["question"], norm_docs)
+                if s_traces:
+                    ans_out = f"{ans_out} {' '.join(s_traces)}".strip()
+                clean_out, _ = reasoner._filter_ungrounded_numbers(ans_out, norm_docs, s_traces)
+                if clean_out:
+                    ans_out = clean_out
+        return ans_out, ref_out, (time.perf_counter() - t_r) * 1000.0
+
+    # 7. Evaluate W0–W6 + True Leave-One-Out across all 3 seeds (Test 60% ONLY!)
     methods = [
         "W0_standard_bm25_rag",
         "W1_legacy_sa_cms",
@@ -1151,11 +1416,12 @@ def main() -> None:
         "W4b_sparse_lse_pmi_sacms",
         "W5_mondrian_8sig",
         "W6_wavecms_r2_full",
-        # Leave-One-Out ablations of W6:
+        # True Leave-One-Out ablations of W6:
         "LOO_W6_minus_sparse_lse",
         "LOO_W6_minus_pmi",
         "LOO_W6_minus_mondrian",
         "LOO_W6_minus_8signals",
+        "LOO_W6_minus_r3_signals",
         "LOO_W6_minus_reasoner",
     ]
 
@@ -1163,51 +1429,100 @@ def main() -> None:
     per_seed_summaries: Dict[str, Dict[str, Any]] = {}
     w5_aurocs: List[float] = []
     mondrian_test_risks: Dict[str, List[Dict[str, Any]]] = defaultdict(list)
+    resplit_500_audit: Dict[str, Any] = {}
+    r3_feature_selection_log: Dict[str, Any] = {}
 
     for seed_str, sp in splits_obj["splits"].items():
         fit_ids = sp["fit_ids"]
         cal_ids = sp["cal_ids"]
         test_ids = sp["test_ids"]
+        cal_ans_flags = [bool(q_by_id[qid].get("answerable", True)) for qid in cal_ids]
 
         # Calibrate 1-threshold ConformalRiskController strictly on Cal (NO clamping!)
-        def _cal_scalar(key: str) -> float:
+        def _cal_scalar(key: str) -> Tuple[float, float]:
             ctrl = ConformalRiskController(epsilon=0.10, default_threshold=0.5)
+            cal_scores = [per_query_cache[qid][key]["score"] for qid in cal_ids]
             cal_data = [
-                {"score": per_query_cache[qid][key]["score"], "is_correct": bool(per_query_cache[qid][key]["y"])}
-                for qid in cal_ids
+                {"score": s, "is_correct": bool(per_query_cache[qid][key]["y"])}
+                for qid, s in zip(cal_ids, cal_scores)
             ]
             ctrl.calibrate(cal_data, epsilon=0.10)
-            return float(ctrl.calibrated_threshold)
+            th15 = find_threshold_at_halluc_rate(cal_scores, cal_ans_flags, 0.15)
+            return float(ctrl.calibrated_threshold), th15
 
-        th_w2 = _cal_scalar("w2")
-        th_w3 = _cal_scalar("w3")
-        th_w3o = _cal_scalar("w3_open")
-        th_w4a = _cal_scalar("w4a")
-        th_w4b = _cal_scalar("w4b")
+        th_w2, th15_w2 = _cal_scalar("w2")
+        th_w3, th15_w3 = _cal_scalar("w3")
+        th_w3o, th15_w3o = _cal_scalar("w3_open")
+        th_w4a, th15_w4a = _cal_scalar("w4a")
+        th_w4b, th15_w4b = _cal_scalar("w4b")
 
-        # Fit & Calibrate W5 Mondrian 8-signal controller (Fit -> weights+eps, Cal -> lambda_g)
+        # Fit & Calibrate W5 Mondrian R3 controller (Fit -> forward_select_r3, Cal -> eps=0.10 + fallback_to_global=True)
         m_ctrl = MondrianConformalRiskController(epsilon=0.10, l2_reg=1.0, seed=int(seed_str))
-        fit_rows = [per_query_cache[qid]["w5_row"] for qid in fit_ids]
-        cal_rows = [per_query_cache[qid]["w5_row"] for qid in cal_ids]
-        m_ctrl.fit_weights(fit_rows)
-        eps_by_group = m_ctrl.select_eps_on_fit(fit_rows, candidate_eps=(0.05, 0.08, 0.10, 0.12, 0.15, 0.20))
-        m_ctrl.calibrate_groups(cal_rows, eps_by_group=eps_by_group)
+        fit_rows = [per_query_cache[qid][active_w5_key] for qid in fit_ids]
+        cal_rows = [per_query_cache[qid][active_w5_key] for qid in cal_ids]
+        fit_info = m_ctrl.fit_weights(fit_rows, forward_select_r3=True)
+        r3_feature_selection_log[seed_str] = {
+            "selected_signals": fit_info.get("selected_signal_names", []),
+            "kept_r3_signals": fit_info.get("kept_r3_signals", []),
+            "killed_r3_signals": fit_info.get("killed_r3_signals", []),
+            "cv_auroc_base": round(float(fit_info.get("cv_auroc_base", 0.5)), 4),
+            "cv_auroc_selected": round(float(fit_info.get("cv_auroc_selected", 0.5)), 4),
+        }
+        m_ctrl.calibrate_groups(cal_rows, eps_by_group=0.10, fallback_to_global=True)
+        # Leak-free Fit+Cal resplit check: allow fallback to global_lambda_ if any group exceeds bound on Fit+Cal
+        m_ctrl.audit_resplit_risk(
+            fit_rows + cal_rows, eps=0.10, n_trials=500, seed=int(seed_str), fallback_to_global=True
+        )
+        cal_scores_w5 = [m_ctrl.score_signals(r["signals"]) for r in cal_rows]
+        th15_w5 = find_threshold_at_halluc_rate(cal_scores_w5, cal_ans_flags, 0.15)
 
-        # LOO_W6_minus_pmi Mondrian controller
+        # True LOO 1: minus sparse_lse -> mean_key (w2_row) with same Mondrian R3 + CRC
+        m_ctrl_w2 = MondrianConformalRiskController(epsilon=0.10, l2_reg=1.0, seed=int(seed_str))
+        fit_w2 = [per_query_cache[qid]["w2_row"] for qid in fit_ids]
+        cal_w2 = [per_query_cache[qid]["w2_row"] for qid in cal_ids]
+        m_ctrl_w2.fit_weights(fit_w2, forward_select_r3=True)
+        m_ctrl_w2.calibrate_groups(cal_w2, eps_by_group=0.10, fallback_to_global=True)
+        th15_loo_w2 = find_threshold_at_halluc_rate(
+            [m_ctrl_w2.score_signals(r["signals"]) for r in cal_w2], cal_ans_flags, 0.15
+        )
+
+        # True LOO 2: minus pmi -> w5_no_pmi_row with same Mondrian R3 + CRC
         m_ctrl_nopmi = MondrianConformalRiskController(epsilon=0.10, l2_reg=1.0, seed=int(seed_str))
-        fit_nopmi = [per_query_cache[qid]["w6_no_pmi_row"] for qid in fit_ids]
-        cal_nopmi = [per_query_cache[qid]["w6_no_pmi_row"] for qid in cal_ids]
-        m_ctrl_nopmi.fit_weights(fit_nopmi)
-        eps_nopmi = m_ctrl_nopmi.select_eps_on_fit(fit_nopmi, candidate_eps=(0.05, 0.08, 0.10, 0.12, 0.15, 0.20))
-        m_ctrl_nopmi.calibrate_groups(cal_nopmi, eps_by_group=eps_nopmi)
+        fit_nopmi = [per_query_cache[qid]["w5_no_pmi_row"] for qid in fit_ids]
+        cal_nopmi = [per_query_cache[qid]["w5_no_pmi_row"] for qid in cal_ids]
+        m_ctrl_nopmi.fit_weights(fit_nopmi, forward_select_r3=True)
+        m_ctrl_nopmi.calibrate_groups(cal_nopmi, eps_by_group=0.10, fallback_to_global=True)
+        th15_loo_nopmi = find_threshold_at_halluc_rate(
+            [m_ctrl_nopmi.score_signals(r["signals"]) for r in cal_nopmi], cal_ans_flags, 0.15
+        )
 
-        # LOO_W6_minus_mondrian (global threshold on s_w)
+        # True LOO 3: minus mondrian -> global threshold on s_w
         global_sw_ctrl = ConformalRiskController(epsilon=0.10, default_threshold=0.5)
         global_sw_ctrl.calibrate(
-            [{"score": m_ctrl.score_signals(per_query_cache[qid]["w5_row"]["signals"]), "is_correct": bool(per_query_cache[qid]["w5_row"]["y"])} for qid in cal_ids],
+            [{"score": s, "is_correct": bool(r["y"])} for s, r in zip(cal_scores_w5, cal_rows)],
             epsilon=0.10,
         )
         th_global_sw = float(global_sw_ctrl.calibrated_threshold)
+
+        # True LOO 4a: minus 8signals -> 1 signal ('margin') with Mondrian CRC
+        m_ctrl_1sig = MondrianConformalRiskController(
+            epsilon=0.10, l2_reg=1.0, seed=int(seed_str), signal_names=("margin",)
+        )
+        m_ctrl_1sig.fit_weights(fit_rows, forward_select_r3=False)
+        m_ctrl_1sig.calibrate_groups(cal_rows, eps_by_group=0.10, fallback_to_global=True)
+        th15_loo_1sig = find_threshold_at_halluc_rate(
+            [m_ctrl_1sig.score_signals(r["signals"]) for r in cal_rows], cal_ans_flags, 0.15
+        )
+
+        # True LOO 4b: minus r3_signals -> old 8 signals (SIGNAL_NAMES) with Mondrian CRC
+        m_ctrl_8sig = MondrianConformalRiskController(
+            epsilon=0.10, l2_reg=1.0, seed=int(seed_str), signal_names=SIGNAL_NAMES
+        )
+        m_ctrl_8sig.fit_weights(fit_rows, forward_select_r3=False)
+        m_ctrl_8sig.calibrate_groups(cal_rows, eps_by_group=0.10, fallback_to_global=True)
+        th15_loo_8sig = find_threshold_at_halluc_rate(
+            [m_ctrl_8sig.score_signals(r["signals"]) for r in cal_rows], cal_ans_flags, 0.15
+        )
 
         # Evaluate ONLY on Test 60%
         seed_recs: Dict[str, List[Dict[str, Any]]] = {m: [] for m in methods}
@@ -1224,73 +1539,84 @@ def main() -> None:
             seed_recs["W1_legacy_sa_cms"].append(evaluate_decision(c["w1"]["refused"], c["w1"]["ans"], q, c["w1"]["lat"]))
 
             # W2, W3, W3_open, W4a, W4b
-            for m_name, key, th in (
-                ("W2_wavecms6_mean_key", "w2", th_w2),
-                ("W3_sparse_lse_doc", "w3", th_w3),
-                ("W3_sparse_lse_open_corpus", "w3_open", th_w3o),
-                ("W4a_sparse_lse_pmi_base", "w4a", th_w4a),
-                ("W4b_sparse_lse_pmi_sacms", "w4b", th_w4b),
+            for m_name, key, th, th15 in (
+                ("W2_wavecms6_mean_key", "w2", th_w2, th15_w2),
+                ("W3_sparse_lse_doc", "w3", th_w3, th15_w3),
+                ("W3_sparse_lse_open_corpus", "w3_open", th_w3o, th15_w3o),
+                ("W4a_sparse_lse_pmi_base", "w4a", th_w4a, th15_w4a),
+                ("W4b_sparse_lse_pmi_sacms", "w4b", th_w4b, th15_w4b),
             ):
-                ref = bool(c[key]["score"] < th)
-                seed_recs[m_name].append(evaluate_decision(ref, c[key]["ans"], q, c[key]["lat"]))
+                sc_val = float(c[key]["score"])
+                ref = bool(sc_val < th)
+                seed_recs[m_name].append(
+                    evaluate_decision(ref, c[key]["ans"], q, c[key]["lat"], score=sc_val, th_15=th15)
+                )
 
-            # W5 (Mondrian 8 signals)
+            # W5 (Mondrian R3)
+            active_row = c[active_w5_key]
             t5 = time.perf_counter()
-            dec5 = m_ctrl.evaluate_signals(c["w5_row"]["signals"], c["group"])
-            lat5 = c["w4b"]["lat"] + (time.perf_counter() - t5) * 1000.0
-            seed_recs["W5_mondrian_8sig"].append(evaluate_decision(dec5.refused, c["w4b"]["ans"], q, lat5))
-            test_scores_w5.append(float(dec5.score or 0.0))
-            test_labels_w5.append(int(c["w5_row"]["y"]))
-            group_test_outcomes[c["group"]].append((not dec5.refused, int(c["w5_row"]["y"])))
+            dec5 = m_ctrl.evaluate_signals(active_row["signals"], c["group"])
+            lat5 = active_row["lat"] + (time.perf_counter() - t5) * 1000.0
+            sc5 = float(dec5.score or 0.0)
+            seed_recs["W5_mondrian_8sig"].append(
+                evaluate_decision(dec5.refused, active_row["ans"], q, lat5, score=sc5, th_15=th15_w5)
+            )
+            test_scores_w5.append(sc5)
+            test_labels_w5.append(int(active_row["y"]))
+            group_test_outcomes[c["group"]].append((not dec5.refused, int(active_row["y"])))
 
             # W6 (W5 + UnifiedReasoner PremiseValidator + SymbolicSolver + NumericProvenance)
-            t6 = time.perf_counter()
-            ans6 = c["w4b"]["ans"]
-            ref6 = dec5.refused
-            if not ref6:
-                ev_docs = [
-                    {"passage_id": p["passage_id"], "document_id": p["document_id"], "text": p["text"], "section_title": p.get("section_title", "")}
-                    for p in c["w4b"]["pass"]
-                ]
-                reasoner = UnifiedReasoner(
-                    retrieve_fn=lambda _q, top_k=3, _ev=ev_docs: _ev[:top_k],
-                    max_deep_rounds=1,
-                )
-                prem = reasoner._premise_validator.validate_premise(q["question"], reasoner._normalize_docs(ev_docs))
-                if prem.has_false_premise:
-                    ref6 = True
-                else:
-                    s_traces = reasoner._run_symbolic_solver(q["question"], reasoner._normalize_docs(ev_docs))
-                    if s_traces:
-                        ans6 = f"{ans6} {' '.join(s_traces)}".strip()
-                    clean6, _ = reasoner._filter_ungrounded_numbers(ans6, reasoner._normalize_docs(ev_docs), s_traces)
-                    if clean6:
-                        ans6 = clean6
-            lat6 = lat5 + (time.perf_counter() - t6) * 1000.0
-            seed_recs["W6_wavecms_r2_full"].append(evaluate_decision(ref6, ans6, q, lat6))
+            ans6, ref6, lat_r6 = _run_w6_reasoner(active_row["ans"], dec5.refused, active_row["pass"], q)
+            lat6 = lat5 + lat_r6
+            sc6 = 0.0 if (ref6 and not dec5.refused) else sc5
+            seed_recs["W6_wavecms_r2_full"].append(
+                evaluate_decision(ref6, ans6, q, lat6, score=sc6, th_15=th15_w5)
+            )
 
-            # Leave-One-Out ablations
-            # 1) minus sparse_lse -> W2 mean_key
+            # True Leave-One-Out ablations (each changes ONLY one component of W6)
+            # 1) minus sparse_lse -> mean_key + Mondrian R3 + UnifiedReasoner
+            dec_lw2 = m_ctrl_w2.evaluate_signals(c["w2_row"]["signals"], c["group"])
+            ans_lw2, ref_lw2, lat_rlw2 = _run_w6_reasoner(c["w2_row"]["ans"], dec_lw2.refused, c["w2_row"]["pass"], q)
+            sc_lw2 = 0.0 if (ref_lw2 and not dec_lw2.refused) else float(dec_lw2.score or 0.0)
             seed_recs["LOO_W6_minus_sparse_lse"].append(
-                evaluate_decision(bool(c["w2"]["score"] < th_w2), c["w2"]["ans"], q, c["w2"]["lat"])
+                evaluate_decision(ref_lw2, ans_lw2, q, c["w2_row"]["lat"] + lat_rlw2, score=sc_lw2, th_15=th15_loo_w2)
             )
-            # 2) minus pmi -> Mondrian without PMI
-            dec_np = m_ctrl_nopmi.evaluate_signals(c["w6_no_pmi_row"]["signals"], c["group"])
+
+            # 2) minus pmi -> sparse_lse (pmi=None) + Mondrian R3 + UnifiedReasoner
+            dec_lnp = m_ctrl_nopmi.evaluate_signals(c["w5_no_pmi_row"]["signals"], c["group"])
+            ans_lnp, ref_lnp, lat_rlnp = _run_w6_reasoner(c["w5_no_pmi_row"]["ans"], dec_lnp.refused, c["w5_no_pmi_row"]["pass"], q)
+            sc_lnp = 0.0 if (ref_lnp and not dec_lnp.refused) else float(dec_lnp.score or 0.0)
             seed_recs["LOO_W6_minus_pmi"].append(
-                evaluate_decision(dec_np.refused, c["w6_no_pmi_row"]["ans"], q, c["w6_no_pmi_row"]["lat"])
+                evaluate_decision(ref_lnp, ans_lnp, q, c["w5_no_pmi_row"]["lat"] + lat_rlnp, score=sc_lnp, th_15=th15_loo_nopmi)
             )
-            # 3) minus mondrian -> 1 global threshold on s_w
-            sw_val = m_ctrl.score_signals(c["w5_row"]["signals"])
+
+            # 3) minus mondrian -> 1 global threshold on s_w + UnifiedReasoner
+            ref_lm_pre = bool(sc5 < th_global_sw)
+            ans_lm, ref_lm, lat_rlm = _run_w6_reasoner(active_row["ans"], ref_lm_pre, active_row["pass"], q)
+            sc_lm = 0.0 if (ref_lm and not ref_lm_pre) else sc5
             seed_recs["LOO_W6_minus_mondrian"].append(
-                evaluate_decision(bool(sw_val < th_global_sw), c["w4b"]["ans"], q, lat5)
+                evaluate_decision(ref_lm, ans_lm, q, lat5 + lat_rlm, score=sc_lm, th_15=th15_w5)
             )
-            # 4) minus 8signals -> W4b (1 heuristic score + 1 threshold)
+
+            # 4a) minus 8signals -> 1 signal ('margin') + Mondrian CRC + UnifiedReasoner
+            dec_l1 = m_ctrl_1sig.evaluate_signals(active_row["signals"], c["group"])
+            ans_l1, ref_l1, lat_rl1 = _run_w6_reasoner(active_row["ans"], dec_l1.refused, active_row["pass"], q)
+            sc_l1 = 0.0 if (ref_l1 and not dec_l1.refused) else float(dec_l1.score or 0.0)
             seed_recs["LOO_W6_minus_8signals"].append(
-                evaluate_decision(bool(c["w4b"]["score"] < th_w4b), c["w4b"]["ans"], q, c["w4b"]["lat"])
+                evaluate_decision(ref_l1, ans_l1, q, active_row["lat"] + lat_rl1, score=sc_l1, th_15=th15_loo_1sig)
             )
+
+            # 4b) minus r3_signals -> old 8 signals + Mondrian CRC + UnifiedReasoner
+            dec_l8 = m_ctrl_8sig.evaluate_signals(active_row["signals"], c["group"])
+            ans_l8, ref_l8, lat_rl8 = _run_w6_reasoner(active_row["ans"], dec_l8.refused, active_row["pass"], q)
+            sc_l8 = 0.0 if (ref_l8 and not dec_l8.refused) else float(dec_l8.score or 0.0)
+            seed_recs["LOO_W6_minus_r3_signals"].append(
+                evaluate_decision(ref_l8, ans_l8, q, active_row["lat"] + lat_rl8, score=sc_l8, th_15=th15_loo_8sig)
+            )
+
             # 5) minus reasoner -> W5
             seed_recs["LOO_W6_minus_reasoner"].append(
-                evaluate_decision(dec5.refused, c["w4b"]["ans"], q, lat5)
+                evaluate_decision(dec5.refused, active_row["ans"], q, lat5, score=sc5, th_15=th15_w5)
             )
 
         auroc_s = compute_auroc(np.array(test_labels_w5), np.array(test_scores_w5))
@@ -1301,18 +1627,54 @@ def main() -> None:
             mondrian_test_risks[g].append({
                 "seed": int(seed_str),
                 "n_test_group": len(pairs),
-                "epsilon_g": float(eps_by_group.get(g, 0.10)),
+                "epsilon_g": 0.10,
                 "lambda_g": float(m_ctrl.group_thresholds_.get(g, m_ctrl.global_threshold_)),
+                "fallback_to_global": bool(m_ctrl.group_cal_stats_.get(g, {}).get("fallback_to_global", False)),
                 "empirical_risk": round(emp_risk, 4),
-                "risk_controlled": bool(emp_risk <= float(eps_by_group.get(g, 0.10)) + 0.02),
+                "risk_controlled": bool(emp_risk <= 0.10 + 0.02),
             })
+
+        # Reporting-only 500-trial resplit audit on Cal+Test (uses a copy so m_ctrl is never mutated)
+        test_rows_for_audit = [per_query_cache[qid][active_w5_key] for qid in test_ids]
+        audit_ctrl = copy.deepcopy(m_ctrl)
+        resplit_500_audit[seed_str] = audit_ctrl.audit_resplit_risk(
+            cal_rows + test_rows_for_audit,
+            eps=0.10,
+            n_trials=500,
+            seed=int(seed_str),
+            fallback_to_global=True,
+        )
 
         per_seed_summaries[seed_str] = {m: summarize_records(recs) for m, recs in seed_recs.items()}
         for m, recs in seed_recs.items():
             pooled_records[m].extend(recs)
 
-    # 8. Aggregate pooled metrics, McNemar, Bootstrap 10k, Holm-Bonferroni
+    # 8. Aggregate pooled metrics, per-seed mean +- std, McNemar, Bootstrap 10k, Holm-Bonferroni
     pooled_summary = {m: summarize_records(recs) for m, recs in pooled_records.items()}
+
+    per_seed_summary: Dict[str, Dict[str, Any]] = {}
+    for m in methods:
+        metric_keys = ("overall_accuracy_pct", "answerable_accuracy_pct", "hallucination_rate_pct", "test_auroc")
+        m_stats: Dict[str, Any] = {}
+        for mk in metric_keys:
+            vals = [
+                float(per_seed_summaries[s_k][m][mk])
+                for s_k in splits_obj["splits"].keys()
+                if per_seed_summaries[s_k][m].get(mk) is not None
+            ]
+            if vals:
+                mean_v = float(statistics.mean(vals))
+                std_v = float(statistics.stdev(vals)) if len(vals) >= 2 else 0.0
+                prec = 4 if mk == "test_auroc" else 2
+                m_stats[mk] = {
+                    "mean": round(mean_v, prec),
+                    "std": round(std_v, prec),
+                    "mean_pm_std": f"{mean_v:.{prec}f} ± {std_v:.{prec}f}",
+                }
+            else:
+                m_stats[mk] = None
+        per_seed_summary[m] = m_stats
+
     w6_corr = np.array([r["correct"] for r in pooled_records["W6_wavecms_r2_full"]], dtype=np.int32)
 
     baselines_for_sig = [
@@ -1362,14 +1724,17 @@ def main() -> None:
             "pmi_device": "cuda" if torch.cuda.is_available() else "cpu",
             "pmi_w4a_mode": pmi_w4a.mode_label,
             "pmi_w4b_mode": pmi_w4b.mode_label,
+            "w5_w6_pmi_mode": pmi_r3_kill_report["w5_w6_mode"],
         },
         "pooled_test_results": pooled_summary,
+        "per_seed_summary": per_seed_summary,
         "w6_bootstrap_10k_95ci_pct": [w6_ci_lo, w6_ci_hi],
         "per_seed_test_results": per_seed_summaries,
         "statistical_significance_vs_w6": sig_tests,
         "mondrian_crc_audit": {
             "w5_test_auroc_per_seed": [round(x, 4) for x in w5_aurocs],
             "w5_test_auroc_mean": round(float(statistics.mean(w5_aurocs)), 4),
+            "r3_forward_feature_selection": r3_feature_selection_log,
             "per_group_empirical_risk_vs_epsilon": {
                 g: {
                     "mean_empirical_risk": round(float(statistics.mean(x["empirical_risk"] for x in vals)), 4),
@@ -1378,7 +1743,9 @@ def main() -> None:
                 }
                 for g, vals in mondrian_test_risks.items()
             },
+            "resplit_500_audit": resplit_500_audit,
         },
+        "pmi_r3_kill_criterion": pmi_r3_kill_report,
         "ridge_associative_memory_kill_criterion": ridge_kill_report,
         "reasoning_suite_60_problems": reasoning_results,
     }
@@ -1390,12 +1757,14 @@ def main() -> None:
     print("\n=== POOLED TEST 60% SUMMARY (W0-W6 + LOO) ===")
     for m in methods:
         s = pooled_summary[m]
+        auc_str = f"{s['test_auroc']:.4f}" if s.get("test_auroc") is not None else "  N/A "
+        aurc_str = f"{s['aurc_pct']:5.2f}%" if s.get("aurc_pct") is not None else "  N/A "
+        a15_str = f"{s['ans_acc_at_halluc_15_pct']:5.2f}%" if s.get("ans_acc_at_halluc_15_pct") is not None else "  N/A "
         print(
             f"{m:28s} | Overall={s['overall_accuracy_pct']:5.2f}% | "
             f"Ans={s['answerable_accuracy_pct']:5.2f}% | "
-            f"Refusal={s['unanswerable_refusal_pct']:5.2f}% | "
             f"Halluc={s['hallucination_rate_pct']:5.2f}% | "
-            f"F1={s['mean_token_f1_pct']:5.2f}% | "
+            f"AUROC={auc_str} | AURC={aurc_str} | Ans@15%={a15_str} | "
             f"Lat={s['mean_latency_ms']:6.2f}ms"
         )
 

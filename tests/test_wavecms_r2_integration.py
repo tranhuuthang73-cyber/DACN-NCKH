@@ -20,7 +20,10 @@ import pytest
 import torch
 from fastapi.testclient import TestClient
 
+from src.reasoning.reasoning_loop import UnifiedReasoner
 from src.reasoning.symbolic_solver import verify_numeric_provenance
+from src.wave_cms.causal_attribution import MondrianConformalRiskController
+from src.wave_cms.nonconformity import R3_SIGNAL_NAMES, extract_signals
 from src.wave_cms.tree_memory import WaveTreeMemory, extract_sparse_terms
 from src.wave_cms.wave_engine import WaveCMSEngine
 from src.web.app import app
@@ -272,8 +275,166 @@ def test_e2e_api_5_domains_4_modes_unlearn_and_dashboard():
         pooled = ablation_w7.get("pooled_test_results", {})
         assert "W0_standard_bm25_rag" in pooled
         assert "W6_wavecms_r2_full" in pooled
+        assert "LOO_W6_minus_r3_signals" in pooled
+        w6_pooled = pooled["W6_wavecms_r2_full"]
+        assert "aurc_pct" in w6_pooled
+        assert "ans_acc_at_halluc_15_pct" in w6_pooled
+
+        per_seed = ablation_w7.get("per_seed_summary", {})
+        assert isinstance(per_seed, dict)
+        assert "W6_wavecms_r2_full" in per_seed
+        assert "LOO_W6_minus_r3_signals" in per_seed
+
+        assert isinstance(ablation_w7.get("pmi_r3_kill_criterion"), dict)
+        rs60 = ablation_w7.get("reasoning_suite_60_problems", {})
+        assert rs60.get("broad", {}).get("accuracy_pct") == 100.0
     finally:
         for sid in created_session_ids:
             client.delete(f"/api/chat/sessions/{sid}")
         for did in created_doc_ids:
             client.delete(f"/api/documents/{did}")
+
+
+def test_r3_nonconformity_12_signals_and_mondrian_crc():
+    """
+    Verifies WaveCMS-R3 nonconformity extraction (12 signals in R3_SIGNAL_NAMES)
+    and MondrianConformalRiskController with forward_select_r3=True,
+    calibrate_groups(..., fallback_to_global=True), and audit_resplit_risk(..., n_trials=100).
+    """
+    assert len(R3_SIGNAL_NAMES) == 12
+    evidence = [
+        {
+            "passage_id": "p1",
+            "text": "Phuong trinh bac hai 2x^2 - 7x + 3 = 0 co Delta = 25 va nghiem x1 = 3, x2 = 0.5.",
+            "score": 0.92,
+            "bm25_score": 4.2,
+        },
+        {
+            "passage_id": "p2",
+            "text": "Cong thuc nghiem tong quat cua phuong trinh bac hai la ax^2 + bx + c = 0.",
+            "score": 0.61,
+            "bm25_score": 2.1,
+        },
+    ]
+    sigs = extract_signals(
+        query="Tinh Delta va nghiem cua 2x^2 - 7x + 3 = 0",
+        candidate_answer="Delta = 25, x1 = 3, x2 = 0.5",
+        evidence=evidence,
+        routing={"weights": [0.92, 0.61], "bm25_scores": [4.2, 2.1]},
+        pmi=1.25,
+        bm25_best_sentence="Phuong trinh bac hai 2x^2 - 7x + 3 = 0 co Delta = 25 va nghiem x1 = 3, x2 = 0.5.",
+        idf_map={"delta": 2.5, "nghiem": 1.8, "phuong": 1.2, "trinh": 1.2},
+        analyzer_conf=0.88,
+        sentence_scores=[0.95, 0.42, 0.15],
+    )
+    for name in R3_SIGNAL_NAMES:
+        assert name in sigs
+        assert isinstance(sigs[name], (int, float))
+        assert math.isfinite(float(sigs[name]))
+
+    def _make_row(idx: int, group: str, y: int) -> dict:
+        base = 0.85 if y == 1 else 0.25
+        jitter = ((idx % 5) - 2) * 0.03
+        row_sigs = {name: max(0.0, min(1.0, base + jitter)) for name in R3_SIGNAL_NAMES}
+        row_sigs["negation_mismatch"] = 0.05 if y == 1 else 0.75
+        row_sigs["pmi_missing"] = 0.0
+        return {"signals": row_sigs, "y": y, "group": group}
+
+    fit_rows = []
+    for i in range(40):
+        g = "VI-encyclopedia" if i % 2 == 0 else "EN-encyclopedia"
+        fit_rows.append(_make_row(i, g, 1 if i % 3 != 0 else 0))
+
+    cal_rows = (
+        [_make_row(i, "VI-encyclopedia", 1 if i % 4 != 0 else 0) for i in range(16)]
+        + [_make_row(i, "EN-encyclopedia", 1 if i % 4 != 0 else 0) for i in range(16)]
+        + [_make_row(i, "EN-reading", 1 if i % 2 == 0 else 0) for i in range(3)]
+    )
+    pooled_rows = cal_rows + [
+        _make_row(i + 100, "VI-encyclopedia" if i % 2 == 0 else "EN-encyclopedia", 1 if i % 3 != 0 else 0)
+        for i in range(25)
+    ]
+
+    ctrl = MondrianConformalRiskController(epsilon=0.10, use_global_fallback=True)
+    fit_res = ctrl.fit_weights(fit_rows, forward_select_r3=True)
+    assert fit_res["status"] == "SUCCESS"
+    assert "selected_signal_names" in fit_res
+    assert "kept_r3_signals" in fit_res
+    assert "killed_r3_signals" in fit_res
+    assert len(fit_res["selected_signal_names"]) >= 8
+
+    cal_stats = ctrl.calibrate_groups(cal_rows, eps_by_group=0.10, fallback_to_global=True)
+    assert ctrl.is_calibrated is True
+    assert {"VI-encyclopedia", "EN-encyclopedia", "EN-reading"}.issubset(cal_stats.keys())
+    assert cal_stats["EN-reading"]["fallback_to_global"] is True
+    for stats in cal_stats.values():
+        assert isinstance(stats["lambda_g"], float)
+
+    audit = ctrl.audit_resplit_risk(
+        pooled_rows, eps=0.10, cal_fraction=0.25, n_trials=100, seed=42, fallback_to_global=True
+    )
+    assert {"VI-encyclopedia", "EN-encyclopedia", "EN-reading"}.issubset(audit.keys())
+    for group_report in audit.values():
+        assert {"mean_risk", "std_risk", "se_risk", "ci95_upper", "exceeds_bound"}.issubset(
+            group_report.keys()
+        )
+
+
+def test_r3_unified_reasoner_broad_symbolic_and_facets():
+    """
+    Verifies UnifiedReasoner in 'broad' mode solves symbolic problems (Math, Chemistry,
+    Cryptography) while still returning multi-perspective facets.
+    """
+    multi_facet_docs = [
+        {
+            "passage_id": "f_def",
+            "document_id": "doc_sym",
+            "section_title": "Definition",
+            "citation_label": "[1]",
+            "resolution": "LEAF_PARAGRAPH",
+            "facet": "definition",
+            "text": "Phuong trinh bac hai va phan ung oxi hoa khu la cac bai toan ky hieu co ban.",
+        },
+        {
+            "passage_id": "f_mech",
+            "document_id": "doc_sym",
+            "section_title": "Mechanism",
+            "citation_label": "[2]",
+            "resolution": "SECTION",
+            "facet": "mechanism",
+            "text": "Co che giai gom tinh biet thuc Delta, can bang nguyen to va dich chuyen ky tu Caesar.",
+        },
+        {
+            "passage_id": "f_app",
+            "document_id": "doc_sym",
+            "section_title": "Application",
+            "citation_label": "[3]",
+            "resolution": "DOCUMENT",
+            "facet": "application",
+            "text": "Ung dung trong toan hoc, hoa hoc vo co va mat ma co dien.",
+        },
+    ]
+
+    reasoner = UnifiedReasoner(
+        retrieve_fn=lambda q, top_k=5, resolution=None: multi_facet_docs[:top_k],
+        broad_budget=5,
+    )
+
+    symbolic_cases = [
+        ("Giai phuong trinh 2x^2 - 7x + 3 = 0", ["x1=3", "x2=1/2"]),
+        ("Can bang phuong trinh hoa hoc Al + O2 -> Al2O3", ["4Al", "3O2", "2Al2O3"]),
+        ("Giai ma caesar('KHOOR', 3, decrypt=True)", ["HELLO"]),
+    ]
+
+    for query, expected_tokens in symbolic_cases:
+        trace = reasoner.run(query=query, mode="broad")
+        assert trace.mode == "broad"
+        assert len(trace.solver_traces) >= 1
+        for tok in expected_tokens:
+            assert tok in trace.answer, f"Expected '{tok}' in broad answer: {trace.answer}"
+        assert len(trace.facets) == 5
+        assert any(f.status == "ok" for f in trace.facets)
+        for f in trace.facets:
+            assert f.facet in VALID_FACETS
+            assert f.resolution in VALID_RESOLUTIONS
+            assert f.status in {"ok", "dropped"}

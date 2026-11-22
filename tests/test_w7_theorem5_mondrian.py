@@ -215,3 +215,66 @@ class TestMondrianConformalRiskController:
         assert ctrl.weights_ is not None
         s = ctrl.score_signals(fit_rows[0]["signals"])
         assert 0.0 <= s <= 1.0
+
+    def test_r3_fallback_to_global_for_small_group(self):
+        """With fallback_to_global=True, infeasible groups (n_g < 15) use global_lambda_."""
+        ctrl = MondrianConformalRiskController()
+        cal_rows = []
+        for i in range(40):
+            cal_rows.append({"group": "EN-reading", "score": 0.1 + 0.02 * i, "y": 1 if i >= 5 else 0})
+        for i in range(4):
+            cal_rows.append({"group": "EN-longpaper", "score": 0.9, "y": 1})
+
+        stats = ctrl.calibrate_groups(cal_rows, eps_by_group=0.10, fallback_to_global=True)
+        assert stats["EN-longpaper"]["infeasible_group_size"] is True
+        assert stats["EN-longpaper"]["fallback_to_global"] is True
+        assert stats["EN-longpaper"]["lambda_g"] == pytest.approx(ctrl.global_lambda_)
+
+    def test_r3_forward_selection_with_kill_criterion(self):
+        """forward_select_r3=True keeps helpful R3 signals and kills noisy ones."""
+        rng = np.random.RandomState(123)
+        fit_rows: List[Dict[str, Any]] = []
+        for i in range(120):
+            y = int(i % 2 == 0)
+            # Base 8 signals are noisy (weak/random) so base CV AUROC ~ 0.5
+            signals = {name: float(rng.normal(0.0, 1.0)) for name in SIGNAL_NAMES}
+            signals["pmi_missing"] = 0.0
+            signals["cross_retriever_agree"] = float(rng.normal(0.0, 1.0))
+            signals["sent_margin"] = float(1.0 if y == 1 else 0.0) + float(rng.normal(0.0, 0.1))
+            signals["idf_query_cov"] = float(rng.normal(0.0, 1.0))
+            signals["analyzer_conf"] = float(rng.normal(0.0, 1.0))
+            fit_rows.append({"id": i, "group": "EN-reading", "y": y, "signals": signals})
+
+        ctrl = MondrianConformalRiskController(seed=123)
+        res = ctrl.fit_weights(fit_rows, forward_select_r3=True, min_auroc_gain=0.005)
+        assert res["status"] == "SUCCESS"
+        assert "cv_auroc_base" in res and "cv_auroc_selected" in res
+        assert "sent_margin" in res["kept_r3_signals"]
+        assert len(res["killed_r3_signals"]) >= 1
+        assert res["cv_auroc_selected"] >= res["cv_auroc_base"] + 0.005
+        assert ctrl.weights_.shape == (len(ctrl.selected_signal_names_),)
+        assert ctrl.active_signal_names_ == ctrl.selected_signal_names_
+
+    def test_r3_audit_resplit_risk_500_trials(self):
+        """500-trial Monte-Carlo resplit audit runs fast and reports per-group bounds."""
+        import time
+
+        rng = np.random.RandomState(7)
+        pooled = []
+        for g in ("EN-reading", "VI-encyclopedia"):
+            for _ in range(80):
+                s = float(rng.uniform(0.0, 1.0))
+                y = int(rng.rand() < (0.15 + 0.8 * s))
+                pooled.append({"group": g, "score": s, "y": y})
+
+        ctrl = MondrianConformalRiskController()
+        t0 = time.perf_counter()
+        report = ctrl.audit_resplit_risk(
+            pooled, eps=0.10, cal_fraction=0.25, n_trials=500, seed=42, fallback_to_global=True
+        )
+        elapsed = time.perf_counter() - t0
+        assert elapsed < 2.0
+        for g in ("EN-reading", "VI-encyclopedia"):
+            assert g in report
+            assert set(report[g].keys()) >= {"mean_risk", "std_risk", "se_risk", "ci95_upper", "exceeds_bound"}
+            assert report[g]["ci95_upper"] == pytest.approx(report[g]["mean_risk"] + 1.96 * report[g]["se_risk"])

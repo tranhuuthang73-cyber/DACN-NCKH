@@ -409,18 +409,36 @@ class UnifiedReasoner:
         text: str,
         evidence: List[Dict[str, Any]],
         solver_traces: List[str],
+        query: str = "",
     ) -> Tuple[str, List[str]]:
         """
         Enforce Numeric Provenance Invariant (§3.5):
         Remove any sentence containing numbers not in Num(evidence) U Num(solver_traces).
+        For natural QA (no solver_traces), also allow numbers grounded in `query` or
+        equivalent unsigned/thousand-separator forms in evidence/query.
         """
         if not text.strip():
             return "", []
         ev_texts = [d["text"] for d in evidence]
+        if query and not solver_traces:
+            ev_texts.append(query)
+
+        fallback_nums: Optional[Set[str]] = None
         kept: List[str] = []
         removed: List[str] = []
         for sent in _split_sentences(text):
-            ok, _ = verify_numeric_provenance(sent, ev_texts, solver_trace=solver_traces)
+            ok, ungrounded = verify_numeric_provenance(sent, ev_texts, solver_trace=solver_traces)
+            if not ok and not solver_traces:
+                if fallback_nums is None:
+                    joined = " ".join(ev_texts)
+                    stripped = re.sub(r"(?<=\d)[.,](?=\d{3}(?!\d))", "", joined)
+                    fallback_nums = {
+                        tok.replace(",", ".")
+                        for src in (joined, stripped)
+                        for tok in re.findall(r"(?<![A-Za-z0-9_])\d+(?:[.,]\d+)*(?![A-Za-z0-9_])", src)
+                    }
+                if all(u in fallback_nums for u in ungrounded):
+                    ok = True
             if ok:
                 kept.append(sent)
             else:
@@ -478,7 +496,9 @@ class UnifiedReasoner:
         if solver_traces:
             raw_answer = f"{raw_answer} {' '.join(solver_traces)}".strip()
 
-        clean_answer, removed = self._filter_ungrounded_numbers(raw_answer, evidence, solver_traces)
+        clean_answer, removed = self._filter_ungrounded_numbers(
+            raw_answer, evidence, solver_traces, query=query
+        )
         if not clean_answer and solver_traces:
             clean_answer = " ".join(solver_traces)
 
@@ -613,7 +633,7 @@ class UnifiedReasoner:
         # Final critique & Numeric Provenance Invariant enforcement
         final_report = self._critic.verify_answer(draft_answer, evidence)
         clean_answer, num_removed = self._filter_ungrounded_numbers(
-            draft_answer, evidence, solver_traces
+            draft_answer, evidence, solver_traces, query=query
         )
         removed_claims.extend(num_removed)
 
@@ -762,17 +782,30 @@ class UnifiedReasoner:
         if bridge_texts and ok_texts:
             ok_texts.append(f"Liên kết khái niệm: {bridge_texts[0]}")
 
-        raw_answer = " ".join(ok_texts).strip()
-        clean_answer, removed = self._filter_ungrounded_numbers(raw_answer, evidence, [])
+        solver_traces = self._run_symbolic_solver(query, evidence)
+        parts: List[str] = []
+        if solver_traces:
+            parts.extend(solver_traces)
+        parts.extend(ok_texts)
+        raw_answer = " ".join(parts).strip()
+        clean_answer, removed = self._filter_ungrounded_numbers(
+            raw_answer, evidence, solver_traces, query=query
+        )
+        if not clean_answer and solver_traces:
+            clean_answer = " ".join(solver_traces)
 
-        steps = [
+        steps: List[ReasoningStep] = [
+            ReasoningStep(kind="formula", text=tr, citations=[], verified=True)
+            for tr in solver_traces
+        ]
+        steps.append(
             ReasoningStep(
                 kind="conclusion",
                 text=clean_answer or DROPPED_FACET_NOTE,
                 citations=list(dict.fromkeys(c for f in facets_out if f.status == "ok" for c in f.citations)),
                 verified=bool(clean_answer) and len(removed) == 0,
             )
-        ]
+        )
         return ReasoningTrace(
             mode="broad",
             hops=min(2, max(1, len(bridge_texts))),
@@ -783,7 +816,7 @@ class UnifiedReasoner:
             facets=facets_out,
             removed_claims=removed,
             answer=clean_answer or DROPPED_FACET_NOTE,
-            solver_traces=[],
+            solver_traces=solver_traces,
         )
 
     # ------------------------------------------------------------------

@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import math
 import re
-from typing import Any, Dict, List, Optional, Sequence, Set, Tuple
+from typing import Any, Dict, List, Mapping, Optional, Sequence, Set, Tuple
 
 import numpy as np
 
@@ -21,6 +21,13 @@ SIGNAL_NAMES: Tuple[str, ...] = (
     "answer_type_ok",
     "pmi",
     "bm25_max",
+)
+
+R3_SIGNAL_NAMES: Tuple[str, ...] = SIGNAL_NAMES + (
+    "cross_retriever_agree",
+    "sent_margin",
+    "idf_query_cov",
+    "analyzer_conf",
 )
 
 MONDRIAN_GROUPS: Tuple[str, ...] = (
@@ -36,6 +43,7 @@ _VI_DIACRITICS_RE = re.compile(
 )
 
 _WORD_RE = re.compile(r"[0-9A-Za-zÀ-ỹ]+(?:[.'/-][0-9A-Za-zÀ-ỹ]+)*")
+_SENTENCE_SPLIT_RE = re.compile(r"(?<=[.!?。！？])\s+|\n+")
 _NUMBER_RE = re.compile(r"(?<![A-Za-z0-9_])\d+(?:[.,]\d+)?%?(?![A-Za-z0-9_])")
 _YEAR_RE = re.compile(r"\b(1\d{3}|2\d{3})\b")
 
@@ -204,6 +212,82 @@ def _tokenize_lower(text: str) -> List[str]:
 
 def _content_tokens(text: str) -> Set[str]:
     return {t for t in _tokenize_lower(text) if t not in _STOPWORDS and len(t) > 1}
+
+
+def _token_idf(tok: str, idf_map: Optional[Mapping[str, float]] = None) -> float:
+    if idf_map is not None and tok in idf_map:
+        val = idf_map[tok]
+        if isinstance(val, (int, float)) and math.isfinite(float(val)):
+            return max(0.0, float(val))
+    return math.log(1.0 + len(tok))
+
+
+def _idf_weighted_cov(
+    query_tokens: Set[str],
+    target_tokens: Set[str],
+    idf_map: Optional[Mapping[str, float]] = None,
+) -> float:
+    if not query_tokens:
+        return 0.0
+    total = 0.0
+    matched = 0.0
+    for tok in query_tokens:
+        w = _token_idf(tok, idf_map)
+        total += w
+        if tok in target_tokens or (len(tok) >= 5 and any(t.startswith(tok[:5]) for t in target_tokens)):
+            matched += w
+    if total <= 0.0:
+        return 0.0
+    return float(np.clip(matched / total, 0.0, 1.0))
+
+
+def _split_sentences(evidence_texts: Sequence[str]) -> List[str]:
+    sents: List[str] = []
+    for text in evidence_texts:
+        for part in _SENTENCE_SPLIT_RE.split(text or ""):
+            s = part.strip()
+            if s:
+                sents.append(s)
+    return sents
+
+
+def _extract_best_evidence_sentence(
+    query: str,
+    candidate_answer: str,
+    evidence_texts: Sequence[str],
+    idf_map: Optional[Mapping[str, float]] = None,
+) -> Tuple[str, float, float]:
+    """Select the evidence sentence most aligned with query and candidate_answer."""
+    sentences = _split_sentences(evidence_texts)
+    if not sentences:
+        return "", 0.0, 0.0
+
+    q_tokens = _content_tokens(query)
+    ans_tokens = {t for t in _tokenize_lower(candidate_answer) if t not in _STOPWORDS}
+
+    best_sent = sentences[0]
+    best_score = -1.0
+    scores: List[float] = []
+
+    for sent in sentences:
+        sent_tokens = {t for t in _tokenize_lower(sent) if t not in _STOPWORDS}
+        q_cov = _idf_weighted_cov(q_tokens, sent_tokens, idf_map)
+        ans_cov = _idf_weighted_cov(ans_tokens, sent_tokens, idf_map)
+        if q_tokens and ans_tokens:
+            score = 0.65 * q_cov + 0.35 * ans_cov
+        elif q_tokens:
+            score = q_cov
+        else:
+            score = ans_cov
+        scores.append(score)
+        if score > best_score:
+            best_score = score
+            best_sent = sent
+
+    sorted_scores = sorted(scores, reverse=True)
+    top1 = float(np.clip(sorted_scores[0], 0.0, 1.0))
+    top2 = float(np.clip(sorted_scores[1], 0.0, 1.0)) if len(sorted_scores) > 1 else 0.0
+    return best_sent, top1, top2
 
 
 def _extract_evidence_texts(evidence: Sequence[Dict[str, Any]]) -> List[str]:
@@ -387,10 +471,12 @@ def _compute_salient_cov(
     query: str,
     candidate_answer: str,
     evidence: Sequence[Dict[str, Any]],
+    best_sent: Optional[str] = None,
 ) -> float:
     texts = _extract_evidence_texts(evidence)
     top1_text = texts[_top1_index(evidence)] if texts else ""
-    support_text = f"{candidate_answer} {top1_text}"
+    focus_text = best_sent if (best_sent and best_sent.strip()) else top1_text
+    support_text = f"{candidate_answer} {focus_text}"
     support_lower = support_text.lower()
     support_tokens = set(_tokenize_lower(support_text))
     support_numbers = {m.group(0).replace(",", "") for m in _NUMBER_RE.finditer(support_text)}
@@ -472,19 +558,11 @@ def _has_negation(text: str) -> bool:
     return any(tok.endswith("n't") for tok in tokens)
 
 
-def _compute_negation_mismatch(query: str, evidence: Sequence[Dict[str, Any]]) -> float:
-    texts = _extract_evidence_texts(evidence)
-    if not texts:
-        return 0.0
-
-    top1_text = texts[_top1_index(evidence)]
-    combined_ev = " ".join(texts)
-
-    # Check antonym pairs between query and top-1 / combined evidence
+def _score_negation_against_text(query: str, text: str) -> float:
     q_tokens = set(_tokenize_lower(query))
     q_lower = (query or "").lower()
-    ev_tokens = set(_tokenize_lower(combined_ev))
-    ev_lower = combined_ev.lower()
+    ev_tokens = set(_tokenize_lower(text))
+    ev_lower = (text or "").lower()
 
     antonym_hit = False
     for side_a, side_b in _ANTONYM_PAIRS:
@@ -497,10 +575,7 @@ def _compute_negation_mismatch(query: str, evidence: Sequence[Dict[str, Any]]) -
             antonym_hit = True
             break
 
-    # Check negation polarity mismatch against top-1 evidence (or combined if single)
-    q_neg = _has_negation(query)
-    ev_neg = _has_negation(top1_text)
-    polarity_mismatch = (q_neg != ev_neg)
+    polarity_mismatch = _has_negation(query) != _has_negation(text)
 
     if antonym_hit and polarity_mismatch:
         return 1.0
@@ -509,6 +584,27 @@ def _compute_negation_mismatch(query: str, evidence: Sequence[Dict[str, Any]]) -
     if polarity_mismatch:
         return 0.8
     return 0.0
+
+
+def _compute_negation_mismatch(
+    query: str,
+    evidence: Sequence[Dict[str, Any]],
+    best_sent: Optional[str] = None,
+) -> float:
+    texts = _extract_evidence_texts(evidence)
+    if not texts and not best_sent:
+        return 0.0
+
+    target = best_sent if (best_sent and best_sent.strip()) else texts[_top1_index(evidence)]
+    score = _score_negation_against_text(query, target)
+
+    q_tokens = _content_tokens(query)
+    if q_tokens and texts:
+        min_overlap = min(2, len(q_tokens))
+        for sent in _split_sentences(texts):
+            if len(_content_tokens(sent) & q_tokens) >= min_overlap:
+                score = max(score, _score_negation_against_text(query, sent))
+    return score
 
 
 def _compute_answer_type_ok(query: str, candidate_answer: str) -> float:
@@ -605,22 +701,84 @@ def _compute_bm25_max(
     return float(1.0 / (1.0 + math.exp(-x)))
 
 
+def _pair_agree(text_a: str, text_b: str) -> float:
+    a = {t for t in _tokenize_lower(text_a) if t not in _STOPWORDS}
+    b = {t for t in _tokenize_lower(text_b) if t not in _STOPWORDS}
+    if not a or not b:
+        return 0.0
+    inter = len(a & b)
+    jaccard = inter / len(a | b)
+    overlap = inter / min(len(a), len(b))
+    return float(np.clip(0.5 * jaccard + 0.5 * overlap, 0.0, 1.0))
+
+
+def _compute_sent_margin(
+    sentence_scores: Optional[Sequence[float]],
+    top1_sent_score: float,
+    top2_sent_score: float,
+) -> float:
+    if sentence_scores is not None:
+        valid = sorted(
+            (float(s) for s in sentence_scores if isinstance(s, (int, float)) and math.isfinite(float(s))),
+            reverse=True,
+        )
+        if not valid:
+            return 0.0
+        if len(valid) == 1:
+            return float(np.clip(valid[0], 0.0, 1.0))
+        return float(np.clip(valid[0] - valid[1], 0.0, 1.0))
+    return float(np.clip(top1_sent_score - top2_sent_score, 0.0, 1.0))
+
+
 def extract_signals(
     query: str,
     candidate_answer: str,
     evidence: List[Dict[str, Any]],
     routing: Optional[Dict[str, Any]] = None,
     pmi: Optional[float] = None,
+    bm25_best_sentence: Optional[str] = None,
+    idf_map: Optional[Mapping[str, float]] = None,
+    analyzer_conf: Optional[float] = None,
+    sentence_scores: Optional[Sequence[float]] = None,
 ) -> Dict[str, float]:
-    """Extract the 8 WaveCMS-R² nonconformity signals plus ``pmi_missing``."""
+    """Extract the 8 WaveCMS-R² + 4 WaveCMS-R³ nonconformity signals plus ``pmi_missing``."""
+    texts = _extract_evidence_texts(evidence)
+    best_sent, top1_sent_score, top2_sent_score = _extract_best_evidence_sentence(
+        query, candidate_answer, texts, idf_map=idf_map
+    )
+
     margin, entropy = _compute_margin_and_entropy(routing, evidence)
     lolo_drop = _compute_lolo_drop(query, candidate_answer, evidence, routing)
-    salient_cov = _compute_salient_cov(query, candidate_answer, evidence)
-    negation_mismatch = _compute_negation_mismatch(query, evidence)
+    salient_cov = _compute_salient_cov(query, candidate_answer, evidence, best_sent=best_sent)
+    negation_mismatch = _compute_negation_mismatch(query, evidence, best_sent=best_sent)
     answer_type_ok = _compute_answer_type_ok(query, candidate_answer)
     pmi_val = float(pmi) if pmi is not None and math.isfinite(float(pmi)) else 0.0
     pmi_missing = 1.0 if pmi is None else 0.0
     bm25_max = _compute_bm25_max(evidence, routing)
+
+    if bm25_best_sentence is not None:
+        agree_ans = _pair_agree(candidate_answer, bm25_best_sentence)
+        agree_sent = _pair_agree(best_sent, bm25_best_sentence) if best_sent else 0.0
+        cross_retriever_agree = max(agree_ans, agree_sent)
+    else:
+        ev0_best, _, _ = _extract_best_evidence_sentence(
+            query, candidate_answer, [texts[0]] if texts else (), idf_map=idf_map
+        )
+        cross_retriever_agree = _pair_agree(candidate_answer, ev0_best)
+
+    sent_margin = _compute_sent_margin(sentence_scores, top1_sent_score, top2_sent_score)
+    idf_query_cov = _idf_weighted_cov(
+        _content_tokens(query),
+        _content_tokens(f"{best_sent} {candidate_answer}"),
+        idf_map=idf_map,
+    )
+
+    if analyzer_conf is not None and math.isfinite(float(analyzer_conf)):
+        analyzer_conf_val = float(np.clip(float(analyzer_conf), 0.0, 1.0))
+    else:
+        analyzer_conf_val = float(
+            np.clip(0.45 * salient_cov + 0.30 * answer_type_ok + 0.25 * (1.0 - negation_mismatch), 0.0, 1.0)
+        )
 
     return {
         "margin": margin,
@@ -632,11 +790,16 @@ def extract_signals(
         "pmi": pmi_val,
         "bm25_max": bm25_max,
         "pmi_missing": pmi_missing,
+        "cross_retriever_agree": cross_retriever_agree,
+        "sent_margin": sent_margin,
+        "idf_query_cov": idf_query_cov,
+        "analyzer_conf": analyzer_conf_val,
     }
 
 
 __all__ = [
     "SIGNAL_NAMES",
+    "R3_SIGNAL_NAMES",
     "MONDRIAN_GROUPS",
     "assign_group",
     "extract_signals",

@@ -107,8 +107,10 @@
       },
       "wave_cms": {
         "0": {
-          "token_f1": 0.0277,
+          "token_f1": 0.719,
+          "token_f1_detailed_report": 0.0277,
           "keyword_acc": 1.0,
+          "keyword_acc_lm": 0.8,
           "routing_hit_at_1": 1.0,
           "routing_hit_at_3": 1.0,
           "tree_vs_flat_exact_match_rate": 1.0,
@@ -122,8 +124,10 @@
           "forgetting_kw": 0.0
         },
         "5": {
-          "token_f1": 0.0224,
+          "token_f1": 0.4152,
+          "token_f1_detailed_report": 0.0224,
           "keyword_acc": 0.6,
+          "keyword_acc_lm": 0.6,
           "routing_hit_at_1": 0.7,
           "routing_hit_at_3": 0.7,
           "tree_vs_flat_exact_match_rate": 1.0,
@@ -133,12 +137,14 @@
           "n_leaves": 18,
           "leaf_core_drift_fro": 0.0,
           "leaf_key_drift_l2": 0.0,
-          "forgetting_f1": 0.0053,
+          "forgetting_f1": 0.3038,
           "forgetting_kw": 0.4
         },
         "10": {
-          "token_f1": 0.0216,
+          "token_f1": 0.219,
+          "token_f1_detailed_report": 0.0216,
           "keyword_acc": 0.6,
+          "keyword_acc_lm": 0.3,
           "routing_hit_at_1": 0.6,
           "routing_hit_at_3": 0.7,
           "tree_vs_flat_exact_match_rate": 1.0,
@@ -148,12 +154,14 @@
           "n_leaves": 33,
           "leaf_core_drift_fro": 0.0,
           "leaf_key_drift_l2": 0.0,
-          "forgetting_f1": 0.0061,
+          "forgetting_f1": 0.5,
           "forgetting_kw": 0.4
         },
         "20": {
-          "token_f1": 0.0218,
+          "token_f1": 0.219,
+          "token_f1_detailed_report": 0.0218,
           "keyword_acc": 0.7,
+          "keyword_acc_lm": 0.3,
           "routing_hit_at_1": 0.6,
           "routing_hit_at_3": 0.7,
           "tree_vs_flat_exact_match_rate": 1.0,
@@ -163,12 +171,14 @@
           "n_leaves": 63,
           "leaf_core_drift_fro": 0.0,
           "leaf_key_drift_l2": 0.0,
-          "forgetting_f1": 0.0059,
+          "forgetting_f1": 0.5,
           "forgetting_kw": 0.3
         },
         "64": {
-          "token_f1": 0.0176,
+          "token_f1": 0.2133,
+          "token_f1_detailed_report": 0.0176,
           "keyword_acc": 0.5,
+          "keyword_acc_lm": 0.3,
           "routing_hit_at_1": 0.7,
           "routing_hit_at_3": 0.7,
           "tree_vs_flat_exact_match_rate": 1.0,
@@ -178,14 +188,16 @@
           "n_leaves": 1598,
           "leaf_core_drift_fro": 0.0,
           "leaf_key_drift_l2": 0.0,
-          "forgetting_f1": 0.0101,
+          "forgetting_f1": 0.5057,
           "forgetting_kw": 0.5
         }
       },
       "wave_cms_mean_key": {
         "0": {
-          "token_f1": 0.0278,
+          "token_f1": 0.719,
+          "token_f1_detailed_report": 0.0278,
           "keyword_acc": 1.0,
+          "keyword_acc_lm": 0.8,
           "routing_hit_at_1": 1.0,
           "routing_hit_at_3": 1.0,
           "tree_vs_flat_exact_match_rate": 1.0,
@@ -199,8 +211,10 @@
           "forgetting_kw": 0.0
         },
         "5": {
-          "token_f1": 0.0222,
+          "token_f1": 0.4152,
+          "token_f1_detailed_report": 0.0222,
           "keyword_acc": 0.6,
+          "keyword_acc_lm": 0.6,
           "routing_hit_at_1": 0.7,
           "routing_hit_at_3": 0.7,
           "tree_vs_flat_exact_match_rate": 1.0,
@@ -210,12 +224,14 @@
           "n_leaves": 18,
           "leaf_core_drift_fro": 0.0,
           "leaf_key_drift_l2": 0.0,
-          "forgetting_f1": 0.0056,
+          "forgetting_f1": 0.3038,
           "forgetting_kw": 0.4
         },
         "10": {
-          "token_f1": 0.023,
+          "token_f1": 0.4152,
+          "token_f1_detailed_report": 0.023,
           "keyword_acc": 0.6,
+          "keyword_acc_lm": 0.6,
           "routing_hit_at_1": 0.6,
           "routing_hit_at_3": 0.7,
           "tree_vs_flat_exact_match_rate": 1.0,
@@ -225,12 +241,14 @@
           "n_leaves": 33,
           "leaf_core_drift_fro": 0.0,
           "leaf_key_drift_l2": 0.0,
-          "forgetting_f1": 0.0048,
+          "forgetting_f1": 0.3038,
           "forgetting_kw": 0.4
         },
         "20": {
-          "token_f1": 0.0102,
+          "token_f1": 0.0667,
+          "token_f1_detailed_report": 0.0102,
           "keyword_acc": 0.4,
+          "keyword_acc_lm": 0.3,
           "routing_hit_at_1": 0.3,
           "routing_hit_at_3": 0.4,
           "tree_vs_flat_exact_match_rate": 1.0,
@@ -240,12 +258,14 @@
           "n_leaves": 63,
           "leaf_core_drift_fro": 0.0,
           "leaf_key_drift_l2": 0.0,
-          "forgetting_f1": 0.0176,
+          "forgetting_f1": 0.6523,
           "forgetting_kw": 0.6
         },
         "64": {
-          "token_f1": 0.0057,
+          "token_f1": 0.1,
+          "token_f1_detailed_report": 0.0057,
           "keyword_acc": 0.1,
+          "keyword_acc_lm": 0.1,
           "routing_hit_at_1": 0.0,
           "routing_hit_at_3": 0.1,
           "tree_vs_flat_exact_match_rate": 0.5,
@@ -255,14 +275,16 @@
           "n_leaves": 1598,
           "leaf_core_drift_fro": 0.0,
           "leaf_key_drift_l2": 0.0,
-          "forgetting_f1": 0.0221,
+          "forgetting_f1": 0.619,
           "forgetting_kw": 0.9
         }
       },
       "wave_cms_sparse_lse": {
         "0": {
-          "token_f1": 0.0277,
+          "token_f1": 0.719,
+          "token_f1_detailed_report": 0.0277,
           "keyword_acc": 1.0,
+          "keyword_acc_lm": 0.8,
           "routing_hit_at_1": 1.0,
           "routing_hit_at_3": 1.0,
           "tree_vs_flat_exact_match_rate": 1.0,
@@ -276,8 +298,10 @@
           "forgetting_kw": 0.0
         },
         "5": {
-          "token_f1": 0.0224,
+          "token_f1": 0.4152,
+          "token_f1_detailed_report": 0.0224,
           "keyword_acc": 0.6,
+          "keyword_acc_lm": 0.6,
           "routing_hit_at_1": 0.7,
           "routing_hit_at_3": 0.7,
           "tree_vs_flat_exact_match_rate": 1.0,
@@ -287,12 +311,14 @@
           "n_leaves": 18,
           "leaf_core_drift_fro": 0.0,
           "leaf_key_drift_l2": 0.0,
-          "forgetting_f1": 0.0053,
+          "forgetting_f1": 0.3038,
           "forgetting_kw": 0.4
         },
         "10": {
-          "token_f1": 0.0216,
+          "token_f1": 0.219,
+          "token_f1_detailed_report": 0.0216,
           "keyword_acc": 0.6,
+          "keyword_acc_lm": 0.3,
           "routing_hit_at_1": 0.6,
           "routing_hit_at_3": 0.7,
           "tree_vs_flat_exact_match_rate": 1.0,
@@ -302,12 +328,14 @@
           "n_leaves": 33,
           "leaf_core_drift_fro": 0.0,
           "leaf_key_drift_l2": 0.0,
-          "forgetting_f1": 0.0061,
+          "forgetting_f1": 0.5,
           "forgetting_kw": 0.4
         },
         "20": {
-          "token_f1": 0.0218,
+          "token_f1": 0.219,
+          "token_f1_detailed_report": 0.0218,
           "keyword_acc": 0.7,
+          "keyword_acc_lm": 0.3,
           "routing_hit_at_1": 0.6,
           "routing_hit_at_3": 0.7,
           "tree_vs_flat_exact_match_rate": 1.0,
@@ -317,12 +345,14 @@
           "n_leaves": 63,
           "leaf_core_drift_fro": 0.0,
           "leaf_key_drift_l2": 0.0,
-          "forgetting_f1": 0.0059,
+          "forgetting_f1": 0.5,
           "forgetting_kw": 0.3
         },
         "64": {
-          "token_f1": 0.0176,
+          "token_f1": 0.2133,
+          "token_f1_detailed_report": 0.0176,
           "keyword_acc": 0.5,
+          "keyword_acc_lm": 0.3,
           "routing_hit_at_1": 0.7,
           "routing_hit_at_3": 0.7,
           "tree_vs_flat_exact_match_rate": 1.0,
@@ -332,7 +362,7 @@
           "n_leaves": 1598,
           "leaf_core_drift_fro": 0.0,
           "leaf_key_drift_l2": 0.0,
-          "forgetting_f1": 0.0101,
+          "forgetting_f1": 0.5057,
           "forgetting_kw": 0.5
         }
       },

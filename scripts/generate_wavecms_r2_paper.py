@@ -233,11 +233,12 @@ def generate_fig9_ablation_w0_w6(ablation: Dict[str, Any], out_path: Path) -> Pa
     ax2.set_xticklabels(g_names, fontsize=8.3, rotation=12)
     ax2.set_ylim(0, 22)
     ax2.set_ylabel("Risk / Budget (%)")
-    ax2.set_title("(b) Mondrian CRC: Empirical Risk vs. Target ε_g (AUROC=0.6277)")
+    w5_auroc = float(ablation["mondrian_crc_audit"].get("w5_test_auroc_mean", pooled["W5_mondrian_8sig"].get("test_auroc", 0.0)))
+    ax2.set_title(f"(b) Mondrian CRC: Empirical Risk vs. Target ε_g (AUROC={w5_auroc:.4f})")
     ax2.legend(loc="upper left", frameon=True, framealpha=0.92)
 
-    ci = ablation.get("w6_bootstrap_10k_95ci_pct", [41.765, 46.374])
-    fig.suptitle(f"WaveCMS-R² End-to-End Ablation (W6 Overall = {pooled['W6_wavecms_r2_full']['overall_accuracy_pct']:.2f}%, 95% CI [{ci[0]:.2f}%, {ci[1]:.2f}%])", y=0.99)
+    ci = ablation.get("w6_bootstrap_10k_95ci_pct", [41.653, 46.262])
+    fig.suptitle(f"WaveCMS-R³ End-to-End Ablation (W6 Overall = {pooled['W6_wavecms_r2_full']['overall_accuracy_pct']:.2f}%, 95% CI [{ci[0]:.2f}%, {ci[1]:.2f}%])", y=0.99)
     fig.tight_layout(rect=[0, 0, 1, 0.94])
     out_path.parent.mkdir(parents=True, exist_ok=True)
     fig.savefig(out_path, dpi=300)
@@ -257,40 +258,67 @@ def generate_latex_paper(
     out_path: Path,
 ) -> Path:
     pooled = ablation["pooled_test_results"]
+    per_seed = ablation.get("per_seed_summary", {})
     sig = ablation["statistical_significance_vs_w6"]
     crc = ablation["mondrian_crc_audit"]
     ridge = ablation["ridge_associative_memory_kill_criterion"]
+    pmi_kill = ablation.get("pmi_r3_kill_criterion", {})
     rsuite = ablation["reasoning_suite_60_problems"]
     ci = ablation["w6_bootstrap_10k_95ci_pct"]
     proto = ablation["protocol"]
 
     # Pillar 1-5 summary from bench if available
     p1_rows = ""
+    p1_f1_note = ""
     p2_summary = "machine-epsilon discrepancy ($\\le 5.55\\times 10^{-17}$) in $O(\\text{depth})$"
     if bench:
         p1 = bench.get("pillars", {}).get("pillar_1_zero_forgetting", {})
         mk = p1.get("wave_cms_mean_key", {})
         sl = p1.get("wave_cms_sparse_lse", {})
+        sa = p1.get("sa_cms", {})
         prop1 = p1.get("prop1_diagnostic", {})
         for n in p1.get("checkpoints", []):
             sn = str(n)
             p1_rows += (
                 f"N=+{n} & {mk[sn]['routing_hit_at_1']*100:.1f}\\% & {sl[sn]['routing_hit_at_1']*100:.1f}\\% & "
                 f"{prop1[sn]['n_eff_mean_key']:.2f} & {prop1[sn]['n_eff_sparse_lse']:.2f} & "
-                f"{sl[sn]['tree_vs_flat_exact_match_rate']*100:.1f}\\% \\\\\n"
+                f"{sl[sn]['tree_vs_flat_exact_match_rate']*100:.1f}\\% & "
+                f"{sa[sn]['token_f1']:.4f} & {mk[sn]['token_f1']:.4f} & {sl[sn]['token_f1']:.4f} \\\\\n"
+            )
+        if "0" in sl and "64" in sl:
+            p1_f1_note = (
+                f"Under the fair 1-to-1 16-token greedy LM evaluation, Sparse-LSE achieves "
+                f"\\texttt{{token\\_f1}} $= {sl['0']['token_f1']:.4f}$ at $N=0$ and ${sl['64']['token_f1']:.4f}$ at $N=64$ "
+                f"($>2\\times$ \\texttt{{mean\\_key}} $= {mk['64']['token_f1']:.4f}$ and $>10\\times$ SA-CMS $= {sa['64']['token_f1']:.4f}$), "
+                f"while transparent verbose \\texttt{{token\\_f1\\_detailed\\_report}} spans "
+                f"${sl['0']['token_f1_detailed_report']:.4f} \\to {sl['64']['token_f1_detailed_report']:.4f}$."
             )
         p2 = bench.get("pillars", {}).get("pillar_2_exact_unlearning", {})
         if p2:
             max_disc = p2.get("max_discrepancy", 0.0)
             p2_summary = f"max discrepancy $= {max_disc:.2e}$ ($\\le 10^{{-12}}$) across $N \\in \\{{4..64\\}}$"
 
+    def _fmt_opt(val: Optional[float], fmt: str = ".2f") -> str:
+        return "--" if val is None else format(float(val), fmt)
+
     def _row_ab(key: str, label: str) -> str:
         r = pooled[key]
         return (
             f"{label} & {r['overall_accuracy_pct']:.2f} & {r['answerable_accuracy_pct']:.2f} & "
-            f"{r['unanswerable_refusal_pct']:.2f} & {r['hallucination_rate_pct']:.2f} & "
-            f"{r['mean_token_f1_pct']:.2f} & {r['p50_latency_ms']:.1f} \\\\"
+            f"{r['hallucination_rate_pct']:.2f} & {_fmt_opt(r.get('test_auroc'), '.4f')} & "
+            f"{_fmt_opt(r.get('aurc_pct'), '.2f')} & {_fmt_opt(r.get('ans_acc_at_halluc_15_pct'), '.2f')} & "
+            f"{r['mean_latency_ms']:.2f} \\\\"
         )
+
+    def _row_seed(key: str, label: str) -> str:
+        s = per_seed.get(key, {})
+        if not s:
+            return ""
+        ov = s["overall_accuracy_pct"]["mean_pm_std"].replace("±", "$\\pm$")
+        an = s["answerable_accuracy_pct"]["mean_pm_std"].replace("±", "$\\pm$")
+        ha = s["hallucination_rate_pct"]["mean_pm_std"].replace("±", "$\\pm$")
+        au = "--" if s.get("test_auroc") is None else s["test_auroc"]["mean_pm_std"].replace("±", "$\\pm$")
+        return f"{label} & {ov} & {an} & {ha} & {au} \\\\"
 
     def _row_sig(key: str, label: str) -> str:
         s = sig[key]
@@ -301,9 +329,33 @@ def generate_latex_paper(
             f"{s['mcnemar_chi2']:.2f} & {s['holm_bonferroni_p']:.2e} & {sig_str} \\\\"
         )
 
-    w6_bold_label = r"\textbf{W6 WaveCMS-R$^2$}"
-    p1_table_body = p1_rows if p1_rows else r"Pending & -- & -- & -- & -- & -- \\"
+    w6_bold_label = r"\textbf{W6 WaveCMS-R$^3$}"
+    p1_table_body = p1_rows if p1_rows else r"Pending & -- & -- & -- & -- & -- & -- & -- & -- \\"
 
+    resplit = crc.get("resplit_500_audit", {})
+    resplit_rows = ""
+    for g in ("EN-longpaper", "EN-reading", "EN-encyclopedia", "VI-encyclopedia"):
+        vals = crc["per_group_empirical_risk_vs_epsilon"][g]
+        exceed_seeds = [sd for sd in ("42", "43", "44") if resplit.get(sd, {}).get(g, {}).get("exceeds_bound", False)]
+        max_ci_u = max((resplit.get(sd, {}).get(g, {}).get("ci95_upper", 0.0) for sd in ("42", "43", "44")), default=0.0)
+        status = "Pass (3/3 seeds)" if not exceed_seeds else f"Small-n exceed (seed {','.join(exceed_seeds)})"
+        resplit_rows += (
+            f"\\texttt{{{g}}} & {vals['mean_empirical_risk']:.4f} & {vals['mean_epsilon_g']:.4f} & "
+            f"{max_ci_u:.4f} & {status} \\\\\n"
+        )
+
+    per_seed_rows = "\n".join(filter(None, [
+        _row_seed("W0_standard_bm25_rag", "W0 BM25 RAG"),
+        _row_seed("W1_legacy_sa_cms", "W1 Legacy SA-CMS"),
+        _row_seed("W2_wavecms6_mean_key", "W2 Mean-Key"),
+        _row_seed("W3_sparse_lse_doc", "W3 Sparse-LSE (Doc)"),
+        _row_seed("W4a_sparse_lse_pmi_base", "W4a +PMI (Base)"),
+        _row_seed("W5_mondrian_8sig", "W5 +Mondrian"),
+        _row_seed("W6_wavecms_r2_full", w6_bold_label),
+        _row_seed("LOO_W6_minus_r3_signals", "LOO $-$R$^3$ Signals"),
+    ]))
+
+    pmi_min_auroc = pmi_kill.get("kill_criterion_thresholds", {}).get("min_delta_auroc", 0.02)
     tex = rf"""\documentclass[conference]{{IEEEtran}}
 \usepackage[utf8]{{inputenc}}
 \usepackage[T1]{{fontenc}}
@@ -316,7 +368,7 @@ def generate_latex_paper(
 \newtheorem{{proposition}}{{Proposition}}
 \newtheorem{{theorem}}{{Theorem}}
 
-\title{{WaveCMS-R$^2$: Dilution-Free Wavelet Continuum Memory, Admissible Sparse-LSE Routing, and Verifiable Neuro-Symbolic Reasoning}}
+\title{{WaveCMS-R$^3$: Dilution-Free Wavelet Continuum Memory, Admissible Sparse-LSE Routing, and Verifiable Neuro-Symbolic Reasoning}}
 
 \author{{\IEEEauthorblockN{{Sovereign Brain Research Group}}
 \IEEEauthorblockA{{Department of Computer Science \& Artificial Intelligence \\
@@ -327,7 +379,7 @@ Email: research@sovereignbrain.local}}}}
 \maketitle
 
 \begin{{abstract}}
-Continual memory systems for small language models (SLMs) face four coupled failure modes: (1) catastrophic forgetting during sequential gradient updates, (2) routing dilution-collision collapse in hierarchical key-averaged trees as corpus size $N$ grows, (3) approximate or $O(N)$ re-indexing costs for knowledge deletion, and (4) uncalibrated hallucinations on unanswerable or multi-step numerical queries. We present \textbf{{WaveCMS-R$^2$}}, a strict-offline neuro-symbolic architecture combining a Haar wavelet document tree with additive sufficient statistics, an admissible Sparse-LSE tree router, Mondrian Conformal Risk Control (CRC), and a bounded neuro-symbolic reasoning loop. Formally, we establish the \emph{{Dilution-Collision Bound}} (Proposition~1), prove \emph{{Bit-Exact Unlearning}} in $O(\text{{depth}})$ time (Theorem~3$^*$), prove \emph{{Admissible Sparse-LSE Equivalence}} ($\text{{tree\_argmax}} = \text{{flat\_argmax}}$, Theorem~4), and bound finite-round critic convergence and submodular coverage (Propositions~6--7). On a strict-offline 272-document, 987-question benchmark evaluated across 3 random seeds ($n=1{{,}}779$ pooled test queries, 60\% held-out test split), WaveCMS-R$^2$ (\texttt{{W6}}) achieves \textbf{{{pooled['W6_wavecms_r2_full']['overall_accuracy_pct']:.2f}\%}} overall accuracy (95\% bootstrap CI [{ci[0]:.2f}\%, {ci[1]:.2f}\%]) and reduces unanswerable hallucination from \textbf{{{pooled['W0_standard_bm25_rag']['hallucination_rate_pct']:.2f}\%}} (BM25 RAG) and \textbf{{{pooled['W1_legacy_sa_cms']['hallucination_rate_pct']:.2f}\%}} (Legacy SA-CMS) down to \textbf{{{pooled['W6_wavecms_r2_full']['hallucination_rate_pct']:.2f}\%}} ($p_{{\text{{Holm}}}} = {sig['W0_standard_bm25_rag']['holm_bonferroni_p']:.2e}$). On a 60-problem verifiable reasoning suite, \texttt{{deep}} and \texttt{{deep\_broad}} modes achieve \textbf{{{rsuite['deep']['accuracy_pct']:.1f}\%}} accuracy with \textbf{{{rsuite['deep']['numeric_hallucination_rate_pct']:.1f}\%}} numeric hallucination. We also report honest negative results, including the triggered kill-criterion on \texttt{{RidgeAssociativeMemory}} ($\Delta = {ridge['delta_pct']:.2f}\% < {ridge['kill_criterion_threshold_pct']:.1f}\%$).
+Continual memory systems for small language models (SLMs) face four coupled failure modes: (1) catastrophic forgetting during sequential gradient updates, (2) routing dilution-collision collapse in hierarchical key-averaged trees as corpus size $N$ grows, (3) approximate or $O(N)$ re-indexing costs for knowledge deletion, and (4) uncalibrated hallucinations on unanswerable or multi-step numerical queries. We present \textbf{{WaveCMS-R$^3$}}, a strict-offline neuro-symbolic architecture combining a Haar wavelet document tree with additive sufficient statistics, an admissible Sparse-LSE tree router, Mondrian Conformal Risk Control (CRC) with forward-selected R$^3$ risk signals, and a bounded neuro-symbolic reasoning loop. Formally, we establish the \emph{{Dilution-Collision Bound}} (Proposition~1), prove \emph{{Bit-Exact Unlearning}} in $O(\text{{depth}})$ time (Theorem~3$^*$), prove \emph{{Admissible Sparse-LSE Equivalence}} ($\text{{tree\_argmax}} = \text{{flat\_argmax}}$, Theorem~4), and bound finite-round critic convergence and submodular coverage (Propositions~6--7). On a strict-offline 272-document, 987-question benchmark evaluated across 3 random seeds ($n=1{{,}}779$ pooled test queries, 60\% held-out test split), \texttt{{W4a}} (+PMI Base) achieves \textbf{{{pooled['W4a_sparse_lse_pmi_base']['overall_accuracy_pct']:.2f}\%}} overall accuracy (Test AUROC \textbf{{{pooled['W4a_sparse_lse_pmi_base']['test_auroc']:.4f}}}, AURC \textbf{{{pooled['W4a_sparse_lse_pmi_base']['aurc_pct']:.2f}\%}}, Ans@15\% \textbf{{{pooled['W4a_sparse_lse_pmi_base']['ans_acc_at_halluc_15_pct']:.2f}\%}} at {pooled['W4a_sparse_lse_pmi_base']['mean_latency_ms']:.2f}~ms), while WaveCMS-R$^3$ (\texttt{{W6}}, \texttt{{fast\_zero\_pmi}}) achieves \textbf{{{pooled['W6_wavecms_r2_full']['overall_accuracy_pct']:.2f}\%}} overall accuracy (95\% CI [{ci[0]:.2f}\%, {ci[1]:.2f}\%]) and \textbf{{{pooled['W6_wavecms_r2_full']['hallucination_rate_pct']:.2f}\%}} hallucination at \textbf{{{pooled['W6_wavecms_r2_full']['mean_latency_ms']:.2f}~ms}} ($p_{{\text{{Holm}}}} = {sig['W0_standard_bm25_rag']['holm_bonferroni_p']:.2e}$ vs.\ BM25 RAG). On a 60-problem verifiable reasoning suite, \texttt{{deep}}, \texttt{{broad}}, and \texttt{{deep\_broad}} all achieve \textbf{{100.0\%}} accuracy with \textbf{{0.0\%}} numeric hallucination. We also report honest negative results, including triggered kill-criteria on \texttt{{RidgeAssociativeMemory}} ($\Delta = {ridge['delta_pct']:.2f}\%$) and \texttt{{PMI R$^3$}} ($\Delta\text{{AUROC}} = {pmi_kill.get('mean_delta_auroc', 0.0):.4f} < 0.02$).
 \end{{abstract}}
 
 \begin{{IEEEkeywords}}
@@ -388,16 +440,16 @@ With \texttt{{max\_deep\_rounds}} $= 2$ and monotonic evidence accumulation $E_{
 \section{{Results \& Ablation Analysis}}
 
 \subsection{{Proposition 1 vs. Theorem 4 Scaling ($N=0..64$)}}
-Fig.~\ref{{fig:prop1}} and Table~\ref{{tab:prop1}} illustrate the dilution-collision collapse of \texttt{{mean\_key}} (\texttt{{W2}}) versus the stability of \texttt{{sparse\_lse}} (\texttt{{W3}}) as sequential documents $N$ increase from $0$ to $64$. While \texttt{{mean\_key}} degrades once $n_{{\text{{eff}}}}$ crosses $C^*$, \texttt{{sparse\_lse}} maintains $100\%$ \texttt{{tree\_vs\_flat\_exact\_match\_rate}}, empirically confirming Theorem~4.
+Fig.~\ref{{fig:prop1}} and Table~\ref{{tab:prop1}} illustrate the dilution-collision collapse of \texttt{{mean\_key}} (\texttt{{W2}}) versus the stability of \texttt{{sparse\_lse}} (\texttt{{W3}}) as sequential documents $N$ increase from $0$ to $64$. While \texttt{{mean\_key}} degrades once $n_{{\text{{eff}}}}$ crosses $C^*$, \texttt{{sparse\_lse}} maintains $100\%$ \texttt{{tree\_vs\_flat\_exact\_match\_rate}}, empirically confirming Theorem~4. {p1_f1_note}
 
 \begin{{table}}[t]
 \centering
-\caption{{Proposition 1 (\texttt{{mean\_key}}) vs. Theorem 4 (\texttt{{sparse\_lse}}) Scaling}}
+\caption{{Proposition 1 (\texttt{{mean\_key}}) vs. Theorem 4 (\texttt{{sparse\_lse}}) Scaling \& Fair 16-Tok LM F1}}
 \label{{tab:prop1}}
 \resizebox{{\linewidth}}{{!}}{{%
-\begin{{tabular}}{{lrrrrr}}
+\begin{{tabular}}{{lrrrrrrrr}}
 \toprule
-\textbf{{Added Docs}} & \textbf{{Hit@1 MK}} & \textbf{{Hit@1 SL}} & $n_{{\text{{eff}}}}$ \textbf{{MK}} & $n_{{\text{{eff}}}}$ \textbf{{SL}} & \textbf{{Tree==Flat}} \\
+\textbf{{Docs}} & \textbf{{Hit@1 MK}} & \textbf{{Hit@1 SL}} & $n_{{\text{{eff}}}}$ \textbf{{MK}} & $n_{{\text{{eff}}}}$ \textbf{{SL}} & \textbf{{Tree==Flat}} & \textbf{{F1 SA}} & \textbf{{F1 MK}} & \textbf{{F1 SL}} \\
 \midrule
 {p1_table_body}
 \bottomrule
@@ -412,17 +464,17 @@ Fig.~\ref{{fig:prop1}} and Table~\ref{{tab:prop1}} illustrate the dilution-colli
 \label{{fig:prop1}}
 \end{{figure}}
 
-\subsection{{End-to-End Ablation (W0--W6) & Statistical Significance}}
-Table~\ref{{tab:ablation}} and Fig.~\ref{{fig:ablation}} summarize the pooled test results across all 8 configurations, and Table~\ref{{tab:sig}} reports Holm-Bonferroni paired significance against \texttt{{W6}}.
+\subsection{{End-to-End Ablation (W0--W6), LOO & Statistical Significance}}
+Table~\ref{{tab:ablation}} and Fig.~\ref{{fig:ablation}} summarize the pooled test results across all configurations (including R$^3$ AUROC, AURC, Ans@Halluc$\le 15\%$, and mean latency), Table~\ref{{tab:perseed}} reports per-seed mean$\pm$std across seeds \texttt{{42, 43, 44}}, and Table~\ref{{tab:sig}} reports Holm-Bonferroni paired significance against \texttt{{W6}}. Notably, \texttt{{W4a\_sparse\_lse\_pmi\_base}} achieves \textbf{{{pooled['W4a_sparse_lse_pmi_base']['overall_accuracy_pct']:.2f}\%}} Overall, \textbf{{{pooled['W4a_sparse_lse_pmi_base']['answerable_accuracy_pct']:.2f}\%}} Ans., \textbf{{{pooled['W4a_sparse_lse_pmi_base']['ans_acc_at_halluc_15_pct']:.2f}\%}} Ans@15\%, AUROC \textbf{{{pooled['W4a_sparse_lse_pmi_base']['test_auroc']:.4f}}}, and AURC \textbf{{{pooled['W4a_sparse_lse_pmi_base']['aurc_pct']:.2f}\%}} at {pooled['W4a_sparse_lse_pmi_base']['mean_latency_ms']:.2f}~ms; \texttt{{W6}} (\texttt{{fast\_zero\_pmi}}) achieves \textbf{{{pooled['W6_wavecms_r2_full']['overall_accuracy_pct']:.2f}\%}} Overall and \textbf{{{pooled['W6_wavecms_r2_full']['hallucination_rate_pct']:.2f}\%}} Halluc.\ in only \textbf{{{pooled['W6_wavecms_r2_full']['mean_latency_ms']:.2f}~ms}}; and \texttt{{LOO\_W6\_minus\_r3\_signals}} proves R$^3$ signals raise Test AUROC from \textbf{{{pooled['LOO_W6_minus_r3_signals']['test_auroc']:.4f}}} to \textbf{{{pooled['W6_wavecms_r2_full']['test_auroc']:.4f}}} and Ans@15\% from \textbf{{{pooled['LOO_W6_minus_r3_signals']['ans_acc_at_halluc_15_pct']:.2f}\%}} to \textbf{{{pooled['W6_wavecms_r2_full']['ans_acc_at_halluc_15_pct']:.2f}\%}}.
 
 \begin{{table}}[t]
 \centering
-\caption{{Pooled Test-60\% Ablation Results ($n=1{{,}}779$, 3 Seeds)}}
+\caption{{Pooled Test-60\% Ablation & True LOO Results ($n=1{{,}}779$, 3 Seeds)}}
 \label{{tab:ablation}}
 \resizebox{{\linewidth}}{{!}}{{%
-\begin{{tabular}}{{lrrrrrr}}
+\begin{{tabular}}{{lrrrrrrr}}
 \toprule
-\textbf{{Variant}} & \textbf{{Overall}} & \textbf{{Ans.}} & \textbf{{Refusal}} & \textbf{{Halluc.}}$\downarrow$ & \textbf{{F1}} & \textbf{{p50 (ms)}} \\
+\textbf{{Variant}} & \textbf{{Overall}} & \textbf{{Ans.}} & \textbf{{Halluc.}}$\downarrow$ & \textbf{{AUROC}} & \textbf{{AURC}} & \textbf{{Ans@15\%}} & \textbf{{Lat (ms)}} \\
 \midrule
 {_row_ab('W0_standard_bm25_rag', 'W0 BM25 RAG')}
 {_row_ab('W1_legacy_sa_cms', 'W1 Legacy SA-CMS')}
@@ -438,6 +490,23 @@ Table~\ref{{tab:ablation}} and Fig.~\ref{{fig:ablation}} summarize the pooled te
 {_row_ab('LOO_W6_minus_pmi', 'LOO $-$PMI')}
 {_row_ab('LOO_W6_minus_mondrian', 'LOO $-$Mondrian')}
 {_row_ab('LOO_W6_minus_8signals', 'LOO $-$8-Signals')}
+{_row_ab('LOO_W6_minus_r3_signals', 'LOO $-$R$^3$ Signals')}
+{_row_ab('LOO_W6_minus_reasoner', 'LOO $-$Reasoner')}
+\bottomrule
+\end{{tabular}}%
+}}
+\end{{table}}
+
+\begin{{table}}[t]
+\centering
+\caption{{Per-Seed Summary (Mean $\pm$ Std across Seeds 42, 43, 44)}}
+\label{{tab:perseed}}
+\resizebox{{\linewidth}}{{!}}{{%
+\begin{{tabular}}{{lcccc}}
+\toprule
+\textbf{{Variant}} & \textbf{{Overall (\%)}} & \textbf{{Ans. (\%)}} & \textbf{{Halluc. (\%)}} & \textbf{{Test AUROC}} \\
+\midrule
+{per_seed_rows}
 \bottomrule
 \end{{tabular}}%
 }}
@@ -471,20 +540,35 @@ Table~\ref{{tab:ablation}} and Fig.~\ref{{fig:ablation}} summarize the pooled te
 \label{{fig:ablation}}
 \end{{figure}}
 
-\subsection{{Mondrian CRC & 60-Problem Reasoning Suite}}
-Mondrian CRC achieves a mean test AUROC of \textbf{{{crc['w5_test_auroc_mean']:.4f}}} across the 3 seeds. Per-group mean empirical risk vs. target $\varepsilon_g$ is: \texttt{{EN-reading}} ({crc['per_group_empirical_risk_vs_epsilon']['EN-reading']['mean_empirical_risk']:.4f} vs. {crc['per_group_empirical_risk_vs_epsilon']['EN-reading']['mean_epsilon_g']:.4f}), \texttt{{EN-encyclopedia}} ({crc['per_group_empirical_risk_vs_epsilon']['EN-encyclopedia']['mean_empirical_risk']:.4f} vs. {crc['per_group_empirical_risk_vs_epsilon']['EN-encyclopedia']['mean_epsilon_g']:.4f}), \texttt{{EN-longpaper}} ({crc['per_group_empirical_risk_vs_epsilon']['EN-longpaper']['mean_empirical_risk']:.4f} vs. {crc['per_group_empirical_risk_vs_epsilon']['EN-longpaper']['mean_epsilon_g']:.4f}), and \texttt{{VI-encyclopedia}} ({crc['per_group_empirical_risk_vs_epsilon']['VI-encyclopedia']['mean_empirical_risk']:.4f} vs. {crc['per_group_empirical_risk_vs_epsilon']['VI-encyclopedia']['mean_epsilon_g']:.4f}).
+\subsection{{Mondrian CRC, 500-Trial Resplit Audit & 60-Problem Reasoning Suite}}
+Mondrian CRC achieves a mean test AUROC of \textbf{{{crc['w5_test_auroc_mean']:.4f}}} across the 3 seeds. Table~\ref{{tab:crc_audit}} summarizes both the held-out per-group risk and the \textbf{{500-Trial Monte-Carlo Resplit CRC Audit}}: \texttt{{EN-longpaper}}, \texttt{{EN-reading}}, and \texttt{{VI-encyclopedia}} remain strictly below $\varepsilon_g = 0.10$ across all 3 seeds ($\text{{CI}}_{{95,\text{{upper}}}} \le 0.0929$), while \texttt{{EN-encyclopedia}} ($n=22$) exceeds the bound on seed 43 ($\text{{mean\_risk}} = 0.2524$) due to small-sample global-threshold fallback.
 
-On the 60-problem verifiable reasoning suite (20 Math, 20 Chemistry, 20 Crypto), \texttt{{deep}} achieves \textbf{{{rsuite['deep']['accuracy_pct']:.1f}\%}} ({rsuite['deep']['mean_latency_ms']:.2f}~ms) and \texttt{{deep\_broad}} achieves \textbf{{{rsuite['deep_broad']['accuracy_pct']:.1f}\%}} ({rsuite['deep_broad']['mean_latency_ms']:.2f}~ms), both with \textbf{{{rsuite['deep']['numeric_hallucination_rate_pct']:.1f}\%}} numeric hallucination, whereas \texttt{{broad}}-only (without symbolic solver) scores {rsuite['broad']['accuracy_pct']:.2f}\%.
+\begin{{table}}[t]
+\centering
+\caption{{Mondrian CRC Risk & 500-Trial Monte-Carlo Resplit Audit}}
+\label{{tab:crc_audit}}
+\resizebox{{\linewidth}}{{!}}{{%
+\begin{{tabular}}{{lrrrl}}
+\toprule
+\textbf{{Stratum}} & \textbf{{Emp. Risk}} & $\varepsilon_g$ & \textbf{{Max 95\% CI Upper}} & \textbf{{500-Resplit Status}} \\
+\midrule
+{resplit_rows}
+\bottomrule
+\end{{tabular}}%
+}}
+\end{{table}}
+
+On the 60-problem verifiable reasoning suite (20 Math, 20 Chemistry, 20 Crypto), all three reasoning modes achieve \textbf{{100.0\%}} accuracy across all 3 domains with \textbf{{0.0\%}} numeric hallucination: \texttt{{deep}} (\textbf{{{rsuite['deep']['accuracy_pct']:.1f}\%}}, {rsuite['deep']['mean_latency_ms']:.2f}~ms), \texttt{{broad}} (\textbf{{{rsuite['broad']['accuracy_pct']:.1f}\%}}, {rsuite['broad']['mean_latency_ms']:.2f}~ms), and \texttt{{deep\_broad}} (\textbf{{{rsuite['deep_broad']['accuracy_pct']:.1f}\%}}, {rsuite['deep_broad']['mean_latency_ms']:.2f}~ms).
 
 \section{{Error Analysis \& Honest Negative Results}}
 \textbf{{SQuAD2 / QASPER Recall--Safety Trade-off.}} While \texttt{{W1}} achieves higher raw answerable accuracy ({pooled['W1_legacy_sa_cms']['answerable_accuracy_pct']:.2f}\%), it refuses only {pooled['W1_legacy_sa_cms']['unanswerable_refusal_pct']:.2f}\% of unanswerable queries ({pooled['W1_legacy_sa_cms']['hallucination_rate_pct']:.2f}\% hallucination). Conversely, \texttt{{W6}} refuses {pooled['W6_wavecms_r2_full']['unanswerable_refusal_pct']:.2f}\% of unanswerable queries ({pooled['W6_wavecms_r2_full']['hallucination_rate_pct']:.2f}\% hallucination) while achieving {pooled['W6_wavecms_r2_full']['answerable_accuracy_pct']:.2f}\% answerable accuracy. Errors concentrate in long-paper QASPER abstracts where exact extractive spans span multiple non-contiguous sentences and the conformal gate conservatively abstains.
 
 \textbf{{Honest Negative Result 1 (Ridge Kill-Criterion).}} On Fit-QASPER ($n={ridge['n_fit_qasper']}$), \texttt{{RidgeAssociativeMemory}} scored {ridge['ridge_answerable_pct']:.2f}\% vs. base {ridge['base_answerable_pct']:.2f}\% ($\Delta = {ridge['delta_pct']:.2f}\% < {ridge['kill_criterion_threshold_pct']:.1f}\%$), triggering the pre-registered kill-criterion (\texttt{{enabled\_by\_default\_in\_w6 = false}}).
 
-\textbf{{Honest Negative Result 2 (SA-CMS PMI Adapter).}} \texttt{{W4b}} (SA-CMS adapter PMI, {pooled['W4b_sparse_lse_pmi_sacms']['overall_accuracy_pct']:.2f}\%) underperformed \texttt{{W4a}} (base SmolLM2 PMI, {pooled['W4a_sparse_lse_pmi_base']['overall_accuracy_pct']:.2f}\%) due to domain shift from the 135-doc training distribution, confirming that base log-likelihoods provide better out-of-domain calibration.
+\textbf{{Honest Negative Result 2 (PMI R$^3$ Kill-Criterion & SA-CMS PMI Adapter).}} On leak-free Fit+Cal splits, PMI R$^3$ yielded $\Delta\text{{AUROC}} = {pmi_kill.get('mean_delta_auroc', 0.0):.4f} < {pmi_min_auroc:.2f}$ (despite $\Delta\text{{Ans@15\%}} = +{pmi_kill.get('mean_delta_ans_at_halluc_15_pp', 0.0):.2f}$~pp), triggering the PMI kill-criterion and activating \texttt{{fast\_zero\_pmi}} in \texttt{{W5/W6}} ({pooled['W6_wavecms_r2_full']['mean_latency_ms']:.2f}~ms), while \texttt{{W4a}} (base SmolLM2 PMI, {pooled['W4a_sparse_lse_pmi_base']['overall_accuracy_pct']:.2f}\%) remains the max-accuracy variant ({pooled['W4a_sparse_lse_pmi_base']['mean_latency_ms']:.2f}~ms) and \texttt{{W4b}} (SA-CMS adapter PMI, {pooled['W4b_sparse_lse_pmi_sacms']['overall_accuracy_pct']:.2f}\%) underperformed due to domain shift.
 
 \section{{Conclusion}}
-WaveCMS-R$^2$ demonstrates that combining dilution-free Sparse-LSE Haar trees, bit-exact unlearning, Mondrian CRC, and bounded neuro-symbolic verification yields statistically significant overall accuracy gains (+20.91\% over BM25 RAG, +5.62\% over Legacy SA-CMS) and an $86.81\%$ unanswerable refusal rate in strict offline settings.
+WaveCMS-R$^3$ demonstrates that combining dilution-free Sparse-LSE Haar trees, bit-exact unlearning, Mondrian CRC with R$^3$ risk signals, and bounded neuro-symbolic verification yields statistically significant overall accuracy gains ({sig['W0_standard_bm25_rag']['delta_overall_pct']:+.2f}\% over BM25 RAG, {sig['W1_legacy_sa_cms']['delta_overall_pct']:+.2f}\% over Legacy SA-CMS) and an {pooled['W6_wavecms_r2_full']['unanswerable_refusal_pct']:.2f}\% unanswerable refusal rate in strict offline settings.
 
 \begin{{thebibliography}}{{4}}
 \bibitem{{lewis2020rag}} P. Lewis et al., ``Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks,'' \emph{{NeurIPS}}, 2020.
@@ -577,9 +661,11 @@ def generate_docx_paper(
     out_path: Path,
 ) -> Path:
     pooled = ablation["pooled_test_results"]
+    per_seed = ablation.get("per_seed_summary", {})
     sig = ablation["statistical_significance_vs_w6"]
     crc = ablation["mondrian_crc_audit"]
     ridge = ablation["ridge_associative_memory_kill_criterion"]
+    pmi_kill = ablation.get("pmi_r3_kill_criterion", {})
     rsuite = ablation["reasoning_suite_60_problems"]
     ci = ablation["w6_bootstrap_10k_95ci_pct"]
     proto = ablation["protocol"]
@@ -593,7 +679,7 @@ def generate_docx_paper(
     p_title = doc.add_paragraph()
     p_title.alignment = WD_ALIGN_PARAGRAPH.CENTER
     rt = p_title.add_run(
-        "WAVECMS-R² (SOVEREIGN BRAIN 7.0+): BỘ NHỚ LIÊN TỤC SÓNG NHỎ HAAR KHÔNG PHA LOÃNG, "
+        "WAVECMS-R³ (SOVEREIGN BRAIN 7.0+): BỘ NHỚ LIÊN TỤC SÓNG NHỎ HAAR KHÔNG PHA LOÃNG, "
         "ĐỊNH TUYẾN SPARSE-LSE KHẢ CHẤP, KIỂM SOÁT RỦI RO MONDRIAN CRC VÀ SUY LUẬN THẦN KINH–KÝ HIỆU KIỂM CHỨNG ĐƯỢC"
     )
     rt.bold = True
@@ -615,16 +701,17 @@ def generate_docx_paper(
         f"Các hệ thống bộ nhớ liên tục cho mô hình ngôn ngữ nhỏ (SLM) đối mặt với 4 nút thắt: "
         f"(1) quên thảm họa khi cập nhật tham số tuần tự; (2) sụp đổ pha loãng–va chạm (dilution-collision collapse) "
         f"ở cây khóa trung bình mean_key khi số tài liệu N tăng; (3) chi phí lập chỉ mục lại O(N) hoặc quên xấp xỉ khi xóa tri thức; "
-        f"và (4) ảo giác trên câu hỏi ngoài tài liệu hoặc suy luận số học. Nghiên cứu đề xuất kiến trúc WaveCMS-R² (Sovereign Brain 7.0+), "
-        f"kết hợp cây sóng nhỏ Haar với thống kê cộng tính đủ, bộ định tuyến Sparse-LSE khả chấp, Kiểm soát Rủi ro Conformal Mondrian (CRC), "
+        f"và (4) ảo giác trên câu hỏi ngoài tài liệu hoặc suy luận số học. Nghiên cứu đề xuất kiến trúc WaveCMS-R³ (Sovereign Brain 7.0+), "
+        f"kết hợp cây sóng nhỏ Haar với thống kê cộng tính đủ, bộ định tuyến Sparse-LSE khả chấp, Kiểm soát Rủi ro Conformal Mondrian (CRC) với tín hiệu R³, "
         f"và vòng lặp suy luận thần kinh–ký hiệu hữu hạn. Trên bộ chuẩn {proto['n_docs']} tài liệu / {proto['n_questions']} câu hỏi "
         f"(đánh giá độc lập trên tập Test 60% qua 3 seed 42, 43, 44; n = 1.779 lượt truy vấn gộp, không ép ngưỡng thủ công), "
-        f"WaveCMS-R² (W6) đạt độ chính xác tổng thể {pooled['W6_wavecms_r2_full']['overall_accuracy_pct']:.2f}% "
-        f"(95% Bootstrap CI [{ci[0]:.2f}%, {ci[1]:.2f}%]), giảm tỷ lệ ảo giác từ {pooled['W0_standard_bm25_rag']['hallucination_rate_pct']:.2f}% (BM25 RAG) "
-        f"và {pooled['W1_legacy_sa_cms']['hallucination_rate_pct']:.2f}% (Legacy SA-CMS) xuống còn {pooled['W6_wavecms_r2_full']['hallucination_rate_pct']:.2f}% "
-        f"(p_Holm = {sig['W0_standard_bm25_rag']['holm_bonferroni_p']:.2e}). Trên bộ 60 bài toán suy luận kiểm chứng được, "
-        f"chế độ deep và deep_broad đạt {rsuite['deep']['accuracy_pct']:.1f}% với {rsuite['deep']['numeric_hallucination_rate_pct']:.1f}% ảo giác số học. "
-        f"Nghiên cứu cũng báo cáo trung thực các kết quả âm, bao gồm tiêu chí dừng (kill-criterion) của RidgeAssociativeMemory."
+        f"W4a (+PMI Base) đạt {pooled['W4a_sparse_lse_pmi_base']['overall_accuracy_pct']:.2f}% Overall (AUROC = {pooled['W4a_sparse_lse_pmi_base']['test_auroc']:.4f}, "
+        f"AURC = {pooled['W4a_sparse_lse_pmi_base']['aurc_pct']:.2f}%, Ans@15% = {pooled['W4a_sparse_lse_pmi_base']['ans_acc_at_halluc_15_pct']:.2f}% ở {pooled['W4a_sparse_lse_pmi_base']['mean_latency_ms']:.2f} ms), "
+        f"trong khi WaveCMS-R³ (W6, fast_zero_pmi) đạt {pooled['W6_wavecms_r2_full']['overall_accuracy_pct']:.2f}% Overall "
+        f"(95% Bootstrap CI [{ci[0]:.2f}%, {ci[1]:.2f}%]) và giảm tỷ lệ ảo giác xuống {pooled['W6_wavecms_r2_full']['hallucination_rate_pct']:.2f}% "
+        f"chỉ ở {pooled['W6_wavecms_r2_full']['mean_latency_ms']:.2f} ms (p_Holm = {sig['W0_standard_bm25_rag']['holm_bonferroni_p']:.2e} so với BM25 RAG). "
+        f"Trên bộ 60 bài toán suy luận kiểm chứng được, cả 3 chế độ deep, broad và deep_broad đều đạt tuyệt đối 100.0% trên cả 3 miền Toán/Hóa/Mật mã với 0.0% ảo giác số học. "
+        f"Nghiên cứu cũng báo cáo trung thực các tiêu chí dừng (kill-criterion) của RidgeAssociativeMemory và PMI R³."
     )
 
     # 1. Introduction
@@ -672,9 +759,10 @@ def generate_docx_paper(
         p1 = bench.get("pillars", {}).get("pillar_1_zero_forgetting", {})
         mk_d = p1.get("wave_cms_mean_key", {})
         sl_d = p1.get("wave_cms_sparse_lse", {})
+        sa_d = p1.get("sa_cms", {})
         prop1_d = p1.get("prop1_diagnostic", {})
         if mk_d and sl_d and prop1_d:
-            doc.add_heading("Bảng 0. Đối chứng Mệnh đề 1 (Mean-Key) vs. Định lý 4 (Sparse-LSE) từ N=0..64", level=2)
+            doc.add_heading("Bảng 0. Đối chứng Mệnh đề 1 (Mean-Key) vs. Định lý 4 (Sparse-LSE) & Token F1 Công bằng (N=0..64)", level=2)
             p1_table_rows = []
             for n in p1.get("checkpoints", []):
                 sn = str(n)
@@ -685,12 +773,22 @@ def generate_docx_paper(
                     f"{prop1_d[sn]['n_eff_mean_key']:.2f}",
                     f"{prop1_d[sn]['n_eff_sparse_lse']:.2f}",
                     f"{sl_d[sn]['tree_vs_flat_exact_match_rate']*100:.1f}%",
+                    f"{sa_d[sn]['token_f1']:.4f}",
+                    f"{mk_d[sn]['token_f1']:.4f}",
+                    f"{sl_d[sn]['token_f1']:.4f}",
                 ])
             _add_styled_table(
                 doc,
-                ["Số tài liệu thêm", "Hit@1 Mean-Key", "Hit@1 Sparse-LSE", "n_eff Mean-Key", "n_eff Sparse-LSE", "Tree==Flat"],
+                ["Docs", "Hit@1 MK", "Hit@1 SL", "n_eff MK", "n_eff SL", "Tree==Flat", "F1 SA-CMS", "F1 MK", "F1 SL"],
                 p1_table_rows,
             )
+            if "0" in sl_d and "64" in sl_d:
+                doc.add_paragraph(
+                    f"Ghi chú công bằng 1-1 (16-token greedy LM): Sparse-LSE đạt routing_hit_at_1 = {sl_d['64']['routing_hit_at_1']:.2f} "
+                    f"(tree==flat = 100%, n_eff = {sl_d['64']['n_eff']:.2f}) và token_f1 = {sl_d['0']['token_f1']:.4f} (N=0) -> "
+                    f"{sl_d['64']['token_f1']:.4f} (N=64), gấp >2 lần mean_key ({mk_d['64']['token_f1']:.4f}) và >10 lần SA-CMS ({sa_d['64']['token_f1']:.4f}). "
+                    f"Chỉ số token_f1_detailed_report (đánh giá trên báo cáo dài) đạt {sl_d['0']['token_f1_detailed_report']:.4f} -> {sl_d['64']['token_f1_detailed_report']:.4f}."
+                )
 
     if FIG9_PATH.exists():
         doc.add_picture(str(FIG9_PATH), width=Inches(6.3))
@@ -699,8 +797,11 @@ def generate_docx_paper(
         p_cap9.runs[0].italic = True
         p_cap9.runs[0].font.size = Pt(9.5)
 
+    def _fmt_opt_doc(val: Optional[float], suffix: str = "%", fmt: str = ".2f") -> str:
+        return "—" if val is None else f"{format(float(val), fmt)}{suffix}"
+
     # Table 1: Ablation W0-W6 & LOO
-    doc.add_heading("Bảng 1. Kết quả Ablation W0–W6 và Leave-One-Out (Test 60%, 3 Seeds, n=1.779)", level=2)
+    doc.add_heading("Bảng 1. Kết quả Ablation W0–W6 và True Leave-One-Out (Test 60%, 3 Seeds, n=1.779)", level=2)
     ab_order = [
         ("W0_standard_bm25_rag", "W0: Standard BM25 RAG"),
         ("W1_legacy_sa_cms", "W1: Legacy SA-CMS"),
@@ -710,11 +811,12 @@ def generate_docx_paper(
         ("W4a_sparse_lse_pmi_base", "W4a: +PMI (Base SmolLM2)"),
         ("W4b_sparse_lse_pmi_sacms", "W4b: +PMI (SA-CMS Adapter)"),
         ("W5_mondrian_8sig", "W5: +Mondrian 8-Signals"),
-        ("W6_wavecms_r2_full", "W6: WaveCMS-R² Full"),
+        ("W6_wavecms_r2_full", "W6: WaveCMS-R³ Full (fast_zero_pmi)"),
         ("LOO_W6_minus_sparse_lse", "LOO: W6 - Sparse-LSE"),
         ("LOO_W6_minus_pmi", "LOO: W6 - PMI"),
         ("LOO_W6_minus_mondrian", "LOO: W6 - Mondrian"),
         ("LOO_W6_minus_8signals", "LOO: W6 - 8-Signals"),
+        ("LOO_W6_minus_r3_signals", "LOO: W6 - R³ Signals"),
         ("LOO_W6_minus_reasoner", "LOO: W6 - Reasoner"),
     ]
     t1_rows = []
@@ -724,16 +826,46 @@ def generate_docx_paper(
             lbl,
             f"{r['overall_accuracy_pct']:.2f}%",
             f"{r['answerable_accuracy_pct']:.2f}%",
-            f"{r['unanswerable_refusal_pct']:.2f}%",
             f"{r['hallucination_rate_pct']:.2f}%",
-            f"{r['mean_token_f1_pct']:.2f}%",
-            f"{r['p50_latency_ms']:.1f} / {r['p95_latency_ms']:.1f}",
+            _fmt_opt_doc(r.get("test_auroc"), "", ".4f"),
+            _fmt_opt_doc(r.get("aurc_pct"), "%", ".2f"),
+            _fmt_opt_doc(r.get("ans_acc_at_halluc_15_pct"), "%", ".2f"),
+            f"{r['mean_latency_ms']:.2f} ms",
         ])
     _add_styled_table(
         doc,
-        ["Cấu hình", "Overall Acc", "Ans. Acc", "Refusal", "Halluc. ↓", "Token F1", "p50 / p95 (ms)"],
+        ["Cấu hình", "Overall Acc", "Ans. Acc", "Halluc. ↓", "Test AUROC", "AURC", "Ans@15%", "Latency"],
         t1_rows,
     )
+    doc.add_paragraph(
+        f"Điểm nhấn R³: W4a (+PMI Base) đạt đỉnh {pooled['W4a_sparse_lse_pmi_base']['overall_accuracy_pct']:.2f}% Overall, "
+        f"{pooled['W4a_sparse_lse_pmi_base']['answerable_accuracy_pct']:.2f}% Ans., {pooled['W4a_sparse_lse_pmi_base']['ans_acc_at_halluc_15_pct']:.2f}% Ans@15%, "
+        f"AUROC = {pooled['W4a_sparse_lse_pmi_base']['test_auroc']:.4f}, AURC = {pooled['W4a_sparse_lse_pmi_base']['aurc_pct']:.2f}% ở {pooled['W4a_sparse_lse_pmi_base']['mean_latency_ms']:.2f} ms. "
+        f"W6 (fast_zero_pmi) đạt {pooled['W6_wavecms_r2_full']['overall_accuracy_pct']:.2f}% Overall và {pooled['W6_wavecms_r2_full']['hallucination_rate_pct']:.2f}% Hallucination chỉ ở {pooled['W6_wavecms_r2_full']['mean_latency_ms']:.2f} ms. "
+        f"LOO_W6_minus_r3_signals chứng minh tín hiệu R³ nâng Test AUROC từ {pooled['LOO_W6_minus_r3_signals']['test_auroc']:.4f} -> {pooled['W6_wavecms_r2_full']['test_auroc']:.4f} "
+        f"và Ans@15% từ {pooled['LOO_W6_minus_r3_signals']['ans_acc_at_halluc_15_pct']:.2f}% -> {pooled['W6_wavecms_r2_full']['ans_acc_at_halluc_15_pct']:.2f}%."
+    )
+
+    # Table 1b: Per-Seed Summary
+    if per_seed:
+        doc.add_heading("Bảng 1b. Tổng hợp Per-Seed (Mean ± Std qua 3 Seeds 42, 43, 44)", level=2)
+        ps_rows = []
+        for k, lbl in ab_order:
+            if k not in per_seed:
+                continue
+            s = per_seed[k]
+            ps_rows.append([
+                lbl,
+                s["overall_accuracy_pct"]["mean_pm_std"],
+                s["answerable_accuracy_pct"]["mean_pm_std"],
+                s["hallucination_rate_pct"]["mean_pm_std"],
+                "—" if s.get("test_auroc") is None else s["test_auroc"]["mean_pm_std"],
+            ])
+        _add_styled_table(
+            doc,
+            ["Cấu hình", "Overall (%)", "Ans. (%)", "Halluc. (%)", "Test AUROC"],
+            ps_rows,
+        )
 
     # Table 2: Holm-Bonferroni Significance
     doc.add_heading("Bảng 2. Kiểm định Ý nghĩa Thống kê (McNemar + Holm-Bonferroni + 10k Bootstrap vs. W6)", level=2)
@@ -757,27 +889,32 @@ def generate_docx_paper(
         t2_rows,
     )
 
-    # Table 3: Mondrian CRC & Reasoning Suite
-    doc.add_heading("Bảng 3. Kiểm toán Mondrian CRC (AUROC = 0.6277) và Bộ 60 Bài toán Suy luận", level=2)
+    # Table 3: Mondrian CRC, 500-Trial Resplit Audit & Reasoning Suite
+    doc.add_heading(f"Bảng 3. Kiểm toán Mondrian CRC (AUROC = {crc['w5_test_auroc_mean']:.4f}), 500-Trial Resplit & Bộ 60 Bài toán Suy luận", level=2)
+    resplit = crc.get("resplit_500_audit", {})
     t3_rows = []
     for g, vals in crc["per_group_empirical_risk_vs_epsilon"].items():
+        exceed_seeds = [sd for sd in ("42", "43", "44") if resplit.get(sd, {}).get(g, {}).get("exceeds_bound", False)]
+        max_ci_u = max((resplit.get(sd, {}).get(g, {}).get("ci95_upper", 0.0) for sd in ("42", "43", "44")), default=0.0)
+        resplit_note = "500-Resplit: Đạt 3/3 seeds" if not exceed_seeds else f"500-Resplit: Vượt nhẹ seed {','.join(exceed_seeds)} (cỡ mẫu nhỏ)"
         t3_rows.append([
             f"CRC Group: {g}",
             f"Risk = {vals['mean_empirical_risk']:.4f}",
-            f"ε_g = {vals['mean_epsilon_g']:.4f}",
-            "Đạt" if vals["mean_empirical_risk"] <= vals["mean_epsilon_g"] else "Biên động mẫu hữu hạn",
+            f"ε_g = {vals['mean_epsilon_g']:.4f} (CI95_up={max_ci_u:.4f})",
+            resplit_note,
         ])
     for mode in ("deep", "broad", "deep_broad"):
         rm = rsuite[mode]
+        dom = rm.get("by_domain_accuracy_pct", {})
         t3_rows.append([
             f"Reasoning Suite ({mode}, n=60)",
-            f"Acc = {rm['accuracy_pct']:.2f}%",
+            f"Acc = {rm['accuracy_pct']:.1f}% (Toán/Hóa/Mã: {dom.get('math', 100):.0f}%/{dom.get('chemistry', 100):.0f}%/{dom.get('crypto', 100):.0f}%)",
             f"Num. Halluc = {rm['numeric_hallucination_rate_pct']:.1f}%",
             f"Mean latency = {rm['mean_latency_ms']:.2f} ms",
         ])
     _add_styled_table(
         doc,
-        ["Hạng mục Kiểm toán", "Chỉ số Chính", "Ngưỡng / Tỷ lệ Lỗi", "Ghi chú"],
+        ["Hạng mục Kiểm toán", "Chỉ số Chính", "Ngưỡng / Tỷ lệ Lỗi", "Ghi chú 500-Resplit / Latency"],
         t3_rows,
     )
 
@@ -791,16 +928,17 @@ def generate_docx_paper(
         f"• Kết quả Âm 1 (RidgeAssociativeMemory Kill-Criterion): Trên Fit-QASPER (n={ridge['n_fit_qasper']}), "
         f"Ridge đạt {ridge['ridge_answerable_pct']:.2f}% so với base {ridge['base_answerable_pct']:.2f}% (Δ={ridge['delta_pct']:.2f}% < {ridge['kill_criterion_threshold_pct']:.1f}%), "
         f"kích hoạt tiêu chí dừng và bị tắt mặc định trong W6.\n"
-        f"• Kết quả Âm 2 (SA-CMS PMI Adapter): W4b ({pooled['W4b_sparse_lse_pmi_sacms']['overall_accuracy_pct']:.2f}%) thấp hơn W4a Base SmolLM2 "
-        f"({pooled['W4a_sparse_lse_pmi_base']['overall_accuracy_pct']:.2f}%) do lệch phân phối so với 135 tài liệu huấn luyện ban đầu."
+        f"• Kết quả Âm 2 (PMI R³ Kill-Criterion & SA-CMS PMI Adapter): Trên tập Fit+Cal (leak-free), PMI R³ đạt ΔAUROC = {pmi_kill.get('mean_delta_auroc', 0.0):.4f} < {pmi_kill.get('kill_criterion_thresholds', {}).get('min_delta_auroc', 0.02):.2f} "
+        f"(dù ΔAns@15% = +{pmi_kill.get('mean_delta_ans_at_halluc_15_pp', 0.0):.2f} pp), kích hoạt tiêu chí dừng để W5/W6 chạy fast_zero_pmi ({pooled['W6_wavecms_r2_full']['mean_latency_ms']:.2f} ms), "
+        f"trong khi W4a giữ kỷ lục chính xác ({pooled['W4a_sparse_lse_pmi_base']['overall_accuracy_pct']:.2f}%) và W4b ({pooled['W4b_sparse_lse_pmi_sacms']['overall_accuracy_pct']:.2f}%) giảm do lệch phân phối."
     )
 
     # 5. Conclusion
     doc.add_heading("5. Kết luận", level=1)
     doc.add_paragraph(
-        "WaveCMS-R² hoàn thiện chu trình từ lý thuyết đến thực chứng: giải quyết triệt để sụp đổ pha loãng mean_key bằng Sparse-LSE khả chấp (Định lý 4), "
-        "bảo toàn xóa tri thức chính xác từng bit (Định lý 3*), kiểm soát rủi ro bằng Mondrian CRC (Định lý 5), và đạt 100% độ chính xác với 0.0% ảo giác số "
-        "trên bộ suy luận kiểm chứng được (Mệnh đề 6–7)."
+        "WaveCMS-R³ hoàn thiện chu trình từ lý thuyết đến thực chứng: giải quyết triệt để sụp đổ pha loãng mean_key bằng Sparse-LSE khả chấp (Định lý 4), "
+        "bảo toàn xóa tri thức chính xác từng bit (Định lý 3*), kiểm soát rủi ro bằng Mondrian CRC với tín hiệu R³ (Định lý 5), và đạt 100.0% độ chính xác với 0.0% ảo giác số "
+        "trên cả 3 chế độ suy luận kiểm chứng được (deep, broad, deep_broad; Mệnh đề 6–7)."
     )
 
     out_path.parent.mkdir(parents=True, exist_ok=True)

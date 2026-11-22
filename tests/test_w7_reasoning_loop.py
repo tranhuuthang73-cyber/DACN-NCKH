@@ -381,3 +381,86 @@ def test_fast_and_deep_broad_modes() -> None:
     assert db_trace.mode == "deep_broad"
     assert len(db_trace.facets) == 5
     assert "4" in db_trace.answer
+
+
+def test_broad_mode_symbolic_solver_math_chem_crypto_with_facets() -> None:
+    docs = [
+        {
+            "passage_id": "p1",
+            "document_id": "doc_1",
+            "section_title": "Lý thuyết",
+            "citation_label": "[1]",
+            "resolution": "LEAF_PARAGRAPH",
+            "facet": "definition",
+            "text": "Phương pháp ký hiệu đảm bảo nghiệm chính xác tuyệt đối.",
+        },
+        {
+            "passage_id": "p2",
+            "document_id": "doc_2",
+            "section_title": "Ứng dụng",
+            "citation_label": "[2]",
+            "resolution": "SECTION",
+            "facet": "application",
+            "text": "Áp dụng cho toán học, hóa học và mật mã cổ điển.",
+        },
+    ]
+    reasoner = UnifiedReasoner(retrieve_fn=lambda q, top_k=5, resolution=None: docs)
+
+    # Math: solve_quadratic
+    m_trace = reasoner.run("Giải phương trình 2x^2 - 7x + 3 = 0", mode="broad")
+    assert m_trace.mode == "broad"
+    assert len(m_trace.facets) == 5
+    assert any("solve_quadratic" in t and "x1=3" in t and "x2=1/2" in t for t in m_trace.solver_traces)
+    assert any(s.kind == "formula" and s.verified for s in m_trace.steps)
+    assert m_trace.answer.startswith("solve_quadratic")
+    assert "Phương pháp ký hiệu" in m_trace.answer
+
+    # Chemistry: balance_equation
+    c_trace = reasoner.run("Cân bằng phương trình Fe + O2 -> Fe2O3", mode="broad")
+    assert any("4Fe + 3O2 -> 2Fe2O3" in t for t in c_trace.solver_traces)
+    assert any(s.kind == "formula" and s.verified for s in c_trace.steps)
+    assert c_trace.answer.startswith("balance_equation")
+    assert len(c_trace.facets) == 5
+
+    # Cryptography: caesar, vigenere, affine
+    caesar_trace = reasoner.run("caesar('HELLO', 3)", mode="broad")
+    assert any("KHOOR" in t for t in caesar_trace.solver_traces)
+    assert caesar_trace.answer.startswith("caesar")
+    assert len(caesar_trace.facets) == 5
+
+    vig_trace = reasoner.run("vigenere('ATTACKATDAWN', 'LEMON')", mode="broad")
+    assert any("LXFOPVEFRNHR" in t for t in vig_trace.solver_traces)
+    assert len(vig_trace.facets) == 5
+
+    aff_trace = reasoner.run("affine('HELLO', 5, 8)", mode="broad")
+    assert any("RCLLA" in t for t in aff_trace.solver_traces)
+    assert len(aff_trace.facets) == 5
+
+
+def test_natural_qa_number_filter_preserves_normalized_numbers(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    docs = [
+        {
+            "passage_id": "p1",
+            "document_id": "doc_1",
+            "section_title": "Thống kê",
+            "citation_label": "[1]",
+            "text": "Giai đoạn 2024-2025 ghi nhận 1.000 mẫu thử với tỷ lệ 95,5% đạt chuẩn.",
+        }
+    ]
+    reasoner = UnifiedReasoner(retrieve_fn=lambda q, top_k=5: docs, max_deep_rounds=1)
+    monkeypatch.setattr(
+        reasoner._dag_builder,
+        "compose_chain_narrative",
+        lambda chain: (
+            "Trong năm 2025, hệ thống xử lý 1000 mẫu với tỷ lệ 95.5% đạt chuẩn theo báo cáo 2023 [1]."
+        ),
+    )
+
+    trace = reasoner.run("Báo cáo năm 2023 ghi nhận kết quả gì?", mode="deep")
+    assert "2025" in trace.answer
+    assert "1000" in trace.answer
+    assert "95.5%" in trace.answer
+    assert "2023" in trace.answer
+    assert trace.removed_claims == []

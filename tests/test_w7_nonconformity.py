@@ -5,6 +5,7 @@ import pytest
 
 from src.wave_cms.nonconformity import (
     MONDRIAN_GROUPS,
+    R3_SIGNAL_NAMES,
     SIGNAL_NAMES,
     assign_group,
     extract_signals,
@@ -180,3 +181,105 @@ def test_assign_group_invariant_to_hidden_labels():
         poisoned_b = {**meta, "answerable": False, "gold_answer": "", "is_impossible": True, "label": 0}
         assert assign_group(doc_meta=poisoned_a, query=query, doc_length_chars=length) == g_clean
         assert assign_group(doc_meta=poisoned_b, query=query, doc_length_chars=length) == g_clean
+
+
+def test_r3_signal_names_and_new_signals():
+    assert R3_SIGNAL_NAMES == SIGNAL_NAMES + (
+        "cross_retriever_agree",
+        "sent_margin",
+        "idf_query_cov",
+        "analyzer_conf",
+    )
+
+    evidence = [
+        {
+            "text": (
+                "Albert Einstein published general relativity in 1915. "
+                "He later worked at Princeton University."
+            ),
+            "bm25": 5.0,
+        }
+    ]
+
+    sig_agree = extract_signals(
+        query="When did Albert Einstein publish general relativity?",
+        candidate_answer="1915",
+        evidence=evidence,
+        bm25_best_sentence="Albert Einstein published general relativity in 1915.",
+        idf_map={"einstein": 4.0, "relativity": 3.5, "publish": 2.0, "general": 1.0, "albert": 2.5},
+        analyzer_conf=0.92,
+        sentence_scores=[0.95, 0.25, 0.1],
+    )
+    for name in R3_SIGNAL_NAMES:
+        assert name in sig_agree
+        assert isinstance(sig_agree[name], float)
+        assert math.isfinite(sig_agree[name])
+
+    assert sig_agree["cross_retriever_agree"] > 0.8
+    assert math.isclose(sig_agree["sent_margin"], 0.7, rel_tol=1e-6)
+    assert math.isclose(sig_agree["idf_query_cov"], 1.0, rel_tol=1e-6)
+    assert math.isclose(sig_agree["analyzer_conf"], 0.92, rel_tol=1e-6)
+
+    # Disagreement with BM25 best sentence and fallback analyzer_conf / sent_margin
+    sig_disagree = extract_signals(
+        query="When did Albert Einstein publish general relativity?",
+        candidate_answer="1915",
+        evidence=evidence,
+        bm25_best_sentence="Isaac Newton formulated classical mechanics in 1687.",
+        analyzer_conf=None,
+        sentence_scores=None,
+    )
+    assert sig_disagree["cross_retriever_agree"] == 0.0
+    assert 0.0 <= sig_disagree["sent_margin"] <= 1.0
+    assert sig_disagree["sent_margin"] > 0.5
+    assert 0.0 < sig_disagree["analyzer_conf"] <= 1.0
+
+    # Default bm25_best_sentence=None compares candidate_answer with best sentence of evidence[0]
+    sig_default_bm25 = extract_signals(
+        query="When did Albert Einstein publish general relativity?",
+        candidate_answer="1915",
+        evidence=evidence,
+    )
+    assert sig_default_bm25["cross_retriever_agree"] > 0.3
+
+
+def test_r3_idf_query_cov_weighting():
+    evidence = [{"text": "The photon energy depends on frequency."}]
+    # Rare keyword "hamiltonian" missing vs common keyword "energy" present
+    idf_map = {"hamiltonian": 6.0, "energy": 1.0}
+    sig_missing_rare = extract_signals(
+        query="How does the hamiltonian energy behave?",
+        candidate_answer="depends on frequency",
+        evidence=evidence,
+        idf_map=idf_map,
+    )
+    assert sig_missing_rare["idf_query_cov"] < 0.3
+
+    # Without idf_map, length-based approximation still bounds in [0, 1]
+    sig_approx = extract_signals(
+        query="How does the hamiltonian energy behave?",
+        candidate_answer="depends on frequency",
+        evidence=evidence,
+    )
+    assert 0.0 < sig_approx["idf_query_cov"] < 1.0
+
+
+def test_r3_long_passage_anti_dilution():
+    noise_sentences = [
+        f"Noise sentence {i} discusses unrelated weather and did not mention physics."
+        for i in range(15)
+    ]
+    target_sentence = "Marie Curie isolated pure radium in 1902 in Paris."
+    long_passage = " ".join(noise_sentences[:7] + [target_sentence] + noise_sentences[7:])
+
+    sig = extract_signals(
+        query="What element did Marie Curie isolate in 1902?",
+        candidate_answer="radium",
+        evidence=[{"text": long_passage, "score": 0.9}],
+    )
+    # Sentence-level concentration avoids dilution from 15 noise sentences (even with "did not")
+    assert sig["salient_cov"] >= 0.8
+    assert sig["negation_mismatch"] == 0.0
+    assert sig["idf_query_cov"] >= 0.7
+    assert sig["sent_margin"] > 0.4
+    assert sig["analyzer_conf"] > 0.75

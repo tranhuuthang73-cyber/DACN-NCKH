@@ -34,7 +34,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from src.wave_cms.nonconformity import SIGNAL_NAMES
+from src.wave_cms.nonconformity import R3_SIGNAL_NAMES, SIGNAL_NAMES
 from src.wave_cms.tree_memory import (
     DocumentTreeNode,
     TreeLevel,
@@ -718,12 +718,22 @@ class MondrianConformalRiskController(ConformalRiskController):
         default_threshold: float = 0.45,
         l2_reg: float = 1.0,
         seed: int = 42,
+        signal_names: Optional[Sequence[str]] = None,
+        use_global_fallback: bool = False,
     ) -> None:
         super().__init__(epsilon=epsilon, default_threshold=default_threshold)
         self.l2_reg = float(l2_reg)
         self.seed = int(seed)
-        self.signal_names: Tuple[str, ...] = tuple(SIGNAL_NAMES)
-        self._pmi_idx: int = self.signal_names.index("pmi")
+        self._explicit_signal_names: Optional[Tuple[str, ...]] = (
+            tuple(signal_names) if signal_names is not None else None
+        )
+        self.signal_names: Tuple[str, ...] = (
+            tuple(signal_names) if signal_names is not None else tuple(SIGNAL_NAMES)
+        )
+        self.active_signal_names_: Tuple[str, ...] = self.signal_names
+        self.selected_signal_names_: Tuple[str, ...] = self.signal_names
+        self.use_global_fallback: bool = bool(use_global_fallback)
+        self._pmi_idx: int = self.signal_names.index("pmi") if "pmi" in self.signal_names else -1
         self.pmi_fit_mean_: float = 0.0
         self.feature_means_: Optional[np.ndarray] = None
         self.feature_stds_: Optional[np.ndarray] = None
@@ -734,6 +744,8 @@ class MondrianConformalRiskController(ConformalRiskController):
         self.group_epsilons_: Dict[str, float] = {}
         self.group_cal_stats_: Dict[str, Dict[str, Any]] = {}
         self.global_threshold_: float = self.default_threshold
+        self.global_lambda_: float = self.default_threshold
+        self.audit_fallback_groups_: set[str] = set()
 
     def _extract_raw_vector(
         self,
@@ -796,7 +808,99 @@ class MondrianConformalRiskController(ConformalRiskController):
             b -= lr * grad_b
         return w, float(b)
 
-    def fit_weights(self, fit_rows: Sequence[Dict[str, Any]]) -> Dict[str, Any]:
+    _R3_EXTRA_SIGNALS: Tuple[str, ...] = (
+        "cross_retriever_agree",
+        "sent_margin",
+        "idf_query_cov",
+        "analyzer_conf",
+    )
+
+    def _extract_matrix_for_signals(
+        self,
+        rows: Sequence[Mapping[str, Any]],
+        sig_names: Sequence[str],
+        pmi_impute_value: float,
+    ) -> np.ndarray:
+        n = len(rows)
+        d = len(sig_names)
+        mat = np.zeros((n, d), dtype=np.float64)
+        for r_idx, row in enumerate(rows):
+            sigs = row.get("signals", row)
+            pmi_missing = float(sigs.get("pmi_missing", 0.0)) >= 0.5
+            for c_idx, name in enumerate(sig_names):
+                raw_val = sigs.get(name)
+                if name == "pmi" and (pmi_missing or raw_val is None or not math.isfinite(float(raw_val))):
+                    mat[r_idx, c_idx] = pmi_impute_value
+                else:
+                    val = 0.0 if raw_val is None else float(raw_val)
+                    mat[r_idx, c_idx] = val if math.isfinite(val) else 0.0
+        return mat
+
+    def _fit_and_score_logreg(
+        self,
+        X_train: np.ndarray,
+        y_train: np.ndarray,
+        X_eval: np.ndarray,
+    ) -> Tuple[np.ndarray, float, np.ndarray, np.ndarray, np.ndarray]:
+        means = np.mean(X_train, axis=0)
+        stds = np.std(X_train, axis=0)
+        safe_stds = np.where(stds > 1e-8, stds, 1.0)
+        X_tr_std = (X_train - means) / safe_stds
+        X_ev_std = (X_eval - means) / safe_stds
+
+        if len(np.unique(y_train)) >= 2:
+            from sklearn.linear_model import LogisticRegression
+
+            clf = LogisticRegression(
+                C=1.0 / max(1e-6, self.l2_reg),
+                penalty="l2",
+                solver="lbfgs",
+                max_iter=1000,
+                random_state=self.seed,
+            )
+            clf.fit(X_tr_std, y_train)
+            w = clf.coef_[0].astype(np.float64).copy()
+            b = float(clf.intercept_[0])
+        else:
+            w, b = self._fit_numpy_gd(X_tr_std, y_train)
+
+        logits = np.clip(X_ev_std @ w + b, -60.0, 60.0)
+        probs = 1.0 / (1.0 + np.exp(-logits))
+        return w, b, means, safe_stds, probs
+
+    def _cv_auroc_for_signals(
+        self,
+        fit_rows: Sequence[Mapping[str, Any]],
+        y_arr: np.ndarray,
+        sig_names: Sequence[str],
+        pmi_impute_value: float,
+        n_splits: int = 5,
+    ) -> float:
+        n_pos = int(np.sum(y_arr == 1))
+        n_neg = int(np.sum(y_arr == 0))
+        k_folds = min(n_splits, n_pos, n_neg)
+        if k_folds < 2:
+            return 0.5
+
+        from sklearn.model_selection import StratifiedKFold
+
+        X_all = self._extract_matrix_for_signals(fit_rows, sig_names, pmi_impute_value)
+        skf = StratifiedKFold(n_splits=k_folds, shuffle=True, random_state=self.seed)
+        oof_probs = np.zeros(len(y_arr), dtype=np.float64)
+        for tr_idx, val_idx in skf.split(X_all, y_arr):
+            _, _, _, _, val_probs = self._fit_and_score_logreg(
+                X_all[tr_idx], y_arr[tr_idx], X_all[val_idx]
+            )
+            oof_probs[val_idx] = val_probs
+        return self._compute_auroc(y_arr, oof_probs)
+
+    def fit_weights(
+        self,
+        fit_rows: Sequence[Dict[str, Any]],
+        use_r3_signals: Optional[bool] = None,
+        forward_select_r3: bool = False,
+        min_auroc_gain: float = 0.005,
+    ) -> Dict[str, Any]:
         """Fits feature standardization and L2 logistic regression strictly on Fit rows."""
         if not fit_rows:
             raise ValueError("fit_rows must not be empty")
@@ -810,51 +914,75 @@ class MondrianConformalRiskController(ConformalRiskController):
                 pmi_vals.append(float(raw_pmi))
         self.pmi_fit_mean_ = float(np.mean(pmi_vals)) if pmi_vals else 0.0
 
-        X_raw = np.vstack([
-            self._extract_raw_vector(row.get("signals", row), self.pmi_fit_mean_)
-            for row in fit_rows
-        ])
         y_arr = np.array(
             [1 if int(row.get("y", row.get("is_correct", 0))) == 1 else 0 for row in fit_rows],
             dtype=np.int32,
         )
 
-        means = np.mean(X_raw, axis=0)
-        stds = np.std(X_raw, axis=0)
-        safe_stds = np.where(stds > 1e-8, stds, 1.0)
+        has_all_r3 = all(
+            all(k in row.get("signals", row) for k in self._R3_EXTRA_SIGNALS)
+            for row in fit_rows
+        )
+
+        cv_info: Dict[str, Any] = {}
+        if forward_select_r3:
+            current_sigs = list(SIGNAL_NAMES)
+            base_cv = self._cv_auroc_for_signals(fit_rows, y_arr, current_sigs, self.pmi_fit_mean_)
+            current_cv = base_cv
+            kept_r3: List[str] = []
+            killed_r3: List[str] = []
+            for cand in self._R3_EXTRA_SIGNALS:
+                if not all(cand in row.get("signals", row) for row in fit_rows):
+                    killed_r3.append(cand)
+                    continue
+                cand_cv = self._cv_auroc_for_signals(
+                    fit_rows, y_arr, current_sigs + [cand], self.pmi_fit_mean_
+                )
+                if cand_cv - current_cv >= float(min_auroc_gain):
+                    current_sigs.append(cand)
+                    current_cv = cand_cv
+                    kept_r3.append(cand)
+                else:
+                    killed_r3.append(cand)
+            chosen_sigs = tuple(current_sigs)
+            cv_info = {
+                "cv_auroc_base": base_cv,
+                "cv_auroc_selected": current_cv,
+                "kept_r3_signals": kept_r3,
+                "killed_r3_signals": killed_r3,
+            }
+        elif self._explicit_signal_names is not None:
+            chosen_sigs = self._explicit_signal_names
+        elif use_r3_signals is True or (use_r3_signals is None and has_all_r3):
+            chosen_sigs = tuple(R3_SIGNAL_NAMES)
+        else:
+            chosen_sigs = tuple(SIGNAL_NAMES)
+
+        self.signal_names = chosen_sigs
+        self.active_signal_names_ = chosen_sigs
+        self.selected_signal_names_ = chosen_sigs
+        self._pmi_idx = self.signal_names.index("pmi") if "pmi" in self.signal_names else -1
+
+        X_raw = self._extract_matrix_for_signals(fit_rows, self.signal_names, self.pmi_fit_mean_)
+        w, b, means, safe_stds, probs = self._fit_and_score_logreg(X_raw, y_arr, X_raw)
+        self.weights_ = w
+        self.bias_ = b
         self.feature_means_ = means
         self.feature_stds_ = safe_stds
-
-        X_std = (X_raw - means) / safe_stds
-
-        if len(np.unique(y_arr)) >= 2:
-            from sklearn.linear_model import LogisticRegression
-
-            clf = LogisticRegression(
-                C=1.0 / max(1e-6, self.l2_reg),
-                penalty="l2",
-                solver="lbfgs",
-                max_iter=1000,
-                random_state=self.seed,
-            )
-            clf.fit(X_std, y_arr)
-            self.weights_ = clf.coef_[0].astype(np.float64).copy()
-            self.bias_ = float(clf.intercept_[0])
-        else:
-            self.weights_, self.bias_ = self._fit_numpy_gd(X_std, y_arr)
-
-        logits = np.clip(X_std @ self.weights_ + self.bias_, -60.0, 60.0)
-        probs = 1.0 / (1.0 + np.exp(-logits))
         self.fit_auroc_ = self._compute_auroc(y_arr, probs)
 
-        return {
+        out = {
             "status": "SUCCESS",
             "n_fit": len(fit_rows),
             "fit_auroc": self.fit_auroc_,
             "pmi_fit_mean": self.pmi_fit_mean_,
             "bias": self.bias_,
-            "weights": {name: float(w) for name, w in zip(self.signal_names, self.weights_)},
+            "active_signal_names": list(self.active_signal_names_),
+            "selected_signal_names": list(self.selected_signal_names_),
+            "weights": {name: float(val) for name, val in zip(self.signal_names, self.weights_)},
         }
+        out.update(cv_info)
+        return out
 
     def score_signals(self, signals: Dict[str, float]) -> float:
         """Computes s_w(x) = sigmoid(w^T f_tilde(x) + b) in [0, 1]."""
@@ -870,10 +998,11 @@ class MondrianConformalRiskController(ConformalRiskController):
         scores_arr: np.ndarray,
         labels_arr: np.ndarray,
         eps_g: float,
+        min_group_size: int = 15,
     ) -> Dict[str, Any]:
         n_g = len(scores_arr)
         eps_g = max(1e-6, min(1.0, float(eps_g)))
-        infeasible = n_g == 0 or (float(n_g) < (1.0 / eps_g) - 1.0)
+        infeasible = n_g == 0 or (float(n_g + 1) * eps_g < 1.0) or (n_g < min_group_size)
         if infeasible:
             return {
                 "lambda_g": 1.0 + 1e-9,
@@ -882,6 +1011,7 @@ class MondrianConformalRiskController(ConformalRiskController):
                 "empirical_risk": 0.0,
                 "crc_bound": 1.0 / float(n_g + 1),
                 "infeasible_group_size": True,
+                "fallback_to_global": False,
             }
 
         wrong = labels_arr == 0
@@ -914,9 +1044,19 @@ class MondrianConformalRiskController(ConformalRiskController):
             "empirical_risk": best_emp_risk,
             "crc_bound": best_bound,
             "infeasible_group_size": False,
+            "fallback_to_global": False,
         }
 
-    def _row_score_and_label(self, row: Dict[str, Any]) -> Tuple[float, int, str]:
+    def _calibrate_1d(
+        self,
+        scores_arr: np.ndarray,
+        labels_arr: np.ndarray,
+        eps: float,
+    ) -> float:
+        res = self._calibrate_group_scores(scores_arr, labels_arr, eps, min_group_size=1)
+        return float(res["lambda_g"])
+
+    def _row_score_and_label(self, row: Mapping[str, Any]) -> Tuple[float, int, str]:
         if "score" in row:
             s = max(0.0, min(1.0, float(row["score"])))
         else:
@@ -929,6 +1069,7 @@ class MondrianConformalRiskController(ConformalRiskController):
         self,
         cal_rows: Sequence[Dict[str, Any]],
         eps_by_group: Union[float, Dict[str, float]] = 0.10,
+        fallback_to_global: Optional[bool] = None,
     ) -> Dict[str, Dict[str, Any]]:
         """Calibrates group-conditional thresholds lambda_hat_g strictly on Cal rows."""
         if not cal_rows:
@@ -937,6 +1078,8 @@ class MondrianConformalRiskController(ConformalRiskController):
             self.group_epsilons_ = {}
             self.group_cal_stats_ = {}
             return {}
+
+        use_fb = self.use_global_fallback if fallback_to_global is None else bool(fallback_to_global)
 
         grouped: Dict[str, Tuple[List[float], List[int]]] = {}
         all_scores: List[float] = []
@@ -950,6 +1093,19 @@ class MondrianConformalRiskController(ConformalRiskController):
             grouped[g][1].append(y)
             all_scores.append(s)
             all_labels.append(y)
+
+        default_eps = (
+            float(np.mean(list(eps_by_group.values())))
+            if isinstance(eps_by_group, dict) and eps_by_group
+            else (float(eps_by_group) if not isinstance(eps_by_group, dict) else self.epsilon)
+        )
+        global_lambda = self._calibrate_1d(
+            np.array(all_scores, dtype=np.float64),
+            np.array(all_labels, dtype=np.int32),
+            default_eps,
+        )
+        self.global_lambda_ = global_lambda
+        self.global_threshold_ = global_lambda
 
         stats_by_group: Dict[str, Dict[str, Any]] = {}
         self.group_thresholds_ = {}
@@ -966,25 +1122,115 @@ class MondrianConformalRiskController(ConformalRiskController):
                 np.array(y_list, dtype=np.int32),
                 eps_g,
             )
+            if (res["infeasible_group_size"] and use_fb) or (g in self.audit_fallback_groups_):
+                res["lambda_g"] = global_lambda
+                res["fallback_to_global"] = True
             stats_by_group[g] = res
             self.group_thresholds_[g] = float(res["lambda_g"])
             self.group_epsilons_[g] = float(res["epsilon_g"])
 
-        default_eps = (
-            float(np.mean(list(eps_by_group.values())))
-            if isinstance(eps_by_group, dict) and eps_by_group
-            else (float(eps_by_group) if not isinstance(eps_by_group, dict) else self.epsilon)
-        )
-        global_res = self._calibrate_group_scores(
-            np.array(all_scores, dtype=np.float64),
-            np.array(all_labels, dtype=np.int32),
-            default_eps,
-        )
-        self.global_threshold_ = float(global_res["lambda_g"])
         self.group_cal_stats_ = stats_by_group
         self.calibration_sample_size = len(cal_rows)
         self.is_calibrated = True
         return stats_by_group
+
+    def audit_resplit_risk(
+        self,
+        pooled_cal_test_rows: Sequence[Mapping[str, Any]],
+        eps: float = 0.10,
+        cal_fraction: float = 0.25,
+        n_trials: int = 500,
+        seed: int = 42,
+        fallback_to_global: bool = True,
+    ) -> Dict[str, Any]:
+        """500-trial Monte-Carlo Cal/Test resplit audit on precomputed scores."""
+        if not pooled_cal_test_rows:
+            return {}
+
+        n_total = len(pooled_cal_test_rows)
+        n_cal = max(1, min(n_total - 1, int(round(float(cal_fraction) * n_total))))
+
+        scores = np.empty(n_total, dtype=np.float64)
+        labels = np.empty(n_total, dtype=np.int32)
+        groups: List[str] = []
+        for idx, row in enumerate(pooled_cal_test_rows):
+            s, y, g = self._row_score_and_label(row)
+            scores[idx] = s
+            labels[idx] = y
+            groups.append(g)
+
+        unique_groups = sorted(set(groups))
+        group_to_id = {g: i for i, g in enumerate(unique_groups)}
+        group_ids = np.array([group_to_id[g] for g in groups], dtype=np.int32)
+
+        rng = np.random.RandomState(int(seed))
+        risks_by_group: Dict[str, List[float]] = {g: [] for g in unique_groups}
+
+        for _ in range(int(n_trials)):
+            perm = rng.permutation(n_total)
+            cal_idx = perm[:n_cal]
+            test_idx = perm[n_cal:]
+
+            cal_s = scores[cal_idx]
+            cal_y = labels[cal_idx]
+            cal_g = group_ids[cal_idx]
+
+            test_s = scores[test_idx]
+            test_y = labels[test_idx]
+            test_g = group_ids[test_idx]
+
+            global_lam = self._calibrate_1d(cal_s, cal_y, eps)
+
+            for g_id, g_name in enumerate(unique_groups):
+                t_mask = test_g == g_id
+                if not np.any(t_mask):
+                    continue
+                c_mask = cal_g == g_id
+                if not np.any(c_mask):
+                    lam_g = global_lam if fallback_to_global else 1.0 + 1e-9
+                else:
+                    res = self._calibrate_group_scores(cal_s[c_mask], cal_y[c_mask], eps)
+                    lam_g = global_lam if (res["infeasible_group_size"] and fallback_to_global) else float(res["lambda_g"])
+
+                risk = float(np.mean((test_s[t_mask] >= lam_g) & (test_y[t_mask] == 0)))
+                risks_by_group[g_name].append(risk)
+
+        audit_report: Dict[str, Any] = {}
+        for g_name in unique_groups:
+            r_list = risks_by_group[g_name]
+            if not r_list:
+                audit_report[g_name] = {
+                    "mean_risk": 0.0,
+                    "std_risk": 0.0,
+                    "se_risk": 0.0,
+                    "ci95_upper": 0.0,
+                    "exceeds_bound": False,
+                }
+                continue
+            r_arr = np.asarray(r_list, dtype=np.float64)
+            mean_risk = float(np.mean(r_arr))
+            std_risk = float(np.std(r_arr, ddof=1)) if len(r_arr) >= 2 else 0.0
+            se_risk = float(std_risk / math.sqrt(len(r_arr)))
+            ci95_upper = float(mean_risk + 1.96 * se_risk)
+            exceeds_bound = bool(mean_risk > float(eps) + 1.96 * se_risk)
+
+            if exceeds_bound:
+                self.audit_fallback_groups_.add(g_name)
+                if self.is_calibrated and g_name in self.group_thresholds_:
+                    self.group_thresholds_[g_name] = self.global_lambda_
+                if self.is_calibrated and g_name in self.group_cal_stats_:
+                    self.group_cal_stats_[g_name]["lambda_g"] = self.global_lambda_
+                    self.group_cal_stats_[g_name]["fallback_to_global"] = True
+
+            audit_report[g_name] = {
+                "mean_risk": mean_risk,
+                "std_risk": std_risk,
+                "se_risk": se_risk,
+                "ci95_upper": ci95_upper,
+                "exceeds_bound": exceeds_bound,
+            }
+
+        return audit_report
 
     def select_eps_on_fit(
         self,

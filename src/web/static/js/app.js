@@ -1187,6 +1187,9 @@
     const mode = String(trace.mode || "").toLowerCase();
     const steps = Array.isArray(trace.steps) ? trace.steps : [];
     const facets = Array.isArray(trace.facets) ? trace.facets : [];
+    if (mode === "fast" || (!mode && steps.length === 0 && facets.length === 0)) {
+      return "";
+    }
     const hasRichTrace =
       mode === "deep" ||
       mode === "broad" ||
@@ -1196,13 +1199,13 @@
     if (!hasRichTrace) return "";
 
     const modeTitles = {
-      deep: "🧠 Tiến trình Suy nghĩ Sâu",
-      broad: "🌐 Bản đồ Tư duy Rộng",
-      deep_broad: "🔥 Suy nghĩ Sâu + Tư duy Rộng",
+      deep: "🧠 Xem tiến trình Suy nghĩ Sâu",
+      broad: "🌐 Xem bản đồ Tư duy Rộng",
+      deep_broad: "🔥 Xem Suy nghĩ Sâu + Tư duy Rộng",
       fast: "⚡ Tiến trình Tư duy",
     };
-    const headerTitle = modeTitles[mode] || "🧠 Tiến trình Tư duy WaveCMS-R²";
-    const isOpen = mode !== "fast";
+    const headerTitle = modeTitles[mode] || "🧠 Xem tiến trình Tư duy WaveCMS-R²";
+    const isOpen = false;
 
     const hopsVal = toFiniteNumber(trace.hops ?? trace.num_hops);
     const rhoVal = toFiniteNumber(trace.rho_hat ?? trace.contraction_rho);

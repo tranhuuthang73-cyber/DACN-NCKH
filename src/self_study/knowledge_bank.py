@@ -221,18 +221,92 @@ class SelfStudyKnowledgeBank:
                 passage_map[pid] = ptxt
 
         # Parse sections by headings
-        # Supported: 1. GIỚI THIỆU, 3. PHÁ MÃ, Topic 49, # Header, etc.
+        # Supported: Markdown (# / ##), 1., 1.1, I., Phần N, Chương N, Chapter N,
+        # Section N, Bài N, Mục N, Topic N, Chủ đề N, Unit N, Lesson N, Ví dụ N
         lines = raw_text.splitlines()
         sections: List[Dict[str, Any]] = []
+        preamble_lines: List[str] = []
         current_sec: Optional[Dict[str, Any]] = None
 
-        heading_re = re.compile(
-            r"^(?:===\s*Page\s*\d+\s*===\s*)?"
-            r"(?:#+\s*)?"
-            r"(\d+\.|\b[IVXLCDM]+\.|\bTopic\s+\d+[:.\-–]?|\bChủ đề\s+\d+[:.\-–]?|\bBài\s+\d+[:.\-–]?|\bMục\s+\d+[:.\-–]?)\s*"
-            r"([^\n:]+):?",
+        md_heading_re = re.compile(r"^(#{1,6})\s+(.+?)\s*$")
+        prefixed_heading_re = re.compile(
+            r"^(Phần|Chương|Chapter|Section|Bài|Mục|Topic|Chủ\s*đề|Unit|Lesson|Ví\s*dụ)\s*"
+            r"(\d+(?:\.\d+)*|[IVXLCDM]+)?(?:\s*[:.\-–]\s*|\s*)(.*)$",
             re.IGNORECASE,
         )
+        numbered_heading_re = re.compile(
+            r"^(\d+(?:\.\d+)*\.|[IVXLCDM]+\.)\s+([^\n]+)$",
+        )
+        dot_sub_heading_re = re.compile(
+            r"^(\d+\.\d+(?:\.\d+)*)\s+([^\n]+)$",
+        )
+
+        def _parse_heading(clean_line: str) -> Optional[Tuple[int, str, str, str]]:
+            """Returns (level, heading, title_body, prefix) or None."""
+            if not clean_line or re.match(r"^[\-\*\+•]\s+", clean_line):
+                return None
+
+            m_md = md_heading_re.match(clean_line)
+            if m_md:
+                level = min(3, len(m_md.group(1)))
+                inner = m_md.group(2).strip().rstrip(":").strip()
+                if not inner:
+                    return None
+                m_sub_num = re.match(
+                    r"^((?:Phần|Chương|Chapter|Section|Bài|Mục|Topic|Chủ\s*đề|Unit|Lesson|Ví\s*dụ)\s+\d+(?:\.\d+)*|\d+(?:\.\d+)*\.?|[IVXLCDM]+\.)\s*[:.\-–]?\s*(.*)$",
+                    inner,
+                    re.IGNORECASE,
+                )
+                if m_sub_num:
+                    pfx = m_sub_num.group(1).strip()
+                    tbody = (m_sub_num.group(2) or inner).strip()
+                else:
+                    pfx = inner.split()[0]
+                    tbody = inner
+                return level, inner, tbody, pfx
+
+            if len(clean_line) > 100 or " = " in clean_line:
+                return None
+
+            m_pre = prefixed_heading_re.match(clean_line)
+            if m_pre:
+                kw = m_pre.group(1).strip()
+                num_part = (m_pre.group(2) or "").strip()
+                rest = (m_pre.group(3) or "").strip().rstrip(":").strip()
+                if not num_part:
+                    return None
+                kw_norm = strip_accents(kw.lower())
+                if "." in num_part or kw_norm in ("vi du", "muc", "section"):
+                    level = max(2, min(3, num_part.count(".") + 1)) if "." in num_part else (2 if kw_norm == "vi du" else 1)
+                else:
+                    level = 1
+                pfx = f"{kw} {num_part}".strip()
+                full_h = f"{pfx}: {rest}".strip(": ") if rest else pfx
+                # Require either ':' in original line or title capitalization / short title
+                if ":" in clean_line or (rest and len(rest.split()) <= 12) or not rest:
+                    return level, full_h, (rest or pfx), pfx
+
+            m_dot = dot_sub_heading_re.match(clean_line)
+            if m_dot:
+                num_str = m_dot.group(1).strip()
+                rest = m_dot.group(2).strip().rstrip(":").strip()
+                if len(rest.split()) <= 14:
+                    level = min(3, num_str.count(".") + 1)
+                    return level, f"{num_str} {rest}".strip(), rest, num_str
+
+            m_num = numbered_heading_re.match(clean_line)
+            if m_num:
+                pfx = m_num.group(1).strip()
+                rest = m_num.group(2).strip().rstrip(":").strip()
+                # Avoid false heading on normal numbered sentences unless short or titled/upper
+                words = rest.split()
+                is_upper_or_colon = clean_line.rstrip().endswith(":") or (words and words[0][:1].isupper())
+                if is_upper_or_colon and len(words) <= 14:
+                    dots = pfx.rstrip(".").count(".")
+                    level = min(3, dots + 1)
+                    return level, f"{pfx} {rest}".strip(), rest, pfx
+
+            return None
 
         for line in lines:
             line_str = line.strip()
@@ -245,19 +319,34 @@ class SelfStudyKnowledgeBank:
 
             # Strip leading page marker if combined
             clean_line = re.sub(r"^===\s*Page\s*\d+\s*===\s*", "", line_str).strip()
+            if not clean_line:
+                continue
 
-            m = heading_re.match(clean_line)
-            if m:
-                pfx = m.group(1).strip()
-                title_body = m.group(2).strip()
-                full_h = f"{pfx} {title_body}".strip()
+            parsed = _parse_heading(clean_line)
+            if parsed is not None:
+                lvl, full_h, title_body, pfx = parsed
                 if current_sec:
                     sections.append(current_sec)
+                elif preamble_lines:
+                    sections.append({
+                        "heading": title or "Mở đầu",
+                        "title": title or "Mở đầu",
+                        "prefix": "0.",
+                        "level": 1,
+                        "lines": list(preamble_lines),
+                        "raw_lines": list(preamble_lines),
+                        "bullets": [p.lstrip("-*•+ ").strip() for p in preamble_lines if re.match(r"^[\-\*\+•]\s+", p)],
+                        "paragraphs": [p for p in preamble_lines if not re.match(r"^[\-\*\+•]\s+", p)],
+                        "examples": [p for p in preamble_lines if any(k in p.lower() for k in ("ví dụ", "vi du", "cho p ="))],
+                        "formulas": [p for p in preamble_lines if any(sym in p for sym in (" = ", " + ", " mod ", " \u2295 ", " XOR ", "zi = "))],
+                    })
                 current_sec = {
                     "heading": full_h,
                     "title": title_body,
                     "prefix": pfx,
+                    "level": lvl,
                     "lines": [],
+                    "raw_lines": [],
                     "bullets": [],
                     "paragraphs": [],
                     "examples": [],
@@ -267,6 +356,7 @@ class SelfStudyKnowledgeBank:
 
             if current_sec is not None:
                 current_sec["lines"].append(clean_line)
+                current_sec["raw_lines"].append(clean_line)
                 # Detect bullets
                 if re.match(r"^[\-\*\+•]\s+", clean_line) or re.match(r"^\d+\)\s+", clean_line):
                     bullet_text = re.sub(r"^[\-\*\+•]\s+", "", clean_line).strip()
@@ -282,8 +372,7 @@ class SelfStudyKnowledgeBank:
                 if any(kw in clean_line.lower() for kw in ["ví dụ", "vi du", "cho p =", "giả sử"]):
                     current_sec["examples"].append(clean_line)
             else:
-                # Pre-heading preamble
-                pass
+                preamble_lines.append(clean_line)
 
         if current_sec:
             sections.append(current_sec)
@@ -295,7 +384,9 @@ class SelfStudyKnowledgeBank:
                 "heading": title or "Tài liệu",
                 "title": title or "Tài liệu",
                 "prefix": "1.",
+                "level": 1,
                 "lines": paragraphs,
+                "raw_lines": paragraphs,
                 "bullets": [p for p in paragraphs if p.startswith(("-", "*", "•"))],
                 "paragraphs": paragraphs,
                 "examples": [p for p in paragraphs if "ví dụ" in p.lower()],
@@ -375,6 +466,25 @@ class SelfStudyKnowledgeBank:
             "status": "learned",
         }
 
+    @staticmethod
+    def get_section_bundle(
+        sections: List[Dict[str, Any]],
+        target_idx: int,
+    ) -> List[Dict[str, Any]]:
+        """Returns target section plus all immediately nested child subsections."""
+        if not sections or target_idx < 0 or target_idx >= len(sections):
+            return []
+        root_sec = sections[target_idx]
+        root_lvl = int(root_sec.get("level", 1))
+        bundle = [root_sec]
+        for nxt in sections[target_idx + 1:]:
+            nxt_lvl = int(nxt.get("level", 1))
+            if nxt_lvl > root_lvl:
+                bundle.append(nxt)
+            else:
+                break
+        return bundle
+
     def classify_answer_blueprint(self, query: str) -> str:
         """Classifies user question into one of the 6 answer blueprints."""
         q_norm = strip_accents((query or "").lower())
@@ -385,8 +495,14 @@ class SelfStudyKnowledgeBank:
                     return True
             return False
 
-        # Check SUMMARY_OVERVIEW
-        if _has_cue(["tong quan", "tom tat", "toan bo tai lieu", "noi dung chinh"]):
+        is_specific_section = bool(
+            re.search(r"\b(?:topic|chu de|bai|muc|chuong|phan|section|chapter|unit|lesson)\s*(?:\d+(?:\.\d+)*|[ivxlcdm]+)\b", q_norm)
+            or re.search(r"^\s*\d+(?:\.\d+)*\.?\s+[a-z0-9]", q_norm)
+            or re.search(r"['\"“][^'\"”]+['\"”]", query or "")
+        )
+
+        # Check SUMMARY_OVERVIEW (only when not scoped to a specific section/topic)
+        if not is_specific_section and _has_cue(["tong quan", "tom tat", "toan bo tai lieu", "noi dung chinh"]):
             return "SUMMARY_OVERVIEW"
 
         # Check DEFINITION_AND_TYPES: asks definition + types/methods/examples or enumerating types/methods/ciphers
@@ -397,15 +513,11 @@ class SelfStudyKnowledgeBank:
             "bao nhieu phuong phap", "cac he ma",
         ])
         has_types = has_enum_types or _has_cue(["cho vi du", "vi du"])
-        is_specific_section = bool(
-            re.search(r"\b(?:topic|chu de|bai|muc|chuong|phan)\s*\d+\b", q_norm)
-            or re.search(r"^\s*\d+\.\s+[a-z0-9]", q_norm)
-        )
         if has_def and has_types:
             return "DEFINITION_AND_TYPES"
         if has_enum_types and not is_specific_section:
             return "DEFINITION_AND_TYPES"
-        if has_def:
+        if has_def and not is_specific_section:
             if _has_cue(["loai", "he", "phuong phap"]):
                 return "DEFINITION_AND_TYPES"
 
@@ -471,8 +583,8 @@ class SelfStudyKnowledgeBank:
         m_quote_top = re.search(r"['\"]([^'\"]+)['\"]", query or "")
         quoted_target_norm = strip_accents(m_quote_top.group(1).lower()) if m_quote_top else ""
         has_numbered_target = bool(
-            re.search(r"\b(?:topic|chu de|bai|muc|chuong|phan)\s*\d+\b", q_norm)
-            or re.search(r"^\s*\d+\.\s+[a-z0-9]", q_norm)
+            re.search(r"\b(?:topic|chu de|bai|muc|chuong|phan|section|chapter|unit|lesson)\s*(?:\d+(?:\.\d+)*|[ivxlcdm]+)\b", q_norm)
+            or re.search(r"^\s*\d+(?:\.\d+)*\.?\s+[a-z0-9]", q_norm)
         )
         is_intro_target = bool(
             quoted_target_norm and any(k in quoted_target_norm for k in ["gioi thieu", "tong quan", "mo dau"])
@@ -623,10 +735,18 @@ class SelfStudyKnowledgeBank:
                 "grounded": True,
             }
 
+        from src.web.question_router import QuestionRouter
+        granularity = QuestionRouter.classify_section_granularity(query)
+        has_section_target = has_numbered_target or bool(quoted_target_norm)
+
         # ----------------------------------------------------------------------
         # Case C: COMPARISON_AND_SECURITY (Pros/Cons, Comparisons, Security)
         # ----------------------------------------------------------------------
-        is_explicit_sec_heading = bool(re.search(r"^\s*\d+\.\s+", query.strip()) or re.search(r"['\"][^'\"]+['\"]", query))
+        is_explicit_sec_heading = bool(
+            re.search(r"^\s*\d+(?:\.\d+)*\.\s+", query.strip())
+            or re.search(r"['\"][^'\"]+['\"]", query)
+            or (has_numbered_target and granularity in ("full", "key_points"))
+        )
         if not is_explicit_sec_heading and (
             blueprint == "COMPARISON_AND_SECURITY"
             or any(k in q_norm for k in ["uu nhuoc diem", "so sanh", "phan biet", "diem manh", "diem yeu", "an ninh", "tham ma"])
@@ -655,7 +775,7 @@ class SelfStudyKnowledgeBank:
         # ----------------------------------------------------------------------
         # Case D: MECHANISM_AND_FORMULA / STEP-BY-STEP PROCESS
         # ----------------------------------------------------------------------
-        if any(k in q_norm for k in ["cac buoc", "quy trinh", "thuat toan"]):
+        if not (has_section_target and granularity in ("full", "key_points")) and any(k in q_norm for k in ["cac buoc", "quy trinh", "thuat toan"]):
             try:
                 from src.self_study.datasets.step_by_step_process_stitcher import synthesize_step_by_step_process
                 passages = []
@@ -685,6 +805,7 @@ class SelfStudyKnowledgeBank:
         )
         if (
             has_def_cue
+            and granularity == "focused"
             and not asks_doc_wide_enum
             and not is_explicit_sec_heading
             and not has_numbered_target
@@ -693,49 +814,166 @@ class SelfStudyKnowledgeBank:
             return None
 
         # ----------------------------------------------------------------------
-        # Case B: SECTION_FULL_EXPLANATION / Specific Topic (e.g. "3. PHÁ MÃ", "'PHÁ MÃ'")
+        # Case B: SECTION_FULL_EXPLANATION / KEY_POINTS / FOCUSED
         # ----------------------------------------------------------------------
-        # Look for section matching query
+        target_idx = -1
         target_sec = None
-        # Check quoted topic first: 'PHÁ MÃ' or "PHÁ MÃ"
-        m_quote = re.search(r"['\"]([^'\"]+)['\"]", query)
+        m_quote = re.search(r"['\"“]([^'\"”]+)['\"”]", query)
         target_name = m_quote.group(1).strip() if m_quote else ""
 
-        if not target_name:
-            # Check topic number: "3. PHÁ MÃ" or "topic 49"
-            m_num = re.search(r"(?:^|\b)(\d+)\.?\s*([a-zA-Zà-ỹÀ-Ỹ0-9\s]+)?", query)
-            if m_num:
-                target_num = m_num.group(1)
-                for s in sections:
-                    if s["prefix"].startswith(target_num) or f"{target_num}." in s["heading"] or f"Topic {target_num}" in s["heading"]:
-                        target_sec = s
-                        break
+        explicit_num_requested = False
+        m_scoped_num = re.search(
+            r"\b(?:(phần|phan|chương|chuong|chapter|bài|bai|mục|muc|section|topic|chủ\s*đề|chu\s*de|unit|lesson)\s+)?(\d+(?:\.\d+)*)\b",
+            query,
+            re.IGNORECASE,
+        )
+        if m_scoped_num and not target_name:
+            req_kw = strip_accents((m_scoped_num.group(1) or "").lower()).strip()
+            target_num = m_scoped_num.group(2).strip()
+            if req_kw or re.match(r"^\s*\d+(?:\.\d+)*[\.\s]", query):
+                explicit_num_requested = True
 
-        if not target_sec and target_name:
+            # Pass 1: exact multi-level match (e.g. '2.1' must match '2.1' before '2.')
+            num_pat = re.compile(rf"(?:^|\b){re.escape(target_num)}(?:\.|\b|:)")
+            best_num_score = -1
+            for i_s, s in enumerate(sections):
+                h_str = s["heading"]
+                h_norm = strip_accents(h_str.lower())
+                pfx_norm = strip_accents(s["prefix"].lower())
+                if not (num_pat.search(h_str) or pfx_norm == target_num or pfx_norm.startswith(f"{target_num}.") or pfx_norm.endswith(f" {target_num}")):
+                    continue
+                sc = 1
+                if "." in target_num and target_num in pfx_norm:
+                    sc += 10
+                elif "." not in target_num and "." not in s["prefix"]:
+                    sc += 4
+                if req_kw and req_kw in h_norm:
+                    sc += 8
+                if int(s.get("level", 1)) == 1 and "." not in target_num:
+                    sc += 2
+                if sc > best_num_score:
+                    best_num_score = sc
+                    target_idx = i_s
+
+        if target_idx < 0 and target_name:
             t_norm = strip_accents(target_name.lower())
-            for s in sections:
+            for i_s, s in enumerate(sections):
                 if t_norm in strip_accents(s["heading"].lower()):
-                    target_sec = s
+                    target_idx = i_s
                     break
 
-        if not target_sec:
-            # Word overlap search across section headings
+        if target_idx < 0 and not explicit_num_requested:
+            kb_meta_stops = {
+                "toan", "bo", "noi", "dung", "lay", "het", "day", "du", "tat", "ca",
+                "phan", "chinh", "tom", "tat", "muc", "trong", "co", "gi", "cua", "nay",
+                "cho", "biet", "bai", "chuong", "topic", "section", "giong", "khac",
+                "nhung", "cac", "mot", "voi", "nhu", "the", "nao", "giai", "thich",
+                "trinh", "bay", "neu", "rut", "cot", "loi", "diem", "trong", "tam",
+            }
+            q_terms = [
+                w for w in re.findall(r"[a-z0-9_]+", q_norm)
+                if len(w) >= 2 and w not in kb_meta_stops
+            ]
             best_score = 0
-            for s in sections:
-                h_norm = strip_accents(s["heading"].lower())
-                score = sum(1 for w in q_norm.split() if len(w) > 2 and w in h_norm)
+            for i_s, s in enumerate(sections):
+                h_tokens = set(re.findall(r"[a-z0-9_]+", strip_accents(s["heading"].lower()))) - kb_meta_stops
+                score = sum(1 for w in q_terms if w in h_tokens)
                 if score > best_score and score >= 1:
                     best_score = score
-                    target_sec = s
+                    target_idx = i_s
 
-        if target_sec:
+        if target_idx >= 0:
+            target_sec = sections[target_idx]
             h_title = target_sec["heading"]
-            raw_items = [line.lstrip("-*• ").strip() for line in target_sec.get("lines", []) if line.strip()]
-            if not raw_items:
+            bundle = self.get_section_bundle(sections, target_idx)
+            matched_headings = [s["heading"] for s in bundle]
+
+            all_bundle_raw_lines: List[str] = []
+            for s_b in bundle:
+                for ln in (s_b.get("raw_lines") or s_b.get("lines") or []):
+                    if ln.strip():
+                        all_bundle_raw_lines.append(ln.strip())
+
+            raw_items = [ln.lstrip("-*• ").strip() for ln in all_bundle_raw_lines if ln.lstrip("-*• ").strip()]
+            if not raw_items and len(bundle) <= 1:
                 return None
+
+            if granularity == "full":
+                parts: List[str] = [f"### {h_title}"]
+                root_lines = bundle[0].get("raw_lines") or bundle[0].get("lines") or []
+                if root_lines:
+                    parts.append("\n".join(root_lines))
+                for sub in bundle[1:]:
+                    sub_lines = sub.get("raw_lines") or sub.get("lines") or []
+                    if sub_lines:
+                        parts.append(f"**{sub['heading']}**\n" + "\n".join(sub_lines))
+                    else:
+                        parts.append(f"**{sub['heading']}**")
+                full_answer = "\n\n".join(parts).strip()
+                return {
+                    "answer": full_answer,
+                    "blueprint": "SECTION_FULL_EXPLANATION",
+                    "citations": ["[1]"],
+                    "grounded": True,
+                    "matched_headings": matched_headings,
+                }
+
+            if granularity == "key_points":
+                from src.web.document_analyzer import DocumentAnalyzer
+
+                clean_bundle_text = "\n".join(raw_items)
+                max_pts = min(5, max(2, len(raw_items)))
+                kp_data = DocumentAnalyzer.extract_key_points_and_summary(
+                    clean_bundle_text,
+                    title=h_title,
+                    max_points=max_pts,
+                )
+                key_points = [pt.strip() for pt in (kp_data.get("key_points") or []) if pt.strip()]
+
+                # Also ensure representative concise points from child subsections (including short bullets)
+                seen_kp_norm = {strip_accents(kp.lower())[:50] for kp in key_points}
+                if len(bundle) > 1:
+                    for sub in bundle[1:]:
+                        sub_raw = [x.lstrip("-*• ").strip() for x in (sub.get("raw_lines") or sub.get("lines") or []) if x.strip()]
+                        if not sub_raw:
+                            continue
+                        already_covered = any(
+                            strip_accents(sub_raw[0].lower())[:30] in sk or any(strip_accents(sr.lower())[:30] in sk for sr in sub_raw)
+                            for sk in seen_kp_norm
+                        )
+                        if not already_covered and len(key_points) < 6:
+                            rep = sub_raw[0]
+                            key_points.append(f"**{sub['heading']}**: {rep}" if sub["heading"] not in rep else rep)
+                            seen_kp_norm.add(strip_accents(rep.lower())[:50])
+
+                if not key_points or len(key_points) < 2:
+                    for item in raw_items:
+                        it_norm = strip_accents(item.lower())[:50]
+                        if it_norm not in seen_kp_norm:
+                            key_points.append(item)
+                            seen_kp_norm.add(it_norm)
+                        if len(key_points) >= max_pts:
+                            break
+
+                # Keep key_points strictly concise compared to exhaustive dump when section has >= 3 items
+                if len(raw_items) >= 3:
+                    key_points = key_points[:min(5, len(raw_items) - 1)]
+
+                full_answer = (
+                    f"Các ý chính của **{h_title}**:\n\n"
+                    + "\n".join(f"- {pt}" for pt in key_points)
+                )
+                return {
+                    "answer": full_answer,
+                    "blueprint": "SECTION_KEY_POINTS",
+                    "citations": ["[1]"],
+                    "grounded": True,
+                    "matched_headings": matched_headings,
+                }
+
             sec_lines = [
                 f"- {line.lstrip('-*• ').strip()}" if not line.startswith(("-", "*", "•")) else line
-                for line in target_sec.get("lines", [])
+                for line in all_bundle_raw_lines
             ]
 
             has_example_cue = any(k in q_norm for k in ["vi du", "minh hoa", "ung dung", "ap dung", "thuc te"])
@@ -748,17 +986,20 @@ class SelfStudyKnowledgeBank:
                 ]
             )
             has_concept_cue = any(k in q_norm for k in ["khai niem", "dinh nghia", "la gi", "y chinh", "tom tat", "trong tam"])
-            asks_full = any(k in q_norm for k in ["chi tiet", "toan bo", "day du"]) or (
-                "noi dung" in q_norm and not (has_example_cue or has_mech_cue or has_concept_cue)
-            )
 
             full_answer: Optional[str] = None
-            if not asks_full and len(raw_items) > 1:
+            if len(raw_items) > 1:
+                all_examples = []
+                all_formulas = []
+                for s_b in bundle:
+                    all_examples.extend(s_b.get("examples", []))
+                    all_formulas.extend(s_b.get("formulas", []))
+
                 if has_example_cue:
                     app_cues = ["thoi gian thuc", "truyen thong", "ung dung", "ap dung", "vi du", "minh hoa", "gia su", "cho "]
                     focused = list(dict.fromkeys(
-                        [x.lstrip("-*• ").strip() for x in target_sec.get("examples", []) if x.strip()]
-                        + [x.lstrip("-*• ").strip() for x in target_sec.get("formulas", []) if x.strip()]
+                        [x.lstrip("-*• ").strip() for x in all_examples if x.strip()]
+                        + [x.lstrip("-*• ").strip() for x in all_formulas if x.strip()]
                         + [item for item in raw_items if any(c in strip_accents(item.lower()) for c in app_cues)]
                     ))
                     if focused:
@@ -767,7 +1008,7 @@ class SelfStudyKnowledgeBank:
                             + "\n".join(f"- {item}" for item in focused)
                         )
                 elif has_mech_cue:
-                    formula_set = {x.lstrip("-*• ").strip() for x in target_sec.get("formulas", [])}
+                    formula_set = {x.lstrip("-*• ").strip() for x in all_formulas}
                     mech_cues = [
                         "=", "mod", "xor", "phep", "cong thuc", "sinh ra", "ma hoa", "giai ma",
                         "quy tac", "ma tran", "thay the", "hoan vi", "mo rong", "buoc",
@@ -785,12 +1026,12 @@ class SelfStudyKnowledgeBank:
                         )
                 elif has_concept_cue:
                     def_cues = ["la ", "duoc dinh nghia", "hoan hao", "co so", "dung de", "con goi la", "muc dich"]
-                    para_items = [p.lstrip("-*• ").strip() for p in target_sec.get("paragraphs", []) if p.strip()]
+                    para_items = [p.lstrip("-*• ").strip() for s_b in bundle for p in s_b.get("paragraphs", []) if p.strip()]
                     primary = next(
                         (item for item in raw_items if any(c in strip_accents(item.lower()) for c in def_cues)),
                         para_items[0] if para_items else raw_items[0],
                     )
-                    formula_set = {x.lstrip("-*• ").strip() for x in target_sec.get("formulas", [])}
+                    formula_set = {x.lstrip("-*• ").strip() for x in all_formulas}
                     rest = [item for item in raw_items if item != primary]
                     non_formula_rest = [item for item in rest if item not in formula_set]
                     summary_rest = (non_formula_rest if non_formula_rest else rest)[:2]
@@ -803,7 +1044,7 @@ class SelfStudyKnowledgeBank:
                     from src.self_study.datasets.extractive_text_stitcher import ExtractiveTextStitcher
                     full_answer = ExtractiveTextStitcher.stitch_section_detail(
                         section_title=h_title,
-                        content_lines=target_sec.get("lines", []),
+                        content_lines=all_bundle_raw_lines,
                     )
                 except Exception:
                     content_body = "\n".join(sec_lines) if sec_lines else target_sec["title"]
@@ -816,6 +1057,7 @@ class SelfStudyKnowledgeBank:
                 "blueprint": "SECTION_FULL_EXPLANATION",
                 "citations": ["[1]"],
                 "grounded": True,
+                "matched_headings": matched_headings,
             }
 
         return None

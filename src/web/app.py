@@ -7,6 +7,7 @@ STRICT RULE: NO TRAINING, NO GRADIENT UPDATES, FROZEN INFERENCE ONLY.
 """
 
 import os
+import re
 import sys
 import json
 import time
@@ -479,6 +480,26 @@ def _build_conformal_summary(
     }
 
 
+def _ensure_docs_learned_in_kb(service: Any, doc_ids: Optional[List[str]]) -> Any:
+    """Lazily learns any attached documents missing from SelfStudyKnowledgeBank."""
+    from src.self_study.knowledge_bank import get_knowledge_bank
+    kb = get_knowledge_bank()
+    for d_id in (doc_ids or []):
+        if d_id and d_id not in kb._documents:
+            try:
+                doc_obj = service.store.get_document(d_id)
+                if doc_obj and getattr(doc_obj, "raw_text", None):
+                    kb.learn_document(
+                        doc_id=d_id,
+                        title=doc_obj.title or d_id,
+                        raw_text=doc_obj.raw_text,
+                        passages=getattr(doc_obj, "passages", None),
+                    )
+            except Exception:
+                pass
+    return kb
+
+
 def _run_unified_reasoning_for_chat(
     service: Any,
     query: str,
@@ -529,23 +550,13 @@ def _run_unified_reasoning_for_chat(
         rho_hat = round(omega * 0.5, 4)
 
     if mode == "fast":
-        fast_steps = []
-        if base_answer:
-            fast_steps.append(
-                {
-                    "kind": "conclusion",
-                    "text": base_answer[:400],
-                    "citations": [d["citation_label"] for d in evidence_docs[:3]],
-                    "verified": bool(evidence_docs),
-                }
-            )
         return base_answer, {
             "mode": "fast",
             "hops": 1,
             "rho_hat": round(rho_hat, 4),
             "rounds": 1,
             "conformal": conformal,
-            "steps": fast_steps,
+            "steps": [],
             "facets": [],
             "removed_claims": [],
         }
@@ -625,17 +636,6 @@ def _run_unified_reasoning_for_chat(
         solver_block = "\n".join(f"- {tr}" for tr in trace.solver_traces[:3])
         if solver_block not in enriched_body:
             enriched_body = f"{enriched_body}\n\n**Kiểm chứng công thức:**\n{solver_block}".strip()
-
-    if mode in ("broad", "deep_broad") and trace.facets:
-        ok_facets = [f for f in trace.facets if f.status == "ok"]
-        if ok_facets:
-            facet_lines = []
-            for f in ok_facets:
-                if f.text and f.text[:40] not in enriched_body:
-                    cits = " ".join(f.citations[:2])
-                    facet_lines.append(f"- **{f.facet}** ({f.resolution}): {f.text[:180].strip()} {cits}".strip())
-            if facet_lines:
-                enriched_body = f"{enriched_body}\n\n**Góc nhìn đa độ phân giải:**\n" + "\n".join(facet_lines[:3])
 
     return enriched_body.strip(), {
         "mode": trace_dict.get("mode", mode),
@@ -1920,8 +1920,10 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
         retrieval_ms = (t_ret_end - t_ret_start) * 1000
 
         # Step 5: Evidence Selection & Grounding Verification (Task 8 & 30)
-        use_dynamic_k = (not is_multi_facet) and (route in (QuestionRoute.DIRECT_LOOKUP, QuestionRoute.SECTION_LOOKUP, QuestionRoute.PAGE_LOOKUP))
-        eff_max_ev = max(req.top_k, 6) if is_multi_facet else req.top_k
+        section_granularity = route_meta.get("section_granularity") or QuestionRouter.classify_section_granularity(effective_query)
+        use_full_or_kp_section = (route == QuestionRoute.SECTION_LOOKUP and section_granularity in ("full", "key_points"))
+        use_dynamic_k = (not is_multi_facet) and (not use_full_or_kp_section) and (route in (QuestionRoute.DIRECT_LOOKUP, QuestionRoute.SECTION_LOOKUP, QuestionRoute.PAGE_LOOKUP))
+        eff_max_ev = max(req.top_k, 12) if (is_multi_facet or use_full_or_kp_section) else req.top_k
         evidence = service.evidence_selector.select_evidence(
             effective_query,
             retrieval_candidates,
@@ -1984,7 +1986,7 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
         refusal_message = ""
 
         if not is_grounded or (refusal_decision and refusal_decision.should_refuse and route != QuestionRoute.DOCUMENT_SUMMARY):
-            is_summary_query = route == QuestionRoute.DOCUMENT_SUMMARY or any(kw in effective_query.lower() for kw in ["tóm tắt", "tổng quan", "overview", "tóm lược"])
+            is_summary_query = route == QuestionRoute.DOCUMENT_SUMMARY or any(kw in effective_query.lower() for kw in ["tóm tắt", "tổng quan", "overview", "tóm lược", "lấy phần chính", "lấy ý chính"])
             if attached_docs and is_summary_query:
                 if not retrieval_candidates:
                     from src.hybrid_qa.retriever import RetrievalResult
@@ -2007,6 +2009,46 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
                 if retrieval_candidates:
                     refused = False
                     effective_route = QuestionRoute.DOCUMENT_SUMMARY
+                else:
+                    refused = True
+            elif attached_docs and route == QuestionRoute.SECTION_LOOKUP:
+                # If user asks explicitly for an existing section in attached_docs (e.g. "phần 2 có gì", "lấy phần chính của phần 2"),
+                # rescue when KnowledgeBank matches that exact section in attached_docs.
+                kb_pre = None
+                try:
+                    _kb_tmp = _ensure_docs_learned_in_kb(service, attached_docs)
+                    kb_pre = _kb_tmp.synthesize_learned_answer(query=effective_query, doc_ids=attached_docs)
+                except Exception:
+                    kb_pre = None
+                if kb_pre and kb_pre.get("answer") and kb_pre.get("blueprint") in ("SECTION_FULL_EXPLANATION", "SECTION_KEY_POINTS"):
+                    from src.hybrid_qa.evidence import Citation
+                    matched_hs = [h.lower() for h in (kb_pre.get("matched_headings") or [])]
+                    rescued_ev = []
+                    seen_ev_ids = set()
+                    for d_id in attached_docs:
+                        d_obj = service.store.get_document(d_id)
+                        for p in getattr(d_obj, "passages", None) or []:
+                            sec_low = (getattr(p, "section_title", "") or "").lower()
+                            txt_low = (getattr(p, "text", "") or "").lower()
+                            if not matched_hs or any(h in sec_low or h[:25] in txt_low for h in matched_hs):
+                                if p.passage_id not in seen_ev_ids:
+                                    seen_ev_ids.add(p.passage_id)
+                                    rescued_ev.append(
+                                        Citation(
+                                            passage_id=p.passage_id,
+                                            document_id=d_id,
+                                            text=p.text,
+                                            score=10.0,
+                                            section_title=p.section_title,
+                                            metadata=p.metadata,
+                                        )
+                                    )
+                    if rescued_ev:
+                        evidence.evidence_passages = rescued_ev[:12]
+                        refused = False
+                        effective_route = QuestionRoute.SECTION_LOOKUP
+                    else:
+                        refused = True
                 else:
                     refused = True
             else:
@@ -2172,31 +2214,66 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
         elif effective_route == QuestionRoute.DOCUMENT_SUMMARY:
             if attached_docs:
                 try:
-                    attached_doc = service.store.get_document(attached_docs[0])
+                    if len(attached_docs) > 1:
+                        from src.self_study.knowledge_bank import _score_doc_relevance
+                        best_doc_obj = None
+                        best_doc_sc = -1.0
+                        for _d_id in attached_docs:
+                            _d_cand = service.store.get_document(_d_id)
+                            if _d_cand is None:
+                                continue
+                            _sc = _score_doc_relevance(
+                                effective_query,
+                                {"title": _d_cand.title or "", "raw_text": _d_cand.raw_text or "", "sections": []},
+                            )
+                            if best_doc_obj is None or _sc > best_doc_sc:
+                                best_doc_sc = _sc
+                                best_doc_obj = _d_cand
+                        attached_doc = best_doc_obj or service.store.get_document(attached_docs[0])
+                    else:
+                        attached_doc = service.store.get_document(attached_docs[0])
                     doc_title = attached_doc.title
 
-                    # Detect if document has structured topics (like Topic Speak or lesson modules)
-                    topic_matches = re.findall(
-                        r"^\s*(Topic|Chủ đề|Bài|Mục)\s*(\d+)[:\-\.\s]+([^\n\.\?]{3,65})",
-                        attached_doc.raw_text,
-                        re.IGNORECASE | re.MULTILINE,
+                    from src.self_study.knowledge_bank import strip_accents as _strip_acc_sum
+                    q_sum_norm = _strip_acc_sum(effective_query.lower())
+                    is_explicit_key_points = section_granularity == "key_points" and any(
+                        cue in q_sum_norm
+                        for cue in ("phan chinh", "lay phan chinh", "y chinh", "lay y chinh", "rut ra y chinh", "nhung y chinh", "y cot loi", "diem chinh", "gach dau dong")
                     )
 
-                    if topic_matches:
-                        summary_lines = [
-                            f"📖 **Tổng quan Toàn diện Tài liệu: {doc_title}**\n",
-                            f"Tài liệu bao gồm **{len(topic_matches)} chủ đề chính** để luyện tập và nghiên cứu. Dưới đây là các phần trọng tâm tiêu biểu:\n",
-                        ]
-                        for tm in topic_matches[:8]:
-                            summary_lines.append(f"- **{tm[0].title()} {tm[1]}**: {tm[2].strip()}")
-                        if len(topic_matches) > 8:
-                            summary_lines.append(f"- **Mở rộng**: Cùng {len(topic_matches) - 8} chủ đề chuyên biệt khác trong văn bản.")
-                        body = "\n".join(summary_lines)
-                    else:
-                        blueprint = DocumentAnalyzer.build_document_knowledge_blueprint(
-                            attached_doc.raw_text, title=attached_doc.title
+                    if is_explicit_key_points:
+                        intel = DocumentAnalyzer.extract_key_points_and_summary(
+                            attached_doc.raw_text, title=doc_title, max_points=6
                         )
-                        body = f"{blueprint} {cit_1}"
+                        kp_items = [kp.lstrip("- ").strip() for kp in (intel.get("key_points") or []) if kp.strip()]
+                        if kp_items:
+                            summary_points = [f"- {kp} {cit_1}".strip() for kp in kp_items]
+                            body = f"📌 **Các ý chính trọng tâm của tài liệu: {doc_title}**\n\n" + "\n".join(summary_points)
+                        else:
+                            body = f"📖 **Tóm lược Tài liệu: {doc_title}** {cit_1}"
+                    else:
+                        # Detect if document has structured topics (like Topic Speak or lesson modules)
+                        topic_matches = re.findall(
+                            r"^\s*(Topic|Chủ đề|Bài|Mục)\s*(\d+)[:\-\.\s]+([^\n\.\?]{3,65})",
+                            attached_doc.raw_text,
+                            re.IGNORECASE | re.MULTILINE,
+                        )
+
+                        if topic_matches:
+                            summary_lines = [
+                                f"📖 **Tổng quan Toàn diện Tài liệu: {doc_title}**\n",
+                                f"Tài liệu bao gồm **{len(topic_matches)} chủ đề chính** để luyện tập và nghiên cứu. Dưới đây là các phần trọng tâm tiêu biểu:\n",
+                            ]
+                            for tm in topic_matches[:8]:
+                                summary_lines.append(f"- **{tm[0].title()} {tm[1]}**: {tm[2].strip()}")
+                            if len(topic_matches) > 8:
+                                summary_lines.append(f"- **Mở rộng**: Cùng {len(topic_matches) - 8} chủ đề chuyên biệt khác trong văn bản.")
+                            body = "\n".join(summary_lines)
+                        else:
+                            blueprint = DocumentAnalyzer.build_document_knowledge_blueprint(
+                                attached_doc.raw_text, title=attached_doc.title
+                            )
+                            body = f"{blueprint} {cit_1}"
                 except Exception:
                     intel = DocumentAnalyzer.extract_key_points_and_summary(attached_doc.raw_text, title=attached_doc.title, max_points=4)
                     summary_points = [f"- {kp.lstrip('- ').strip()} {cit_1}" for kp in intel["key_points"]]
@@ -2218,26 +2295,113 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
                 comp_points.append(f"- **{c['document_title']}**: {lead} {c['citation_label']}")
             body = "Khi đối chiếu giữa các tài liệu, có các điểm phân biệt chính:\n" + "\n".join(comp_points)
         elif effective_route == QuestionRoute.SECTION_LOOKUP:
-            smart_sec, _ = DocumentAnalyzer.find_best_grounded_answer(
-                query=effective_query,
-                evidence_passages=evidence.evidence_passages,
-                answer_mode=req.answer_mode,
-            )
-            smart_sec_body = smart_sec.split("### Nguồn tham khảo")[0].strip() if "### Nguồn tham khảo" in smart_sec else smart_sec.strip()
-            if smart_sec_body and not smart_sec_body.startswith("Không tìm thấy đủ thông tin"):
-                body = smart_sec_body
+            kb_synth = None
+            try:
+                kb = _ensure_docs_learned_in_kb(service, attached_docs)
+                kb_synth = kb.synthesize_learned_answer(
+                    query=effective_query,
+                    doc_ids=attached_docs,
+                )
+            except Exception:
+                kb_synth = None
+
+            if (
+                kb_synth
+                and kb_synth.get("answer")
+                and (
+                    kb_synth.get("blueprint") in ("SECTION_FULL_EXPLANATION", "SECTION_KEY_POINTS")
+                    or section_granularity in ("full", "key_points")
+                )
+            ):
+                body = kb_synth["answer"]
+                matched_headings = [str(h).lower() for h in (kb_synth.get("matched_headings") or [])]
+                if matched_headings and attached_docs:
+                    existing_pids = {c.get("passage_id") for c in citations_data}
+                    for _d_id in attached_docs:
+                        try:
+                            _d_obj = service.store.get_document(_d_id)
+                            for _p in getattr(_d_obj, "passages", None) or []:
+                                if _p.passage_id in existing_pids:
+                                    continue
+                                _sec_low = (getattr(_p, "section_title", "") or "").lower()
+                                _txt_low = (getattr(_p, "text", "") or "").lower()
+                                if any(h in _sec_low or h[:25] in _txt_low for h in matched_headings):
+                                    existing_pids.add(_p.passage_id)
+                                    idx_next = len(citations_data) + 1
+                                    cit_item = {
+                                        "citation_index": idx_next,
+                                        "citation_label": f"[{idx_next}]",
+                                        "passage_id": _p.passage_id,
+                                        "document_id": _d_id,
+                                        "document_title": getattr(_d_obj, "title", _d_id) or _d_id,
+                                        "section_title": getattr(_p, "section_title", "Phần nội dung") or "Phần nội dung",
+                                        "paragraph_index": getattr(_p, "paragraph_index", idx_next),
+                                        "score": 1.0,
+                                        "text": _p.text,
+                                        "support_status": "SUPPORTED",
+                                    }
+                                    citations_data.append(cit_item)
+                                    evidence_passages_out.append(cit_item)
+                                    if len(citations_data) >= 12:
+                                        break
+                        except Exception:
+                            pass
+                        if len(citations_data) >= 12:
+                            break
             else:
-                body_points = [s.strip() for s in sentences[:3] if len(s.strip()) > 10]
-                if body_points:
-                    body = "\n".join(f"- {p}" for p in body_points) + f" {cit_1}"
+                _m_req_num = re.search(
+                    r"\b(?:topic|chủ\s*đề|bài|mục|chương|phần|section|chapter|unit|lesson)\s+(\d+(?:\.\d+)*)\b",
+                    effective_query,
+                    re.IGNORECASE,
+                )
+                _missing_explicit_sec = False
+                if _m_req_num and attached_docs:
+                    _req_num = _m_req_num.group(1)
+                    _sec_pat = re.compile(
+                        rf"(?:\b(?:topic|chủ\s*đề|bài|mục|chương|phần|section|chapter|unit|lesson)\s+{re.escape(_req_num)}\b|^\s*#*\s*{re.escape(_req_num)}(?:\.|\s))",
+                        re.IGNORECASE | re.MULTILINE,
+                    )
+                    _found_in_attached = False
+                    for _d in attached_docs:
+                        try:
+                            _d_obj = service.store.get_document(_d)
+                            if _d_obj and _sec_pat.search(getattr(_d_obj, "raw_text", "") or ""):
+                                _found_in_attached = True
+                                break
+                        except Exception:
+                            pass
+                    if not _found_in_attached:
+                        _missing_explicit_sec = True
+
+                if _missing_explicit_sec:
+                    refused = True
+                    refusal_reason = "section_not_found"
+                    citations_data = []
+                    evidence_passages_out = []
+                    refusal_message = (
+                        f"Không tìm thấy mục/phần được hỏi (`{_m_req_num.group(0)}`) trong tài liệu đang chọn. "
+                        "Vui lòng kiểm tra lại số hiệu mục/phần trong tài liệu."
+                    )
                 else:
-                    body = f"{best_passage[:300].strip()} {cit_1}"
+                    smart_sec, _ = DocumentAnalyzer.find_best_grounded_answer(
+                        query=effective_query,
+                        evidence_passages=evidence.evidence_passages,
+                        answer_mode=req.answer_mode,
+                    )
+                    smart_sec_body = smart_sec.split("### Nguồn tham khảo")[0].strip() if "### Nguồn tham khảo" in smart_sec else smart_sec.strip()
+                    if smart_sec_body and not smart_sec_body.startswith("Không tìm thấy đủ thông tin"):
+                        body = smart_sec_body
+                    else:
+                        body_points = [s.strip() for s in sentences[:3] if len(s.strip()) > 10]
+                        if body_points:
+                            body = "\n".join(f"- {p}" for p in body_points) + f" {cit_1}"
+                        else:
+                            body = f"{best_passage[:300].strip()} {cit_1}"
         else:
             # Check Knowledge Bank first for structured multi-facet answers
             kb_synth = None
             try:
-                from src.self_study.knowledge_bank import get_knowledge_bank
-                kb = get_knowledge_bank()
+                kb = _ensure_docs_learned_in_kb(service, attached_docs)
                 kb_synth = kb.synthesize_learned_answer(
                     query=effective_query,
                     doc_ids=attached_docs,
@@ -2245,7 +2409,7 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
             except Exception:
                 pass
 
-            if kb_synth and kb_synth.get("blueprint") in ("DEFINITION_AND_TYPES", "SECTION_FULL_EXPLANATION") and kb_synth.get("answer"):
+            if kb_synth and kb_synth.get("blueprint") in ("DEFINITION_AND_TYPES", "SECTION_FULL_EXPLANATION", "SECTION_KEY_POINTS") and kb_synth.get("answer"):
                 body = kb_synth["answer"]
             else:
                 smart_answer, _ = DocumentAnalyzer.find_best_grounded_answer(

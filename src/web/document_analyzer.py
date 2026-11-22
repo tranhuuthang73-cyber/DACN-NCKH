@@ -583,6 +583,8 @@ class DocumentAnalyzer:
             "noi dung chi tiet", "thong tin cot loi", "yeu cau cua muc",
             "tong quan", "tom tat", "gioi thieu chung", "noi dung chinh",
             "noi dung cua muc", "trinh bay muc", "bao gom nhung gi",
+            "toan bo", "lay het", "day du", "tat ca", "co gi",
+            "phan chinh", "y chinh",
         )
         is_general_section_query = any(m in q_norm for m in general_section_markers)
         aspect_concept = any(k in q_norm for k in ("khai niem", "dinh nghia", "la gi", "y nghia", "vai tro", "muc dich"))
@@ -982,17 +984,76 @@ class DocumentAnalyzer:
                         "ban chat", "nguyen tac", "bao toan",
                     )
                 )
-                evidence_items = [(answer_core, cit_1)]
-                for s in supporting_sents:
-                    s_fmt = s if s.endswith((".", "!", "?")) else f"{s}."
-                    evidence_items.append((s_fmt, cit_1))
+                asks_full_section = any(
+                    k in q_norm
+                    for k in (
+                        "toan bo", "lay het", "day du", "tat ca", "co gi lay het",
+                        "trong muc", "trong phan", "trong chuong", "trong bai",
+                        "co nhung gi", "gom nhung gi", "bao gom nhung gi",
+                    )
+                )
+                asks_key_points = any(
+                    k in q_norm
+                    for k in (
+                        "phan chinh", "lay phan chinh", "y chinh", "lay y chinh",
+                        "rut ra y chinh", "noi dung chinh", "diem chinh", "tom tat", "trong tam",
+                    )
+                )
 
-                if is_reasoning_cue and len(evidence_items) >= 2:
-                    reasoning_txt = _build_grounded_reasoning(query, evidence_items, is_comparison=False, has_sub_queries=False)
-                    core_bullets = "\n".join(f"- {s} {lbl}" for s, lbl in evidence_items)
-                    body = f"**1. Trả lời trọng tâm:**\n{core_bullets}\n\n**2. Suy luận & Liên hệ từ tài liệu:**\n{reasoning_txt}"
+                if asks_full_section and not asks_key_points:
+                    # Exhaustive section extraction across all evidence passages sharing matched_section
+                    full_sents: List[str] = []
+                    seen_full: Set[str] = set()
+                    target_passages = [
+                        p for p in evidence_passages
+                        if not matched_section or (getattr(p, "section_title", "") or "").strip() == matched_section.strip()
+                    ] or [best_passage]
+                    for tp in target_passages:
+                        tp_text = getattr(tp, "text", "") if hasattr(tp, "text") else str(tp)
+                        for s in split_sentences(tp_text):
+                            s_clean = s.strip()
+                            if s_clean and s_clean not in seen_full:
+                                seen_full.add(s_clean)
+                                full_sents.append(s_clean if s_clean.endswith((".", "!", "?")) else f"{s_clean}.")
+                    if not full_sents:
+                        full_sents = [answer_core]
+                    body = "\n".join(f"- {s} {cit_1}" for s in full_sents) if len(full_sents) > 1 else f"{full_sents[0]} {cit_1}"
+                elif asks_key_points:
+                    # Concise 3-5 salient takeaways across matching section passages
+                    kp_passages = [
+                        p for p in evidence_passages
+                        if not matched_section or (getattr(p, "section_title", "") or "").strip() == matched_section.strip()
+                    ] or [best_passage]
+                    kp_raw = "\n".join(
+                        getattr(tp, "text", "") if hasattr(tp, "text") else str(tp)
+                        for tp in kp_passages
+                    )
+                    kp_data = cls.extract_key_points_and_summary(
+                        kp_raw,
+                        title=matched_section or doc_display_title,
+                        max_points=5,
+                    )
+                    kp_list = kp_data.get("key_points") or [answer_core]
+                    kp_lines = []
+                    for kp in kp_list[:5]:
+                        kp_clean = kp.strip()
+                        if kp_clean:
+                            if not kp_clean.endswith((".", "!", "?")):
+                                kp_clean += "."
+                            kp_lines.append(f"- {kp_clean} {cit_1}")
+                    body = f"**Các ý chính trọng tâm ({matched_section or doc_display_title}):**\n" + "\n".join(kp_lines)
                 else:
-                    body = " ".join(f"{s} {lbl}" for s, lbl in evidence_items)
+                    evidence_items = [(answer_core, cit_1)]
+                    for s in supporting_sents:
+                        s_fmt = s if s.endswith((".", "!", "?")) else f"{s}."
+                        evidence_items.append((s_fmt, cit_1))
+
+                    if is_reasoning_cue and len(evidence_items) >= 2:
+                        reasoning_txt = _build_grounded_reasoning(query, evidence_items, is_comparison=False, has_sub_queries=False)
+                        core_bullets = "\n".join(f"- {s} {lbl}" for s, lbl in evidence_items)
+                        body = f"**1. Trả lời trọng tâm:**\n{core_bullets}\n\n**2. Suy luận & Liên hệ từ tài liệu:**\n{reasoning_txt}"
+                    else:
+                        body = " ".join(f"{s} {lbl}" for s, lbl in evidence_items)
                 active_citations = [c for c in dedup_citations if c["citation_label"] == cit_1]
                 if not active_citations:
                     active_citations = dedup_citations[:1]

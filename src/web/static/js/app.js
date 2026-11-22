@@ -2689,27 +2689,117 @@
         : ablationW7 && typeof ablationW7 === "object"
           ? Array.isArray(ablationW7.rows)
             ? ablationW7.rows
-            : Array.isArray(ablationW7.variants)
-              ? ablationW7.variants
-              : Object.entries(ablationW7)
-                  .filter(([k]) => /^w[0-6]/i.test(k))
-                  .map(([k, v]) => Object.assign({ variant: k }, v && typeof v === "object" ? v : { value: v }))
+            : ablationW7.pooled_test_results && typeof ablationW7.pooled_test_results === "object"
+              ? Object.entries(ablationW7.pooled_test_results).map(([k, v]) => {
+                  const seedEntry = ablationW7.per_seed_summary?.[k]?.overall_accuracy_pct;
+                  const seedStr =
+                    seedEntry && typeof seedEntry === "object"
+                      ? seedEntry.mean_pm_std || `${Number(seedEntry.mean || 0).toFixed(2)} ± ${Number(seedEntry.std || 0).toFixed(2)}`
+                      : null;
+                  const sig = ablationW7.statistical_significance_vs_w6?.[k];
+                  const note = sig
+                    ? `W6 ${Number(sig.delta_overall_pct || 0) >= 0 ? "+" : ""}${Number(sig.delta_overall_pct || 0).toFixed(2)}% (p=${Number(sig.p_value || 1).toExponential(2)})`
+                    : k === "W6_wavecms_r2_full"
+                      ? "Cấu hình chuẩn đầy đủ WaveCMS-R²/R³"
+                      : "—";
+                  return Object.assign(
+                    { variant: k, per_seed_overall_str: seedStr, note },
+                    v && typeof v === "object" ? v : { value: v }
+                  );
+                })
+              : Array.isArray(ablationW7.variants)
+                ? ablationW7.variants
+                : Object.entries(ablationW7)
+                    .filter(([k]) => /^(w[0-6]|loo_)/i.test(k))
+                    .map(([k, v]) => Object.assign({ variant: k }, v && typeof v === "object" ? v : { value: v }))
           : [];
+
+      const rs60 = ablationW7?.reasoning_suite_60_problems || null;
+      const mondrianAudit = ablationW7?.mondrian_crc_audit || null;
+      const pmiKill = ablationW7?.pmi_r3_kill_criterion || null;
+      const ridgeKill = ablationW7?.ridge_associative_memory_kill_criterion || null;
+
+      const resplitAudit = mondrianAudit?.resplit_500_audit || null;
+      const perGroupRisk = mondrianAudit?.per_group_empirical_risk_vs_epsilon || null;
+      let mondrianSummaryHtml = "";
+      if (resplitAudit && typeof resplitAudit === "object") {
+        const seed42Groups = resplitAudit["42"] || Object.values(resplitAudit)[0] || {};
+        const groupChips = Object.entries(seed42Groups)
+          .map(([grp, st]) => {
+            const meanRisk = toFiniteNumber(st?.mean_risk);
+            const ciUpper = toFiniteNumber(st?.ci95_upper);
+            const ok = st?.exceeds_bound === false;
+            return `<span class="metric-kpi-badge" style="margin-right:6px; margin-bottom:4px; display:inline-block;">${escapeHtml(grp)}: risk=${meanRisk !== null ? (meanRisk * 100).toFixed(2) : "—"}% (CI95≤${ciUpper !== null ? (ciUpper * 100).toFixed(2) : "—"}%, ${ok ? "Đạt" : "Vượt"})</span>`;
+          })
+          .join("");
+        mondrianSummaryHtml = `<div><strong>Kiểm định Mondrian CRC 500-Trial:</strong> ${groupChips || "Đã hiệu chuẩn"}</div>`;
+      } else if (perGroupRisk && typeof perGroupRisk === "object") {
+        const groupChips = Object.entries(perGroupRisk)
+          .map(([grp, st]) => {
+            const emp = toFiniteNumber(st?.mean_empirical_risk);
+            const eps = toFiniteNumber(st?.mean_epsilon_g);
+            return `<span class="metric-kpi-badge" style="margin-right:6px; margin-bottom:4px; display:inline-block;">${escapeHtml(grp)}: risk=${emp !== null ? (emp * 100).toFixed(2) : "—"}% (ε=${eps !== null ? (eps * 100).toFixed(1) : "—"}%)</span>`;
+          })
+          .join("");
+        mondrianSummaryHtml = `<div><strong>Kiểm định Mondrian CRC theo nhóm:</strong> ${groupChips}</div>`;
+      }
+
+      const reasoningSuiteHtml = rs60 || mondrianSummaryHtml || pmiKill || ridgeKill
+        ? `
+        <div class="bc-section-card" style="margin-top:12px;">
+          <h4 class="bc-section-title">🧠 Reasoning Suite 60 Bài (Toán/Hóa/Mật mã) &amp; Kiểm định Mondrian CRC 500-Trial / Kill-Criteria</h4>
+          ${
+            rs60
+              ? `<div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(190px, 1fr)); gap:10px; margin-bottom:10px;">
+                  ${["deep", "broad", "deep_broad"]
+                    .filter((m) => rs60[m])
+                    .map((m) => {
+                      const st = rs60[m];
+                      return `
+                        <div class="metric-kpi-box">
+                          <span class="metric-kpi-badge">MODE: ${escapeHtml(m.toUpperCase())} (n=${escapeHtml(String(st.n ?? 60))})</span>
+                          <div class="metric-kpi-val">${formatPct(toFiniteNumber(st.accuracy_pct))}</div>
+                          <div class="metric-kpi-desc">Bịa số: <strong>${formatPct(toFiniteNumber(st.numeric_hallucination_rate_pct))}</strong> · ${formatFixed(toFiniteNumber(st.mean_latency_ms), 2, " ms")}</div>
+                        </div>
+                      `;
+                    })
+                    .join("")}
+                </div>`
+              : ""
+          }
+          <div style="font-size:12.5px; line-height:1.6;">
+            ${mondrianSummaryHtml}
+            ${
+              pmiKill
+                ? `<div><strong>PMI R³ Kill-Criterion (${escapeHtml(String(pmiKill.evaluation_split || "Fit+Cal"))}):</strong> ΔAUROC = <code>${toFiniteNumber(pmiKill.mean_delta_auroc)?.toFixed(4) ?? "—"}</code> (ngưỡng ≥ ${toFiniteNumber(pmiKill.kill_criterion_thresholds?.min_delta_auroc)?.toFixed(2) ?? "—"}), ΔAns@15% = <code>${toFiniteNumber(pmiKill.mean_delta_ans_at_halluc_15_pp)?.toFixed(2) ?? "—"} pp</code> → <strong>${pmiKill.kill_criterion_triggered ? "Kích hoạt cắt bỏ (W5/W6 dùng fast_zero_pmi)" : "Giữ lại"}</strong></div>`
+                : ""
+            }
+            ${
+              ridgeKill
+                ? `<div><strong>Ridge Associative Memory Kill-Criterion (n=${escapeHtml(String(ridgeKill.n_fit_qasper ?? "—"))}):</strong> Base = <code>${formatPct(toFiniteNumber(ridgeKill.base_answerable_pct))}</code> vs Ridge = <code>${formatPct(toFiniteNumber(ridgeKill.ridge_answerable_pct))}</code> (Δ = <code>${toFiniteNumber(ridgeKill.delta_pct)?.toFixed(2) ?? "0.00"}%</code>) → <strong>${ridgeKill.kill_criterion_triggered ? "Kích hoạt cắt bỏ (disabled in W6)" : "Giữ lại"}</strong></div>`
+                : ""
+            }
+          </div>
+        </div>
+      `
+        : "";
 
       const ablationW7Html = ablationW7
         ? `
         <div class="bc-section-card">
-          <h4 class="bc-section-title">🔬 Ablation Chuẩn Phản Biện WaveCMS-R² (W0–W6)</h4>
+          <h4 class="bc-section-title">🔬 Ablation Chuẩn Không Rò Rỉ WaveCMS-R³ (W0–W6 &amp; True Leave-One-Out, Test 60% n = 1,779)</h4>
           <div class="doc-table-wrap">
             <table class="doc-table">
               <thead>
                 <tr>
                   <th>Biến thể</th>
-                  <th>Mô tả / Cấu hình</th>
-                  <th>Accuracy / Hit@1</th>
-                  <th>Faithfulness</th>
-                  <th>Refusal / Risk</th>
-                  <th>Ghi chú / Delta</th>
+                  <th>Mô tả cấu hình</th>
+                  <th>Overall Acc (3-Seed Mean±Std)</th>
+                  <th>Answerable Acc / Ans@15%</th>
+                  <th>Refusal / Hallucination</th>
+                  <th>Test AUROC / AURC (↓)</th>
+                  <th>Độ trễ TB (p50)</th>
+                  <th>Ý nghĩa thống kê / Ghi chú</th>
                 </tr>
               </thead>
               <tbody>
@@ -2719,56 +2809,98 @@
                         .map((row) => {
                           const vName = row.variant || row.id || row.name || row.code || "N/A";
                           const desc = row.description || row.config || row.label || "—";
-                          const acc = toFiniteNumber(row.accuracy_pct ?? row.routing_hit_at_1_pct ?? row.accuracy ?? row.hit_at_1);
-                          const faith = toFiniteNumber(row.faithfulness_pct ?? row.citation_faithfulness_pct ?? row.faithfulness);
-                          const ref = toFiniteNumber(row.refusal_pct ?? row.refusal_acc_pct ?? row.risk_pct ?? row.false_answer_rate_pct);
-                          const note = row.delta || row.note || row.status || "—";
+                          const overallAcc = toFiniteNumber(row.overall_accuracy_pct ?? row.accuracy_pct ?? row.accuracy);
+                          const seedStr = row.per_seed_overall_str || (overallAcc !== null ? formatPct(overallAcc) : "—");
+                          const ansAcc = toFiniteNumber(row.answerable_accuracy_pct);
+                          const ans15 = toFiniteNumber(row.ans_acc_at_halluc_15_pct);
+                          const refPct = toFiniteNumber(row.unanswerable_refusal_pct ?? row.refusal_pct ?? row.refusal_acc_pct);
+                          const halPct = toFiniteNumber(row.hallucination_rate_pct ?? row.false_answer_rate_pct);
+                          const auroc = toFiniteNumber(row.test_auroc);
+                          const aurc = toFiniteNumber(row.aurc_pct);
+                          const meanLat = toFiniteNumber(row.mean_latency_ms);
+                          const p50Lat = toFiniteNumber(row.p50_latency_ms);
+                          const note = row.note || row.delta || row.status || "—";
                           return `
                             <tr>
                               <td><strong>${escapeHtml(String(vName))}</strong></td>
                               <td>${escapeHtml(String(desc))}</td>
-                              <td><code>${acc !== null ? (acc <= 1 && row.hit_at_1 !== undefined ? `${(acc * 100).toFixed(1)}%` : formatPct(acc)) : "Chưa có dữ liệu"}</code></td>
-                              <td><code>${faith !== null ? formatPct(faith) : "—"}</code></td>
-                              <td><code>${ref !== null ? formatPct(ref) : "—"}</code></td>
+                              <td><code>${overallAcc !== null ? formatPct(overallAcc) : "—"}</code>${seedStr && seedStr !== formatPct(overallAcc) ? `<br><small style="color:var(--text-muted)">(${escapeHtml(String(seedStr))}%)</small>` : ""}</td>
+                              <td><code>${ansAcc !== null ? formatPct(ansAcc) : "—"}</code> / <code>${ans15 !== null ? formatPct(ans15) : "—"}</code></td>
+                              <td><code>${refPct !== null ? formatPct(refPct) : "—"}</code> / <code>${halPct !== null ? formatPct(halPct) : "—"}</code></td>
+                              <td><code>${auroc !== null ? auroc.toFixed(4) : "—"}</code> / <code>${aurc !== null ? formatPct(aurc) : "—"}</code></td>
+                              <td><code>${meanLat !== null ? `${meanLat.toFixed(2)} ms` : "—"}</code>${p50Lat !== null ? ` <small>(p50: ${p50Lat.toFixed(2)})</small>` : ""}</td>
                               <td>${escapeHtml(String(note))}</td>
                             </tr>
                           `;
                         })
                         .join("")
-                    : `<tr><td colspan="6" style="color: var(--text-muted); text-align:center;">Chưa có dữ liệu</td></tr>`
+                    : `<tr><td colspan="8" style="color: var(--text-muted); text-align:center;">Không tìm thấy dữ liệu ablation_w7.</td></tr>`
                 }
               </tbody>
             </table>
           </div>
+          ${reasoningSuiteHtml}
         </div>
       `
         : "";
 
       const pillar1W7 = data.pillar1_sparse_lse_w7 || null;
-      const pillar1W7Rows = Array.isArray(pillar1W7)
-        ? pillar1W7
-        : pillar1W7 && typeof pillar1W7 === "object"
-          ? Array.isArray(pillar1W7.rows)
-            ? pillar1W7.rows
-            : Array.isArray(pillar1W7.sweeps)
-              ? pillar1W7.sweeps
-              : Array.isArray(pillar1W7.results)
-                ? pillar1W7.results
-                : []
-          : [];
+      const pillar1W7Rows = (() => {
+        if (Array.isArray(pillar1W7)) return pillar1W7;
+        if (!pillar1W7 || typeof pillar1W7 !== "object") return [];
+        if (Array.isArray(pillar1W7.rows)) return pillar1W7.rows;
+        const p1Raw = pillar1W7.pillars?.pillar_1_zero_forgetting;
+        if (p1Raw && typeof p1Raw === "object") {
+          const cps = Array.isArray(p1Raw.checkpoints) ? p1Raw.checkpoints : [0, 5, 10, 20, 64];
+          const mkMap = p1Raw.wave_cms_mean_key || {};
+          const slMap = p1Raw.wave_cms_sparse_lse || p1Raw.wave_cms || {};
+          const ragMap = p1Raw.standard_rag || {};
+          const saMap = p1Raw.sa_cms || {};
+          return cps.map((cp) => {
+            const k = String(cp);
+            const mk = mkMap[k] || {};
+            const sl = slMap[k] || {};
+            const rag = ragMap[k] || {};
+            const sa = saMap[k] || {};
+            return {
+              n: cp,
+              n_docs: sl.n_docs,
+              n_leaves: sl.n_leaves,
+              mean_key_hit_at_1_pct: Number((Number(mk.routing_hit_at_1 || 0) * 100).toFixed(2)),
+              sparse_lse_hit_at_1_pct: Number((Number(sl.routing_hit_at_1 || 0) * 100).toFixed(2)),
+              sparse_lse_hit_at_3_pct: Number((Number(sl.routing_hit_at_3 || 0) * 100).toFixed(2)),
+              tree_vs_flat_exact_match_pct: Number((Number(sl.tree_vs_flat_exact_match_rate ?? 1) * 100).toFixed(2)),
+              mean_key_n_eff: Number(Number(mk.n_eff || 0).toFixed(2)),
+              sparse_lse_n_eff: Number(Number(sl.n_eff || 0).toFixed(2)),
+              sparse_lse_token_f1_pct: Number((Number(sl.token_f1 || 0) * 100).toFixed(2)),
+              mean_key_token_f1_pct: Number((Number(mk.token_f1 || 0) * 100).toFixed(2)),
+              standard_rag_token_f1_pct: Number((Number(rag.token_f1 || 0) * 100).toFixed(2)),
+              sa_cms_token_f1_pct: Number((Number(sa.token_f1 || 0) * 100).toFixed(2)),
+              leaf_core_drift_fro: Number(sl.leaf_core_drift_fro || 0),
+            };
+          });
+        }
+        return Array.isArray(pillar1W7.sweeps)
+          ? pillar1W7.sweeps
+          : Array.isArray(pillar1W7.results)
+            ? pillar1W7.results
+            : [];
+      })();
 
       const pillar1W7Html = pillar1W7
         ? `
         <div class="bc-section-card">
-          <h4 class="bc-section-title">🧭 Pillar 1: Định tuyến mean_key vs sparse_lse (N = 0..64 tài liệu nhiễu)</h4>
+          <h4 class="bc-section-title">🧭 Pillar 1: Định tuyến mean_key vs sparse_lse (Định lý 4, N = 0..64 tài liệu nhiễu, tới 1,598 lá)</h4>
           <div class="doc-table-wrap">
             <table class="doc-table">
               <thead>
                 <tr>
-                  <th>Số tài liệu nhiễu (N)</th>
-                  <th>mean_key (Hit@1)</th>
-                  <th>sparse_lse (Hit@1)</th>
-                  <th>Chênh lệch (Δ)</th>
+                  <th>Mốc N (Docs / Lá)</th>
+                  <th>mean_key Hit@1 (n_eff)</th>
+                  <th>sparse_lse Hit@1 (n_eff)</th>
+                  <th>Tree == Flat Exact</th>
+                  <th>Token F1 Công bằng (WaveCMS vs mean_key vs SA-CMS)</th>
+                  <th>Chênh lệch Hit@1 (Δ)</th>
                 </tr>
               </thead>
               <tbody>
@@ -2777,21 +2909,33 @@
                     ? pillar1W7Rows
                         .map((row) => {
                           const nVal = row.n ?? row.noise_docs ?? row.N ?? "N/A";
-                          const mk = toFiniteNumber(row.mean_key_pct ?? row.mean_key ?? row.mean_key_hit_at_1);
-                          const sl = toFiniteNumber(row.sparse_lse_pct ?? row.sparse_lse ?? row.sparse_lse_hit_at_1);
-                          const mkPct = mk !== null && mk <= 1 && row.mean_key_pct === undefined ? mk * 100 : mk;
-                          const slPct = sl !== null && sl <= 1 && row.sparse_lse_pct === undefined ? sl * 100 : sl;
+                          const nDocs = toFiniteNumber(row.n_docs);
+                          const nLeaves = toFiniteNumber(row.n_leaves);
+                          const mkHit = toFiniteNumber(row.mean_key_hit_at_1_pct ?? row.mean_key_pct ?? row.mean_key);
+                          const slHit = toFiniteNumber(row.sparse_lse_hit_at_1_pct ?? row.sparse_lse_pct ?? row.sparse_lse);
+                          const mkNeff = toFiniteNumber(row.mean_key_n_eff);
+                          const slNeff = toFiniteNumber(row.sparse_lse_n_eff);
+                          const exactMatch = toFiniteNumber(row.tree_vs_flat_exact_match_pct);
+                          const slF1 = toFiniteNumber(row.sparse_lse_token_f1_pct);
+                          const mkF1 = toFiniteNumber(row.mean_key_token_f1_pct);
+                          const saF1 = toFiniteNumber(row.sa_cms_token_f1_pct);
+                          const docLeafLabel =
+                            nDocs !== null || nLeaves !== null
+                              ? ` <small style="color:var(--text-muted)">(${nDocs ?? "—"} docs / ${nLeaves ?? "—"} lá)</small>`
+                              : "";
                           return `
                             <tr>
-                              <td><strong>N = ${escapeHtml(String(nVal))}</strong></td>
-                              <td><code>${formatPct(mkPct)}</code></td>
-                              <td><strong><code>${formatPct(slPct)}</code></strong></td>
-                              <td><span class="bc-delta-pill">${escapeHtml(formatDelta(mkPct, slPct))}</span></td>
+                              <td><strong>N = ${escapeHtml(String(nVal))}</strong>${docLeafLabel}</td>
+                              <td><code>${formatPct(mkHit)}</code>${mkNeff !== null ? ` <small>(n_eff=${mkNeff.toFixed(1)})</small>` : ""}</td>
+                              <td><strong><code>${formatPct(slHit)}</code></strong>${slNeff !== null ? ` <small>(n_eff=${slNeff.toFixed(2)})</small>` : ""}</td>
+                              <td><code>${exactMatch !== null ? formatPct(exactMatch) : "100.00%"}</code></td>
+                              <td><code>${formatPct(slF1)}</code> vs <code>${formatPct(mkF1)}</code> vs <code>${formatPct(saF1)}</code></td>
+                              <td><span class="bc-delta-pill">${escapeHtml(formatDelta(mkHit, slHit))}</span></td>
                             </tr>
                           `;
                         })
                         .join("")
-                    : `<tr><td colspan="4" style="color: var(--text-muted); text-align:center;">Chưa có dữ liệu</td></tr>`
+                    : `<tr><td colspan="6" style="color: var(--text-muted); text-align:center;">Không tìm thấy dữ liệu Pillar 1.</td></tr>`
                 }
               </tbody>
             </table>
@@ -3037,27 +3181,117 @@
         : ablationW7 && typeof ablationW7 === "object"
           ? Array.isArray(ablationW7.rows)
             ? ablationW7.rows
-            : Array.isArray(ablationW7.variants)
-              ? ablationW7.variants
-              : Object.entries(ablationW7)
-                  .filter(([k]) => /^w[0-6]/i.test(k))
-                  .map(([k, v]) => Object.assign({ variant: k }, v && typeof v === "object" ? v : { value: v }))
+            : ablationW7.pooled_test_results && typeof ablationW7.pooled_test_results === "object"
+              ? Object.entries(ablationW7.pooled_test_results).map(([k, v]) => {
+                  const seedEntry = ablationW7.per_seed_summary?.[k]?.overall_accuracy_pct;
+                  const seedStr =
+                    seedEntry && typeof seedEntry === "object"
+                      ? seedEntry.mean_pm_std || `${Number(seedEntry.mean || 0).toFixed(2)} ± ${Number(seedEntry.std || 0).toFixed(2)}`
+                      : null;
+                  const sig = ablationW7.statistical_significance_vs_w6?.[k];
+                  const note = sig
+                    ? `W6 ${Number(sig.delta_overall_pct || 0) >= 0 ? "+" : ""}${Number(sig.delta_overall_pct || 0).toFixed(2)}% (p=${Number(sig.p_value || 1).toExponential(2)})`
+                    : k === "W6_wavecms_r2_full"
+                      ? "Cấu hình chuẩn đầy đủ WaveCMS-R²/R³"
+                      : "—";
+                  return Object.assign(
+                    { variant: k, per_seed_overall_str: seedStr, note },
+                    v && typeof v === "object" ? v : { value: v }
+                  );
+                })
+              : Array.isArray(ablationW7.variants)
+                ? ablationW7.variants
+                : Object.entries(ablationW7)
+                    .filter(([k]) => /^(w[0-6]|loo_)/i.test(k))
+                    .map(([k, v]) => Object.assign({ variant: k }, v && typeof v === "object" ? v : { value: v }))
           : [];
+
+      const rs60 = ablationW7?.reasoning_suite_60_problems || null;
+      const mondrianAudit = ablationW7?.mondrian_crc_audit || null;
+      const pmiKill = ablationW7?.pmi_r3_kill_criterion || null;
+      const ridgeKill = ablationW7?.ridge_associative_memory_kill_criterion || null;
+
+      const resplitAudit = mondrianAudit?.resplit_500_audit || null;
+      const perGroupRisk = mondrianAudit?.per_group_empirical_risk_vs_epsilon || null;
+      let mondrianSummaryHtml = "";
+      if (resplitAudit && typeof resplitAudit === "object") {
+        const seed42Groups = resplitAudit["42"] || Object.values(resplitAudit)[0] || {};
+        const groupChips = Object.entries(seed42Groups)
+          .map(([grp, st]) => {
+            const meanRisk = toFiniteNumber(st?.mean_risk);
+            const ciUpper = toFiniteNumber(st?.ci95_upper);
+            const ok = st?.exceeds_bound === false;
+            return `<span class="metric-kpi-badge" style="margin-right:6px; margin-bottom:4px; display:inline-block;">${escapeHtml(grp)}: risk=${meanRisk !== null ? (meanRisk * 100).toFixed(2) : "—"}% (CI95≤${ciUpper !== null ? (ciUpper * 100).toFixed(2) : "—"}%, ${ok ? "Đạt" : "Vượt"})</span>`;
+          })
+          .join("");
+        mondrianSummaryHtml = `<div><strong>Kiểm định Mondrian CRC 500-Trial:</strong> ${groupChips || "Đã hiệu chuẩn"}</div>`;
+      } else if (perGroupRisk && typeof perGroupRisk === "object") {
+        const groupChips = Object.entries(perGroupRisk)
+          .map(([grp, st]) => {
+            const emp = toFiniteNumber(st?.mean_empirical_risk);
+            const eps = toFiniteNumber(st?.mean_epsilon_g);
+            return `<span class="metric-kpi-badge" style="margin-right:6px; margin-bottom:4px; display:inline-block;">${escapeHtml(grp)}: risk=${emp !== null ? (emp * 100).toFixed(2) : "—"}% (ε=${eps !== null ? (eps * 100).toFixed(1) : "—"}%)</span>`;
+          })
+          .join("");
+        mondrianSummaryHtml = `<div><strong>Kiểm định Mondrian CRC theo nhóm:</strong> ${groupChips}</div>`;
+      }
+
+      const reasoningSuiteHtml = rs60 || mondrianSummaryHtml || pmiKill || ridgeKill
+        ? `
+        <div class="bc-section-card" style="margin-top:12px;">
+          <h4 class="bc-section-title">🧠 Reasoning Suite 60 Bài (Toán/Hóa/Mật mã) &amp; Kiểm định Mondrian CRC 500-Trial / Kill-Criteria</h4>
+          ${
+            rs60
+              ? `<div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(190px, 1fr)); gap:10px; margin-bottom:10px;">
+                  ${["deep", "broad", "deep_broad"]
+                    .filter((m) => rs60[m])
+                    .map((m) => {
+                      const st = rs60[m];
+                      return `
+                        <div class="metric-kpi-box">
+                          <span class="metric-kpi-badge">MODE: ${escapeHtml(m.toUpperCase())} (n=${escapeHtml(String(st.n ?? 60))})</span>
+                          <div class="metric-kpi-val">${formatPct(toFiniteNumber(st.accuracy_pct))}</div>
+                          <div class="metric-kpi-desc">Bịa số: <strong>${formatPct(toFiniteNumber(st.numeric_hallucination_rate_pct))}</strong> · ${formatFixed(toFiniteNumber(st.mean_latency_ms), 2, " ms")}</div>
+                        </div>
+                      `;
+                    })
+                    .join("")}
+                </div>`
+              : ""
+          }
+          <div style="font-size:12.5px; line-height:1.6;">
+            ${mondrianSummaryHtml}
+            ${
+              pmiKill
+                ? `<div><strong>PMI R³ Kill-Criterion (${escapeHtml(String(pmiKill.evaluation_split || "Fit+Cal"))}):</strong> ΔAUROC = <code>${toFiniteNumber(pmiKill.mean_delta_auroc)?.toFixed(4) ?? "—"}</code> (ngưỡng ≥ ${toFiniteNumber(pmiKill.kill_criterion_thresholds?.min_delta_auroc)?.toFixed(2) ?? "—"}), ΔAns@15% = <code>${toFiniteNumber(pmiKill.mean_delta_ans_at_halluc_15_pp)?.toFixed(2) ?? "—"} pp</code> → <strong>${pmiKill.kill_criterion_triggered ? "Kích hoạt cắt bỏ (W5/W6 dùng fast_zero_pmi)" : "Giữ lại"}</strong></div>`
+                : ""
+            }
+            ${
+              ridgeKill
+                ? `<div><strong>Ridge Associative Memory Kill-Criterion (n=${escapeHtml(String(ridgeKill.n_fit_qasper ?? "—"))}):</strong> Base = <code>${formatPct(toFiniteNumber(ridgeKill.base_answerable_pct))}</code> vs Ridge = <code>${formatPct(toFiniteNumber(ridgeKill.ridge_answerable_pct))}</code> (Δ = <code>${toFiniteNumber(ridgeKill.delta_pct)?.toFixed(2) ?? "0.00"}%</code>) → <strong>${ridgeKill.kill_criterion_triggered ? "Kích hoạt cắt bỏ (disabled in W6)" : "Giữ lại"}</strong></div>`
+                : ""
+            }
+          </div>
+        </div>
+      `
+        : "";
 
       const ablationW7Html = ablationW7
         ? `
         <div class="bc-section-card">
-          <h4 class="bc-section-title">🔬 Ablation Chuẩn Phản Biện WaveCMS-R² (W0–W6)</h4>
+          <h4 class="bc-section-title">🔬 Ablation Chuẩn Không Rò Rỉ WaveCMS-R³ (W0–W6 &amp; True Leave-One-Out, Test 60% n = 1,779)</h4>
           <div class="doc-table-wrap">
             <table class="doc-table">
               <thead>
                 <tr>
                   <th>Biến thể</th>
-                  <th>Mô tả / Cấu hình</th>
-                  <th>Accuracy / Hit@1</th>
-                  <th>Faithfulness</th>
-                  <th>Refusal / Risk</th>
-                  <th>Ghi chú / Delta</th>
+                  <th>Mô tả cấu hình</th>
+                  <th>Overall Acc (3-Seed Mean±Std)</th>
+                  <th>Answerable Acc / Ans@15%</th>
+                  <th>Refusal / Hallucination</th>
+                  <th>Test AUROC / AURC (↓)</th>
+                  <th>Độ trễ TB (p50)</th>
+                  <th>Ý nghĩa thống kê / Ghi chú</th>
                 </tr>
               </thead>
               <tbody>
@@ -3067,56 +3301,98 @@
                         .map((row) => {
                           const vName = row.variant || row.id || row.name || row.code || "N/A";
                           const desc = row.description || row.config || row.label || "—";
-                          const acc = toFiniteNumber(row.accuracy_pct ?? row.routing_hit_at_1_pct ?? row.accuracy ?? row.hit_at_1);
-                          const faith = toFiniteNumber(row.faithfulness_pct ?? row.citation_faithfulness_pct ?? row.faithfulness);
-                          const ref = toFiniteNumber(row.refusal_pct ?? row.refusal_acc_pct ?? row.risk_pct ?? row.false_answer_rate_pct);
-                          const note = row.delta || row.note || row.status || "—";
+                          const overallAcc = toFiniteNumber(row.overall_accuracy_pct ?? row.accuracy_pct ?? row.accuracy);
+                          const seedStr = row.per_seed_overall_str || (overallAcc !== null ? formatPct(overallAcc) : "—");
+                          const ansAcc = toFiniteNumber(row.answerable_accuracy_pct);
+                          const ans15 = toFiniteNumber(row.ans_acc_at_halluc_15_pct);
+                          const refPct = toFiniteNumber(row.unanswerable_refusal_pct ?? row.refusal_pct ?? row.refusal_acc_pct);
+                          const halPct = toFiniteNumber(row.hallucination_rate_pct ?? row.false_answer_rate_pct);
+                          const auroc = toFiniteNumber(row.test_auroc);
+                          const aurc = toFiniteNumber(row.aurc_pct);
+                          const meanLat = toFiniteNumber(row.mean_latency_ms);
+                          const p50Lat = toFiniteNumber(row.p50_latency_ms);
+                          const note = row.note || row.delta || row.status || "—";
                           return `
                             <tr>
                               <td><strong>${escapeHtml(String(vName))}</strong></td>
                               <td>${escapeHtml(String(desc))}</td>
-                              <td><code>${acc !== null ? (acc <= 1 && row.hit_at_1 !== undefined ? `${(acc * 100).toFixed(1)}%` : formatPct(acc)) : "Chưa có dữ liệu"}</code></td>
-                              <td><code>${faith !== null ? formatPct(faith) : "—"}</code></td>
-                              <td><code>${ref !== null ? formatPct(ref) : "—"}</code></td>
+                              <td><code>${overallAcc !== null ? formatPct(overallAcc) : "—"}</code>${seedStr && seedStr !== formatPct(overallAcc) ? `<br><small style="color:var(--text-muted)">(${escapeHtml(String(seedStr))}%)</small>` : ""}</td>
+                              <td><code>${ansAcc !== null ? formatPct(ansAcc) : "—"}</code> / <code>${ans15 !== null ? formatPct(ans15) : "—"}</code></td>
+                              <td><code>${refPct !== null ? formatPct(refPct) : "—"}</code> / <code>${halPct !== null ? formatPct(halPct) : "—"}</code></td>
+                              <td><code>${auroc !== null ? auroc.toFixed(4) : "—"}</code> / <code>${aurc !== null ? formatPct(aurc) : "—"}</code></td>
+                              <td><code>${meanLat !== null ? `${meanLat.toFixed(2)} ms` : "—"}</code>${p50Lat !== null ? ` <small>(p50: ${p50Lat.toFixed(2)})</small>` : ""}</td>
                               <td>${escapeHtml(String(note))}</td>
                             </tr>
                           `;
                         })
                         .join("")
-                    : `<tr><td colspan="6" style="color: var(--text-muted); text-align:center;">Chưa có dữ liệu</td></tr>`
+                    : `<tr><td colspan="8" style="color: var(--text-muted); text-align:center;">Không tìm thấy dữ liệu ablation_w7.</td></tr>`
                 }
               </tbody>
             </table>
           </div>
+          ${reasoningSuiteHtml}
         </div>
       `
         : "";
 
       const pillar1W7 = data.pillar1_sparse_lse_w7 || null;
-      const pillar1W7Rows = Array.isArray(pillar1W7)
-        ? pillar1W7
-        : pillar1W7 && typeof pillar1W7 === "object"
-          ? Array.isArray(pillar1W7.rows)
-            ? pillar1W7.rows
-            : Array.isArray(pillar1W7.sweeps)
-              ? pillar1W7.sweeps
-              : Array.isArray(pillar1W7.results)
-                ? pillar1W7.results
-                : []
-          : [];
+      const pillar1W7Rows = (() => {
+        if (Array.isArray(pillar1W7)) return pillar1W7;
+        if (!pillar1W7 || typeof pillar1W7 !== "object") return [];
+        if (Array.isArray(pillar1W7.rows)) return pillar1W7.rows;
+        const p1Raw = pillar1W7.pillars?.pillar_1_zero_forgetting;
+        if (p1Raw && typeof p1Raw === "object") {
+          const cps = Array.isArray(p1Raw.checkpoints) ? p1Raw.checkpoints : [0, 5, 10, 20, 64];
+          const mkMap = p1Raw.wave_cms_mean_key || {};
+          const slMap = p1Raw.wave_cms_sparse_lse || p1Raw.wave_cms || {};
+          const ragMap = p1Raw.standard_rag || {};
+          const saMap = p1Raw.sa_cms || {};
+          return cps.map((cp) => {
+            const k = String(cp);
+            const mk = mkMap[k] || {};
+            const sl = slMap[k] || {};
+            const rag = ragMap[k] || {};
+            const sa = saMap[k] || {};
+            return {
+              n: cp,
+              n_docs: sl.n_docs,
+              n_leaves: sl.n_leaves,
+              mean_key_hit_at_1_pct: Number((Number(mk.routing_hit_at_1 || 0) * 100).toFixed(2)),
+              sparse_lse_hit_at_1_pct: Number((Number(sl.routing_hit_at_1 || 0) * 100).toFixed(2)),
+              sparse_lse_hit_at_3_pct: Number((Number(sl.routing_hit_at_3 || 0) * 100).toFixed(2)),
+              tree_vs_flat_exact_match_pct: Number((Number(sl.tree_vs_flat_exact_match_rate ?? 1) * 100).toFixed(2)),
+              mean_key_n_eff: Number(Number(mk.n_eff || 0).toFixed(2)),
+              sparse_lse_n_eff: Number(Number(sl.n_eff || 0).toFixed(2)),
+              sparse_lse_token_f1_pct: Number((Number(sl.token_f1 || 0) * 100).toFixed(2)),
+              mean_key_token_f1_pct: Number((Number(mk.token_f1 || 0) * 100).toFixed(2)),
+              standard_rag_token_f1_pct: Number((Number(rag.token_f1 || 0) * 100).toFixed(2)),
+              sa_cms_token_f1_pct: Number((Number(sa.token_f1 || 0) * 100).toFixed(2)),
+              leaf_core_drift_fro: Number(sl.leaf_core_drift_fro || 0),
+            };
+          });
+        }
+        return Array.isArray(pillar1W7.sweeps)
+          ? pillar1W7.sweeps
+          : Array.isArray(pillar1W7.results)
+            ? pillar1W7.results
+            : [];
+      })();
 
       const pillar1W7Html = pillar1W7
         ? `
         <div class="bc-section-card">
-          <h4 class="bc-section-title">🧭 Pillar 1: Định tuyến mean_key vs sparse_lse (N = 0..64 tài liệu nhiễu)</h4>
+          <h4 class="bc-section-title">🧭 Pillar 1: Định tuyến mean_key vs sparse_lse (Định lý 4, N = 0..64 tài liệu nhiễu, tới 1,598 lá)</h4>
           <div class="doc-table-wrap">
             <table class="doc-table">
               <thead>
                 <tr>
-                  <th>Số tài liệu nhiễu (N)</th>
-                  <th>mean_key (Hit@1)</th>
-                  <th>sparse_lse (Hit@1)</th>
-                  <th>Chênh lệch (Δ)</th>
+                  <th>Mốc N (Docs / Lá)</th>
+                  <th>mean_key Hit@1 (n_eff)</th>
+                  <th>sparse_lse Hit@1 (n_eff)</th>
+                  <th>Tree == Flat Exact</th>
+                  <th>Token F1 Công bằng (WaveCMS vs mean_key vs SA-CMS)</th>
+                  <th>Chênh lệch Hit@1 (Δ)</th>
                 </tr>
               </thead>
               <tbody>
@@ -3125,21 +3401,33 @@
                     ? pillar1W7Rows
                         .map((row) => {
                           const nVal = row.n ?? row.noise_docs ?? row.N ?? "N/A";
-                          const mk = toFiniteNumber(row.mean_key_pct ?? row.mean_key ?? row.mean_key_hit_at_1);
-                          const sl = toFiniteNumber(row.sparse_lse_pct ?? row.sparse_lse ?? row.sparse_lse_hit_at_1);
-                          const mkPct = mk !== null && mk <= 1 && row.mean_key_pct === undefined ? mk * 100 : mk;
-                          const slPct = sl !== null && sl <= 1 && row.sparse_lse_pct === undefined ? sl * 100 : sl;
+                          const nDocs = toFiniteNumber(row.n_docs);
+                          const nLeaves = toFiniteNumber(row.n_leaves);
+                          const mkHit = toFiniteNumber(row.mean_key_hit_at_1_pct ?? row.mean_key_pct ?? row.mean_key);
+                          const slHit = toFiniteNumber(row.sparse_lse_hit_at_1_pct ?? row.sparse_lse_pct ?? row.sparse_lse);
+                          const mkNeff = toFiniteNumber(row.mean_key_n_eff);
+                          const slNeff = toFiniteNumber(row.sparse_lse_n_eff);
+                          const exactMatch = toFiniteNumber(row.tree_vs_flat_exact_match_pct);
+                          const slF1 = toFiniteNumber(row.sparse_lse_token_f1_pct);
+                          const mkF1 = toFiniteNumber(row.mean_key_token_f1_pct);
+                          const saF1 = toFiniteNumber(row.sa_cms_token_f1_pct);
+                          const docLeafLabel =
+                            nDocs !== null || nLeaves !== null
+                              ? ` <small style="color:var(--text-muted)">(${nDocs ?? "—"} docs / ${nLeaves ?? "—"} lá)</small>`
+                              : "";
                           return `
                             <tr>
-                              <td><strong>N = ${escapeHtml(String(nVal))}</strong></td>
-                              <td><code>${formatPct(mkPct)}</code></td>
-                              <td><strong><code>${formatPct(slPct)}</code></strong></td>
-                              <td><span class="bc-delta-pill">${escapeHtml(formatDelta(mkPct, slPct))}</span></td>
+                              <td><strong>N = ${escapeHtml(String(nVal))}</strong>${docLeafLabel}</td>
+                              <td><code>${formatPct(mkHit)}</code>${mkNeff !== null ? ` <small>(n_eff=${mkNeff.toFixed(1)})</small>` : ""}</td>
+                              <td><strong><code>${formatPct(slHit)}</code></strong>${slNeff !== null ? ` <small>(n_eff=${slNeff.toFixed(2)})</small>` : ""}</td>
+                              <td><code>${exactMatch !== null ? formatPct(exactMatch) : "100.00%"}</code></td>
+                              <td><code>${formatPct(slF1)}</code> vs <code>${formatPct(mkF1)}</code> vs <code>${formatPct(saF1)}</code></td>
+                              <td><span class="bc-delta-pill">${escapeHtml(formatDelta(mkHit, slHit))}</span></td>
                             </tr>
                           `;
                         })
                         .join("")
-                    : `<tr><td colspan="4" style="color: var(--text-muted); text-align:center;">Chưa có dữ liệu</td></tr>`
+                    : `<tr><td colspan="6" style="color: var(--text-muted); text-align:center;">Không tìm thấy dữ liệu Pillar 1.</td></tr>`
                 }
               </tbody>
             </table>

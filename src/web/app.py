@@ -3656,12 +3656,126 @@ async def get_comparison_dashboard():
     vs Improved (WaveCMS 6.0 + Hybrid QA + 20M Tokens).
     """
     online_data = _load_json_safe(PROJECT_ROOT / "results" / "online_scale_comparison_200docs.json")
-    wave_bench = _load_json_safe(PROJECT_ROOT / "results" / "wave_cms_vs_baselines_benchmark.json") or {}
+    wave_bench = (
+        _load_json_safe(PROJECT_ROOT / "results" / "wave_cms_vs_baselines_w7.json")
+        or _load_json_safe(PROJECT_ROOT / "results" / "wave_cms_vs_baselines_benchmark.json")
+        or {}
+    )
     manifest = _load_json_safe(PROJECT_ROOT / "checkpoints" / "train_20m" / "training_20m_manifest.json") or {}
     train_log = _load_json_safe(PROJECT_ROOT / "checkpoints" / "train_20m" / "training_20m_log.json") or {}
     train_params_raw = _load_json_safe(PROJECT_ROOT / "results" / "training_params_comparison.json") or {}
-    ablation_w7 = _load_json_safe(PROJECT_ROOT / "results" / "wavecms_r2_ablation.json")
-    pillar1_sparse_lse_w7 = _load_json_safe(PROJECT_ROOT / "results" / "wave_cms_vs_baselines_w7.json")
+    ablation_w7_raw = _load_json_safe(PROJECT_ROOT / "results" / "wavecms_r2_ablation.json")
+    pillar1_sparse_lse_w7_raw = _load_json_safe(PROJECT_ROOT / "results" / "wave_cms_vs_baselines_w7.json")
+
+    ablation_w7 = dict(ablation_w7_raw) if isinstance(ablation_w7_raw, dict) else ablation_w7_raw
+    if isinstance(ablation_w7, dict) and isinstance(ablation_w7.get("pooled_test_results"), dict):
+        pooled_res = ablation_w7["pooled_test_results"]
+        per_seed_sum = ablation_w7.get("per_seed_summary") or {}
+        stat_sig = ablation_w7.get("statistical_significance_vs_w6") or {}
+        w6_overall = float((pooled_res.get("W6_wavecms_r2_full") or {}).get("overall_accuracy_pct", 0.0))
+        variant_descriptions = {
+            "W0_standard_bm25_rag": "Baseline BM25 Standard RAG (không cổng từ chối Conformal)",
+            "W1_legacy_sa_cms": "Legacy SA-CMS (bộ nhớ cấu trúc 3 mức tiền đề)",
+            "W2_wavecms6_mean_key": "WaveCMS 6.0 dùng định tuyến mean_key (không sparse_lse)",
+            "W3_sparse_lse_doc": "WaveCMS + Sparse-LSE định tuyến cấp tài liệu",
+            "W3_sparse_lse_open_corpus": "WaveCMS + Sparse-LSE định tuyến toàn kho mở (open-corpus)",
+            "W4a_sparse_lse_pmi_base": "WaveCMS + Sparse-LSE + PMI (SmolLM2-135M base)",
+            "W4b_sparse_lse_pmi_sacms": "WaveCMS + Sparse-LSE + PMI (SA-CMS adapter)",
+            "W5_mondrian_8sig": "WaveCMS + Sparse-LSE + Mondrian CRC (8 tín hiệu)",
+            "W6_wavecms_r2_full": "WaveCMS-R²/R³ Full (Sparse-LSE + Mondrian 12-tín hiệu + Reasoner)",
+            "LOO_W6_minus_sparse_lse": "Leave-One-Out: W6 bỏ Sparse-LSE (dùng mean_key)",
+            "LOO_W6_minus_pmi": "Leave-One-Out: W6 bỏ PMI (fast_zero_pmi)",
+            "LOO_W6_minus_mondrian": "Leave-One-Out: W6 bỏ phân nhóm Mondrian (Global CRC)",
+            "LOO_W6_minus_8signals": "Leave-One-Out: W6 bỏ nhóm 8 tín hiệu cơ bản",
+            "LOO_W6_minus_r3_signals": "Leave-One-Out: W6 bỏ các tín hiệu R³ mở rộng",
+            "LOO_W6_minus_reasoner": "Leave-One-Out: W6 bỏ UnifiedReasoner",
+        }
+        ablation_rows = []
+        for variant_key, metrics in pooled_res.items():
+            if not isinstance(metrics, dict):
+                continue
+            seed_entry = (per_seed_sum.get(variant_key) or {}).get("overall_accuracy_pct")
+            if isinstance(seed_entry, dict):
+                per_seed_overall_str = seed_entry.get("mean_pm_std") or (
+                    f"{float(seed_entry.get('mean', 0.0)):.2f} ± {float(seed_entry.get('std', 0.0)):.2f}"
+                )
+            else:
+                per_seed_overall_str = f"{float(metrics.get('overall_accuracy_pct', 0.0)):.2f}"
+
+            sig_info = stat_sig.get(variant_key)
+            if isinstance(sig_info, dict):
+                d_pct = float(sig_info.get("delta_overall_pct", 0.0))
+                p_v = float(sig_info.get("p_value", 1.0))
+                sig_flag = "p < 0.05" if sig_info.get("significant_at_0_05") else "n.s."
+                delta_str = f"W6 {d_pct:+.2f}%"
+                note_str = f"W6 {d_pct:+.2f}% (p={p_v:.2e}, {sig_flag})"
+            elif variant_key == "W6_wavecms_r2_full":
+                delta_str = "0.00% (Tham chiếu)"
+                note_str = "Cấu hình chuẩn đầy đủ WaveCMS-R²/R³"
+            else:
+                diff = round(float(metrics.get("overall_accuracy_pct", 0.0)) - w6_overall, 2)
+                delta_str = f"{diff:+.2f}% vs W6"
+                note_str = f"Chênh lệch vs W6: {diff:+.2f}% điểm"
+
+            ablation_rows.append(
+                {
+                    "variant": variant_key,
+                    "description": variant_descriptions.get(variant_key, variant_key.replace("_", " ")),
+                    "overall_accuracy_pct": metrics.get("overall_accuracy_pct"),
+                    "answerable_accuracy_pct": metrics.get("answerable_accuracy_pct"),
+                    "unanswerable_refusal_pct": metrics.get("unanswerable_refusal_pct"),
+                    "hallucination_rate_pct": metrics.get("hallucination_rate_pct"),
+                    "mean_token_f1_pct": metrics.get("mean_token_f1_pct"),
+                    "test_auroc": metrics.get("test_auroc"),
+                    "aurc_pct": metrics.get("aurc_pct"),
+                    "ans_acc_at_halluc_15_pct": metrics.get("ans_acc_at_halluc_15_pct"),
+                    "overall_acc_at_halluc_15_pct": metrics.get("overall_acc_at_halluc_15_pct"),
+                    "mean_latency_ms": metrics.get("mean_latency_ms"),
+                    "p50_latency_ms": metrics.get("p50_latency_ms"),
+                    "p95_latency_ms": metrics.get("p95_latency_ms"),
+                    "per_seed_overall_str": per_seed_overall_str,
+                    "delta": delta_str,
+                    "note": note_str,
+                }
+            )
+        ablation_w7["rows"] = ablation_rows
+
+    pillar1_sparse_lse_w7 = (
+        dict(pillar1_sparse_lse_w7_raw) if isinstance(pillar1_sparse_lse_w7_raw, dict) else pillar1_sparse_lse_w7_raw
+    )
+    if isinstance(pillar1_sparse_lse_w7, dict):
+        p1_raw = (pillar1_sparse_lse_w7.get("pillars") or {}).get("pillar_1_zero_forgetting") or {}
+        checkpoints = p1_raw.get("checkpoints") or [0, 5, 10, 20, 64]
+        mk_map = p1_raw.get("wave_cms_mean_key") or {}
+        sl_map = p1_raw.get("wave_cms_sparse_lse") or p1_raw.get("wave_cms") or {}
+        rag_map = p1_raw.get("standard_rag") or {}
+        sa_map = p1_raw.get("sa_cms") or {}
+        p1_rows = []
+        for cp in checkpoints:
+            cp_key = str(cp)
+            w_mk = mk_map.get(cp_key) or {}
+            w_sl = sl_map.get(cp_key) or {}
+            w_rag = rag_map.get(cp_key) or {}
+            w_sa = sa_map.get(cp_key) or {}
+            p1_rows.append(
+                {
+                    "n": cp,
+                    "n_docs": w_sl.get("n_docs"),
+                    "n_leaves": w_sl.get("n_leaves"),
+                    "mean_key_hit_at_1_pct": round(float(w_mk.get("routing_hit_at_1", 0.0)) * 100.0, 2),
+                    "sparse_lse_hit_at_1_pct": round(float(w_sl.get("routing_hit_at_1", 0.0)) * 100.0, 2),
+                    "sparse_lse_hit_at_3_pct": round(float(w_sl.get("routing_hit_at_3", 0.0)) * 100.0, 2),
+                    "tree_vs_flat_exact_match_pct": round(float(w_sl.get("tree_vs_flat_exact_match_rate", 1.0)) * 100.0, 2),
+                    "mean_key_n_eff": round(float(w_mk.get("n_eff", 0.0)), 2),
+                    "sparse_lse_n_eff": round(float(w_sl.get("n_eff", 0.0)), 2),
+                    "sparse_lse_token_f1_pct": round(float(w_sl.get("token_f1", 0.0)) * 100.0, 2),
+                    "mean_key_token_f1_pct": round(float(w_mk.get("token_f1", 0.0)) * 100.0, 2),
+                    "standard_rag_token_f1_pct": round(float(w_rag.get("token_f1", 0.0)) * 100.0, 2),
+                    "sa_cms_token_f1_pct": round(float(w_sa.get("token_f1", 0.0)) * 100.0, 2),
+                    "leaf_core_drift_fro": float(w_sl.get("leaf_core_drift_fro", 0.0)),
+                }
+            )
+        pillar1_sparse_lse_w7["rows"] = p1_rows
 
     pillars = wave_bench.get("pillars") or {}
     p2 = pillars.get("pillar_2_exact_unlearning") or {}

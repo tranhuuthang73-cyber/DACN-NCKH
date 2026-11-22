@@ -288,6 +288,24 @@ def test_e2e_api_5_domains_4_modes_unlearn_and_dashboard():
         assert isinstance(ablation_w7.get("pmi_r3_kill_criterion"), dict)
         rs60 = ablation_w7.get("reasoning_suite_60_problems", {})
         assert rs60.get("broad", {}).get("accuracy_pct") == 100.0
+
+        ablation_rows = ablation_w7.get("rows")
+        assert isinstance(ablation_rows, list) and len(ablation_rows) >= 14
+        variants_seen = {r["variant"]: r for r in ablation_rows}
+        assert "W0_standard_bm25_rag" in variants_seen
+        assert "W6_wavecms_r2_full" in variants_seen
+        assert any(k.startswith("LOO_") for k in variants_seen)
+        assert variants_seen["W6_wavecms_r2_full"]["overall_accuracy_pct"] == pooled["W6_wavecms_r2_full"]["overall_accuracy_pct"]
+        assert isinstance(variants_seen["W6_wavecms_r2_full"]["per_seed_overall_str"], str)
+
+        p1_w7 = dash.get("pillar1_sparse_lse_w7")
+        assert isinstance(p1_w7, dict)
+        p1_rows = p1_w7.get("rows")
+        assert isinstance(p1_rows, list) and len(p1_rows) == 5
+        assert [r["n"] for r in p1_rows] == [0, 5, 10, 20, 64]
+        row_64 = next(r for r in p1_rows if r["n"] == 64)
+        assert row_64["sparse_lse_hit_at_1_pct"] == 70.0
+        assert row_64["mean_key_hit_at_1_pct"] == 0.0
     finally:
         for sid in created_session_ids:
             client.delete(f"/api/chat/sessions/{sid}")

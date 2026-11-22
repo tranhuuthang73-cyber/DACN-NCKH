@@ -2020,7 +2020,7 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
                     kb_pre = _kb_tmp.synthesize_learned_answer(query=effective_query, doc_ids=attached_docs)
                 except Exception:
                     kb_pre = None
-                if kb_pre and kb_pre.get("answer") and kb_pre.get("blueprint") in ("SECTION_FULL_EXPLANATION", "SECTION_KEY_POINTS"):
+                if kb_pre and kb_pre.get("answer") and kb_pre.get("blueprint") in ("SECTION_FULL_EXPLANATION", "SECTION_KEY_POINTS", "SECTION_GROUNDED_EXPLANATION"):
                     from src.hybrid_qa.evidence import Citation
                     matched_hs = [h.lower() for h in (kb_pre.get("matched_headings") or [])]
                     rescued_ev = []
@@ -2241,7 +2241,24 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
                         for cue in ("phan chinh", "lay phan chinh", "y chinh", "lay y chinh", "rut ra y chinh", "nhung y chinh", "y cot loi", "diem chinh", "gach dau dong")
                     )
 
-                    if is_explicit_key_points:
+                    if section_granularity == "explain":
+                        from src.brain.grounded_explainer import get_grounded_explainer
+                        raw_sents = DocumentAnalyzer._split_clean_sentences(attached_doc.raw_text)
+                        explained_doc = get_grounded_explainer().explain_section(
+                            query=effective_query,
+                            section_title=doc_title,
+                            raw_items=raw_sents,
+                            max_points=4,
+                        )
+                        if explained_doc:
+                            body = explained_doc
+                        else:
+                            intel = DocumentAnalyzer.extract_key_points_and_summary(
+                                attached_doc.raw_text, title=doc_title, max_points=4
+                            )
+                            kp_items = [kp.lstrip("- ").strip() for kp in (intel.get("key_points") or []) if kp.strip()]
+                            body = f"**Giải thích ngắn gọn — {doc_title}:**\n\n" + "\n".join(f"- {kp}" for kp in kp_items)
+                    elif is_explicit_key_points:
                         intel = DocumentAnalyzer.extract_key_points_and_summary(
                             attached_doc.raw_text, title=doc_title, max_points=6
                         )
@@ -2309,8 +2326,8 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
                 kb_synth
                 and kb_synth.get("answer")
                 and (
-                    kb_synth.get("blueprint") in ("SECTION_FULL_EXPLANATION", "SECTION_KEY_POINTS")
-                    or section_granularity in ("full", "key_points")
+                    kb_synth.get("blueprint") in ("SECTION_FULL_EXPLANATION", "SECTION_KEY_POINTS", "SECTION_GROUNDED_EXPLANATION")
+                    or section_granularity in ("full", "key_points", "explain")
                 )
             ):
                 body = kb_synth["answer"]
@@ -2528,7 +2545,15 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
                 _b_advisory = _b_inspector.inspect_and_advise(citations_data, effective_query)
                 if _b_advisory.has_boundary and _b_advisory.clauses:
                     _b_cond = _b_advisory.clauses[0].condition_text
-                    if _b_cond not in body and _b_advisory.advisory_text not in body:
+                    _b_clean = _b_cond.lstrip("-*• ").strip()
+                    from src.self_study.knowledge_bank import strip_accents as _sa_bnd
+                    _b_norm_probe = _sa_bnd(_b_clean.lower())[:32]
+                    _body_norm_low = _sa_bnd(body.lower())
+                    if (
+                        _b_cond not in body
+                        and _b_advisory.advisory_text not in body
+                        and (not _b_norm_probe or _b_norm_probe not in _body_norm_low)
+                    ):
                         body = f"{body}\n\n👉 **{_b_advisory.advisory_text}**"
             except Exception:
                 pass
@@ -2693,8 +2718,20 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
         "memory_level": memory_level_label,
         "thinking_mode": thinking_mode,
         "reasoning_trace": reasoning_trace,
+        "discourse_explainer": {
+            "engine": "WaveCMS-Discourse-SelfBuilt",
+            "granularity": section_granularity,
+            "neural_scorer_active": False,
+        },
         "suggested_questions": follow_up_questions if not refused else [],
     }
+    try:
+        from src.brain.neural_discourse_scorer import NeuralDiscourseScorer
+        diagnostics_data["discourse_explainer"]["neural_scorer_active"] = bool(
+            NeuralDiscourseScorer.get_instance().has_trained_weights
+        )
+    except Exception:
+        pass
 
     # Epistemic Calibration Deep Integration (Wave 3)
     epistemic_data = {}

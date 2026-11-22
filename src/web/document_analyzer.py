@@ -80,51 +80,35 @@ def _build_grounded_reasoning(
     is_comparison: bool,
     has_sub_queries: bool,
 ) -> str:
-    """Synthesizes document-grounded reasoning strictly from extracted evidence sentences."""
+    """Synthesizes entity-grounded reasoning strictly from extracted frames (zero canned fluff)."""
     if len(evidence_items) < 2:
         return ""
-    s1, lbl1 = evidence_items[0]
-    s2, lbl2 = evidence_items[1]
-    n1 = strip_accents(s1.lower())
-    n2 = strip_accents(s2.lower())
-    q_norm = strip_accents((query or "").lower())
+    try:
+        from src.brain.grounded_explainer import extract_frame, get_grounded_explainer
+        from src.brain.neural_discourse_scorer import NeuralDiscourseScorer
 
-    contrast_pairs = [
-        ("nhuong electron", "nhan electron", "nhường electron", "nhận electron"),
-        ("nhuong e", "nhan e", "nhường e", "nhận e"),
-        ("nhuong", "nhan", "nhường", "nhận"),
-        ("tang", "giam", "tăng", "giảm"),
-        ("thu", "toa", "thu", "tỏa"),
-        ("uu diem", "nhuoc diem", "ưu điểm", "nhược điểm"),
-    ]
-    for a_key, b_key, a_disp, b_disp in contrast_pairs:
-        if (a_key in n1 and b_key in n2) or (b_key in n1 and a_key in n2):
-            first_lbl, second_lbl = (lbl1, lbl2) if a_key in n1 else (lbl2, lbl1)
-            return (
-                f"Từ các dữ kiện đã trích, hai đối tượng thể hiện mối quan hệ đối ứng trực tiếp: "
-                f"một vế gắn với cơ chế **{a_disp}** {first_lbl}, đối ứng với vế còn lại gắn với cơ chế **{b_disp}** {second_lbl}."
+        scorer = NeuralDiscourseScorer.get_instance()
+        raw_sents = [s for s, _ in evidence_items]
+        scores = scorer.score_clauses(query, raw_sents)
+        frames = [
+            extract_frame(
+                sentence=sent,
+                role=sc.role,
+                salience=sc.salience,
+                citation_label=lbl,
             )
-
-    if is_comparison or has_sub_queries or any(k in q_norm for k in ("phan biet", "khac nhau", "giong nhau")):
-        cits = " ".join(dict.fromkeys(lbl for _, lbl in evidence_items))
-        return (
-            f"Các dữ kiện từ {cits} xác định rõ đặc trưng riêng của từng khái niệm trong cùng chủ đề, "
-            f"giúp đối chiếu trực tiếp bản chất và vai trò của từng vế dựa trên định nghĩa gốc trong tài liệu."
+            for (sent, lbl), sc in zip(evidence_items, scores)
+        ]
+        synth = get_grounded_explainer().build_entity_grounded_synthesis(
+            query=query,
+            frames=frames,
+            is_comparison=is_comparison,
         )
-
-    causal_cues = ("do ", "vi ", "nen ", "dan den", "giup ", "tao ra", "nho ", "thong qua", "bang cach")
-    if any(c in n1 or c in n2 for c in causal_cues):
-        cits = " ".join(dict.fromkeys(lbl for _, lbl in evidence_items))
-        return (
-            f"Các bằng chứng từ {cits} liên kết theo mạch nguyên nhân – cơ chế – kết quả: "
-            f"dữ kiện mở đầu nêu cơ sở vận hành {lbl1}, từ đó dẫn trực tiếp tới hệ quả hoặc ứng dụng được ghi nhận ở {lbl2}."
-        )
-
-    cits = " ".join(dict.fromkeys(lbl for _, lbl in evidence_items))
-    return (
-        f"Tổng hợp {len(evidence_items)} luận điểm từ {cits} cho thấy các dữ kiện bổ sung trực tiếp cho nhau "
-        f"trong phạm vi tài liệu để làm rõ trọng tâm câu hỏi."
-    )
+        if synth:
+            return synth
+    except Exception:
+        pass
+    return ""
 
 
 class DocumentAnalyzer:
@@ -854,27 +838,39 @@ class DocumentAnalyzer:
                 query,
                 re.IGNORECASE,
             ))
-            has_sub_queries = bool(sub_query_sentences and len(sub_query_sentences) >= 2)
-
-            # Special case compatibility for test_gemini_style_structured_synthesis_across_multiple_passages
-            is_gemini_test_query = (
-                query.strip().rstrip("?").lower() == "hệ thống sa-cms hoạt động như thế nào"
-                and len(evidence_passages) >= 2
+            asks_full_section = any(
+                k in q_norm
+                for k in (
+                    "toan bo", "lay het", "day du", "tat ca", "co gi lay het",
+                    "trong muc", "trong phan", "trong chuong", "trong bai",
+                    "co nhung gi", "gom nhung gi", "bao gom nhung gi",
+                )
+            )
+            asks_key_points = any(
+                k in q_norm
+                for k in (
+                    "phan chinh", "lay phan chinh", "y chinh", "lay y chinh",
+                    "rut ra y chinh", "noi dung chinh", "diem chinh", "tom tat", "trong tam",
+                )
+            )
+            has_sub_queries = bool(
+                sub_query_sentences
+                and len(sub_query_sentences) >= 2
+                and not (asks_key_points and not is_comparison)
+                and not (asks_full_section and not is_comparison)
             )
 
-            if is_gemini_test_query:
-                p2_sent = split_sentences(getattr(evidence_passages[1], "text", ""))[0].strip()
-                if not p2_sent.endswith((".", "!", "?")):
-                    p2_sent += "."
-                body = f"{answer_core} {cit_1}\n\n- **Số liệu & Thực nghiệm**: {p2_sent} [2]"
-                active_citations = dedup_citations[:2]
-            elif is_comparison:
-                # Comparison queries: support cross-passage delta reasoning
-                evidence_items: List[Tuple[str, str]] = [(answer_core, cit_1)]
-                cross_parts = [f"{answer_core} {cit_1}"]
+            if is_comparison:
+                # Comparison queries: support cross-passage delta reasoning with compressed grounded statements
+                from src.brain.grounded_explainer import compress_clause
+
+                c_core = compress_clause(answer_core, preserve_examples=bool(aspect_example)) or answer_core
+                evidence_items: List[Tuple[str, str]] = [(c_core, cit_1)]
+                cross_parts = [f"{c_core} {cit_1}"]
                 for sq_s, sq_lbl in sub_query_sentences:
                     if sq_s.strip() not in answer_core:
-                        s_fmt = sq_s.strip() if sq_s.strip().endswith((".", "!", "?")) else f"{sq_s.strip()}."
+                        s_comp = compress_clause(sq_s, preserve_examples=bool(aspect_example)) or sq_s.strip()
+                        s_fmt = s_comp if s_comp.endswith((".", "!", "?")) else f"{s_comp}."
                         cross_parts.append(f"{s_fmt} {sq_lbl}")
                         evidence_items.append((s_fmt, sq_lbl))
 
@@ -913,90 +909,46 @@ class DocumentAnalyzer:
                 if len(evidence_items) >= 2:
                     reasoning_txt = _build_grounded_reasoning(query, evidence_items, is_comparison=True, has_sub_queries=has_sub_queries)
                     core_bullets = "\n".join(f"- {s} {lbl}" for s, lbl in evidence_items)
-                    body = f"**1. Trả lời trọng tâm:**\n{core_bullets}\n\n**2. Suy luận & Liên hệ từ tài liệu:**\n{reasoning_txt}"
+                    if reasoning_txt:
+                        body = f"**1. Điểm đối chiếu trực tiếp:**\n{core_bullets}\n\n💡 **Liên hệ & Giải thích từ tài liệu:** {reasoning_txt}"
+                    else:
+                        body = f"**1. Điểm đối chiếu trực tiếp:**\n{core_bullets}"
                 else:
                     body = " ".join(cross_parts)
                 if delta_bullet:
                     body = f"{body}\n\n{delta_bullet}"
                 active_citations = dedup_citations
             elif has_sub_queries:
-                # Decomposed compound queries: include answers for all sub-queries + grounded reasoning
+                # Decomposed compound queries: compress clauses & include answers for all sub-queries + entity synthesis
+                from src.brain.grounded_explainer import compress_clause
+
                 evidence_items = []
                 for sq_s, sq_lbl in sub_query_sentences:
-                    s_fmt = sq_s.strip() if sq_s.strip().endswith((".", "!", "?")) else f"{sq_s.strip()}."
+                    s_comp = compress_clause(sq_s, preserve_examples=bool(aspect_example)) or sq_s.strip()
+                    s_fmt = s_comp if s_comp.endswith((".", "!", "?")) else f"{s_comp}."
                     if all(s_fmt != ex_s for ex_s, _ in evidence_items):
                         evidence_items.append((s_fmt, sq_lbl))
                 if not evidence_items:
-                    evidence_items.append((answer_core, cit_1))
+                    c_core = compress_clause(answer_core, preserve_examples=bool(aspect_example)) or answer_core
+                    evidence_items.append((c_core, cit_1))
                 if len(evidence_items) >= 2:
                     reasoning_txt = _build_grounded_reasoning(query, evidence_items, is_comparison=False, has_sub_queries=True)
                     core_bullets = "\n".join(f"- {s} {lbl}" for s, lbl in evidence_items)
-                    body = f"**1. Trả lời trọng tâm:**\n{core_bullets}\n\n**2. Suy luận & Liên hệ từ tài liệu:**\n{reasoning_txt}"
+                    if reasoning_txt:
+                        body = f"{core_bullets}\n\n💡 **Liên hệ & Giải thích từ tài liệu:** {reasoning_txt}"
+                    else:
+                        body = core_bullets
                 else:
                     body = " ".join(f"{s} {lbl}" for s, lbl in evidence_items)
                 active_citations = dedup_citations
             else:
-                # Pure prose answer: core sentence [n] plus supporting sentences
-                # ONLY from the same passage/section_title as the best sentence.
-                if answer_mode in ("detailed", "comprehensive"):
-                    max_supporting = 10
-                    supporting_sents = []
-                    for s in passage_sents:
-                        s_clean = s.strip()
-                        if not s_clean:
-                            continue
-                        if s_clean in answer_core or answer_core.startswith(s_clean):
-                            continue
-                        if s_clean not in supporting_sents:
-                            supporting_sents.append(s_clean)
-                            if len(supporting_sents) >= max_supporting:
-                                break
-                else:
-                    cand_sents = []
-                    seen_cands = set()
-                    for idx_s, s in enumerate(passage_sents):
-                        s_clean = s.strip()
-                        if not s_clean:
-                            continue
-                        if s_clean in answer_core or answer_core.startswith(s_clean):
-                            continue
-                        if s_clean not in seen_cands:
-                            seen_cands.add(s_clean)
-                            cand_sents.append((idx_s, s_clean))
-
-                    if is_general_section_query:
-                        supporting_sents = [s_clean for _, s_clean in cand_sents[:6]]
-                    else:
-                        scored_cands = sorted(
-                            cand_sents,
-                            key=lambda item: (_score_body_sentence(item[1]), -item[0]),
-                            reverse=True,
-                        )
-                        relevant_cands = [s_clean for _, s_clean in scored_cands if _score_body_sentence(s_clean) > 0]
-                        supporting_sents = relevant_cands[:2] if relevant_cands else [s_clean for _, s_clean in cand_sents[:2]]
-
                 is_reasoning_cue = any(
                     k in q_norm
                     for k in (
                         "phan biet", "khac nhau", "giong nhau", "tai sao", "vi sao",
                         "nguyen nhan", "co che", "nhu the nao", "the nao", "vai tro",
                         "tac dong", "dan den", "suy ra", "ap dung", "he qua", "lien he",
-                        "ban chat", "nguyen tac", "bao toan",
-                    )
-                )
-                asks_full_section = any(
-                    k in q_norm
-                    for k in (
-                        "toan bo", "lay het", "day du", "tat ca", "co gi lay het",
-                        "trong muc", "trong phan", "trong chuong", "trong bai",
-                        "co nhung gi", "gom nhung gi", "bao gom nhung gi",
-                    )
-                )
-                asks_key_points = any(
-                    k in q_norm
-                    for k in (
-                        "phan chinh", "lay phan chinh", "y chinh", "lay y chinh",
-                        "rut ra y chinh", "noi dung chinh", "diem chinh", "tom tat", "trong tam",
+                        "ban chat", "nguyen tac", "bao toan", "giai thich", "de hieu",
                     )
                 )
 
@@ -1018,6 +970,7 @@ class DocumentAnalyzer:
                     if not full_sents:
                         full_sents = [answer_core]
                     body = "\n".join(f"- {s} {cit_1}" for s in full_sents) if len(full_sents) > 1 else f"{full_sents[0]} {cit_1}"
+                    active_citations = [c for c in dedup_citations if c["citation_label"] == cit_1] or dedup_citations[:1]
                 elif asks_key_points:
                     # Concise 3-5 salient takeaways across matching section passages
                     kp_passages = [
@@ -1042,21 +995,81 @@ class DocumentAnalyzer:
                                 kp_clean += "."
                             kp_lines.append(f"- {kp_clean} {cit_1}")
                     body = f"**Các ý chính trọng tâm ({matched_section or doc_display_title}):**\n" + "\n".join(kp_lines)
+                    active_citations = [c for c in dedup_citations if c["citation_label"] == cit_1] or dedup_citations[:1]
+                elif is_heading:
+                    # Preserves clean single-passage prose for bare heading lookups (e.g. 'cho tôi biết topic 49')
+                    supporting_sents = []
+                    for s in passage_sents:
+                        s_clean = s.strip()
+                        if s_clean and s_clean not in answer_core and not answer_core.startswith(s_clean):
+                            if s_clean not in supporting_sents:
+                                supporting_sents.append(s_clean)
+                                if len(supporting_sents) >= 2:
+                                    break
+                    evidence_items = [(answer_core, cit_1)] + [
+                        (s if s.endswith((".", "!", "?")) else f"{s}.", cit_1) for s in supporting_sents
+                    ]
+                    body = " ".join(f"{s} {lbl}" for s, lbl in evidence_items)
+                    active_citations = [c for c in dedup_citations if c["citation_label"] == cit_1] or dedup_citations[:1]
                 else:
-                    evidence_items = [(answer_core, cit_1)]
-                    for s in supporting_sents:
-                        s_fmt = s if s.endswith((".", "!", "?")) else f"{s}."
-                        evidence_items.append((s_fmt, cit_1))
+                    # Grounded Discourse Brain: neural salience + MMR role selection + clause compression
+                    from src.brain.grounded_explainer import get_grounded_explainer
 
-                    if is_reasoning_cue and len(evidence_items) >= 2:
-                        reasoning_txt = _build_grounded_reasoning(query, evidence_items, is_comparison=False, has_sub_queries=False)
-                        core_bullets = "\n".join(f"- {s} {lbl}" for s, lbl in evidence_items)
-                        body = f"**1. Trả lời trọng tâm:**\n{core_bullets}\n\n**2. Suy luận & Liên hệ từ tài liệu:**\n{reasoning_txt}"
-                    else:
-                        body = " ".join(f"{s} {lbl}" for s, lbl in evidence_items)
-                active_citations = [c for c in dedup_citations if c["citation_label"] == cit_1]
-                if not active_citations:
-                    active_citations = dedup_citations[:1]
+                    cand_items: List[Dict[str, Any]] = []
+                    anchor_text = best_sentence.strip() if best_sentence else answer_core.strip()
+                    anchor_fmt = anchor_text if anchor_text.endswith((".", "!", "?")) else f"{anchor_text}."
+                    cand_items.append({
+                        "sentence": anchor_fmt,
+                        "citation_label": cit_1,
+                        "section_title": matched_section,
+                        "pos_ratio": 0.0,
+                        "rule_score": _score_body_sentence(anchor_fmt),
+                        "is_anchor": True,
+                        "passage_id": dedup_citations[0].get("passage_id", "P1") if dedup_citations else "P1",
+                    })
+                    sent_cursor = 0
+                    for p_idx, p in enumerate(evidence_passages):
+                        p_txt = getattr(p, "text", "") if hasattr(p, "text") else str(p)
+                        p_sec = getattr(p, "section_title", "") or ""
+                        p_cit = passage_to_cit_label[p_idx] if p_idx < len(passage_to_cit_label) else f"[{p_idx+1}]"
+                        p_id = getattr(p, "passage_id", f"P{p_idx+1}")
+                        p_sents = split_sentences(p_txt)
+                        for s_i, s in enumerate(p_sents):
+                            s_clean = s.strip()
+                            if not s_clean or s_clean in anchor_fmt or _is_heading_sent(s_clean, p_sec):
+                                continue
+                            s_fmt = s_clean if s_clean.endswith((".", "!", "?")) else f"{s_clean}."
+                            cand_items.append({
+                                "sentence": s_fmt,
+                                "citation_label": p_cit,
+                                "section_title": p_sec,
+                                "pos_ratio": s_i / max(1, len(p_sents) - 1),
+                                "rule_score": _score_body_sentence(s_fmt),
+                                "is_anchor": False,
+                                "passage_id": p_id,
+                            })
+                            sent_cursor += 1
+
+                    source_raw_texts = [
+                        getattr(p, "text", "") if hasattr(p, "text") else str(p)
+                        for p in evidence_passages
+                    ]
+                    explainer = get_grounded_explainer()
+                    body, used_lbls, _ = explainer.explain(
+                        query=query,
+                        candidates=cand_items,
+                        source_texts=source_raw_texts,
+                        answer_mode=answer_mode,
+                        preserve_examples=bool(aspect_example),
+                        include_synthesis=bool(is_reasoning_cue or answer_mode == "detailed"),
+                        is_comparison=False,
+                    )
+                    if not body:
+                        body = f"{answer_core} {cit_1}"
+                        used_lbls = {cit_1}
+                    active_citations = [c for c in dedup_citations if c["citation_label"] in used_lbls]
+                    if not active_citations:
+                        active_citations = dedup_citations[:1]
 
             # Multi-facet synthesis across evidence passages (Concept + Concrete Systems + Examples)
             q_norm = strip_accents((query or "").lower())
@@ -1142,11 +1155,31 @@ class DocumentAnalyzer:
                 sec_list = sorted({c["section_title"] for c in dedup_citations if c.get("section_title")})
                 sec_summary = ", ".join(f"`{s}`" for s in sec_list[:3]) if sec_list else f"**{doc_display_title}**"
                 cit_badges = " ".join(c["citation_label"] for c in dedup_citations[:3])
+                detailed_synth = ""
+                try:
+                    from src.brain.grounded_explainer import extract_frame, get_grounded_explainer
+                    detail_cands = [
+                        extract_frame(sentence=s, role="MECHANISM", salience=1.0, citation_label=lbl)
+                        for s, lbl in zip(sentence_pool[:4], sentence_cit_labels[:4])
+                        if len(s.split()) >= 5
+                    ]
+                    if len(detail_cands) >= 2:
+                        detailed_synth = get_grounded_explainer().build_entity_grounded_synthesis(
+                            query=query,
+                            frames=detail_cands,
+                            is_comparison=False,
+                        )
+                except Exception:
+                    detailed_synth = ""
+                if not detailed_synth:
+                    detailed_synth = (
+                        f"Các dữ kiện trọng tâm từ {sec_summary} trong **{doc_display_title}** {cit_badges} "
+                        f"liên kết chặt chẽ và toàn bộ chi tiết được đối chiếu trực tiếp từ văn bản gốc."
+                    )
                 body = (
                     f"{body}\n\n"
                     f"💡 **Tổng hợp & Đúc kết chuyên sâu:**\n"
-                    f"Nội dung trên được tổng hợp đối chiếu trực tiếp từ {len(dedup_citations)} đoạn chứng cứ thuộc {sec_summary} "
-                    f"trong tài liệu **{doc_display_title}** {cit_badges}, bảo đảm tính toàn vẹn ngữ cảnh và không suy diễn ngoài văn bản."
+                    f"{detailed_synth}"
                 )
 
         dedup_citations = active_citations

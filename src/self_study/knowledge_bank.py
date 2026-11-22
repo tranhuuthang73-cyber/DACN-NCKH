@@ -801,16 +801,50 @@ class SelfStudyKnowledgeBank:
         # "tại sao ... phải bảo toàn electron") into dumping a section/heading; yield to DocumentAnalyzer.find_best_grounded_answer.
         has_def_cue = any(
             re.search(r"\b" + re.escape(c) + r"\b", q_norm)
-            for c in ("la gi", "khai niem", "dinh nghia", "tai sao", "vi sao", "nguyen nhan", "ly do")
+            for c in ("la gi", "khai niem", "dinh nghia", "tai sao", "vi sao", "nguyen nhan", "ly do", "giai thich")
         )
         if (
             has_def_cue
-            and granularity == "focused"
+            and granularity in ("focused", "explain")
             and not asks_doc_wide_enum
             and not is_explicit_sec_heading
             and not has_numbered_target
             and not asks_main_doc_topic
         ):
+            # Build direct grounded explanation across matching doc lines when invoked standalone;
+            # blueprint 'GROUNDED_CONCEPT_EXPLANATION' keeps DocumentAnalyzer authoritative in web chat.
+            try:
+                from src.brain.grounded_explainer import get_grounded_explainer
+                q_toks = {t for t in re.findall(r"[a-z0-9_]+", q_norm) if len(t) >= 2}
+                all_lines: List[str] = []
+                for sec in sections:
+                    for ln in (sec.get("raw_lines") or sec.get("lines") or []):
+                        cl = str(ln or "").strip().lstrip("-*• ").strip()
+                        if len(cl) >= 12:
+                            all_lines.append(cl)
+                if all_lines:
+                    scored_lines = sorted(
+                        all_lines,
+                        key=lambda ln: len(set(re.findall(r"[a-z0-9_]+", strip_accents(ln.lower()))) & q_toks),
+                        reverse=True,
+                    )
+                    top_hits = scored_lines[:6]
+                    if top_hits and len(set(re.findall(r"[a-z0-9_]+", strip_accents(top_hits[0].lower()))) & q_toks) >= 1:
+                        exp_ans = get_grounded_explainer().explain_section(
+                            query=query,
+                            section_title=doc.get("title") or "Tài liệu",
+                            raw_items=top_hits,
+                            max_points=4,
+                        )
+                        if exp_ans:
+                            return {
+                                "answer": exp_ans,
+                                "blueprint": "GROUNDED_CONCEPT_EXPLANATION",
+                                "citations": ["[1]"],
+                                "grounded": True,
+                            }
+            except Exception:
+                pass
             return None
 
         # ----------------------------------------------------------------------
@@ -959,6 +993,18 @@ class SelfStudyKnowledgeBank:
                 if len(raw_items) >= 3:
                     key_points = key_points[:min(5, len(raw_items) - 1)]
 
+                try:
+                    from src.brain.grounded_explainer import compress_clause
+                    compressed_kps = []
+                    for pt in key_points:
+                        if "**" not in pt and len(pt.split()) > 26:
+                            compressed_kps.append(compress_clause(pt, preserve_examples=False) or pt)
+                        else:
+                            compressed_kps.append(pt)
+                    key_points = compressed_kps
+                except Exception:
+                    pass
+
                 full_answer = (
                     f"Các ý chính của **{h_title}**:\n\n"
                     + "\n".join(f"- {pt}" for pt in key_points)
@@ -970,6 +1016,26 @@ class SelfStudyKnowledgeBank:
                     "grounded": True,
                     "matched_headings": matched_headings,
                 }
+
+            if granularity == "explain":
+                try:
+                    from src.brain.grounded_explainer import get_grounded_explainer
+                    exp_answer = get_grounded_explainer().explain_section(
+                        query=query,
+                        section_title=h_title,
+                        raw_items=raw_items,
+                        max_points=4,
+                    )
+                    if exp_answer:
+                        return {
+                            "answer": exp_answer,
+                            "blueprint": "SECTION_GROUNDED_EXPLANATION",
+                            "citations": ["[1]"],
+                            "grounded": True,
+                            "matched_headings": matched_headings,
+                        }
+                except Exception:
+                    pass
 
             sec_lines = [
                 f"- {line.lstrip('-*• ').strip()}" if not line.startswith(("-", "*", "•")) else line
@@ -1040,6 +1106,26 @@ class SelfStudyKnowledgeBank:
                         full_answer += "\n\n**Ý chính liên quan:**\n" + "\n".join(f"- {item}" for item in summary_rest)
 
             if full_answer is None:
+                is_bare_heading_lookup = bool(re.match(r"^\s*\d+(?:\.\d+)*\.", query.strip()))
+                if len(raw_items) > 4 and "chi tiet" not in q_norm and not is_bare_heading_lookup:
+                    try:
+                        from src.brain.grounded_explainer import get_grounded_explainer
+                        exp_answer = get_grounded_explainer().explain_section(
+                            query=query,
+                            section_title=h_title,
+                            raw_items=raw_items,
+                            max_points=4,
+                        )
+                        if exp_answer:
+                            return {
+                                "answer": exp_answer,
+                                "blueprint": "SECTION_GROUNDED_EXPLANATION",
+                                "citations": ["[1]"],
+                                "grounded": True,
+                                "matched_headings": matched_headings,
+                            }
+                    except Exception:
+                        pass
                 try:
                     from src.self_study.datasets.extractive_text_stitcher import ExtractiveTextStitcher
                     full_answer = ExtractiveTextStitcher.stitch_section_detail(

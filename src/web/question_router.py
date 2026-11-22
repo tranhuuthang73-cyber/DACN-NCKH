@@ -155,6 +155,16 @@ class QuestionRouter:
             "tom tat", "tom luoc", "tom gon", "gach dau dong", "dai y",
             "key point", "main point", "takeaway",
         )
+        explicit_kp_cues = (
+            "phan chinh", "lay phan chinh", "y chinh", "lay y chinh",
+            "rut ra y chinh", "nhung y chinh", "y cot loi", "gach dau dong",
+            "key point", "main point", "takeaway",
+        )
+        explain_cues = (
+            "giai thich", "de hieu", "ngan gon de hieu", "hieu nom na",
+            "noi de hieu", "tom tat ngan gon", "tom gon de hieu",
+            "giai thich ngan", "explain briefly", "in simple terms",
+        )
         full_override_cues = (
             "toan bo", "lay het", "day du", "co gi lay het",
             "tat ca", "toan van", "liet ke het",
@@ -181,10 +191,18 @@ class QuestionRouter:
             )
         )
         has_override_full = _match_cues(full_override_cues)
+        has_explicit_kp = _match_cues(explicit_kp_cues)
+        has_explain = _match_cues(explain_cues)
         has_key_points = _match_cues(key_points_cues)
         has_full = has_override_full or has_whats_in_section or _match_cues(full_cues)
         has_focused = _match_cues(focused_cues)
 
+        if has_override_full:
+            return "full"
+        if has_explicit_kp:
+            return "key_points"
+        if has_explain and "chi tiet" not in q_norm and not has_whats_in_section:
+            return "explain"
         if has_key_points and not has_override_full:
             return "key_points"
         if has_full and (has_override_full or not has_focused):

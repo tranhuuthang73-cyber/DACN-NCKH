@@ -1720,13 +1720,37 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
             "diagnostics": assistant_msg.get("diagnostics", {}),
         }
 
-    # Persist updated valid attached docs to session
+    # Persist updated valid attached docs to session (copy list to avoid mutating attached_docs via session)
     if attached_docs != session.document_ids:
-        session.document_ids = attached_docs
+        session.document_ids = list(attached_docs)
         try:
             service.session_manager.save()
         except Exception:
             pass
+
+    from src.reasoning.formula_lab import build_online_study_expansion, detect_expansion_intent
+
+    expansion_intent = detect_expansion_intent(effective_query)
+    online_expansion_res: Optional[Dict[str, Any]] = None
+    is_online_symbolic_expansion = False
+    if expansion_intent.get("wants_any") and req.allow_online_api and attached_docs:
+        try:
+            doc_texts_combined: List[str] = []
+            primary_doc_title = "Tài liệu"
+            for d_idx_e, d_id_e in enumerate(attached_docs):
+                d_obj_e = service.store.get_document(d_id_e)
+                if d_obj_e and getattr(d_obj_e, "raw_text", ""):
+                    if d_idx_e == 0 and getattr(d_obj_e, "title", ""):
+                        primary_doc_title = d_obj_e.title
+                    doc_texts_combined.append(d_obj_e.raw_text)
+            if doc_texts_combined:
+                online_expansion_res = build_online_study_expansion(
+                    query=effective_query,
+                    doc_text="\n\n".join(doc_texts_combined),
+                    doc_title=primary_doc_title,
+                )
+        except Exception:
+            online_expansion_res = None
 
     for _attempt in range(2):
         route, route_meta = service.question_router.classify_intent(
@@ -1736,6 +1760,7 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
         # Step 4: Retrieval based on routing & attached documents (Pre-filtered for Zero Leakage)
         t_ret_start = time.perf_counter()
         retrieval_candidates = []
+        is_compound_query = False
 
         is_multi_facet = (
             route in (QuestionRoute.CROSS_DOCUMENT_COMPARISON, QuestionRoute.DOCUMENT_SUMMARY, QuestionRoute.MULTI_PASSAGE_SYNTHESIS)
@@ -1770,20 +1795,37 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
                     from src.reasoning.query_decomposer import QueryDecomposer
                     _decomposer = QueryDecomposer()
                     _decomp_res = _decomposer.decompose(effective_query)
-                    seen_p_ids = {h.passage_id for h in retrieval_candidates}
                     if _decomp_res.is_compound and len(_decomp_res.sub_queries) >= 2:
+                        is_compound_query = True
+                        sub_hit_lists: List[List[Any]] = []
                         for _sq in _decomp_res.sub_queries:
                             _sq_expanded, _ = expand_query_semantics(_sq.text)
                             _sub_hits = service.retriever.retrieve(
                                 _sq_expanded,
-                                top_k=max(2, top_k_retrieve // 2),
+                                top_k=max(4, top_k_retrieve // 2),
                                 allowed_document_ids=attached_docs,
                             )
-                            for _sh in _sub_hits:
-                                if _sh.passage_id not in seen_p_ids:
-                                    seen_p_ids.add(_sh.passage_id)
-                                    retrieval_candidates.append(_sh)
+                            sub_hit_lists.append(list(_sub_hits or []))
 
+                        # Round-robin interleave sub-query top hits ahead of full-query hits so part 2 is never crowded out
+                        interleaved: List[Any] = []
+                        seen_interleave: set = set()
+                        max_sub_len = max((len(lst) for lst in sub_hit_lists), default=0)
+                        for idx_rr in range(max_sub_len):
+                            for lst in sub_hit_lists:
+                                if idx_rr < len(lst):
+                                    hit_item = lst[idx_rr]
+                                    if hit_item.passage_id not in seen_interleave:
+                                        seen_interleave.add(hit_item.passage_id)
+                                        interleaved.append(hit_item)
+                        for base_h in retrieval_candidates:
+                            if base_h.passage_id not in seen_interleave:
+                                seen_interleave.add(base_h.passage_id)
+                                interleaved.append(base_h)
+                        if interleaved:
+                            retrieval_candidates = interleaved
+
+                    seen_p_ids = {h.passage_id for h in retrieval_candidates}
                     # Focus entities pinned retrieval (Wave 3)
                     if hasattr(_decomposer, "extract_focus_entities"):
                         _focus_entities = _decomposer.extract_focus_entities(effective_query)
@@ -1922,8 +1964,8 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
         # Step 5: Evidence Selection & Grounding Verification (Task 8 & 30)
         section_granularity = route_meta.get("section_granularity") or QuestionRouter.classify_section_granularity(effective_query)
         use_full_or_kp_section = (route == QuestionRoute.SECTION_LOOKUP and section_granularity in ("full", "key_points"))
-        use_dynamic_k = (not is_multi_facet) and (not use_full_or_kp_section) and (route in (QuestionRoute.DIRECT_LOOKUP, QuestionRoute.SECTION_LOOKUP, QuestionRoute.PAGE_LOOKUP))
-        eff_max_ev = max(req.top_k, 12) if (is_multi_facet or use_full_or_kp_section) else req.top_k
+        use_dynamic_k = (not is_compound_query) and (not is_multi_facet) and (not use_full_or_kp_section) and (route in (QuestionRoute.DIRECT_LOOKUP, QuestionRoute.SECTION_LOOKUP, QuestionRoute.PAGE_LOOKUP))
+        eff_max_ev = max(req.top_k, 12) if (is_multi_facet or use_full_or_kp_section) else (max(req.top_k, 8) if is_compound_query else req.top_k)
         evidence = service.evidence_selector.select_evidence(
             effective_query,
             retrieval_candidates,
@@ -2073,10 +2115,34 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
                         "Tài liệu được cung cấp hiện chưa đủ thông tin cho câu hỏi này."
                     )
 
+        if online_expansion_res is not None:
+            refused = False
+            refusal_reason = None
+            refusal_message = ""
+            if not evidence.evidence_passages and attached_docs:
+                try:
+                    from src.hybrid_qa.evidence import Citation
+                    _d0 = service.store.get_document(attached_docs[0])
+                    if _d0 and getattr(_d0, "passages", None):
+                        _p0 = _d0.passages[0]
+                        evidence.evidence_passages = [
+                            Citation(
+                                passage_id=_p0.passage_id,
+                                document_id=attached_docs[0],
+                                text=_p0.text,
+                                score=10.0,
+                                section_title=_p0.section_title,
+                                metadata=_p0.metadata,
+                            )
+                        ]
+                except Exception:
+                    pass
+
         if (not refused and len(evidence.evidence_passages) > 0) or not req.allow_online_api or online_fetched_attempted:
             break
 
         online_fetched_attempted = True
+        prev_attached_set = set(attached_docs)
         online_api_fetched_docs = await _auto_fetch_online_docs_for_chat(
             service=service,
             query=effective_query,
@@ -2087,8 +2153,9 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
         added_online_doc = False
         for item in online_api_fetched_docs:
             d_id = item.get("document_id")
-            if d_id and d_id not in attached_docs:
-                attached_docs.append(d_id)
+            if d_id and d_id not in prev_attached_set:
+                if d_id not in attached_docs:
+                    attached_docs.append(d_id)
                 added_online_doc = True
         if not added_online_doc:
             break
@@ -2151,6 +2218,11 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
 
     if refused:
         answer_text = refusal_message
+        if expansion_intent.get("wants_any") and not req.allow_online_api:
+            answer_text += (
+                " Bạn có thể bật **Online (Mở rộng & Bài tập)** để hệ thống tự biến đổi công thức "
+                "và sinh thêm ví dụ, bài tập từ công thức trong tài liệu."
+            )
         citations_data = []  # Clear citations when refused
         unified_trace = {
             "mode": thinking_mode,
@@ -2199,7 +2271,10 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
         )
 
         kb_synth = None
-        if wants_suggested_questions and attached_docs:
+        if online_expansion_res is not None:
+            body = online_expansion_res["answer"]
+            is_online_symbolic_expansion = True
+        elif wants_suggested_questions and attached_docs:
             try:
                 attached_doc = service.store.get_document(attached_docs[0])
                 auto_qs = DocumentAnalyzer.generate_suggested_questions(attached_doc.raw_text, title=attached_doc.title, max_questions=5)
@@ -2470,6 +2545,11 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
                 "Tài liệu không có thông tin hoặc chưa đủ căn cứ. "
                 "Không tìm thấy đủ thông tin trong tài liệu để trả lời chắc chắn."
             )
+            if expansion_intent.get("wants_any") and not req.allow_online_api:
+                answer_text += (
+                    " Bạn có thể bật **Online (Mở rộng & Bài tập)** để hệ thống tự biến đổi công thức "
+                    "và sinh thêm ví dụ, bài tập từ công thức trong tài liệu."
+                )
             unified_trace = {
                 "mode": thinking_mode,
                 "hops": 0,
@@ -2558,39 +2638,47 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
             except Exception:
                 pass
 
-            # Reflective Grounding Critic check (Trụ cột 3)
-            try:
-                from src.hybrid_qa.grounding_critic import GroundingCritic
-                _critic = GroundingCritic()
-                critic_citations = list(citations_data)
-                _seen_critic_pids = {c.get("passage_id") for c in critic_citations if c.get("passage_id")}
-                _used_doc_ids = list(dict.fromkeys(
-                    [c.get("document_id") for c in citations_data if c.get("document_id")]
-                    + (attached_docs if (not citations_data or (isinstance(kb_synth, dict) and kb_synth.get("answer") == body)) else [])
-                ))
-                if not _used_doc_ids and attached_docs:
-                    _used_doc_ids = list(attached_docs)
-                for _d_id in _used_doc_ids:
-                    try:
-                        _d_obj = service.store.get_document(_d_id)
-                        if _d_obj and getattr(_d_obj, "passages", None):
-                            for _p in _d_obj.passages:
-                                if _p.passage_id not in _seen_critic_pids:
-                                    _seen_critic_pids.add(_p.passage_id)
-                                    critic_citations.append({
-                                        "passage_id": _p.passage_id,
-                                        "document_id": _d_id,
-                                        "document_title": getattr(_d_obj, "title", _d_id),
-                                        "section_title": getattr(_p, "section_title", ""),
-                                        "text": _p.text,
-                                    })
-                    except Exception:
-                        pass
-                _c_report = _critic.verify_answer(body, critic_citations)
-                if not _c_report.is_faithful:
-                    body = _critic.correct_answer(body, _c_report)
-            except Exception:
-                pass
+            # Reflective Grounding Critic check (Trụ cột 3) — skip for intentional Online Symbolic expansions
+            if not is_online_symbolic_expansion:
+                try:
+                    from src.hybrid_qa.grounding_critic import GroundingCritic
+                    _critic = GroundingCritic()
+                    critic_citations = list(citations_data)
+                    _seen_critic_pids = {c.get("passage_id") for c in critic_citations if c.get("passage_id")}
+                    _used_doc_ids = list(dict.fromkeys(
+                        [c.get("document_id") for c in citations_data if c.get("document_id")]
+                        + (attached_docs if (not citations_data or (isinstance(kb_synth, dict) and kb_synth.get("answer") == body)) else [])
+                    ))
+                    if not _used_doc_ids and attached_docs:
+                        _used_doc_ids = list(attached_docs)
+                    for _d_id in _used_doc_ids:
+                        try:
+                            _d_obj = service.store.get_document(_d_id)
+                            if _d_obj and getattr(_d_obj, "passages", None):
+                                for _p in _d_obj.passages:
+                                    if _p.passage_id not in _seen_critic_pids:
+                                        _seen_critic_pids.add(_p.passage_id)
+                                        critic_citations.append({
+                                            "passage_id": _p.passage_id,
+                                            "document_id": _d_id,
+                                            "document_title": getattr(_d_obj, "title", _d_id),
+                                            "section_title": getattr(_p, "section_title", ""),
+                                            "text": _p.text,
+                                        })
+                        except Exception:
+                            pass
+                    _c_report = _critic.verify_answer(body, critic_citations)
+                    if not _c_report.is_faithful:
+                        body = _critic.correct_answer(body, _c_report)
+                except Exception:
+                    pass
+
+            if expansion_intent.get("wants_any") and not req.allow_online_api and not is_online_symbolic_expansion:
+                body = (
+                    f"{body}\n\n"
+                    "🔒 *Đang ở chế độ **Offline** (chỉ trả lời từ tài liệu). "
+                    "Bật **Online (Mở rộng & Bài tập)** để hệ thống tự biến đổi công thức, sinh thêm ví dụ và bài tập mới.*"
+                )
 
             legacy_trace = reasoning_trace
             body, unified_trace = _run_unified_reasoning_for_chat(
@@ -2722,6 +2810,13 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
             "engine": "WaveCMS-Discourse-SelfBuilt",
             "granularity": section_granularity,
             "neural_scorer_active": False,
+        },
+        "online_formula_lab": {
+            "active": is_online_symbolic_expansion,
+            "allow_online_api": bool(req.allow_online_api),
+            "engine": online_expansion_res.get("engine") if online_expansion_res else None,
+            "formulas_found": online_expansion_res.get("formulas_found", 0) if online_expansion_res else 0,
+            "modes_generated": online_expansion_res.get("modes_generated", []) if online_expansion_res else [],
         },
         "suggested_questions": follow_up_questions if not refused else [],
     }

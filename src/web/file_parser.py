@@ -140,8 +140,161 @@ def _format_table_rows_to_sentences(rows_data: List[List[str]]) -> List[str]:
     return sentences
 
 
+_OMML_NS = "http://schemas.openxmlformats.org/officeDocument/2006/math"
+_W_NS = "http://schemas.openxmlformats.org/wordprocessingml/2006/main"
+_MC_NS = "http://schemas.openxmlformats.org/markup-compatibility/2006"
+
+
+def _local_tag(elem: Any) -> str:
+    tag = getattr(elem, "tag", "") or ""
+    return tag.rsplit("}", 1)[-1]
+
+
+def _extract_omml_math(elem: Any) -> str:
+    """Recursively converts Office Math XML (<m:oMath>) nodes into readable linear math text."""
+    tag = _local_tag(elem)
+    if tag == "t":
+        return elem.text or ""
+    if tag == "f":  # fraction: <m:num> / <m:den>
+        num_el = next((c for c in elem if _local_tag(c) == "num"), None)
+        den_el = next((c for c in elem if _local_tag(c) == "den"), None)
+        num_s = _extract_omml_math(num_el).strip() if num_el is not None else ""
+        den_s = _extract_omml_math(den_el).strip() if den_el is not None else ""
+        n_fmt = f"({num_s})" if any(ch in num_s for ch in " +-*/") else num_s
+        d_fmt = f"({den_s})" if any(ch in den_s for ch in " +-*/") else den_s
+        return f"{n_fmt}/{d_fmt}" if (num_s or den_s) else ""
+    if tag == "sSup":  # superscript base^sup
+        e_el = next((c for c in elem if _local_tag(c) == "e"), None)
+        sup_el = next((c for c in elem if _local_tag(c) == "sup"), None)
+        e_s = _extract_omml_math(e_el).strip() if e_el is not None else ""
+        sup_s = _extract_omml_math(sup_el).strip() if sup_el is not None else ""
+        return f"{e_s}^{sup_s}" if len(sup_s) <= 2 else f"{e_s}^{{{sup_s}}}"
+    if tag == "sSub":  # subscript base_sub
+        e_el = next((c for c in elem if _local_tag(c) == "e"), None)
+        sub_el = next((c for c in elem if _local_tag(c) == "sub"), None)
+        e_s = _extract_omml_math(e_el).strip() if e_el is not None else ""
+        sub_s = _extract_omml_math(sub_el).strip() if sub_el is not None else ""
+        return f"{e_s}_{sub_s}" if len(sub_s) <= 2 else f"{e_s}_{{{sub_s}}}"
+    if tag == "sSubSup":
+        e_el = next((c for c in elem if _local_tag(c) == "e"), None)
+        sub_el = next((c for c in elem if _local_tag(c) == "sub"), None)
+        sup_el = next((c for c in elem if _local_tag(c) == "sup"), None)
+        e_s = _extract_omml_math(e_el).strip() if e_el is not None else ""
+        sub_s = _extract_omml_math(sub_el).strip() if sub_el is not None else ""
+        sup_s = _extract_omml_math(sup_el).strip() if sup_el is not None else ""
+        return f"{e_s}_{sub_s}^{sup_s}"
+    if tag == "rad":  # radical sqrt(...)
+        e_el = next((c for c in elem if _local_tag(c) == "e"), None)
+        e_s = _extract_omml_math(e_el).strip() if e_el is not None else ""
+        return f"sqrt({e_s})" if e_s else ""
+    if tag == "d":  # delimiter parentheses
+        inner = "".join(_extract_omml_math(c) for c in elem if _local_tag(c) == "e")
+        return f"({inner})" if inner else ""
+
+    parts: List[str] = []
+    for child in elem:
+        if _local_tag(child) == "rPr":
+            continue
+        piece = _extract_omml_math(child)
+        if piece:
+            parts.append(piece)
+    return "".join(parts)
+
+
+def _extract_paragraph_with_math_and_textboxes(p_elem: Any) -> Tuple[str, List[str]]:
+    """
+    Extracts full paragraph text preserving inline Word text, breaks, tabs, and OMML math
+    without duplicating mc:Fallback shapes, while also collecting <w:txbxContent> lines.
+    """
+    inline_parts: List[str] = []
+    textbox_lines: List[str] = []
+
+    def _walk(node: Any) -> None:
+        tag = _local_tag(node)
+        if tag == "Fallback":
+            return
+        if tag in ("oMath", "oMathPara"):
+            math_str = _extract_omml_math(node).strip()
+            if math_str:
+                if inline_parts and not inline_parts[-1].endswith((" ", "\n", "(")):
+                    inline_parts.append(" ")
+                inline_parts.append(math_str)
+                inline_parts.append(" ")
+            return
+        if tag == "txbxContent":
+            for tb_p in node:
+                if _local_tag(tb_p) == "p":
+                    tb_txt, nested_tbs = _extract_paragraph_with_math_and_textboxes(tb_p)
+                    if tb_txt:
+                        textbox_lines.append(tb_txt)
+                    textbox_lines.extend(nested_tbs)
+            return
+        if tag in ("t", "delText"):
+            if node.text:
+                inline_parts.append(node.text)
+            return
+        if tag == "tab":
+            inline_parts.append(" ")
+            return
+        if tag in ("br", "cr"):
+            inline_parts.append("\n")
+            return
+        for child in node:
+            _walk(child)
+
+    _walk(p_elem)
+    raw = "".join(inline_parts)
+    # Clean per-line spacing while keeping explicit paragraph line breaks
+    cleaned_lines = [re.sub(r"[ \t]{2,}", " ", ln).strip() for ln in raw.splitlines()]
+    main_text = "\n".join(ln for ln in cleaned_lines if ln)
+    return main_text, textbox_lines
+
+
+def _ocr_image_bytes(img_bytes: bytes) -> str:
+    """Runs local OCR on raw image bytes if PIL + pytesseract are available; skips tiny icons."""
+    try:
+        from PIL import Image
+        img = Image.open(io.BytesIO(img_bytes))
+        if img.size[0] < 50 or img.size[1] < 50:
+            return ""
+        import pytesseract
+        try:
+            txt = pytesseract.image_to_string(img, lang="vie+eng")
+        except Exception:
+            txt = pytesseract.image_to_string(img)
+        return (txt or "").strip()
+    except Exception:
+        return ""
+
+
+def _extract_docx_embedded_images_ocr(file_bytes: bytes, max_images: int = 12) -> List[str]:
+    """Extracts OCR text from raster images embedded inside word/media/* of a DOCX archive."""
+    import zipfile
+
+    ocr_blocks: List[str] = []
+    raster_exts = (".png", ".jpg", ".jpeg", ".bmp", ".tif", ".tiff", ".webp")
+    try:
+        with zipfile.ZipFile(io.BytesIO(file_bytes)) as zf:
+            media_names = sorted(
+                name for name in zf.namelist()
+                if name.startswith("word/media/") and name.lower().endswith(raster_exts)
+            )
+            for name in media_names[:max_images]:
+                try:
+                    img_bytes = zf.read(name)
+                except Exception:
+                    continue
+                ocr_text = _ocr_image_bytes(img_bytes)
+                if ocr_text:
+                    img_label = Path(name).name
+                    ocr_blocks.append(f"### Nội dung OCR từ hình ảnh ({img_label})\n{ocr_text}")
+    except Exception:
+        return []
+    return ocr_blocks
+
+
 def extract_text_from_docx(file_bytes: bytes) -> str:
-    """Extracts both paragraphs and tables in document order from DOCX bytes using python-docx."""
+    """Extracts paragraphs, headings, OMML formulas, textboxes, SDT controls, and tables in document order from DOCX."""
     import docx
     from docx.text.paragraph import Paragraph
     from docx.table import Table
@@ -149,27 +302,63 @@ def extract_text_from_docx(file_bytes: bytes) -> str:
     stream = io.BytesIO(file_bytes)
     doc = docx.Document(stream)
     blocks: List[str] = []
+    seen_txbx: set = set()
 
-    for child in doc.element.body.iterchildren():
-        if child.tag.endswith("p"):
-            p = Paragraph(child, doc)
-            txt = p.text.strip()
-            if txt:
-                style_name = p.style.name.lower() if p.style and p.style.name else ""
-                if "heading 1" in style_name:
-                    blocks.append(f"# {txt}")
-                elif "heading 2" in style_name:
-                    blocks.append(f"## {txt}")
-                elif "heading 3" in style_name:
-                    blocks.append(f"### {txt}")
-                else:
-                    blocks.append(txt)
-        elif child.tag.endswith("tbl"):
-            tbl = Table(child, doc)
-            rows_data = [[cell.text.strip() for cell in row.cells] for row in tbl.rows]
-            table_sents = _format_table_rows_to_sentences(rows_data)
-            if table_sents:
-                blocks.append("\n".join(table_sents))
+    def _append_paragraph(child: Any) -> None:
+        p = Paragraph(child, doc)
+        txt, tb_lines = _extract_paragraph_with_math_and_textboxes(child)
+        if not txt:
+            txt = (p.text or "").strip()
+        if txt:
+            style_name = p.style.name.lower() if p.style and p.style.name else ""
+            if "heading 1" in style_name:
+                blocks.append(f"# {txt}")
+            elif "heading 2" in style_name:
+                blocks.append(f"## {txt}")
+            elif "heading 3" in style_name:
+                blocks.append(f"### {txt}")
+            else:
+                blocks.append(txt)
+        for tb in tb_lines:
+            tb_clean = tb.strip()
+            if tb_clean and tb_clean not in seen_txbx:
+                seen_txbx.add(tb_clean)
+                blocks.append(tb_clean)
+
+    def _walk_body(container: Any) -> None:
+        for child in container:
+            tag = _local_tag(child)
+            if tag == "p":
+                _append_paragraph(child)
+            elif tag == "tbl":
+                tbl = Table(child, doc)
+                rows_data: List[List[str]] = []
+                for row in tbl.rows:
+                    row_cells: List[str] = []
+                    for cell in row.cells:
+                        cell_parts: List[str] = []
+                        for cp in cell._tc.iterchildren():
+                            if _local_tag(cp) == "p":
+                                c_txt, c_tbs = _extract_paragraph_with_math_and_textboxes(cp)
+                                if c_txt:
+                                    cell_parts.append(c_txt)
+                                cell_parts.extend(c_tbs)
+                        row_cells.append(" ".join(cell_parts).strip() if cell_parts else cell.text.strip())
+                    rows_data.append(row_cells)
+                table_sents = _format_table_rows_to_sentences(rows_data)
+                if table_sents:
+                    blocks.append("\n".join(table_sents))
+            elif tag == "sdt":
+                sdt_content = next((c for c in child if _local_tag(c) == "sdtContent"), None)
+                if sdt_content is not None:
+                    _walk_body(sdt_content)
+
+    _walk_body(doc.element.body.iterchildren())
+
+    # Also OCR raster images embedded inside word/media/* (e.g. screenshot formulas/tables)
+    ocr_blocks = _extract_docx_embedded_images_ocr(file_bytes)
+    if ocr_blocks:
+        blocks.extend(ocr_blocks)
 
     if not blocks:
         raise ValueError("Could not extract any readable text from DOCX.")

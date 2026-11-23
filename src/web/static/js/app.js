@@ -611,7 +611,7 @@
       dom.btnToggleOnlineApi.classList.toggle("is-active", enabled);
       dom.btnToggleOnlineApi.setAttribute("aria-pressed", enabled ? "true" : "false");
       if (dom.lblOnlineApi) {
-        dom.lblOnlineApi.textContent = enabled ? "🌐 Auto API ngoài: Bật" : "🌐 Auto API ngoài";
+        dom.lblOnlineApi.textContent = enabled ? "🌐 Online (Mở rộng & Bài tập)" : "🔒 Offline (Chỉ tài liệu)";
       }
     }
     if (dom.thinkingModeSelector) {
@@ -3013,9 +3013,9 @@
               <span class="bc-runtime-sub">${escapeHtml(String(apiTrain.stage || "N/A"))} (${apiTrainLoss !== null ? `loss ${apiTrainLoss.toFixed(4)}` : "loss N/A"})</span>
             </div>
             <div class="bc-runtime-item">
-              <span class="bc-runtime-label">Chế độ Auto API ngoài</span>
-              <strong class="bc-runtime-val">${state.allowOnlineApi ? "🌐 Đang BẬT (Hybrid Fallback)" : "🔒 Đang TẮT (100% Air-Gap)"}</strong>
-              <span class="bc-runtime-sub">8 nguồn API công khai sẵn sàng khi bật</span>
+              <span class="bc-runtime-label">Chế độ Offline / Online (Tự build)</span>
+              <strong class="bc-runtime-val">${state.allowOnlineApi ? "🌐 Đang BẬT (Biến đổi Công thức & Bài tập + Nguồn mở)" : "🔒 Đang TẮT (100% Air-Gap Chỉ tài liệu)"}</strong>
+              <span class="bc-runtime-sub">Offline khóa chặt tài liệu · Online biến đổi công thức, sinh ví dụ &amp; bài tập</span>
             </div>
           </div>
         </div>
@@ -3782,8 +3782,8 @@
         syncModeAndLengthUI();
         showToast(
           state.allowOnlineApi
-            ? "Đã bật Auto API ngoài (tự gọi Wikipedia/arXiv/OpenAlex/EuropePMC khi vượt kho local)."
-            : "Đã tắt Auto API ngoài — bảo toàn chế độ Offline Air-Gap."
+            ? "Đã bật chế độ Online: Tự biến đổi công thức, sinh ví dụ & bài tập mới (SymPy tự build) và hỗ trợ tra cứu mở rộng."
+            : "Đã chuyển về chế độ Offline Air-Gap: Chỉ trả lời chính xác trong tài liệu đính kèm."
         );
       });
     }

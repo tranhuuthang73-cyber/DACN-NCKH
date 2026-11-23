@@ -31,7 +31,8 @@ class DocumentChunker:
 
     SENTENCE_BOUNDARY = re.compile(
         r'(?<=[.!?])\s+(?=[A-Z\u00C0-\u024F])|'  # Period/excl/question + space + uppercase
-        r'(?<=\n)\s*\n+'                             # Blank line
+        r'(?<=\n)\s*\n+|'                            # Blank line
+        r'\n(?=\s*(?:[-*•+]\s+|(?:Bước|Step|Bài|Ví\s+dụ|Đề\s+bài)\s*\d*[:.\s]))'  # Bullet / step newline boundary
     )
 
     # Page Marker Regex: recognizes page dividers like === Page 1 ===
@@ -135,6 +136,22 @@ class DocumentChunker:
 
         return passages
 
+    @classmethod
+    def _join_chunk_sentences(cls, items: List[Tuple[str, int, int]], full_text: str) -> str:
+        """Joins sentences cleanly, preserving line breaks after headings or before bullet/step items."""
+        if not items:
+            return ""
+        parts: List[str] = [items[0][0]]
+        for idx in range(1, len(items)):
+            prev_txt, _, prev_end = items[idx - 1]
+            curr_txt, curr_start, _ = items[idx]
+            has_nl = (curr_start >= prev_end) and ("\n" in full_text[prev_end:curr_start])
+            starts_struct = bool(re.match(r"^(?:[-*•+]\s+|(?:Bước|Step|Bài|Ví\s+dụ|Đề\s+bài)\s*\d*[:.\s])", curr_txt.lstrip(), re.IGNORECASE))
+            sep = "\n" if (cls.is_heading(prev_txt) or starts_struct or has_nl) else " "
+            parts.append(sep)
+            parts.append(curr_txt)
+        return "".join(parts).strip()
+
     def _sentence_chunk(self, text: str) -> List[Tuple[str, int, int]]:
         """
         Sentence-aware chunking with Adaptive Structural Boundary Overlap:
@@ -157,7 +174,7 @@ class DocumentChunker:
             # 1. Standalone page marker: flush immediately with ZERO overlap and discard marker
             if self.is_page_marker(sent_text):
                 if current_sentences:
-                    chunk_text = " ".join(s[0] for s in current_sentences).strip()
+                    chunk_text = self._join_chunk_sentences(current_sentences, text)
                     if chunk_text:
                         chunks.append((chunk_text, current_sentences[0][1], current_sentences[-1][2]))
                     current_sentences = []
@@ -175,7 +192,7 @@ class DocumentChunker:
 
             # 3. RULE: A heading must never be conjoined with previous section/topic sentences!
             if sent_is_heading and current_sentences:
-                chunk_text = " ".join(s[0] for s in current_sentences).strip()
+                chunk_text = self._join_chunk_sentences(current_sentences, text)
                 if chunk_text:
                     chunks.append((chunk_text, current_sentences[0][1], current_sentences[-1][2]))
                 # Strict ZERO overlap across heading boundaries
@@ -188,7 +205,7 @@ class DocumentChunker:
                 and current_sentences
                 and not (len(current_sentences) == 1 and self.is_heading(current_sentences[0][0]))
             ):
-                chunk_text = " ".join(s[0] for s in current_sentences).strip()
+                chunk_text = self._join_chunk_sentences(current_sentences, text)
                 chunk_end = current_sentences[-1][2]
                 if chunk_text:
                     chunks.append((chunk_text, current_sentences[0][1], chunk_end))
@@ -225,7 +242,7 @@ class DocumentChunker:
 
         # Emit remaining
         if current_sentences:
-            chunk_text = " ".join(s[0] for s in current_sentences).strip()
+            chunk_text = self._join_chunk_sentences(current_sentences, text)
             if len(chunk_text) >= self.min_chunk_size:
                 chunks.append((chunk_text, current_sentences[0][1], current_sentences[-1][2]))
             elif chunks:

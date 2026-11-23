@@ -56,22 +56,33 @@ def _fuzzy_token_overlap(q_tokens: Set[str], s_tokens: Set[str]) -> Tuple[int, i
 
 
 def _extract_compound_concept_parts(query: str) -> List[str]:
-    """Splits compound concept/comparison queries ('A và B là gì', 'phân biệt A với B') into parts."""
+    """Splits compound concept/comparison queries ('A là gì và B là gì', 'phân biệt A với B') into clean subject parts."""
     q = (query or "").strip().rstrip("?!.")
-    q = re.sub(
-        r"^(?:hãy\s+|cho\s+biết\s+|trình\s+bày\s+|giải\s+thích\s+|nêu\s+)?(?:khái\s+niệm\s+|định\s+nghĩa\s+|so\s+sánh\s+|phân\s+biệt\s+)?(?:giữa\s+)?",
-        "",
-        q,
-        flags=re.IGNORECASE,
-    ).strip()
-    q = re.sub(
-        r"\s+(?:là\s+gì|như\s+thế\s+nào|ra\s+sao|có\s+gì\s+khác\s+nhau|khác\s+nhau\s+như\s+thế\s+nào)$",
-        "",
-        q,
-        flags=re.IGNORECASE,
-    ).strip()
-    parts = [p.strip() for p in re.split(r"\s+(?:và|với|so\s+với|cùng\s+với)\s+|,\s*", q, flags=re.IGNORECASE) if len(p.strip()) >= 2]
-    return parts if len(parts) >= 2 else []
+    raw_parts = [
+        p.strip()
+        for p in re.split(r"\s+(?:và|với|so\s+với|cùng\s+với)\s+|,\s*", q, flags=re.IGNORECASE)
+        if len(p.strip()) >= 2
+    ]
+    if len(raw_parts) < 2:
+        return []
+    cleaned_parts: List[str] = []
+    for part in raw_parts:
+        p = re.sub(
+            r"^(?:hãy\s+|cho\s+biết\s+|trình\s+bày\s+|giải\s+thích\s+|nêu\s+)?"
+            r"(?:khái\s+niệm\s+|định\s+nghĩa\s+|so\s+sánh\s+|phân\s+biệt\s+)?(?:giữa\s+|của\s+|về\s+)?",
+            "",
+            part,
+            flags=re.IGNORECASE,
+        ).strip()
+        p = re.sub(
+            r"\s+(?:là\s+gì|như\s+thế\s+nào|ra\s+sao|có\s+gì\s+khác\s+nhau|khác\s+nhau\s+như\s+thế\s+nào)$",
+            "",
+            p,
+            flags=re.IGNORECASE,
+        ).strip()
+        if len(p) >= 2:
+            cleaned_parts.append(p)
+    return cleaned_parts if len(cleaned_parts) >= 2 else []
 
 
 def _build_grounded_reasoning(
@@ -537,20 +548,39 @@ class DocumentAnalyzer:
             for _ in split_sentences(passage_text):
                 sentence_cit_labels.append(p_lbl)
 
-        # Check compound query decomposition so multi-part questions cover all sub-queries
+        # Check compound query decomposition so multi-part questions cover all sub-queries without picking duplicates
         sub_query_sentences: List[Tuple[str, str]] = []
         try:
             from src.reasoning.query_decomposer import QueryDecomposer
             decomp = QueryDecomposer().decompose(query)
             if decomp.is_compound and len(decomp.sub_queries) >= 2:
+                picked_raw: List[str] = []
+                # Prefer body sentences over bare section headings when answering compound queries
+                body_indices = [
+                    i_s for i_s, s_txt in enumerate(sentence_pool)
+                    if not (
+                        sentence_sections[i_s]
+                        and (
+                            s_txt.strip().lower() == sentence_sections[i_s].strip().lower()
+                            or (len(s_txt.strip()) >= 4 and s_txt.strip().rstrip(".:") in sentence_sections[i_s].strip())
+                        )
+                    )
+                ]
+                search_pool = [sentence_pool[i_s] for i_s in body_indices] if body_indices else sentence_pool
+                search_secs = [sentence_sections[i_s] for i_s in body_indices] if body_indices else sentence_sections
                 for sq in decomp.sub_queries:
-                    sq_exp, _ = expand_query_semantics(sq.text)
-                    sq_best = select_best_sentence(sq_exp, sentence_pool, sentence_sections)
+                    sq_best = select_best_sentence(
+                        sq.text,
+                        search_pool,
+                        search_secs,
+                        exclude_sentences=picked_raw,
+                    )
                     if sq_best and sq_best in sentence_pool:
                         s_idx = sentence_pool.index(sq_best)
                         s_lbl = sentence_cit_labels[s_idx] if s_idx < len(sentence_cit_labels) else "[1]"
                         if all(sq_best != existing_s for existing_s, _ in sub_query_sentences):
                             sub_query_sentences.append((sq_best, s_lbl))
+                            picked_raw.append(sq_best)
                 if sub_query_sentences:
                     best_sentence = sub_query_sentences[0][0]
         except Exception:
@@ -631,11 +661,16 @@ class DocumentAnalyzer:
             ex_hits, fz_hits = _fuzzy_token_overlap(target_tokens, s_tokens)
             score = ex_hits * 2.5 + fz_hits * 1.8
             if subject_phrase_norm:
-                subj_part = s_norm.split(" la ", 1)[0] if " la " in s_norm else s_norm[:len(subject_phrase_norm) + 12]
-                if s_norm.startswith(subject_phrase_norm) or subject_phrase_norm in subj_part:
-                    score += 10.0
+                subj_part = s_norm.split(" la ", 1)[0] if " la " in s_norm else s_norm[:len(subject_phrase_norm) + 18]
+                subj_main = re.sub(r"\([^)]*\)", " ", subj_part)
+                subj_main = re.sub(r"\s+", " ", subj_main).strip(" -*•.:")
+                if subj_main.startswith(subject_phrase_norm) or subject_phrase_norm in subj_main:
+                    score += 12.0
+                elif subject_phrase_norm in subj_part:
+                    # Mentioned only inside parentheses (e.g. "Chất khử (chất bị oxi hóa)")
+                    score -= 3.0
                 else:
-                    subj_tokens = set(re.findall(r"[a-z0-9_]+", subj_part))
+                    subj_tokens = set(re.findall(r"[a-z0-9_]+", subj_main or subj_part))
                     s_ex, s_fz = _fuzzy_token_overlap(target_tokens, subj_tokens)
                     score += s_ex * 3.0 + s_fz * 2.0
             if extra_tokens:
@@ -700,6 +735,8 @@ class DocumentAnalyzer:
                     best_p_score = -1e9
                     best_p_idx = -1
                     for idx_s, s_cand in enumerate(sentence_pool):
+                        if any(s_cand == ex_s for ex_s, _ in sub_query_sentences):
+                            continue
                         if _is_heading_sent(s_cand, sentence_sections[idx_s] if idx_s < len(sentence_sections) else ""):
                             continue
                         sc = _score_sentence_for_tokens(s_cand, p_tokens, subject_phrase_norm=p_norm)

@@ -523,12 +523,19 @@ def relevance_score(query: str, sentence: str, extra: str = "") -> float:
     return min(1.0, len(q_tokens & haystack) / float(len(q_tokens)))
 
 
-def select_best_sentence(query: str, sentences: Sequence[str], section_titles: Optional[Sequence[str]] = None) -> str:
+def select_best_sentence(
+    query: str,
+    sentences: Sequence[str],
+    section_titles: Optional[Sequence[str]] = None,
+    exclude_sentences: Optional[Sequence[str]] = None,
+) -> str:
     """
     Picks the sentence with the strongest alignment to the query.
 
     `section_titles`, when supplied, must be parallel to `sentences`. A section whose
     heading matches the question intent gets a boost.
+    `exclude_sentences`, when supplied, skips already-selected sentences (e.g. across
+    sub-queries) so compound queries never pick the same sentence twice.
     """
     META_QUESTION_TOKENS = {
         "yeu", "cau", "chi", "tiet", "cu", "the", "lien", "quan", "den", "noi", "dung",
@@ -546,13 +553,52 @@ def select_best_sentence(query: str, sentences: Sequence[str], section_titles: O
     is_general_concept = any(w in q_low for w in ["la gi", "gioi thieu", "khai niem", "bao nhieu loai", "cac loai", "phuong phap", "phan loai"])
     quoted_matches = [strip_accents(qm.strip().lower()) for qm in re.findall(r"['\"]([^'\"]{2,60})['\"]", query or "")]
 
+    # Extract explicit target subject for definition queries (e.g. "chất oxi hóa là gì" -> "chat oxi hoa")
+    target_subject = ""
+    if q_type == "definition":
+        t_sub = re.sub(
+            r"^(?:dac diem va noi dung cua|noi dung ve|khai niem|dinh nghia|cho biet|giai thich|hay)\s+",
+            "",
+            q_low.strip(" ?!."),
+        ).strip()
+        # Split before interrogative copula even when semantic expansion tokens trail after '?'
+        t_parts = re.split(
+            r"\s+(?:la gi|la nhu the nao|nghia la gi|duoc hieu la gi|nhu the nao)\b",
+            t_sub,
+            maxsplit=1,
+        )
+        t_cand = t_parts[0].strip(" ?!.,:") if t_parts else t_sub
+        if len(t_cand) >= 4:
+            target_subject = t_cand
+
+    excluded_norms = {
+        strip_accents(re.sub(r"\s+", " ", _clean(e).lower())).strip()
+        for e in (exclude_sentences or [])
+        if e and _clean(e)
+    }
+
     best, best_score = "", -1.0
     for index, sentence in enumerate(sentences):
         sentence_clean = _clean(sentence)
         if len(sentence_clean) < 6:
             continue
         s_norm = strip_accents(sentence_clean.lower())
+        s_cmp_norm = re.sub(r"\s+", " ", s_norm).strip()
+        if excluded_norms and s_cmp_norm in excluded_norms:
+            continue
         score = len(q_tokens & _tokens(sentence_clean)) * 2.0
+
+        # Subject-head alignment for definitions: reward main subject before copula,
+        # penalize parenthetical alias-only hits so "Chất khử (chất bị oxi hóa)" doesn't hijack "chất oxi hóa là gì"
+        if target_subject:
+            copula_split = re.split(r"\s+(?:la|duoc hieu la|duoc dinh nghia la|nghia la|is)\s+|:", s_norm, maxsplit=1)
+            before_cop = copula_split[0] if copula_split else s_norm[:len(target_subject) + 18]
+            subj_main = re.sub(r"\([^)]*\)", " ", before_cop)
+            subj_main = re.sub(r"\s+", " ", subj_main).strip(" -*•.:")
+            if target_subject in subj_main:
+                score += 14.0
+            elif target_subject in before_cop:
+                score -= 4.0
 
         # Quoted entity match bonus
         for qm in quoted_matches:
@@ -563,13 +609,18 @@ def select_best_sentence(query: str, sentences: Sequence[str], section_titles: O
             score += 4.0
         if q_type == "limitation" and _has_cue(sentence_clean, LIMITATION_CUES):
             score += 4.5
-        if q_type == "definition" and _has_cue(sentence_clean, DEFINITION_CUES):
-            score += 4.0
+        has_def_cue = _has_cue(sentence_clean, DEFINITION_CUES)
+        if q_type == "definition" and has_def_cue:
+            score += 6.0
 
         # Preference for overview/definition/classification when asking general questions
         if is_general_concept:
             if any(term in s_norm for term in ["gioi thieu", "khai niem", "dinh nghia", "phuong phap pho bien", "bao gom", "co 2 phuong phap", "co 2 loai", "khoa doi xung"]):
-                score += 5.0
+                # Do not let bare short headings like "Định nghĩa chất khử" beat actual definition sentences
+                if has_def_cue or len(sentence_clean.split()) > 6 or ":" in sentence_clean:
+                    score += 5.0
+                else:
+                    score += 0.5
             if sentence_clean.strip().startswith(("*", "-", "•", "+")):
                 score += 3.0
             # Deprioritize isolated formulas when asking for concept

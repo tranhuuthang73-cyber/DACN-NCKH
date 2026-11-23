@@ -320,7 +320,66 @@ class QueryDecomposer:
                     reasoning_type="sequential",
                 )
 
-        # 4. Conjunction splitting
+        # 4. Conjunction & multi-concept list splitting (2+ or 3+ items, e.g. "A, B và C là gì?")
+        # First check compact concept lists ("chất khử, chất oxi hóa và quá trình oxi hóa là gì")
+        list_q_match = re.match(
+            r"^(?:(?:hãy|cho\s+biết|nêu|trình\s+bày|giải\s+thích)\s+)?"
+            r"(?:(?:khái\s+niệm|định\s+nghĩa)\s+(?:về\s+|của\s+)?)?"
+            r"(.+?)"
+            r"(?:\s+(là\s+gì|như\s+thế\s+nào|ra\s+sao|có\s+vai\s+trò\s+gì))?\s*\??$",
+            q_clean,
+            flags=re.IGNORECASE,
+        )
+        if list_q_match:
+            has_list_sep = bool(re.search(r",\s*|\s+(?:và|với|cùng\s+với)\s+", list_q_match.group(1), flags=re.IGNORECASE))
+            suffix_cue = (list_q_match.group(2) or "").strip()
+            has_concept_cue = bool(suffix_cue) or bool(
+                re.search(r"\b(?:khái\s+niệm|định\s+nghĩa|là\s+gì|như\s+thế\s+nào)\b", q_clean, flags=re.IGNORECASE)
+            )
+            if has_list_sep and has_concept_cue:
+                raw_items = [
+                    p.strip(" ,;?.")
+                    for p in re.split(r"\s*,\s*|\s+(?:và|cùng\s+với)\s+", list_q_match.group(1), flags=re.IGNORECASE)
+                    if p.strip(" ,;?.")
+                ]
+                cleaned_items: List[str] = []
+                for it in raw_items:
+                    it_c = re.sub(
+                        r"^(?:khái\s+niệm|định\s+nghĩa|cho\s+biết|nêu|trình\s+bày|giải\s+thích)\s+(?:về\s+|của\s+)?",
+                        "",
+                        it,
+                        flags=re.IGNORECASE,
+                    ).strip()
+                    it_c = re.sub(
+                        r"\s+(?:là\s+gì|như\s+thế\s+nào|ra\s+sao|có\s+vai\s+trò\s+gì)$",
+                        "",
+                        it_c,
+                        flags=re.IGNORECASE,
+                    ).strip()
+                    if len(it_c) >= 4:
+                        cleaned_items.append(it_c)
+                # Guard against splitting paired generic aspects of ONE entity ("đặc điểm và cơ chế của hệ thống")
+                _generic_aspects = {
+                    "đặc điểm", "cơ chế", "nội dung", "mục tiêu", "phạm vi", "vai trò",
+                    "nguyên lý", "ưu điểm", "nhược điểm", "hạn chế", "lợi ích", "kết quả",
+                    "tính chất", "ứng dụng", "bản chất", "nguyên nhân", "tầm quan trọng",
+                    "dac diem", "co che", "noi dung", "muc tieu", "pham vi", "vai tro",
+                    "nguyen ly", "uu diem", "nhuoc diem", "han che", "loi ich", "ket qua",
+                }
+                has_bare_aspect = any(it.lower() in _generic_aspects for it in cleaned_items)
+                if 2 <= len(cleaned_items) <= 5 and len(cleaned_items) == len(raw_items) and not has_bare_aspect:
+                    q_tail = suffix_cue or "là gì"
+                    sub_queries = [
+                        SubQuery(text=f"{item} {q_tail}?", intent=f"part_{idx+1}")
+                        for idx, item in enumerate(cleaned_items)
+                    ]
+                    return DecompositionResult(
+                        is_compound=True,
+                        sub_queries=sub_queries,
+                        original_query=query,
+                        reasoning_type="compound",
+                    )
+
         for pattern in self.CONJUNCTION_SPLITTERS:
             if re.search(pattern, q_clean, re.IGNORECASE):
                 parts = re.split(pattern, q_clean, flags=re.IGNORECASE)

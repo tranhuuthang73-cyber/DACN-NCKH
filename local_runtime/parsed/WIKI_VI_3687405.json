@@ -1,0 +1,408 @@
+{
+  "document_id": "WIKI_VI_3687405",
+  "sections": [
+    {
+      "title": "# An ninh mạng",
+      "start": 0,
+      "end": 3556
+    },
+    {
+      "title": "## Lược sử hình thành và phát triển",
+      "start": 3556,
+      "end": 3593
+    },
+    {
+      "title": "### 1971 – Virus máy tính đầu tiên trên thế giới",
+      "start": 3593,
+      "end": 4567
+    },
+    {
+      "title": "### 1983 - Bằng sáng chế đầu tiên trong lĩnh vực an ninh mạng tại Hoa Kỳ",
+      "start": 4567,
+      "end": 5270
+    },
+    {
+      "title": "### 1993 – Hội nghị DEF CON đầu tiên",
+      "start": 5270,
+      "end": 5700
+    },
+    {
+      "title": "### 1995 – Sự ra đời của Security Sockets Layer (SSL) 2.0",
+      "start": 5700,
+      "end": 6845
+    },
+    {
+      "title": "### 2003 – Sự xuất hiện của \"Ẩn danh\" (Anonymous)",
+      "start": 6845,
+      "end": 7467
+    },
+    {
+      "title": "### 2010 - Chiến dịch Ánh ban mai (Operation Aurora)",
+      "start": 7467,
+      "end": 8318
+    },
+    {
+      "title": "### Ngày nay – An ninh mạng trở nên quan trọng hơn bao giờ hết",
+      "start": 8318,
+      "end": 9200
+    },
+    {
+      "title": "## Mục tiêu của an ninh mạng",
+      "start": 9200,
+      "end": 10543
+    },
+    {
+      "title": "### Tính bảo mật (Confidentiality)",
+      "start": 10543,
+      "end": 14106
+    },
+    {
+      "title": "### Tính toàn vẹn (Integrity)",
+      "start": 14106,
+      "end": 15481
+    },
+    {
+      "title": "### Tính sẵn có (Availability)",
+      "start": 15481,
+      "end": 16273
+    },
+    {
+      "title": "## Tấn công mạng",
+      "start": 16273,
+      "end": 16508
+    },
+    {
+      "title": "### Nạn nhân của tấn công mạng",
+      "start": 16508,
+      "end": 17934
+    },
+    {
+      "title": "### Mục đích tấn công mạng",
+      "start": 17934,
+      "end": 18395
+    },
+    {
+      "title": "## Lỗ hổng bảo mật và các loại tấn công phổ biến",
+      "start": 18395,
+      "end": 18996
+    },
+    {
+      "title": "### Tấn công bằng phần mềm độc hại (Malware Attack)",
+      "start": 18996,
+      "end": 20973
+    },
+    {
+      "title": "### Tấn công giả mạo (Phishing Attack)",
+      "start": 20973,
+      "end": 21373
+    },
+    {
+      "title": "### Tấn công trung gian (Man-in-the-middle Attack)",
+      "start": 21373,
+      "end": 22140
+    },
+    {
+      "title": "### Tấn công từ chối dịch vụ (Denial of Service)",
+      "start": 22140,
+      "end": 23088
+    },
+    {
+      "title": "### Tấn công cơ sở dữ liệu (SQL Injection Attack)",
+      "start": 23088,
+      "end": 23544
+    },
+    {
+      "title": "### Tấn công \"cửa hậu\" (Backdoor Attack)",
+      "start": 23544,
+      "end": 24133
+    },
+    {
+      "title": "### Khai thác lỗ hổng (Zero-day Exploits)",
+      "start": 24133,
+      "end": 24462
+    },
+    {
+      "title": "## Ảnh hưởng của tấn công mạng trong kinh doanh",
+      "start": 24462,
+      "end": 24791
+    },
+    {
+      "title": "### Tài chính",
+      "start": 24791,
+      "end": 25321
+    },
+    {
+      "title": "### Danh tiếng",
+      "start": 25321,
+      "end": 25901
+    },
+    {
+      "title": "### Pháp lý",
+      "start": 25901,
+      "end": 26351
+    },
+    {
+      "title": "## Tác động của tấn công mạng vào các ngành công nghiệp khác nhau",
+      "start": 26351,
+      "end": 26418
+    },
+    {
+      "title": "### Lĩnh vực y tế, chăm sóc sức khoẻ",
+      "start": 26418,
+      "end": 27796
+    },
+    {
+      "title": "### Lĩnh vực tài chính",
+      "start": 27796,
+      "end": 28556
+    },
+    {
+      "title": "### Lĩnh vực hoạt động sản xuất",
+      "start": 28556,
+      "end": 29339
+    },
+    {
+      "title": "### Lĩnh vực truyền thông và viễn thông",
+      "start": 29339,
+      "end": 31038
+    },
+    {
+      "title": "### Lĩnh vực bảo hiểm",
+      "start": 31038,
+      "end": 32022
+    },
+    {
+      "title": "## Chú thích",
+      "start": 32022,
+      "end": 32034
+    }
+  ],
+  "paragraphs": [
+    {
+      "text": "# An ninh mạng",
+      "start": 0,
+      "end": 14
+    },
+    {
+      "text": "An ninh mạng (cybersecurity), an ninh máy tính (computer security), bảo mật công nghệ thông tin (IT ",
+      "start": 16,
+      "end": 1352
+    },
+    {
+      "text": "Bảo mật công nghệ thông tin (với cách gọi khác là bảo mật thông tin điện tử): Bảo vệ dữ liệu ở nơi c",
+      "start": 1354,
+      "end": 2748
+    },
+    {
+      "text": "Hacker mũ trắng (White-hat hacker) – cũng còn gọi là \"ethical hacker\" (hacker có nguyên tắc/đạo đức)",
+      "start": 2750,
+      "end": 3554
+    },
+    {
+      "text": "## Lược sử hình thành và phát triển",
+      "start": 3556,
+      "end": 3591
+    },
+    {
+      "text": "### 1971 – Virus máy tính đầu tiên trên thế giới\nChúng ta thường sẽ cho rằng máy tính phải được phát",
+      "start": 3593,
+      "end": 4565
+    },
+    {
+      "text": "### 1983 - Bằng sáng chế đầu tiên trong lĩnh vực an ninh mạng tại Hoa Kỳ\nVào thời điểm khi máy tính ",
+      "start": 4567,
+      "end": 5268
+    },
+    {
+      "text": "### 1993 – Hội nghị DEF CON đầu tiên\nDEF CON là một trong những hội nghị kỹ thuật an ninh mạng nổi t",
+      "start": 5270,
+      "end": 5698
+    },
+    {
+      "text": "### 1995 – Sự ra đời của Security Sockets Layer (SSL) 2.0\nĐây là một tiêu chuẩn an ninh công nghệ to",
+      "start": 5700,
+      "end": 6843
+    },
+    {
+      "text": "### 2003 – Sự xuất hiện của \"Ẩn danh\" (Anonymous)\n\"Anonymous\" là nhóm hacker nổi tiếng toàn cầu đầu ",
+      "start": 6845,
+      "end": 7465
+    },
+    {
+      "text": "### 2010 - Chiến dịch Ánh ban mai (Operation Aurora)\nVào nửa cuối năm 2009, hãng Google tại Trung Qu",
+      "start": 7467,
+      "end": 8316
+    },
+    {
+      "text": "### Ngày nay – An ninh mạng trở nên quan trọng hơn bao giờ hết\nKhông gian mạng ngày nay đã trở thành",
+      "start": 8318,
+      "end": 9198
+    },
+    {
+      "text": "## Mục tiêu của an ninh mạng\nMục tiêu của an ninh mạng là bảo vệ thông tin khỏi bị đánh cắp, xâm phạ",
+      "start": 9200,
+      "end": 9404
+    },
+    {
+      "text": "Bảo vệ tính bảo mật của dữ liệu.\nBảo toàn tính toàn vẹn của dữ liệu.\nThúc đẩy sự sẵn có của dữ liệu ",
+      "start": 9406,
+      "end": 10541
+    },
+    {
+      "text": "### Tính bảo mật (Confidentiality)\nBảo mật gần tương đương với quyền riêng tư và việc tránh tiết lộ ",
+      "start": 10543,
+      "end": 11098
+    },
+    {
+      "text": "Mã hóa (Encryption): Mã hóa là một phương pháp chuyển đổi thông tin khiến dữ liệu trở nên không thể ",
+      "start": 11100,
+      "end": 14104
+    },
+    {
+      "text": "### Tính toàn vẹn (Integrity)\nTính toàn vẹn đề cập đến các phương pháp nhằm đảm bảo nguồn dữ liệu là",
+      "start": 14106,
+      "end": 14330
+    },
+    {
+      "text": "Sao lưu (Backups): Sao lưu là lưu trữ dữ liệu định kỳ. Đây là một quá trình tạo lập các bản sao của ",
+      "start": 14332,
+      "end": 15479
+    },
+    {
+      "text": "### Tính sẵn có (Availability)\nMọi hệ thống thông tin đều phục vụ cho mục đích riêng của nó và thông",
+      "start": 15481,
+      "end": 15859
+    },
+    {
+      "text": "Bảo vệ vật lý (Physical Protections): Có nghĩa là giữ thông tin có sẵn ngay cả trong trường hợp phải",
+      "start": 15861,
+      "end": 16271
+    },
+    {
+      "text": "## Tấn công mạng\nTấn công mạng là tất cả các hình thức xâm nhập trái phép vào một hệ thống máy tính,",
+      "start": 16273,
+      "end": 16506
+    },
+    {
+      "text": "### Nạn nhân của tấn công mạng\nTấn công mạng không mục tiêu: Ở các cuộc tấn công không mục tiêu, đối",
+      "start": 16508,
+      "end": 17932
+    },
+    {
+      "text": "### Mục đích tấn công mạng\nBên cạnh những mục đích phổ biến như trục lợi phi pháp, tống tiền doanh n",
+      "start": 17934,
+      "end": 18393
+    },
+    {
+      "text": "## Lỗ hổng bảo mật và các loại tấn công phổ biến\nLỗ hổng bảo mật là một điểm yếu của hệ thống trong ",
+      "start": 18395,
+      "end": 18994
+    },
+    {
+      "text": "### Tấn công bằng phần mềm độc hại (Malware Attack)\nMalware là phần mềm độc hại, được kết hợp giữa h",
+      "start": 18996,
+      "end": 19722
+    },
+    {
+      "text": "Virus: Là những đoạn mã chương trình tự sao chép, tức tự nhân bản, đính kèm vào các tệp tin sạch, đư",
+      "start": 19724,
+      "end": 20971
+    },
+    {
+      "text": "### Tấn công giả mạo (Phishing Attack)\nPhishing là hình thức giả mạo thành một đơn vị/cá nhân uy tín",
+      "start": 20973,
+      "end": 21371
+    },
+    {
+      "text": "### Tấn công trung gian (Man-in-the-middle Attack)\nTấn công trung gian (MitM), hay còn gọi là tấn cô",
+      "start": 21373,
+      "end": 22138
+    },
+    {
+      "text": "### Tấn công từ chối dịch vụ (Denial of Service)\nCác cuộc tấn công từ chối dịch vụ (DoS) được thiết ",
+      "start": 22140,
+      "end": 23086
+    },
+    {
+      "text": "### Tấn công cơ sở dữ liệu (SQL Injection Attack)\nHacker chèn một đoạn code độc hại vào server sử dụ",
+      "start": 23088,
+      "end": 23542
+    },
+    {
+      "text": "### Tấn công \"cửa hậu\" (Backdoor Attack)\nTrong một hệ thống máy tính, Backdoor (\"cửa hậu\") là một ph",
+      "start": 23544,
+      "end": 24131
+    },
+    {
+      "text": "### Khai thác lỗ hổng (Zero-day Exploits)\nLỗ hổng Zero-day (hay còn gọi là 0-day) là thuật ngữ để ch",
+      "start": 24133,
+      "end": 24460
+    },
+    {
+      "text": "## Ảnh hưởng của tấn công mạng trong kinh doanh\nMột cuộc tấn công mạng thành công có thể gây ra thiệ",
+      "start": 24462,
+      "end": 24789
+    },
+    {
+      "text": "### Tài chính\nCác cuộc tấn công mạng thường dẫn đến những tổn thất lớn về tài chính, phát sinh từ vi",
+      "start": 24791,
+      "end": 24894
+    },
+    {
+      "text": "Đánh cắp thông tin của công ty.\nĐánh cắp thông tin tài chính (ví dụ: chi tiết ngân hàng hoặc chi tiế",
+      "start": 24896,
+      "end": 25319
+    },
+    {
+      "text": "### Danh tiếng\nNiềm tin, sự tin tưởng là một trong những yếu tố thiết yếu khi xây dựng mối quan hệ v",
+      "start": 25321,
+      "end": 25636
+    },
+    {
+      "text": "Mất khách hàng.\nMất doanh số.\nGiảm lợi nhuận.\nTác động về thiệt hại danh tiếng thậm chí có thể ảnh h",
+      "start": 25638,
+      "end": 25899
+    },
+    {
+      "text": "### Pháp lý\nCác luật lệ về bảo vệ dữ liệu và quyền riêng tư yêu cầu doanh nghiệp quản lý, bảo mật tấ",
+      "start": 25901,
+      "end": 26349
+    },
+    {
+      "text": "## Tác động của tấn công mạng vào các ngành công nghiệp khác nhau",
+      "start": 26351,
+      "end": 26416
+    },
+    {
+      "text": "### Lĩnh vực y tế, chăm sóc sức khoẻ\nNgành công nghiệp chăm sóc sức khỏe vô cùng rộng lớn và phức tạ",
+      "start": 26418,
+      "end": 27794
+    },
+    {
+      "text": "### Lĩnh vực tài chính\nDữ liệu tài chính là một trong những mục tiêu hấp dẫn nhất đối với hacker, do",
+      "start": 27796,
+      "end": 28554
+    },
+    {
+      "text": "### Lĩnh vực hoạt động sản xuất\nCác nhà sản xuất ngày nay trở thành mục tiêu của không chỉ các tác n",
+      "start": 28556,
+      "end": 29337
+    },
+    {
+      "text": "### Lĩnh vực truyền thông và viễn thông\nTrên phạm vi toàn cầu, các công ty giải trí và truyền thông ",
+      "start": 29339,
+      "end": 31036
+    },
+    {
+      "text": "### Lĩnh vực bảo hiểm\nCác cuộc tấn công mạng trong lĩnh vực bảo hiểm đang gia tăng theo cấp số nhân ",
+      "start": 31038,
+      "end": 32020
+    },
+    {
+      "text": "## Chú thích",
+      "start": 32022,
+      "end": 32034
+    }
+  ],
+  "total_tokens": 24371
+}

@@ -1,0 +1,38 @@
+{
+  "document_id": "OPENALEX_W7215290006",
+  "sections": [
+    {
+      "title": "# Lựa chọn bài tập thể dục aerobic phát triển thể lực chung cho nữ sinh viên học viện Nông nghiệp Việt Nam",
+      "start": 0,
+      "end": 108
+    },
+    {
+      "title": "## Abstract",
+      "start": 108,
+      "end": 532
+    },
+    {
+      "title": "## Metadata",
+      "start": 532,
+      "end": 807
+    }
+  ],
+  "paragraphs": [
+    {
+      "text": "# Lựa chọn bài tập thể dục aerobic phát triển thể lực chung cho nữ sinh viên học viện Nông nghiệp Vi",
+      "start": 0,
+      "end": 106
+    },
+    {
+      "text": "## Abstract\nUsing the method of interviewing Aerobic lecturers and experts to select exercises, base",
+      "start": 108,
+      "end": 530
+    },
+    {
+      "text": "## Metadata\nOpenAlex ID: W7215290006\nYear: 2020\nVenue: Tạp chí Khoa học thể thao\nConcepts: Interview",
+      "start": 532,
+      "end": 807
+    }
+  ],
+  "total_tokens": 288
+}

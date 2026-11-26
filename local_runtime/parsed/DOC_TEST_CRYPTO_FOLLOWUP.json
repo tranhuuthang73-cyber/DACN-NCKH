@@ -1,0 +1,68 @@
+{
+  "document_id": "DOC_TEST_CRYPTO_FOLLOWUP",
+  "sections": [
+    {
+      "title": "=== Page 1 ===",
+      "start": 0,
+      "end": 15
+    },
+    {
+      "title": "1. HỆ MÃ DỊCH VÒNG:",
+      "start": 15,
+      "end": 266
+    },
+    {
+      "title": "=== Page 2 ===",
+      "start": 266,
+      "end": 281
+    },
+    {
+      "title": "2. HỆ MÃ AFFINE:",
+      "start": 281,
+      "end": 484
+    },
+    {
+      "title": "=== Page 3 ===",
+      "start": 484,
+      "end": 499
+    },
+    {
+      "title": "3. HỆ MÃ VIGENERE:",
+      "start": 499,
+      "end": 796
+    },
+    {
+      "title": "=== Page 4 ===",
+      "start": 796,
+      "end": 811
+    },
+    {
+      "title": "4. AN NINH HỆ MÃ:",
+      "start": 811,
+      "end": 1036
+    }
+  ],
+  "paragraphs": [
+    {
+      "text": "=== Page 1 ===\n1. HỆ MÃ DỊCH VÒNG:\n- Không gian bản rõ P, bản mã C và khóa K đều thuộc vành số nguyê",
+      "start": 0,
+      "end": 264
+    },
+    {
+      "text": "=== Page 2 ===\n2. HỆ MÃ AFFINE:\n- Hàm mã hóa: e(x) = (a * x + b) mod 26 với điều kiện gcd(a, 26) = 1",
+      "start": 266,
+      "end": 482
+    },
+    {
+      "text": "=== Page 3 ===\n3. HỆ MÃ VIGENERE:\n- Hệ mã thay thế đa bảng chữ cái sử dụng từ khóa lặp lại độ dài m:",
+      "start": 484,
+      "end": 794
+    },
+    {
+      "text": "=== Page 4 ===\n4. AN NINH HỆ MÃ:\n- An ninh vô điều kiện: Không thể phá mã dù đối phương có tài nguyê",
+      "start": 796,
+      "end": 1036
+    }
+  ],
+  "total_tokens": 738
+}

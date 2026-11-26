@@ -1,0 +1,79 @@
+{
+  "document_id": "wiki_vi_wavelet_test",
+  "version": 1,
+  "title": "Biến đổi Wavelet Haar trong nén tín hiệu",
+  "raw_text": "## Tổng quan\nBiến đổi Wavelet Haar là phép biến đổi trực giao đa phân giải do Alfréd Haar đề xuất năm 1909.\n\n## Ứng dụng trong bộ nhớ\nWaveCMS sử dụng cây Wavelet nhị phân cân bằng để phân rã tri thức theo độ sâu O(log N) và đạt sai số xóa tri thức chính xác mức máy nhỏ hơn 5.55e-17.",
+  "passages": [
+    {
+      "passage_id": "wiki_vi_wavelet_test::P000",
+      "document_id": "wiki_vi_wavelet_test",
+      "text": "## Tổng quan\nBiến đổi Wavelet Haar là phép biến đổi trực giao đa phân giải do Alfréd Haar đề xuất năm 1909.",
+      "start_char": 0,
+      "end_char": 107,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "Tổng quan",
+      "metadata": {
+        "section_id": "SEC001",
+        "paragraph_id": "PARA001",
+        "document_version": 1,
+        "category": "WIKIPEDIA",
+        "source": "wikipedia",
+        "language": "vi",
+        "url": "https://vi.wikipedia.org/wiki/Wavelet_Haar",
+        "token_reduction": {
+          "raw_tokens": 83,
+          "cleaned_tokens": 83,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "wiki_vi_wavelet_test::P001",
+      "document_id": "wiki_vi_wavelet_test",
+      "text": "## Ứng dụng trong bộ nhớ\nWaveCMS sử dụng cây Wavelet nhị phân cân bằng để phân rã tri thức theo độ sâu O(log N) và đạt sai số xóa tri thức chính xác mức máy nhỏ hơn 5.55e-17.",
+      "start_char": 109,
+      "end_char": 283,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "Ứng dụng trong bộ nhớ",
+      "metadata": {
+        "section_id": "SEC002",
+        "paragraph_id": "PARA001",
+        "document_version": 1,
+        "category": "WIKIPEDIA",
+        "source": "wikipedia",
+        "language": "vi",
+        "url": "https://vi.wikipedia.org/wiki/Wavelet_Haar",
+        "token_reduction": {
+          "raw_tokens": 83,
+          "cleaned_tokens": 83,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    }
+  ],
+  "structural_metadata": {},
+  "content_hash": "4353a8ed714389db",
+  "created_at": 1795702360.8588307,
+  "metadata": {
+    "category": "WIKIPEDIA",
+    "source": "wikipedia",
+    "language": "vi",
+    "url": "https://vi.wikipedia.org/wiki/Wavelet_Haar",
+    "token_reduction": {
+      "raw_tokens": 83,
+      "cleaned_tokens": 83,
+      "tokens_saved": 0,
+      "reduction_pct": 0.0,
+      "removed_lines_count": 0
+    },
+    "chunker_version": "v5.0"
+  }
+}

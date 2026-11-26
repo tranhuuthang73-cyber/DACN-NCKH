@@ -1,0 +1,403 @@
+{
+  "document_id": "OPENALEX_W7125393001",
+  "version": 1,
+  "title": "Tái phát sinh hóa sau điều trị triệt căn ung thư tuyến tiền liệt",
+  "raw_text": "# Tái phát sinh hóa sau điều trị triệt căn ung thư tuyến tiền liệt\n\n## Abstract\nUng thư tuyến tiền liệt (TTL) là bệnh ác tính phổ biến, với 27–53% trường hợp tái phát sinh hóa (BCR) sau điều trị triệt căn. Hiện vẫn còn thiếu đồng thuận về định nghĩa BCR và có sự khác biệt trong khuyến cáo điều trị. Bài tổng quan này nhằm hệ thống hóa bằng chứng khoa học mới nhất để hỗ trợ quản lý BCR tối ưu tại Việt Nam, dựa trên các khuyến cáo của 4 hiệp hội tiết niệu và ung thư uy tín nhất trên thế giới bao gồm AUA, EAU, ASCO và NCCN. Sau phẫu thuật, định nghĩa BCR khác nhau giữa các hiệp hội (ví dụ: NCCN 0,1 ng/mL, AUA/ASCO 0,2 ng/mL, EAU 0,4 ng/mL). Sau xạ trị, định nghĩa thống nhất là PSA tăng 2 ng/mL so với mức thấp nhất (nadir). Các yếu tố nguy cơ độc lập bao gồm PSA, điểm Gleason/nhóm ISUP, giai đoạn ung thư và biên phẫu thuật dương tính. Quản lý BCR cần phân nhóm nguy cơ (thấp/cao) dựa trên PSA-DT và nhóm ISUP. PSMA PET/CT là phương tiện ưu tiên để phát hiện sớm tái phát lâm sàng, ngay cả ở mức PSA rất thấp. Điều trị cứu vớt nền tảng là xạ trị cứu vớt sớm sau phẫu thuật và hormon liệu pháp sau xạ trị. Quản lý BCR hiệu quả đòi hỏi một cách tiếp cận đa chiều. Phân nhóm nguy cơ (PSA-DT, ISUP) là tối quan trọng để định hướng chiến lược theo dõi hoặc điều trị cứu vớt kịp thời. Việc cá nhân hóa và áp dụng linh hoạt các khuyến cáo cập nhật là chìa khóa để cải thiện tiên lượng cho bệnh nhân TTL. Các tài liệu được tổng hợp từ các hướng dẫn quốc tế và đối chiếu với y văn liên quan công bố trong giai đoạn 2018–2025. Từ khóa: ung thư tuyến tiền liệt; tái phát sinh hóa; điều trị triệt căn\n\n## Metadata\nOpenAlex ID: W7125393001\nYear: 2026\nVenue: Y HOC TP HO CHI MINH\nConcepts: Context (archaeology), breakpoint cluster region, Business, Physics, Mathematics\nAuthors: Kinh Luân Thái, Như Quang Trần\nURL: https://doi.org/10.32895/hcjm.m.2026.02.03",
+  "passages": [
+    {
+      "passage_id": "OPENALEX_W7125393001::P000",
+      "document_id": "OPENALEX_W7125393001",
+      "text": "# Tái phát sinh hóa sau điều trị triệt căn ung thư tuyến tiền liệt",
+      "start_char": 0,
+      "end_char": 66,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "Tái phát sinh hóa sau điều trị triệt căn ung thư tuyến tiền liệt",
+      "metadata": {
+        "section_id": "SEC001",
+        "paragraph_id": "PARA001",
+        "document_version": 1,
+        "category": "OPENALEX",
+        "source": "openalex",
+        "language": "en",
+        "url": "https://doi.org/10.32895/hcjm.m.2026.02.03",
+        "token_reduction": {
+          "raw_tokens": 504,
+          "cleaned_tokens": 504,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "OPENALEX_W7125393001::P001",
+      "document_id": "OPENALEX_W7125393001",
+      "text": "## Abstract Ung thư tuyến tiền liệt (TTL) là bệnh ác tính phổ biến, với 27–53% trường hợp tái phát sinh hóa (BCR) sau điều trị triệt căn. Hiện vẫn còn thiếu đồng thuận về định nghĩa BCR và có sự khác biệt trong khuyến cáo điều trị.",
+      "start_char": 68,
+      "end_char": 299,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "Abstract",
+      "metadata": {
+        "section_id": "SEC002",
+        "paragraph_id": "PARA001",
+        "document_version": 1,
+        "category": "OPENALEX",
+        "source": "openalex",
+        "language": "en",
+        "url": "https://doi.org/10.32895/hcjm.m.2026.02.03",
+        "token_reduction": {
+          "raw_tokens": 504,
+          "cleaned_tokens": 504,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "OPENALEX_W7125393001::P002",
+      "document_id": "OPENALEX_W7125393001",
+      "text": "Hiện vẫn còn thiếu đồng thuận về định nghĩa BCR và có sự khác biệt trong khuyến cáo điều trị. Bài tổng quan này nhằm hệ thống hóa bằng chứng khoa học mới nhất để hỗ trợ quản lý BCR tối ưu tại Việt Nam, dựa trên các khuyến cáo của 4 hiệp hội tiết niệu và ung thư uy tín nhất trên thế giới bao gồm AUA, EAU, ASCO và NCCN.",
+      "start_char": 206,
+      "end_char": 525,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "Abstract",
+      "metadata": {
+        "section_id": "SEC002",
+        "paragraph_id": "PARA002",
+        "document_version": 1,
+        "category": "OPENALEX",
+        "source": "openalex",
+        "language": "en",
+        "url": "https://doi.org/10.32895/hcjm.m.2026.02.03",
+        "token_reduction": {
+          "raw_tokens": 504,
+          "cleaned_tokens": 504,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "OPENALEX_W7125393001::P003",
+      "document_id": "OPENALEX_W7125393001",
+      "text": "Bài tổng quan này nhằm hệ thống hóa bằng chứng khoa học mới nhất để hỗ trợ quản lý BCR tối ưu tại Việt Nam, dựa trên các khuyến cáo của 4 hiệp hội tiết niệu và ung thư uy tín nhất trên thế giới bao gồm AUA, EAU, ASCO và NCCN. Sau phẫu thuật, định nghĩa BCR khác nhau giữa các hiệp hội (ví dụ: NCCN 0,1 ng/mL, AUA/ASCO 0,2 ng/mL, EAU 0,4 ng/mL).",
+      "start_char": 300,
+      "end_char": 644,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "Abstract",
+      "metadata": {
+        "section_id": "SEC002",
+        "paragraph_id": "PARA002",
+        "document_version": 1,
+        "category": "OPENALEX",
+        "source": "openalex",
+        "language": "en",
+        "url": "https://doi.org/10.32895/hcjm.m.2026.02.03",
+        "token_reduction": {
+          "raw_tokens": 504,
+          "cleaned_tokens": 504,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "OPENALEX_W7125393001::P004",
+      "document_id": "OPENALEX_W7125393001",
+      "text": "Sau phẫu thuật, định nghĩa BCR khác nhau giữa các hiệp hội (ví dụ: NCCN 0,1 ng/mL, AUA/ASCO 0,2 ng/mL, EAU 0,4 ng/mL). Sau xạ trị, định nghĩa thống nhất là PSA tăng 2 ng/mL so với mức thấp nhất (nadir).",
+      "start_char": 526,
+      "end_char": 728,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "Abstract",
+      "metadata": {
+        "section_id": "SEC002",
+        "paragraph_id": "PARA002",
+        "document_version": 1,
+        "category": "OPENALEX",
+        "source": "openalex",
+        "language": "en",
+        "url": "https://doi.org/10.32895/hcjm.m.2026.02.03",
+        "token_reduction": {
+          "raw_tokens": 504,
+          "cleaned_tokens": 504,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "OPENALEX_W7125393001::P005",
+      "document_id": "OPENALEX_W7125393001",
+      "text": "Sau xạ trị, định nghĩa thống nhất là PSA tăng 2 ng/mL so với mức thấp nhất (nadir). Các yếu tố nguy cơ độc lập bao gồm PSA, điểm Gleason/nhóm ISUP, giai đoạn ung thư và biên phẫu thuật dương tính.",
+      "start_char": 645,
+      "end_char": 841,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "Abstract",
+      "metadata": {
+        "section_id": "SEC002",
+        "paragraph_id": "PARA002",
+        "document_version": 1,
+        "category": "OPENALEX",
+        "source": "openalex",
+        "language": "en",
+        "url": "https://doi.org/10.32895/hcjm.m.2026.02.03",
+        "token_reduction": {
+          "raw_tokens": 504,
+          "cleaned_tokens": 504,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "OPENALEX_W7125393001::P006",
+      "document_id": "OPENALEX_W7125393001",
+      "text": "Các yếu tố nguy cơ độc lập bao gồm PSA, điểm Gleason/nhóm ISUP, giai đoạn ung thư và biên phẫu thuật dương tính. Quản lý BCR cần phân nhóm nguy cơ (thấp/cao) dựa trên PSA-DT và nhóm ISUP.",
+      "start_char": 729,
+      "end_char": 916,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "Abstract",
+      "metadata": {
+        "section_id": "SEC002",
+        "paragraph_id": "PARA002",
+        "document_version": 1,
+        "category": "OPENALEX",
+        "source": "openalex",
+        "language": "en",
+        "url": "https://doi.org/10.32895/hcjm.m.2026.02.03",
+        "token_reduction": {
+          "raw_tokens": 504,
+          "cleaned_tokens": 504,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "OPENALEX_W7125393001::P007",
+      "document_id": "OPENALEX_W7125393001",
+      "text": "Quản lý BCR cần phân nhóm nguy cơ (thấp/cao) dựa trên PSA-DT và nhóm ISUP. PSMA PET/CT là phương tiện ưu tiên để phát hiện sớm tái phát lâm sàng, ngay cả ở mức PSA rất thấp.",
+      "start_char": 842,
+      "end_char": 1015,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "Abstract",
+      "metadata": {
+        "section_id": "SEC002",
+        "paragraph_id": "PARA002",
+        "document_version": 1,
+        "category": "OPENALEX",
+        "source": "openalex",
+        "language": "en",
+        "url": "https://doi.org/10.32895/hcjm.m.2026.02.03",
+        "token_reduction": {
+          "raw_tokens": 504,
+          "cleaned_tokens": 504,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "OPENALEX_W7125393001::P008",
+      "document_id": "OPENALEX_W7125393001",
+      "text": "PSMA PET/CT là phương tiện ưu tiên để phát hiện sớm tái phát lâm sàng, ngay cả ở mức PSA rất thấp. Điều trị cứu vớt nền tảng là xạ trị cứu vớt sớm sau phẫu thuật và hormon liệu pháp sau xạ trị. Quản lý BCR hiệu quả đòi hỏi một cách tiếp cận đa chiều.",
+      "start_char": 917,
+      "end_char": 1167,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "Abstract",
+      "metadata": {
+        "section_id": "SEC002",
+        "paragraph_id": "PARA002",
+        "document_version": 1,
+        "category": "OPENALEX",
+        "source": "openalex",
+        "language": "en",
+        "url": "https://doi.org/10.32895/hcjm.m.2026.02.03",
+        "token_reduction": {
+          "raw_tokens": 504,
+          "cleaned_tokens": 504,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "OPENALEX_W7125393001::P009",
+      "document_id": "OPENALEX_W7125393001",
+      "text": "Quản lý BCR hiệu quả đòi hỏi một cách tiếp cận đa chiều. Phân nhóm nguy cơ (PSA-DT, ISUP) là tối quan trọng để định hướng chiến lược theo dõi hoặc điều trị cứu vớt kịp thời.",
+      "start_char": 1111,
+      "end_char": 1284,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "Abstract",
+      "metadata": {
+        "section_id": "SEC002",
+        "paragraph_id": "PARA002",
+        "document_version": 1,
+        "category": "OPENALEX",
+        "source": "openalex",
+        "language": "en",
+        "url": "https://doi.org/10.32895/hcjm.m.2026.02.03",
+        "token_reduction": {
+          "raw_tokens": 504,
+          "cleaned_tokens": 504,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "OPENALEX_W7125393001::P010",
+      "document_id": "OPENALEX_W7125393001",
+      "text": "Phân nhóm nguy cơ (PSA-DT, ISUP) là tối quan trọng để định hướng chiến lược theo dõi hoặc điều trị cứu vớt kịp thời. Việc cá nhân hóa và áp dụng linh hoạt các khuyến cáo cập nhật là chìa khóa để cải thiện tiên lượng cho bệnh nhân TTL.",
+      "start_char": 1168,
+      "end_char": 1402,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "Abstract",
+      "metadata": {
+        "section_id": "SEC002",
+        "paragraph_id": "PARA002",
+        "document_version": 1,
+        "category": "OPENALEX",
+        "source": "openalex",
+        "language": "en",
+        "url": "https://doi.org/10.32895/hcjm.m.2026.02.03",
+        "token_reduction": {
+          "raw_tokens": 504,
+          "cleaned_tokens": 504,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "OPENALEX_W7125393001::P011",
+      "document_id": "OPENALEX_W7125393001",
+      "text": "Việc cá nhân hóa và áp dụng linh hoạt các khuyến cáo cập nhật là chìa khóa để cải thiện tiên lượng cho bệnh nhân TTL. Các tài liệu được tổng hợp từ các hướng dẫn quốc tế và đối chiếu với y văn liên quan công bố trong giai đoạn 2018–2025.",
+      "start_char": 1285,
+      "end_char": 1522,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "Abstract",
+      "metadata": {
+        "section_id": "SEC002",
+        "paragraph_id": "PARA002",
+        "document_version": 1,
+        "category": "OPENALEX",
+        "source": "openalex",
+        "language": "en",
+        "url": "https://doi.org/10.32895/hcjm.m.2026.02.03",
+        "token_reduction": {
+          "raw_tokens": 504,
+          "cleaned_tokens": 504,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "OPENALEX_W7125393001::P012",
+      "document_id": "OPENALEX_W7125393001",
+      "text": "Các tài liệu được tổng hợp từ các hướng dẫn quốc tế và đối chiếu với y văn liên quan công bố trong giai đoạn 2018–2025. Từ khóa: ung thư tuyến tiền liệt; tái phát sinh hóa; điều trị triệt căn",
+      "start_char": 1403,
+      "end_char": 1594,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "Abstract",
+      "metadata": {
+        "section_id": "SEC002",
+        "paragraph_id": "PARA002",
+        "document_version": 1,
+        "category": "OPENALEX",
+        "source": "openalex",
+        "language": "en",
+        "url": "https://doi.org/10.32895/hcjm.m.2026.02.03",
+        "token_reduction": {
+          "raw_tokens": 504,
+          "cleaned_tokens": 504,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "OPENALEX_W7125393001::P013",
+      "document_id": "OPENALEX_W7125393001",
+      "text": "## Metadata OpenAlex ID: W7125393001\nYear: 2026\nVenue: Y HOC TP HO CHI MINH\nConcepts: Context (archaeology), breakpoint cluster region, Business, Physics, Mathematics\nAuthors: Kinh Luân Thái, Như Quang Trần\nURL: https://doi.org/10.32895/hcjm.m.2026.02.03",
+      "start_char": 1596,
+      "end_char": 1850,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "Metadata",
+      "metadata": {
+        "section_id": "SEC003",
+        "paragraph_id": "PARA002",
+        "document_version": 1,
+        "category": "OPENALEX",
+        "source": "openalex",
+        "language": "en",
+        "url": "https://doi.org/10.32895/hcjm.m.2026.02.03",
+        "token_reduction": {
+          "raw_tokens": 504,
+          "cleaned_tokens": 504,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    }
+  ],
+  "structural_metadata": {},
+  "content_hash": "7c70260b0b6b793f",
+  "created_at": 1794997517.7673118,
+  "metadata": {
+    "category": "OPENALEX",
+    "source": "openalex",
+    "language": "en",
+    "url": "https://doi.org/10.32895/hcjm.m.2026.02.03",
+    "token_reduction": {
+      "raw_tokens": 504,
+      "cleaned_tokens": 504,
+      "tokens_saved": 0,
+      "reduction_pct": 0.0,
+      "removed_lines_count": 0
+    },
+    "chunker_version": "v5.0"
+  }
+}

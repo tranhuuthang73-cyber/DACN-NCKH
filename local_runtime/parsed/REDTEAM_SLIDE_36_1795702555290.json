@@ -1,0 +1,193 @@
+{
+  "document_id": "REDTEAM_SLIDE_36_1795702555290",
+  "sections": [
+    {
+      "title": "Root",
+      "start": 0,
+      "end": 13978
+    }
+  ],
+  "paragraphs": [
+    {
+      "text": "=== Page 1 ===\n1. GIỚI THIỆU HỆ MÃ KHÓA ĐỐI XỨNG:\n- Hệ mã khóa đối xứng là phương pháp mật mã xuất hiện đầu tiên trong ngành bảo mật.\n- Thuật ngữ thường gọi: Hệ mã khóa bí mật hoặc hệ mã khóa cổ điển.\n- Các hệ mã này phần lớn có lịch sử phát triển từ trước năm 1970.\n- Bên gửi và bên nhận cùng chia sẻ chung một khóa bí mật K duy nhất.\n- Các phương pháp này là cơ sở nền tảng để phát triển các thuật toán mã hóa đối xứng hiện đại ngày nay như DES và AES.\n- Có 2 phương pháp phổ biến trong mã hóa cổ điển:\n* Mã hóa thay thế.\n* Mã hóa hoán vị.",
+      "start": 0,
+      "end": 541
+    },
+    {
+      "text": "=== Page 2 ===\n1. GIỚI THIỆU HỆ MÃ KHÓA ĐỐI XỨNG (Tiếp theo):\n- Sơ đồ mã hóa đối xứng: Bản rõ P kết hợp với khóa bí mật K qua thuật toán mã hóa E tạo thành bản mã C = E(K, P).\n- Quá trình giải mã: Bản mã C kết hợp với cùng khóa bí mật K qua thuật toán giải mã D tạo lại bản rõ P = D(K, C).\n- Kênh truyền tin an toàn cần đảm bảo tính bí mật và toàn vẹn cho việc phân phối khóa bí mật.",
+      "start": 0,
+      "end": 383
+    },
+    {
+      "text": "=== Page 3 ===\n1. GIỚI THIỆU HỆ MÃ KHÓA ĐỐI XỨNG - Phân loại chi tiết:\n- Hai họ phương pháp kỹ thuật chính trong mật mã học cổ điển:\n* Phương pháp thay thế (Substitution): Mỗi ký tự trong bản rõ được thay thế bằng một ký tự hoặc nhóm ký tự khác.\n* Phương pháp hoán vị (Transposition/Permutation): Các ký tự bản rõ được giữ nguyên giá trị nhưng tráo đổi vị trí theo quy luật.\n- Các hệ mã hóa cổ điển tiêu biểu: Hệ mã dịch vòng (Caesar), Hệ mã đơn bảng, Hệ mã Affine, Hệ mã Vigenere, Hệ mã Hill, Hệ mã Playfair, Hệ mã Autokey, Hệ mã hóa dòng, Hệ mã hóa độn một lần (Vernam / One-Time Pad).",
+      "start": 0,
+      "end": 587
+    },
+    {
+      "text": "=== Page 4 ===\n2. HỆ MÃ DỊCH VÒNG:\n- Khái niệm: Còn gọi là mã Caesar, là một trong những hệ mã hóa thay thế đơn giản nhất trong lịch sử.\n- Mỗi chữ cái trong bản rõ được dịch chuyển một khoảng k vị trí cố định trong bảng chữ cái Z26.\n- Giả sử bảng chữ cái tiếng Anh gồm 26 ký tự được đánh số thứ tự từ A=0 đến Z=25.",
+      "start": 0,
+      "end": 314
+    },
+    {
+      "text": "=== Page 5 ===\n2. HỆ MÃ DỊCH VÒNG - Thuật toán và Công thức:\n- Khóa bí mật k thuộc tập Z26: k thuộc {0, 1, ..., 25}.\n- Công thức mã hóa: c = E(k, p) = (p + k) mod 26.\n- Công thức giải mã: p = D(k, c) = (c - k) mod 26.\n- Ví dụ minh họa: Với khóa k = 3, ký tự 'A' (0) mã hóa thành 'D' (3), 'B' (1) mã hóa thành 'E' (4).",
+      "start": 0,
+      "end": 317
+    },
+    {
+      "text": "=== Page 6 ===\n2. HỆ MÃ DỊCH VÒNG - Đánh giá an ninh:\n- Không gian khóa của hệ mã dịch vòng rất nhỏ, chỉ có đúng 26 khóa có thể.\n- Rất dễ bị phá mã bằng phương pháp tấn công vét cạn (exhaustive key search) trong thời gian tức thì.\n- Thám mã chỉ cần thử tối đa 25 khóa dịch chuyển khác 0 để khôi phục lại hoàn toàn bản rõ.",
+      "start": 0,
+      "end": 321
+    },
+    {
+      "text": "=== Page 7 ===\n3. PHÁ MÃ:\n- Khái niệm thám mã: Khoa học nghiên cứu các kỹ thuật nhằm phá vỡ hệ mật hoặc khôi phục thông tin bản rõ mà không biết trước khóa bí mật.\n- An ninh của hệ mã khóa bao gồm hai mức độ đánh giá:\n- An ninh vô điều kiện: Không thể phá mã dù kẻ tấn công có thời gian vô hạn và tài nguyên tính toán vô hạn.\n- An ninh tính toán: Chi phí để phá vỡ hệ mật vượt quá giá trị kinh tế của thông tin cần bảo vệ, hoặc thời gian cần thiết để phá mã vượt quá thời gian hữu dụng của thông tin.",
+      "start": 0,
+      "end": 500
+    },
+    {
+      "text": "=== Page 8 ===\n3. PHÁ MÃ - Các kiểu tấn công kinh điển:\n- Tấn công chỉ biết bản mã (Ciphertext-only attack): Thám mã chỉ sở hữu một chuỗi các bản mã C.\n- Tấn công biết trước bản rõ (Known-plaintext attack): Thám mã sở hữu các cặp bản rõ và bản mã tương ứng (P, C).\n- Tấn công chọn bản rõ (Chosen-plaintext attack): Thám mã có khả năng chọn các bản rõ tùy ý và thu được bản mã tương ứng.\n- Tấn công chọn bản mã (Chosen-ciphertext attack): Thám mã có quyền chọn bản mã và nhận về bản rõ giải mã tương ứng.",
+      "start": 0,
+      "end": 503
+    },
+    {
+      "text": "=== Page 9 ===\n3. PHÁ MÃ - Phương pháp thống kê tần suất:\n- Các phương pháp thám mã phổ biến gồm tấn công vét cạn (brute-force) và phân tích thống kê tần suất xuất hiện của ký tự.\n- Trong ngôn ngữ tự nhiên, mỗi chữ cái có tần suất xuất hiện đặc trưng (ví dụ: 'E' trong tiếng Anh có tần suất cao nhất khoảng 12.7%).\n- Các hệ mã thay thế đơn bảng giữ nguyên đặc tính phân bố tần suất của ngôn ngữ, do đó dễ dàng bị phân tích và bẻ khóa.",
+      "start": 0,
+      "end": 434
+    },
+    {
+      "text": "=== Page 10 ===\n4. HỆ MÃ ĐƠN BẢNG:\n- Khái niệm: Hệ mã thay thế đơn bảng (Monoalphabetic Substitution Cipher).\n- Không giới hạn ở phép dịch cố định, mà mỗi ký tự trong bảng chữ cái được ánh xạ thành một ký tự bất kỳ theo một hoán vị ngẫu nhiên của 26 chữ cái.\n- Không gian khóa K = 26! xấp xỉ 4 * 10^26, là một con số rất lớn để chống lại tấn công vét cạn.",
+      "start": 0,
+      "end": 355
+    },
+    {
+      "text": "=== Page 11 ===\n4. HỆ MÃ ĐƠN BẢNG - Điểm yếu thám mã:\n- Mặc dù không gian khóa 26! vô cùng lớn, hệ mã này vẫn hoàn toàn không an toàn trước thám mã tần suất.\n- Do mỗi chữ cái luôn được mã hóa thành cùng một ký tự cố định duy nhất, biểu đồ tần suất của bản mã giữ nguyên hình dạng của ngôn ngữ bản rõ.\n- Kẻ thám mã chỉ cần khớp các ký tự xuất hiện nhiều nhất với chữ cái phổ biến để giải mã từng phần thông điệp.",
+      "start": 0,
+      "end": 411
+    },
+    {
+      "text": "=== Page 12 ===\n4. HỆ MÃ ĐƠN BẢNG - Biện pháp cải tiến:\n- Sử dụng các kỹ thuật mã đa bảng hoặc mã hóa khối để làm phẳng biểu đồ phân phối tần suất ký tự.\n- Kỹ thuật phân tích cặp ký tự (digram) và bộ ba ký tự (trigram) giúp tăng tốc độ bẻ khóa hệ mã đơn bảng.",
+      "start": 0,
+      "end": 259
+    },
+    {
+      "text": "=== Page 13 ===\n5. HỆ MÃ AFFINE:\n- Khái niệm: Hệ mã Affine là dạng mở rộng của hệ mã dịch vòng, kết hợp phép nhân và phép cộng modulo 26.\n- Cặp khóa bí mật gồm hai số nguyên K = (a, b) trong đó a, b thuộc Z26.\n- Điều kiện hợp lệ bắt buộc: a phải nguyên tố cùng nhau với 26, tức là gcd(a, 26) = 1.",
+      "start": 0,
+      "end": 296
+    },
+    {
+      "text": "=== Page 14 ===\n5. HỆ MÃ AFFINE - Thuật toán và Công thức:\n- Không gian khóa: Số lượng giá trị a hợp lệ là phi(26) = 12 giá trị (1, 3, 5, 7, 9, 11, 15, 17, 19, 21, 23, 25).\n- Tổng số khóa có thể: |K| = 12 * 26 = 312 khóa.\n- Công thức mã hóa: c = E((a, b), p) = (a * p + b) mod 26.\n- Công thức giải mã: p = D((a, b), c) = a^(-1) * (c - b) mod 26, với a^(-1) là nghịch đảo modulo 26 của a.",
+      "start": 0,
+      "end": 387
+    },
+    {
+      "text": "=== Page 15 ===\n5. HỆ MÃ AFFINE - Ví dụ minh họa:\n- Chọn khóa K = (7, 3). Ta có gcd(7, 26) = 1 và nghịch đảo 7^(-1) mod 26 = 15 vì (7 * 15) mod 26 = 105 mod 26 = 1.\n- Mã hóa ký tự 'H' (7): c = (7 * 7 + 3) mod 26 = 52 mod 26 = 0 ('A').\n- Giải mã 'A' (0): p = 15 * (0 - 3) mod 26 = 15 * (-3) mod 26 = -45 mod 26 = 7 ('H').",
+      "start": 0,
+      "end": 320
+    },
+    {
+      "text": "=== Page 16 ===\n6. HỆ MÃ VIGENERE:\n- Khái niệm: Hệ mã hóa thay thế đa bảng (Polyalphabetic Cipher) nổi tiếng nhất trong lịch sử mật mã cổ điển.\n- Được đề xuất bởi Blaise de Vigenere vào thế kỷ 16.\n- Khắc phục triệt để nhược điểm bảo toàn tần suất đơn bảng bằng cách luân phiên sử dụng nhiều khóa dịch chuyển khác nhau.",
+      "start": 0,
+      "end": 318
+    },
+    {
+      "text": "=== Page 17 ===\n6. HỆ MÃ VIGENERE - Thuật toán và Bảng Vigenere:\n- Khóa bí mật là một từ khóa có độ dài m: K = (k0, k1, ..., km-1) với ki thuộc Z26.\n- Từ khóa được lặp lại tuần hoàn cho đến khi bằng chiều dài bản rõ.\n- Công thức mã hóa: ci = (pi + k_(i mod m)) mod 26.\n- Công thức giải mã: pi = (ci - k_(i mod m)) mod 26.",
+      "start": 0,
+      "end": 321
+    },
+    {
+      "text": "=== Page 18 ===\n6. HỆ MÃ VIGENERE - Phá mã Vigenere:\n- Phương pháp thử nghiệm Kasiski (1863): Tìm các chuỗi ký tự lặp lại trong bản mã để suy ra độ dài từ khóa m (ước chung của các khoảng cách).\n- Chỉ số trùng phùng Friedman (Index of Coincidence - IC): Đo xác suất hai chữ cái chọn ngẫu nhiên trong bản mã trùng nhau để xác định độ dài m chính xác.\n- Khi đã biết độ dài m, bài toán phân rã thành m bài toán mã Caesar đơn lẻ giải bằng tần suất.",
+      "start": 0,
+      "end": 444
+    },
+    {
+      "text": "=== Page 19 ===\n7. HỆ MÃ HILL:\n- Khái niệm: Phát minh bởi Lester S. Hill năm 1929, là hệ mã hóa thay thế đa ký tự (Polygraphic Cipher) đầu tiên ứng dụng đại số tuyến tính.\n- Bản rõ được chia thành các khối độ dài m ký tự và biểu diễn dưới dạng vector hàng P = (p1, p2, ..., pm).\n- Khóa bí mật là một ma trận vuông K kích thước m x m với các phần tử thuộc Z26.",
+      "start": 0,
+      "end": 359
+    },
+    {
+      "text": "=== Page 20 ===\n7. HỆ MÃ HILL - Công thức và Điều kiện khả nghịch:\n- Điều kiện khóa hợp lệ: Ma trận K phải khả nghịch trên vành Z26, tương đương điều kiện gcd(det(K), 26) = 1.\n- Công thức mã hóa: C = P * K mod 26.\n- Công thức giải mã: P = C * K^(-1) mod 26, trong đó K^(-1) = det(K)^(-1) * adj(K) mod 26.\n- Hệ mã Hill có khả năng che giấu hoàn hảo tần suất ký tự đơn lẻ cũng như các cặp ký tự.",
+      "start": 0,
+      "end": 393
+    },
+    {
+      "text": "=== Page 21 ===\n7. HỆ MÃ HILL - Đánh giá an ninh:\n- Hệ mã Hill hoàn toàn chống lại được phương pháp tấn công chỉ biết bản mã (Ciphertext-only) dựa trên tần suất đơn lẻ.\n- Tuy nhiên, hệ mã Hill hoàn toàn tuyến tính nên rất dễ bị phá mã bởi phương pháp tấn công biết trước bản rõ (Known-plaintext attack) bằng cách giải hệ phương trình ma trận m x m.",
+      "start": 0,
+      "end": 348
+    },
+    {
+      "text": "=== Page 22 ===\n8. HỆ MÃ HOÁ ĐỘN MỘT LẦN:\n- Khái niệm: Hệ mã hóa hoàn hảo (Vernam Cipher / One-Time Pad - OTP), sáng chế bởi Gilbert Vernam năm 1917.\n- Được Claude Shannon chứng minh toán học năm 1949 là hệ mật duy nhất đạt mức an ninh tuyệt đối vô điều kiện.\n- Quy tắc bắt buộc:\n1. Độ dài chuỗi khóa K bằng đúng độ dài thông điệp bản rõ P.\n2. Khóa được tạo hoàn toàn ngẫu nhiên thực sự (true random).\n3. Mỗi khóa chỉ được sử dụng duy nhất một lần và sau đó hủy bỏ.",
+      "start": 0,
+      "end": 465
+    },
+    {
+      "text": "=== Page 23 ===\n8. HỆ MÃ HOÁ ĐỘN MỘT LẦN - Cơ chế toán học:\n- Không gian bản rõ, bản mã và khóa: P = C = K = {0, 1}^n.\n- Phép mã hóa: ci = pi XOR ki.\n- Phép giải mã: pi = ci XOR ki.\n- Tính chất hoàn hảo của Shannon: P(P=p | C=c) = P(P=p). Kẻ tấn công khi quan sát bản mã C không nhận thêm bất kỳ thông tin nào về bản rõ P.",
+      "start": 0,
+      "end": 322
+    },
+    {
+      "text": "=== Page 24 ===\n8. HỆ MÃ HOÁ ĐỘN MỘT LẦN - Thách thức triển khai thực tế:\n- Mặc dù an ninh tuyệt đối về mặt lý thuyết, OTP rất khó áp dụng trên diện rộng.\n- Vấn đề phân phối khóa: Việc truyền một lượng khóa ngẫu nhiên khổng lồ bằng độ dài thông điệp đến bên nhận cũng khó khăn như việc truyền thông điệp bí mật.\n- Nguy cơ thảm họa nếu tái sử dụng khóa (Two-time pad): C1 XOR C2 = P1 XOR P2 làm lộ cấu trúc ngôn ngữ của hai thông điệp.",
+      "start": 0,
+      "end": 434
+    },
+    {
+      "text": "=== Page 25 ===\n9. HỆ MÃ HOÁ DÒNG:\n- Khái niệm: Hệ mã hóa dòng (Stream Cipher) là một giải pháp thực tế mô phỏng nguyên lý của Hệ mã độn một lần OTP.\n- Thay vì dùng khóa ngẫu nhiên thật dài vô tận, hệ mã dòng sử dụng một bộ sinh số giả ngẫu nhiên (PRNG / Keystream Generator) điều khiển bởi một khóa bí mật ngắn K ban đầu.\n- Sinh ra một chuỗi dòng khóa z = z1, z2, z3...",
+      "start": 0,
+      "end": 370
+    },
+    {
+      "text": "=== Page 26 ===\n9. HỆ MÃ HOÁ DÒNG - Thuật toán và Phép toán bit:\n- Dòng khóa được sinh tuần tự: zi = fi (K, x1, ..., xi-1).\n- Bản rõ được mã hóa từng bit hoặc từng byte bằng phép XOR với dòng khóa z: ci = pi XOR zi.\n- Giải mã thực hiện hoàn toàn đối xứng bằng cùng phép toán XOR: pi = ci XOR zi.\n- Ưu điểm: Tốc độ xử lý nhanh và độ trễ thấp trong truyền thông thời gian thực, không gây lan truyền lỗi bit.",
+      "start": 0,
+      "end": 405
+    },
+    {
+      "text": "=== Page 27 ===\n9. HỆ MÃ HOÁ DÒNG - Phân loại hệ mã dòng:\n- Hệ mã dòng đồng bộ (Synchronous Stream Cipher): Dòng khóa z được sinh độc lập với bản rõ và bản mã, chỉ phụ thuộc vào khóa bí mật K và vector khởi tạo IV.\n- Hệ mã dòng tự đồng bộ (Self-synchronizing / Asynchronous Stream Cipher): Dòng khóa zi phụ thuộc vào một số bit bản mã liền trước c_(i-1), c_(i-2)...\n- Các hệ mã dòng thực tế nổi tiếng: RC4, ChaCha20, A5/1 (trong mạng GSM).",
+      "start": 0,
+      "end": 439
+    },
+    {
+      "text": "=== Page 28 ===\n10. HỆ MÃ HOÁ AUTOKEY:\n- Khái niệm: Hệ mã hóa tự động sinh khóa (Autokey Cipher), đề xuất bởi Giovan Battista Bellaso và hoàn thiện bởi Vigenere.\n- Giải quyết nhược điểm lặp chu kỳ khóa của mã Vigenere mà không cần chia sẻ trước khóa quá dài.\n- Cho P = C = K = Z26.",
+      "start": 0,
+      "end": 281
+    },
+    {
+      "text": "=== Page 29 ===\n10. HỆ MÃ HOÁ AUTOKEY - Cơ chế mở rộng khóa:\n- Khóa k = k1, k2, ... ban đầu được mở rộng bằng chính các ký tự của bản rõ (Autokey).\n- Cụ thể: K = (k_seed, p1, p2, p3, ..., pn-1).\n- Công thức mã hóa: ci = (pi + ki) mod 26.\n- Công thức giải mã: p1 = (c1 - k1) mod 26; sau khi có p1, sử dụng p1 làm khóa k2 để giải mã c2: p2 = (c2 - p1) mod 26, tiếp tục tuần tự.",
+      "start": 0,
+      "end": 375
+    },
+    {
+      "text": "=== Page 30 ===\n10. HỆ MÃ HOÁ AUTOKEY - Đánh giá ưu nhược điểm:\n- Ưu điểm: Loại bỏ tính chu kỳ tuần hoàn ngắn của từ khóa trong mã Vigenere thông thường, gây khó khăn cho phương pháp kiểm tra Kasiski.\n- Nhược điểm: Thuộc tính tự sinh khóa khiến lỗi giải mã lan truyền; nếu một ký tự bị truyền sai, toàn bộ các ký tự bản rõ phía sau sẽ bị giải mã sai theo.",
+      "start": 0,
+      "end": 355
+    },
+    {
+      "text": "=== Page 31 ===\n11. HỆ MÃ HOÁ PLAYFAIR:\n- Khái niệm: Phát minh bởi Charles Wheatstone năm 1854 nhưng mang tên Huân tước Playfair người có công phổ biến rộng rãi.\n- Sử dụng ma trận ký tự 5x5 để mã hóa từng cặp ký tự (digram).\n- Bảng chữ cái 25 ký tự ghép đôi I và J vào cùng một ô để vừa ma trận 5x5.",
+      "start": 0,
+      "end": 299
+    },
+    {
+      "text": "=== Page 32 ===\n11. HỆ MÃ HOÁ PLAYFAIR - Quy tắc mã hóa ma trận:\n- Thay thế các cặp ký tự dựa trên quy tắc hình học trên ma trận:\n1. Nếu hai ký tự nằm cùng một hàng: Thay bằng các ký tự ngay bên phải (vòng lại đầu hàng nếu ở mép phải).\n2. Nếu hai ký tự nằm cùng một cột: Thay bằng các ký tự ngay bên dưới (vòng lại đầu cột nếu ở mép dưới).\n3. Nếu hai ký tự tạo thành hình chữ nhật: Thay bằng các ký tự ở cùng hàng nhưng nằm trên cột của ký tự kia.",
+      "start": 0,
+      "end": 447
+    },
+    {
+      "text": "=== Page 33 ===\n11. HỆ MÃ HOÁ PLAYFAIR - Xử lý trường hợp đặc biệt:\n- Nếu hai ký tự trong cặp giống nhau (ví dụ: 'LL'): Chèn một ký tự độn phụ như 'X' vào giữa ('LX', 'L...').\n- Nếu độ dài thông điệp là lẻ: Bổ sung ký tự độn 'X' hoặc 'Z' vào cuối chuỗi trước khi mã hóa.\n- Mã hóa Playfair làm phẳng tần suất các chữ cái đơn lẻ, nhưng vẫn có thể bị thám mã dựa trên tần suất của 625 cặp ký tự (digram).",
+      "start": 0,
+      "end": 401
+    },
+    {
+      "text": "=== Page 34 ===\n12. HỆ MÃ HOÁ HOÁN VỊ:\n- Khái niệm: Khác với 11 hệ mã thay thế ở trên, hệ mã hóa hoán vị (Transposition / Permutation Cipher) giữ nguyên giá trị các ký tự bản rõ nhưng thay đổi vị trí của chúng.\n- Tần suất các ký tự trong bản mã hoàn toàn giống hệt tần suất trong bản rõ (chữ cái phổ biến như 'E', 'A' vẫn giữ nguyên số lần xuất hiện).",
+      "start": 0,
+      "end": 351
+    },
+    {
+      "text": "=== Page 35 ===\n12. HỆ MÃ HOÁ HOÁN VỊ - Các kỹ thuật hoán vị phổ biến:\n- Hoán vị đường rào (Rail Fence Cipher): Bản rõ được viết theo đường ziczac qua các đường ray rồi đọc ra theo từng hàng.\n- Hoán vị cột (Columnar Transposition): Bản rõ được điền vào ma trận hình chữ nhật theo từng hàng, sau đó đọc ra theo các cột dựa trên thứ tự hoán vị của từ khóa bí mật.\n- Hoán vị nhiều vòng: Thực hiện liên tiếp 2 hay nhiều lượt hoán vị cột với các khóa khác nhau để làm tăng độ xáo trộn.",
+      "start": 0,
+      "end": 480
+    },
+    {
+      "text": "=== Page 36 ===\n12. HỆ MÃ HOÁ HOÁN VỊ - So sánh và Ứng dụng:\n- So sánh: Mã thay thế làm biến đổi ký tự (confusion); mã hoán vị làm xáo trộn vị trí ký tự (diffusion).\n- Trong mật mã học hiện đại, nguyên lý thay thế kết hợp hoán vị của Claude Shannon là nền tảng cốt lõi của mạng SPN (Substitution-Permutation Network) và mạng Feistel trong chuẩn mã hóa nâng cao AES và DES.",
+      "start": 0,
+      "end": 373
+    }
+  ],
+  "total_tokens": 4401
+}

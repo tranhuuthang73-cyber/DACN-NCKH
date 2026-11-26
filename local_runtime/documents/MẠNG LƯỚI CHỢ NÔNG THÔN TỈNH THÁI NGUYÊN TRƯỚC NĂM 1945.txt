@@ -1,0 +1,12 @@
+# MẠNG LƯỚI CHỢ NÔNG THÔN TỈNH THÁI NGUYÊN TRƯỚC NĂM 1945
+
+## Abstract
+Trong lịch sử, mạng lưới chợ nông thôn ra đời là kết quả của sự phát triển quan hệ hàng hóa và thủ công nghiệp. Ở vùng đồng bằng, trung du hay miền núi, chợ nông thôn đều có vai trò kinh tế, văn hóa, xã hội quan trọng. Với phương pháp lịch sử và phương pháp logic, kết hợp với một số phương pháp khác, nghiên cứu này nhằm giới thiệu đặc điểm về mạng lưới chợ nông thôn tỉnh Thái Nguyên trước năm 1945, trên cơ sở đó, phản ánh rõ nét bức tranh kinh tế, văn hóa và đời sống nhân dân Thái Nguyên lúc bấy giờ. Kết quả nghiên cứu cho thấy, mạng lưới chợ nông thôn ở Thái Nguyên trước năm 1945 ngoài những điểm tương đồng còn có sự khác biệt so với chợ ở những địa phương khác, thể hiện trên các khía cạnh như cách thức họp chợ, địa điểm và thời gian họp chợ, thành phần thương nghiệp ở chợ,... Việc thiết lập mạng lưới chợ Thái Nguyên đã góp phần phá vỡ nền kinh tế khép kín, tự cấp, tự túc của đồng bào. Sự tồn tại của mạng lưới chợ Thái Nguyên trong lịch sử và trong thời hiện đại có vai trò to lớn về mặt kinh tế, cũng như văn hóa và xã hội của người dân nơi đây.
+
+## Metadata
+OpenAlex ID: W4385547268
+Year: 2023
+Venue: TNU Journal of Science and Technology
+Concepts: Chemistry, Stereochemistry
+Authors: Đàm Thị Uyên, Nguyễn Thị Tâm
+URL: https://doi.org/10.34238/tnu-jst.7936

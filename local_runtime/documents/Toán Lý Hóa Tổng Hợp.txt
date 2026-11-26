@@ -1,0 +1,13 @@
+BÀI HỌC TOÁN VÀ HÓA ĐẠI CƯƠNG
+
+Phần 1: Phản ứng oxi hóa - khử
+Phương trình phản ứng: Zn + 2HCl -> ZnCl2 + H2
+Trong đó Zn là chất khử nhường 2 electron: Zn -> Zn2+ + 2e.
+Ion H+ là chất oxi hóa nhận electron: 2H+ + 2e -> H2.
+
+Phần 2: Phương trình bậc hai
+Dạng tổng quát: x^2 - 5*x + 6 = 0
+Nghiệm của phương trình được tính theo biệt thức Delta.
+
+Phần 3: Định luật Ohm vật lý
+Biểu thức định luật: U = I * R trong đó U là hiệu điện thế, I là cường độ dòng điện, R là điện trở.

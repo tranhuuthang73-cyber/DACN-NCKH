@@ -1,0 +1,133 @@
+{
+  "document_id": "OPENALEX_W7215530297",
+  "version": 1,
+  "title": "Lựa chọn một số bài tập nhằm phát triển khả năng phối hợp vận động cho nam học sinh đội tuyển cầu lông trường Trung học phổ thông Đoan Hùng Phú Thọ",
+  "raw_text": "# Lựa chọn một số bài tập nhằm phát triển khả năng phối hợp vận động cho nam học sinh đội tuyển cầu lông trường Trung học phổ thông Đoan Hùng Phú Thọ\n\n## Abstract\nThe usage of the basic research methods is toselect possible exercises with the aim of developingthe ability to coordinate movements for malestudents of the Badminton Team at Doan Hung, PhuTho Highschool. The research's result will be thefundementals for the Badminton teaching andtraining for many highschools in Phu Tho Province.\n\n## Metadata\nOpenAlex ID: W7215530297\nYear: 2021\nVenue: Tạp chí Khoa học thể thao\nConcepts: Medicine, Computer science, Biology, Chemistry, Data collection\nAuthors: TS. Phạm Thị Thanh Hương, ThS. Nguyễn Thị Hồng Phượng\nURL: https://openalex.org/W7215530297",
+  "passages": [
+    {
+      "passage_id": "OPENALEX_W7215530297::P000",
+      "document_id": "OPENALEX_W7215530297",
+      "text": "# Lựa chọn một số bài tập nhằm phát triển khả năng phối hợp vận động cho nam học sinh đội tuyển cầu lông trường Trung học phổ thông Đoan Hùng Phú Thọ",
+      "start_char": 0,
+      "end_char": 149,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "Lựa chọn một số bài tập nhằm phát triển khả năng phối hợp vận động cho nam học sinh đội tuyển cầu lông trường Trung học phổ thông Đoan Hùng Phú Thọ",
+      "metadata": {
+        "section_id": "SEC001",
+        "paragraph_id": "PARA001",
+        "document_version": 1,
+        "category": "OPENALEX",
+        "source": "openalex",
+        "language": "en",
+        "url": "https://openalex.org/W7215530297",
+        "token_reduction": {
+          "raw_tokens": 160,
+          "cleaned_tokens": 160,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "OPENALEX_W7215530297::P001",
+      "document_id": "OPENALEX_W7215530297",
+      "text": "## Abstract\nThe usage of the basic research methods is toselect possible exercises with the aim of developingthe ability to coordinate movements for malestudents of the Badminton Team at Doan Hung, PhuTho Highschool.",
+      "start_char": 151,
+      "end_char": 367,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "Abstract",
+      "metadata": {
+        "section_id": "SEC002",
+        "paragraph_id": "PARA001",
+        "document_version": 1,
+        "category": "OPENALEX",
+        "source": "openalex",
+        "language": "en",
+        "url": "https://openalex.org/W7215530297",
+        "token_reduction": {
+          "raw_tokens": 160,
+          "cleaned_tokens": 160,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "OPENALEX_W7215530297::P002",
+      "document_id": "OPENALEX_W7215530297",
+      "text": "The usage of the basic research methods is toselect possible exercises with the aim of developingthe ability to coordinate movements for malestudents of the Badminton Team at Doan Hung, PhuTho Highschool. The research's result will be thefundementals for the Badminton teaching andtraining for many highschools in Phu Tho Province.",
+      "start_char": 163,
+      "end_char": 494,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "Abstract",
+      "metadata": {
+        "section_id": "SEC002",
+        "paragraph_id": "PARA002",
+        "document_version": 1,
+        "category": "OPENALEX",
+        "source": "openalex",
+        "language": "en",
+        "url": "https://openalex.org/W7215530297",
+        "token_reduction": {
+          "raw_tokens": 160,
+          "cleaned_tokens": 160,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "OPENALEX_W7215530297::P003",
+      "document_id": "OPENALEX_W7215530297",
+      "text": "## Metadata\nOpenAlex ID: W7215530297\nYear: 2021\nVenue: Tạp chí Khoa học thể thao\nConcepts: Medicine, Computer science, Biology, Chemistry, Data collection\nAuthors: TS. Phạm Thị Thanh Hương, ThS. Nguyễn Thị Hồng Phượng\nURL: https://openalex.org/W7215530297",
+      "start_char": 496,
+      "end_char": 751,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "Metadata",
+      "metadata": {
+        "section_id": "SEC003",
+        "paragraph_id": "PARA002",
+        "document_version": 1,
+        "category": "OPENALEX",
+        "source": "openalex",
+        "language": "en",
+        "url": "https://openalex.org/W7215530297",
+        "token_reduction": {
+          "raw_tokens": 160,
+          "cleaned_tokens": 160,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    }
+  ],
+  "structural_metadata": {},
+  "content_hash": "2fef1d0adfb1dd6e",
+  "created_at": 1795695153.1345184,
+  "metadata": {
+    "category": "OPENALEX",
+    "source": "openalex",
+    "language": "en",
+    "url": "https://openalex.org/W7215530297",
+    "token_reduction": {
+      "raw_tokens": 160,
+      "cleaned_tokens": 160,
+      "tokens_saved": 0,
+      "reduction_pct": 0.0,
+      "removed_lines_count": 0
+    },
+    "chunker_version": "v5.0"
+  }
+}

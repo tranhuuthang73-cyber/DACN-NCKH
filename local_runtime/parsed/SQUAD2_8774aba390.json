@@ -1,0 +1,28 @@
+{
+  "document_id": "SQUAD2_8774aba390",
+  "sections": [
+    {
+      "title": "# Haar Transform",
+      "start": 0,
+      "end": 18
+    },
+    {
+      "title": "## Passage",
+      "start": 18,
+      "end": 99
+    }
+  ],
+  "paragraphs": [
+    {
+      "text": "# Haar Transform",
+      "start": 0,
+      "end": 16
+    },
+    {
+      "text": "## Passage\nAlfréd Haar proposed the Haar wavelet in 1909 as an orthonormal basis.",
+      "start": 18,
+      "end": 99
+    }
+  ],
+  "total_tokens": 17
+}

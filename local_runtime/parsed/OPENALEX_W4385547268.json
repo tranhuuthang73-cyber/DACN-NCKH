@@ -1,0 +1,38 @@
+{
+  "document_id": "OPENALEX_W4385547268",
+  "sections": [
+    {
+      "title": "# MẠNG LƯỚI CHỢ NÔNG THÔN TỈNH THÁI NGUYÊN TRƯỚC NĂM 1945",
+      "start": 0,
+      "end": 59
+    },
+    {
+      "title": "## Abstract",
+      "start": 59,
+      "end": 1134
+    },
+    {
+      "title": "## Metadata",
+      "start": 1134,
+      "end": 1344
+    }
+  ],
+  "paragraphs": [
+    {
+      "text": "# MẠNG LƯỚI CHỢ NÔNG THÔN TỈNH THÁI NGUYÊN TRƯỚC NĂM 1945",
+      "start": 0,
+      "end": 57
+    },
+    {
+      "text": "## Abstract\nTrong lịch sử, mạng lưới chợ nông thôn ra đời là kết quả của sự phát triển quan hệ hàng ",
+      "start": 59,
+      "end": 1132
+    },
+    {
+      "text": "## Metadata\nOpenAlex ID: W4385547268\nYear: 2023\nVenue: TNU Journal of Science and Technology\nConcept",
+      "start": 1134,
+      "end": 1344
+    }
+  ],
+  "total_tokens": 991
+}

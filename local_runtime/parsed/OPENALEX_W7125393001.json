@@ -1,0 +1,38 @@
+{
+  "document_id": "OPENALEX_W7125393001",
+  "sections": [
+    {
+      "title": "# Tái phát sinh hóa sau điều trị triệt căn ung thư tuyến tiền liệt",
+      "start": 0,
+      "end": 68
+    },
+    {
+      "title": "## Abstract",
+      "start": 68,
+      "end": 1596
+    },
+    {
+      "title": "## Metadata",
+      "start": 1596,
+      "end": 1850
+    }
+  ],
+  "paragraphs": [
+    {
+      "text": "# Tái phát sinh hóa sau điều trị triệt căn ung thư tuyến tiền liệt",
+      "start": 0,
+      "end": 66
+    },
+    {
+      "text": "## Abstract\nUng thư tuyến tiền liệt (TTL) là bệnh ác tính phổ biến, với 27–53% trường hợp tái phát s",
+      "start": 68,
+      "end": 1594
+    },
+    {
+      "text": "## Metadata\nOpenAlex ID: W7125393001\nYear: 2026\nVenue: Y HOC TP HO CHI MINH\nConcepts: Context (archa",
+      "start": 1596,
+      "end": 1850
+    }
+  ],
+  "total_tokens": 1332
+}

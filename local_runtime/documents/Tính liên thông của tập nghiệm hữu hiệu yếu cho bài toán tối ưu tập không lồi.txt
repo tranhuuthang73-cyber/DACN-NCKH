@@ -1,0 +1,12 @@
+# Tính liên thông của tập nghiệm hữu hiệu yếu cho bài toán tối ưu tập không lồi
+
+## Abstract
+Bài báo này xem xét một bài toán tối ưu tập không lồi và thảo luận các điều kiện liên thông cho tập nghiệm hữu hiệu yếu của nó. Đầu tiên, các khái niệm khác nhau về tính liên thông cho ánh xạ có giá trị tập được đề xuất. Thứ hai, các điều kiện đủ cho tính liên thông cho một dạng mở rộng của hàm khoảng cách định hướng của Hiriart-Urruty được trình bày. Cuối cùng, tính liên thông của tập nghiệm hữu hiệu yếu cho bài toán trên được nghiên cứu thông qua dạng mở rộng của hàm khoảng cách định hướng của Hiriart-Urruty.
+
+## Metadata
+OpenAlex ID: W4381053643
+Year: 2023
+Venue: Can Tho University Journal of Science
+Concepts: Chemistry, Stereochemistry
+Authors: Thái Anh Nguyễn, Thanh Dược Phạm, Thị Ngọc Tuyết Nguyễn
+URL: https://doi.org/10.22144/ctu.jvn.2023.088

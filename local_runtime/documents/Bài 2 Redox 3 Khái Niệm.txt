@@ -1,0 +1,13 @@
+BÀI 2: PHẢN ỨNG OXI HÓA - KHỬ
+
+2.1. Chất khử
+Chất khử là chất nhường electron cho chất khác và có số oxi hóa tăng sau phản ứng.
+Ví dụ: Kim loại Zn nhường 2 electron để tạo thành ion Zn2+.
+
+2.2. Chất oxi hóa
+Chất oxi hóa là chất nhận electron từ chất khác và có số oxi hóa giảm sau phản ứng.
+Ví dụ: Ion H+ nhận electron tạo thành khí H2.
+
+2.3. Quá trình oxi hóa
+Quá trình oxi hóa là quá trình chất khử nhường electron (sự oxi hóa).
+Ngược lại, quá trình khử là quá trình chất oxi hóa nhận electron.

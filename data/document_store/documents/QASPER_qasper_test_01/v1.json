@@ -1,0 +1,106 @@
+{
+  "document_id": "QASPER_qasper_test_01",
+  "version": 1,
+  "title": "Wavelet Memory Paper",
+  "raw_text": "# Wavelet Memory Paper\n\n## Abstract\nWe study orthogonal Haar wavelets for continual knowledge editing.\n\n## Method\nHaar decomposition achieves O(log N) updates.",
+  "passages": [
+    {
+      "passage_id": "QASPER_qasper_test_01::P000",
+      "document_id": "QASPER_qasper_test_01",
+      "text": "# Wavelet Memory Paper",
+      "start_char": 0,
+      "end_char": 22,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "Wavelet Memory Paper",
+      "metadata": {
+        "section_id": "SEC001",
+        "paragraph_id": "PARA001",
+        "document_version": 1,
+        "category": "QASPER",
+        "source": "qasper",
+        "language": "en",
+        "url": "",
+        "token_reduction": {
+          "raw_tokens": 31,
+          "cleaned_tokens": 31,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "QASPER_qasper_test_01::P001",
+      "document_id": "QASPER_qasper_test_01",
+      "text": "## Abstract\nWe study orthogonal Haar wavelets for continual knowledge editing.",
+      "start_char": 24,
+      "end_char": 102,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "Abstract",
+      "metadata": {
+        "section_id": "SEC002",
+        "paragraph_id": "PARA001",
+        "document_version": 1,
+        "category": "QASPER",
+        "source": "qasper",
+        "language": "en",
+        "url": "",
+        "token_reduction": {
+          "raw_tokens": 31,
+          "cleaned_tokens": 31,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "QASPER_qasper_test_01::P002",
+      "document_id": "QASPER_qasper_test_01",
+      "text": "## Method\nHaar decomposition achieves O(log N) updates.",
+      "start_char": 104,
+      "end_char": 159,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "Method",
+      "metadata": {
+        "section_id": "SEC003",
+        "paragraph_id": "PARA002",
+        "document_version": 1,
+        "category": "QASPER",
+        "source": "qasper",
+        "language": "en",
+        "url": "",
+        "token_reduction": {
+          "raw_tokens": 31,
+          "cleaned_tokens": 31,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    }
+  ],
+  "structural_metadata": {},
+  "content_hash": "c01a6fbdd89c84f5",
+  "created_at": 1795702374.91973,
+  "metadata": {
+    "category": "QASPER",
+    "source": "qasper",
+    "language": "en",
+    "url": "",
+    "token_reduction": {
+      "raw_tokens": 31,
+      "cleaned_tokens": 31,
+      "tokens_saved": 0,
+      "reduction_pct": 0.0,
+      "removed_lines_count": 0
+    },
+    "chunker_version": "v5.0"
+  }
+}

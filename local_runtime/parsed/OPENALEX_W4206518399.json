@@ -1,0 +1,38 @@
+{
+  "document_id": "OPENALEX_W4206518399",
+  "sections": [
+    {
+      "title": "# HÌNH TƯỢNG CON NGƯỜI CHẤN THƯƠNG TRONG TIỂU THUYẾT TÔI NGỒI ĐÂY CHỜ CƠN BÃO TỚI CỦA NGUYỄN HẢI NHẬT HUY",
+      "start": 0,
+      "end": 107
+    },
+    {
+      "title": "## Abstract",
+      "start": 107,
+      "end": 813
+    },
+    {
+      "title": "## Metadata",
+      "start": 813,
+      "end": 1024
+    }
+  ],
+  "paragraphs": [
+    {
+      "text": "# HÌNH TƯỢNG CON NGƯỜI CHẤN THƯƠNG TRONG TIỂU THUYẾT TÔI NGỒI ĐÂY CHỜ CƠN BÃO TỚI CỦA NGUYỄN HẢI NHẬ",
+      "start": 0,
+      "end": 105
+    },
+    {
+      "text": "## Abstract\nHình tượng con người chấn thương không chỉ là tín hiệu văn chương của một tác giả hay mộ",
+      "start": 107,
+      "end": 811
+    },
+    {
+      "text": "## Metadata\nOpenAlex ID: W4206518399\nYear: 2021\nVenue: Tạp chí Khoa học\nConcepts: Stereochemistry, C",
+      "start": 813,
+      "end": 1024
+    }
+  ],
+  "total_tokens": 762
+}

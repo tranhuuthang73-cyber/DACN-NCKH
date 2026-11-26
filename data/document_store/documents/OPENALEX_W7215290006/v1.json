@@ -1,0 +1,133 @@
+{
+  "document_id": "OPENALEX_W7215290006",
+  "version": 1,
+  "title": "Lựa chọn bài tập thể dục aerobic phát triển thể lực chung cho nữ sinh viên học viện Nông nghiệp Việt Nam",
+  "raw_text": "# Lựa chọn bài tập thể dục aerobic phát triển thể lực chung cho nữ sinh viên học viện Nông nghiệp Việt Nam\n\n## Abstract\nUsing the method of interviewing Aerobic lecturers and experts to select exercises, based onthe evaluation of lecturers and experts who selected14 exercises to apply for female students ofVietNam National University of Agriculture. Inaddition, the research also conducted in-depthinterviews with students to understand theaspirations, training demands and initialevaluation of students when practicing Aerobic.\n\n## Metadata\nOpenAlex ID: W7215290006\nYear: 2020\nVenue: Tạp chí Khoa học thể thao\nConcepts: Interview, Medical education, Psychology, Chemistry, Qualitative research\nAuthors: ThS. Nguyễn Thị Xuân Hòa, TS. Đặng Đức Hoàn, ThS. Phan Thị Điều\nURL: https://openalex.org/W7215290006",
+  "passages": [
+    {
+      "passage_id": "OPENALEX_W7215290006::P000",
+      "document_id": "OPENALEX_W7215290006",
+      "text": "# Lựa chọn bài tập thể dục aerobic phát triển thể lực chung cho nữ sinh viên học viện Nông nghiệp Việt Nam",
+      "start_char": 0,
+      "end_char": 106,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "Lựa chọn bài tập thể dục aerobic phát triển thể lực chung cho nữ sinh viên học viện Nông nghiệp Việt Nam",
+      "metadata": {
+        "section_id": "SEC001",
+        "paragraph_id": "PARA001",
+        "document_version": 1,
+        "category": "OPENALEX",
+        "source": "openalex",
+        "language": "en",
+        "url": "https://openalex.org/W7215290006",
+        "token_reduction": {
+          "raw_tokens": 155,
+          "cleaned_tokens": 155,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "OPENALEX_W7215290006::P001",
+      "document_id": "OPENALEX_W7215290006",
+      "text": "## Abstract\nUsing the method of interviewing Aerobic lecturers and experts to select exercises, based onthe evaluation of lecturers and experts who selected14 exercises to apply for female students ofVietNam National University of Agriculture.",
+      "start_char": 108,
+      "end_char": 351,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "Abstract",
+      "metadata": {
+        "section_id": "SEC002",
+        "paragraph_id": "PARA001",
+        "document_version": 1,
+        "category": "OPENALEX",
+        "source": "openalex",
+        "language": "en",
+        "url": "https://openalex.org/W7215290006",
+        "token_reduction": {
+          "raw_tokens": 155,
+          "cleaned_tokens": 155,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "OPENALEX_W7215290006::P002",
+      "document_id": "OPENALEX_W7215290006",
+      "text": "Using the method of interviewing Aerobic lecturers and experts to select exercises, based onthe evaluation of lecturers and experts who selected14 exercises to apply for female students ofVietNam National University of Agriculture. Inaddition, the research also conducted in-depthinterviews with students to understand theaspirations, training demands and initialevaluation of students when practicing Aerobic.",
+      "start_char": 120,
+      "end_char": 530,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "Abstract",
+      "metadata": {
+        "section_id": "SEC002",
+        "paragraph_id": "PARA002",
+        "document_version": 1,
+        "category": "OPENALEX",
+        "source": "openalex",
+        "language": "en",
+        "url": "https://openalex.org/W7215290006",
+        "token_reduction": {
+          "raw_tokens": 155,
+          "cleaned_tokens": 155,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "OPENALEX_W7215290006::P003",
+      "document_id": "OPENALEX_W7215290006",
+      "text": "## Metadata\nOpenAlex ID: W7215290006\nYear: 2020\nVenue: Tạp chí Khoa học thể thao\nConcepts: Interview, Medical education, Psychology, Chemistry, Qualitative research\nAuthors: ThS. Nguyễn Thị Xuân Hòa, TS. Đặng Đức Hoàn, ThS. Phan Thị Điều\nURL: https://openalex.org/W7215290006",
+      "start_char": 532,
+      "end_char": 807,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "Metadata",
+      "metadata": {
+        "section_id": "SEC003",
+        "paragraph_id": "PARA002",
+        "document_version": 1,
+        "category": "OPENALEX",
+        "source": "openalex",
+        "language": "en",
+        "url": "https://openalex.org/W7215290006",
+        "token_reduction": {
+          "raw_tokens": 155,
+          "cleaned_tokens": 155,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    }
+  ],
+  "structural_metadata": {},
+  "content_hash": "f76d6c889b7edaa9",
+  "created_at": 1795695150.760067,
+  "metadata": {
+    "category": "OPENALEX",
+    "source": "openalex",
+    "language": "en",
+    "url": "https://openalex.org/W7215290006",
+    "token_reduction": {
+      "raw_tokens": 155,
+      "cleaned_tokens": 155,
+      "tokens_saved": 0,
+      "reduction_pct": 0.0,
+      "removed_lines_count": 0
+    },
+    "chunker_version": "v5.0"
+  }
+}

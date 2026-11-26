@@ -1,0 +1,573 @@
+{
+  "document_id": "DOC_E2E_PERF_36",
+  "sections": [
+    {
+      "title": "=== Page 1 ===",
+      "start": 0,
+      "end": 15
+    },
+    {
+      "title": "1. GIỚI THIỆU HỆ MÃ KHÓA ĐỐI XỨNG:",
+      "start": 15,
+      "end": 543
+    },
+    {
+      "title": "=== Page 2 ===",
+      "start": 543,
+      "end": 558
+    },
+    {
+      "title": "1. GIỚI THIỆU HỆ MÃ KHÓA ĐỐI XỨNG (Tiếp theo):",
+      "start": 558,
+      "end": 928
+    },
+    {
+      "title": "=== Page 3 ===",
+      "start": 928,
+      "end": 943
+    },
+    {
+      "title": "1. GIỚI THIỆU HỆ MÃ KHÓA ĐỐI XỨNG - Phân loại chi tiết:",
+      "start": 943,
+      "end": 1517
+    },
+    {
+      "title": "=== Page 4 ===",
+      "start": 1517,
+      "end": 1532
+    },
+    {
+      "title": "2. HỆ MÃ DỊCH VÒNG:",
+      "start": 1532,
+      "end": 1833
+    },
+    {
+      "title": "=== Page 5 ===",
+      "start": 1833,
+      "end": 1848
+    },
+    {
+      "title": "2. HỆ MÃ DỊCH VÒNG - Thuật toán và Công thức:",
+      "start": 1848,
+      "end": 2152
+    },
+    {
+      "title": "=== Page 6 ===",
+      "start": 2152,
+      "end": 2167
+    },
+    {
+      "title": "2. HỆ MÃ DỊCH VÒNG - Đánh giá an ninh:",
+      "start": 2167,
+      "end": 2475
+    },
+    {
+      "title": "=== Page 7 ===",
+      "start": 2475,
+      "end": 2490
+    },
+    {
+      "title": "3. PHÁ MÃ:",
+      "start": 2490,
+      "end": 2977
+    },
+    {
+      "title": "=== Page 8 ===",
+      "start": 2977,
+      "end": 2992
+    },
+    {
+      "title": "3. PHÁ MÃ - Các kiểu tấn công kinh điển:",
+      "start": 2992,
+      "end": 3482
+    },
+    {
+      "title": "=== Page 9 ===",
+      "start": 3482,
+      "end": 3497
+    },
+    {
+      "title": "3. PHÁ MÃ - Phương pháp thống kê tần suất:",
+      "start": 3497,
+      "end": 3918
+    },
+    {
+      "title": "=== Page 10 ===",
+      "start": 3918,
+      "end": 3934
+    },
+    {
+      "title": "4. HỆ MÃ ĐƠN BẢNG:",
+      "start": 3934,
+      "end": 4275
+    },
+    {
+      "title": "=== Page 11 ===",
+      "start": 4275,
+      "end": 4291
+    },
+    {
+      "title": "4. HỆ MÃ ĐƠN BẢNG - Điểm yếu thám mã:",
+      "start": 4291,
+      "end": 4688
+    },
+    {
+      "title": "=== Page 12 ===",
+      "start": 4688,
+      "end": 4704
+    },
+    {
+      "title": "4. HỆ MÃ ĐƠN BẢNG - Biện pháp cải tiến:",
+      "start": 4704,
+      "end": 4949
+    },
+    {
+      "title": "=== Page 13 ===",
+      "start": 4949,
+      "end": 4965
+    },
+    {
+      "title": "5. HỆ MÃ AFFINE:",
+      "start": 4965,
+      "end": 5247
+    },
+    {
+      "title": "=== Page 14 ===",
+      "start": 5247,
+      "end": 5263
+    },
+    {
+      "title": "5. HỆ MÃ AFFINE - Thuật toán và Công thức:",
+      "start": 5263,
+      "end": 5636
+    },
+    {
+      "title": "=== Page 15 ===",
+      "start": 5636,
+      "end": 5652
+    },
+    {
+      "title": "5. HỆ MÃ AFFINE - Ví dụ minh họa:",
+      "start": 5652,
+      "end": 5958
+    },
+    {
+      "title": "=== Page 16 ===",
+      "start": 5958,
+      "end": 5974
+    },
+    {
+      "title": "6. HỆ MÃ VIGENERE:",
+      "start": 5974,
+      "end": 6278
+    },
+    {
+      "title": "=== Page 17 ===",
+      "start": 6278,
+      "end": 6294
+    },
+    {
+      "title": "6. HỆ MÃ VIGENERE - Thuật toán và Bảng Vigenere:",
+      "start": 6294,
+      "end": 6601
+    },
+    {
+      "title": "=== Page 18 ===",
+      "start": 6601,
+      "end": 6617
+    },
+    {
+      "title": "6. HỆ MÃ VIGENERE - Phá mã Vigenere:",
+      "start": 6617,
+      "end": 7047
+    },
+    {
+      "title": "=== Page 19 ===",
+      "start": 7047,
+      "end": 7063
+    },
+    {
+      "title": "7. HỆ MÃ HILL:",
+      "start": 7063,
+      "end": 7408
+    },
+    {
+      "title": "=== Page 20 ===",
+      "start": 7408,
+      "end": 7424
+    },
+    {
+      "title": "7. HỆ MÃ HILL - Công thức và Điều kiện khả nghịch:",
+      "start": 7424,
+      "end": 7803
+    },
+    {
+      "title": "=== Page 21 ===",
+      "start": 7803,
+      "end": 7819
+    },
+    {
+      "title": "7. HỆ MÃ HILL - Đánh giá an ninh:",
+      "start": 7819,
+      "end": 8153
+    },
+    {
+      "title": "=== Page 22 ===",
+      "start": 8153,
+      "end": 8169
+    },
+    {
+      "title": "8. HỆ MÃ HOÁ ĐỘN MỘT LẦN:",
+      "start": 8169,
+      "end": 8494
+    },
+    {
+      "title": "2. Khóa được tạo hoàn toàn ngẫu nhiên thực sự (true random).",
+      "start": 8494,
+      "end": 8555
+    },
+    {
+      "title": "3. Mỗi khóa chỉ được sử dụng duy nhất một lần và sau đó hủy bỏ.",
+      "start": 8555,
+      "end": 8620
+    },
+    {
+      "title": "=== Page 23 ===",
+      "start": 8620,
+      "end": 8636
+    },
+    {
+      "title": "8. HỆ MÃ HOÁ ĐỘN MỘT LẦN - Cơ chế toán học:",
+      "start": 8636,
+      "end": 8944
+    },
+    {
+      "title": "=== Page 24 ===",
+      "start": 8944,
+      "end": 8960
+    },
+    {
+      "title": "8. HỆ MÃ HOÁ ĐỘN MỘT LẦN - Thách thức triển khai thực tế:",
+      "start": 8960,
+      "end": 9380
+    },
+    {
+      "title": "=== Page 25 ===",
+      "start": 9380,
+      "end": 9396
+    },
+    {
+      "title": "9. HỆ MÃ HOÁ DÒNG:",
+      "start": 9396,
+      "end": 9752
+    },
+    {
+      "title": "=== Page 26 ===",
+      "start": 9752,
+      "end": 9768
+    },
+    {
+      "title": "9. HỆ MÃ HOÁ DÒNG - Thuật toán và Phép toán bit:",
+      "start": 9768,
+      "end": 10159
+    },
+    {
+      "title": "=== Page 27 ===",
+      "start": 10159,
+      "end": 10175
+    },
+    {
+      "title": "9. HỆ MÃ HOÁ DÒNG - Phân loại hệ mã dòng:",
+      "start": 10175,
+      "end": 10600
+    },
+    {
+      "title": "=== Page 28 ===",
+      "start": 10600,
+      "end": 10616
+    },
+    {
+      "title": "10. HỆ MÃ HOÁ AUTOKEY:",
+      "start": 10616,
+      "end": 10883
+    },
+    {
+      "title": "=== Page 29 ===",
+      "start": 10883,
+      "end": 10899
+    },
+    {
+      "title": "10. HỆ MÃ HOÁ AUTOKEY - Cơ chế mở rộng khóa:",
+      "start": 10899,
+      "end": 11260
+    },
+    {
+      "title": "=== Page 30 ===",
+      "start": 11260,
+      "end": 11276
+    },
+    {
+      "title": "10. HỆ MÃ HOÁ AUTOKEY - Đánh giá ưu nhược điểm:",
+      "start": 11276,
+      "end": 11617
+    },
+    {
+      "title": "=== Page 31 ===",
+      "start": 11617,
+      "end": 11633
+    },
+    {
+      "title": "11. HỆ MÃ HOÁ PLAYFAIR:",
+      "start": 11633,
+      "end": 11918
+    },
+    {
+      "title": "=== Page 32 ===",
+      "start": 11918,
+      "end": 11934
+    },
+    {
+      "title": "11. HỆ MÃ HOÁ PLAYFAIR - Quy tắc mã hóa ma trận:",
+      "start": 11934,
+      "end": 12048
+    },
+    {
+      "title": "1. Nếu hai ký tự nằm cùng một hàng: Thay bằng các ký tự ngay bên phải (vòng lại đầu hàng nếu ở mép phải).",
+      "start": 12048,
+      "end": 12154
+    },
+    {
+      "title": "2. Nếu hai ký tự nằm cùng một cột: Thay bằng các ký tự ngay bên dưới (vòng lại đầu cột nếu ở mép dưới).",
+      "start": 12154,
+      "end": 12258
+    },
+    {
+      "title": "3. Nếu hai ký tự tạo thành hình chữ nhật: Thay bằng các ký tự ở cùng hàng nhưng nằm trên cột của ký tự kia.",
+      "start": 12258,
+      "end": 12367
+    },
+    {
+      "title": "=== Page 33 ===",
+      "start": 12367,
+      "end": 12383
+    },
+    {
+      "title": "11. HỆ MÃ HOÁ PLAYFAIR - Xử lý trường hợp đặc biệt:",
+      "start": 12383,
+      "end": 12770
+    },
+    {
+      "title": "=== Page 34 ===",
+      "start": 12770,
+      "end": 12786
+    },
+    {
+      "title": "12. HỆ MÃ HOÁ HOÁN VỊ:",
+      "start": 12786,
+      "end": 13123
+    },
+    {
+      "title": "=== Page 35 ===",
+      "start": 13123,
+      "end": 13139
+    },
+    {
+      "title": "12. HỆ MÃ HOÁ HOÁN VỊ - Các kỹ thuật hoán vị phổ biến:",
+      "start": 13139,
+      "end": 13605
+    },
+    {
+      "title": "=== Page 36 ===",
+      "start": 13605,
+      "end": 13621
+    },
+    {
+      "title": "12. HỆ MÃ HOÁ HOÁN VỊ - So sánh và Ứng dụng:",
+      "start": 13621,
+      "end": 13977
+    }
+  ],
+  "paragraphs": [
+    {
+      "text": "=== Page 1 ===\n1. GIỚI THIỆU HỆ MÃ KHÓA ĐỐI XỨNG:\n- Hệ mã khóa đối xứng là phương pháp mật mã xuất h",
+      "start": 0,
+      "end": 541
+    },
+    {
+      "text": "=== Page 2 ===\n1. GIỚI THIỆU HỆ MÃ KHÓA ĐỐI XỨNG (Tiếp theo):\n- Sơ đồ mã hóa đối xứng: Bản rõ P kết ",
+      "start": 543,
+      "end": 926
+    },
+    {
+      "text": "=== Page 3 ===\n1. GIỚI THIỆU HỆ MÃ KHÓA ĐỐI XỨNG - Phân loại chi tiết:\n- Hai họ phương pháp kỹ thuật",
+      "start": 928,
+      "end": 1515
+    },
+    {
+      "text": "=== Page 4 ===\n2. HỆ MÃ DỊCH VÒNG:\n- Khái niệm: Còn gọi là mã Caesar, là một trong những hệ mã hóa t",
+      "start": 1517,
+      "end": 1831
+    },
+    {
+      "text": "=== Page 5 ===\n2. HỆ MÃ DỊCH VÒNG - Thuật toán và Công thức:\n- Khóa bí mật k thuộc tập Z26: k thuộc ",
+      "start": 1833,
+      "end": 2150
+    },
+    {
+      "text": "=== Page 6 ===\n2. HỆ MÃ DỊCH VÒNG - Đánh giá an ninh:\n- Không gian khóa của hệ mã dịch vòng rất nhỏ,",
+      "start": 2152,
+      "end": 2473
+    },
+    {
+      "text": "=== Page 7 ===\n3. PHÁ MÃ:\n- Khái niệm thám mã: Khoa học nghiên cứu các kỹ thuật nhằm phá vỡ hệ mật h",
+      "start": 2475,
+      "end": 2975
+    },
+    {
+      "text": "=== Page 8 ===\n3. PHÁ MÃ - Các kiểu tấn công kinh điển:\n- Tấn công chỉ biết bản mã (Ciphertext-only ",
+      "start": 2977,
+      "end": 3480
+    },
+    {
+      "text": "=== Page 9 ===\n3. PHÁ MÃ - Phương pháp thống kê tần suất:\n- Các phương pháp thám mã phổ biến gồm tấn",
+      "start": 3482,
+      "end": 3916
+    },
+    {
+      "text": "=== Page 10 ===\n4. HỆ MÃ ĐƠN BẢNG:\n- Khái niệm: Hệ mã thay thế đơn bảng (Monoalphabetic Substitution",
+      "start": 3918,
+      "end": 4273
+    },
+    {
+      "text": "=== Page 11 ===\n4. HỆ MÃ ĐƠN BẢNG - Điểm yếu thám mã:\n- Mặc dù không gian khóa 26! vô cùng lớn, hệ m",
+      "start": 4275,
+      "end": 4686
+    },
+    {
+      "text": "=== Page 12 ===\n4. HỆ MÃ ĐƠN BẢNG - Biện pháp cải tiến:\n- Sử dụng các kỹ thuật mã đa bảng hoặc mã hó",
+      "start": 4688,
+      "end": 4947
+    },
+    {
+      "text": "=== Page 13 ===\n5. HỆ MÃ AFFINE:\n- Khái niệm: Hệ mã Affine là dạng mở rộng của hệ mã dịch vòng, kết ",
+      "start": 4949,
+      "end": 5245
+    },
+    {
+      "text": "=== Page 14 ===\n5. HỆ MÃ AFFINE - Thuật toán và Công thức:\n- Không gian khóa: Số lượng giá trị a hợp",
+      "start": 5247,
+      "end": 5634
+    },
+    {
+      "text": "=== Page 15 ===\n5. HỆ MÃ AFFINE - Ví dụ minh họa:\n- Chọn khóa K = (7, 3). Ta có gcd(7, 26) = 1 và ng",
+      "start": 5636,
+      "end": 5956
+    },
+    {
+      "text": "=== Page 16 ===\n6. HỆ MÃ VIGENERE:\n- Khái niệm: Hệ mã hóa thay thế đa bảng (Polyalphabetic Cipher) n",
+      "start": 5958,
+      "end": 6276
+    },
+    {
+      "text": "=== Page 17 ===\n6. HỆ MÃ VIGENERE - Thuật toán và Bảng Vigenere:\n- Khóa bí mật là một từ khóa có độ ",
+      "start": 6278,
+      "end": 6599
+    },
+    {
+      "text": "=== Page 18 ===\n6. HỆ MÃ VIGENERE - Phá mã Vigenere:\n- Phương pháp thử nghiệm Kasiski (1863): Tìm cá",
+      "start": 6601,
+      "end": 7045
+    },
+    {
+      "text": "=== Page 19 ===\n7. HỆ MÃ HILL:\n- Khái niệm: Phát minh bởi Lester S. Hill năm 1929, là hệ mã hóa thay",
+      "start": 7047,
+      "end": 7406
+    },
+    {
+      "text": "=== Page 20 ===\n7. HỆ MÃ HILL - Công thức và Điều kiện khả nghịch:\n- Điều kiện khóa hợp lệ: Ma trận ",
+      "start": 7408,
+      "end": 7801
+    },
+    {
+      "text": "=== Page 21 ===\n7. HỆ MÃ HILL - Đánh giá an ninh:\n- Hệ mã Hill hoàn toàn chống lại được phương pháp ",
+      "start": 7803,
+      "end": 8151
+    },
+    {
+      "text": "=== Page 22 ===\n8. HỆ MÃ HOÁ ĐỘN MỘT LẦN:\n- Khái niệm: Hệ mã hóa hoàn hảo (Vernam Cipher / One-Time ",
+      "start": 8153,
+      "end": 8618
+    },
+    {
+      "text": "=== Page 23 ===\n8. HỆ MÃ HOÁ ĐỘN MỘT LẦN - Cơ chế toán học:\n- Không gian bản rõ, bản mã và khóa: P =",
+      "start": 8620,
+      "end": 8942
+    },
+    {
+      "text": "=== Page 24 ===\n8. HỆ MÃ HOÁ ĐỘN MỘT LẦN - Thách thức triển khai thực tế:\n- Mặc dù an ninh tuyệt đối",
+      "start": 8944,
+      "end": 9378
+    },
+    {
+      "text": "=== Page 25 ===\n9. HỆ MÃ HOÁ DÒNG:\n- Khái niệm: Hệ mã hóa dòng (Stream Cipher) là một giải pháp thực",
+      "start": 9380,
+      "end": 9750
+    },
+    {
+      "text": "=== Page 26 ===\n9. HỆ MÃ HOÁ DÒNG - Thuật toán và Phép toán bit:\n- Dòng khóa được sinh tuần tự: zi =",
+      "start": 9752,
+      "end": 10157
+    },
+    {
+      "text": "=== Page 27 ===\n9. HỆ MÃ HOÁ DÒNG - Phân loại hệ mã dòng:\n- Hệ mã dòng đồng bộ (Synchronous Stream C",
+      "start": 10159,
+      "end": 10598
+    },
+    {
+      "text": "=== Page 28 ===\n10. HỆ MÃ HOÁ AUTOKEY:\n- Khái niệm: Hệ mã hóa tự động sinh khóa (Autokey Cipher), đề",
+      "start": 10600,
+      "end": 10881
+    },
+    {
+      "text": "=== Page 29 ===\n10. HỆ MÃ HOÁ AUTOKEY - Cơ chế mở rộng khóa:\n- Khóa k = k1, k2, ... ban đầu được mở ",
+      "start": 10883,
+      "end": 11258
+    },
+    {
+      "text": "=== Page 30 ===\n10. HỆ MÃ HOÁ AUTOKEY - Đánh giá ưu nhược điểm:\n- Ưu điểm: Loại bỏ tính chu kỳ tuần ",
+      "start": 11260,
+      "end": 11615
+    },
+    {
+      "text": "=== Page 31 ===\n11. HỆ MÃ HOÁ PLAYFAIR:\n- Khái niệm: Phát minh bởi Charles Wheatstone năm 1854 nhưng",
+      "start": 11617,
+      "end": 11916
+    },
+    {
+      "text": "=== Page 32 ===\n11. HỆ MÃ HOÁ PLAYFAIR - Quy tắc mã hóa ma trận:\n- Thay thế các cặp ký tự dựa trên q",
+      "start": 11918,
+      "end": 12365
+    },
+    {
+      "text": "=== Page 33 ===\n11. HỆ MÃ HOÁ PLAYFAIR - Xử lý trường hợp đặc biệt:\n- Nếu hai ký tự trong cặp giống ",
+      "start": 12367,
+      "end": 12768
+    },
+    {
+      "text": "=== Page 34 ===\n12. HỆ MÃ HOÁ HOÁN VỊ:\n- Khái niệm: Khác với 11 hệ mã thay thế ở trên, hệ mã hóa hoá",
+      "start": 12770,
+      "end": 13121
+    },
+    {
+      "text": "=== Page 35 ===\n12. HỆ MÃ HOÁ HOÁN VỊ - Các kỹ thuật hoán vị phổ biến:\n- Hoán vị đường rào (Rail Fen",
+      "start": 13123,
+      "end": 13603
+    },
+    {
+      "text": "=== Page 36 ===\n12. HỆ MÃ HOÁ HOÁN VỊ - So sánh và Ứng dụng:\n- So sánh: Mã thay thế làm biến đổi ký ",
+      "start": 13605,
+      "end": 13977
+    }
+  ],
+  "total_tokens": 10088
+}

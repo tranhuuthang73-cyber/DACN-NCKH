@@ -1,0 +1,997 @@
+{
+  "document_id": "DOC_REDTEAM_36P",
+  "version": 1,
+  "title": "Slide 36 Pages Cryptography",
+  "raw_text": "=== Page 1 ===\n1. GIỚI THIỆU HỆ MÃ KHÓA ĐỐI XỨNG:\n- Xuất hiện đầu tiên trong ngành mã hóa.\n- Các hệ mã này phần có từ trước năm 1970.\n- Hệ mã khóa bí mật hoặc hệ mã khóa cổ điển.\n- Các phương pháp này là cơ sở để phát triển các thuật toán mã hóa đối xứng hiện nay.\n- Có 2 phương pháp phổ biến:\n* Mã hóa thay thế.\n* Mã hóa hoán vị.\n\n=== Page 2 ===\n2. HỆ MÃ DỊCH VÒNG:\n- Định nghĩa: Không gian bản rõ P, bản mã C và khóa K đều thuộc Z26.\n- Hàm mã hóa: e_k(x) = (x + k) mod 26.\n- Hàm giải mã: d_k(y) = (y - k) mod 26.\n\n=== Page 3 ===\nCHUYÊN ĐỀ MẬT MÃ TRANG 3:\n\n=== Page 4 ===\nCHUYÊN ĐỀ MẬT MÃ TRANG 4:\n\n=== Page 5 ===\nCHUYÊN ĐỀ MẬT MÃ TRANG 5:\n\n=== Page 6 ===\nCHUYÊN ĐỀ MẬT MÃ TRANG 6:\n\n=== Page 7 ===\nCHUYÊN ĐỀ MẬT MÃ TRANG 7:\n\n=== Page 8 ===\nCHUYÊN ĐỀ MẬT MÃ TRANG 8:\n\n=== Page 9 ===\nCHUYÊN ĐỀ MẬT MÃ TRANG 9:\n\n=== Page 10 ===\n3. PHÁ MÃ:\nAn ninh hệ mã khóa:\n- An ninh vô điều kiện: Không thể phá mã dù có thời gian và tài nguyên vô hạn.\n- An ninh tính toán: Chi phí để phá vỡ vượt quá giá trị của thông tin mã hóa, hoặc thời gian phá mã vượt quá thời gian hữu dụng của thông tin.\n- Các phương pháp thám mã phổ biến gồm tấn công vét cạn và phân tích thống kê tần suất xuất hiện.\n\n=== Page 11 ===\n4. HỆ MÃ ĐƠN BẢNG:\n- Thay thế mỗi ký tự bằng một hoán vị cố định của bảng chữ cái.\n- Không gian khóa: 26! xấp xỉ 4 x 10^26.\n\n=== Page 15 ===\n5. HỆ MÃ AFFINE:\n- Công thức: e(x) = (a * x + b) mod 26 với gcd(a, 26) = 1.\n- Giải mã: d(y) = a^(-1) * (y - b) mod 26.\n\n=== Page 20 ===\n6. HỆ MÃ VIGENERE:\n- Sử dụng từ khóa lặp lại k = (k1, k2, ..., km).\n- Phá mã bằng phương pháp Kasiski và chỉ số trùng phùng Friedman.\n\n=== Page 25 ===\n7. HỆ MÃ HILL:\n- Sử dụng đại số tuyến tính và ma trận khóa m x m khả nghịch trên Z26.\n- C = P * K mod 26.\n\n=== Page 12 ===\nMỤC MỞ RỘNG TRANG 12:\n\n=== Page 13 ===\nMỤC MỞ RỘNG TRANG 13:\n\n=== Page 14 ===\nMỤC MỞ RỘNG TRANG 14:\n\n=== Page 16 ===\nMỤC MỞ RỘNG TRANG 16:\n\n=== Page 17 ===\nMỤC MỞ RỘNG TRANG 17:\n\n=== Page 18 ===\nMỤC MỞ RỘNG TRANG 18:\n\n=== Page 19 ===\nMỤC MỞ RỘNG TRANG 19:\n\n=== Page 21 ===\nMỤC MỞ RỘNG TRANG 21:\n\n=== Page 22 ===\nMỤC MỞ RỘNG TRANG 22:\n\n=== Page 23 ===\nMỤC MỞ RỘNG TRANG 23:\n\n=== Page 24 ===\nMỤC MỞ RỘNG TRANG 24:\n\n=== Page 26 ===\nMỤC MỞ RỘNG TRANG 26:\n\n=== Page 27 ===\nMỤC MỞ RỘNG TRANG 27:\n\n=== Page 28 ===\nMỤC MỞ RỘNG TRANG 28:\n\n=== Page 29 ===\nMỤC MỞ RỘNG TRANG 29:\n\n=== Page 30 ===\n8. HỆ MÃ HOÁ ĐỘN MỘT LẦN:\n- Hệ mã hóa hoàn hảo (Vernam Cipher / One-Time Pad).\n- Độ dài khóa bằng đúng độ dài thông điệp cần mã hóa và chỉ dùng duy nhất một lần.\n\n9. HỆ MÃ HOÁ DÒNG:\n- Sinh ra một chuỗi khóa z = z1, z2, z3...\n- Ta có: zi = fi (K, x1, ..., xi-1).\n- Bản rõ được mã hóa từng bit hoặc từng byte bằng phép XOR với dòng khóa z.\n- Ưu điểm: Tốc độ xử lý nhanh và độ trễ thấp trong truyền thông thời gian thực.\n\n=== Page 31 ===\n10. HỆ MÃ HOÁ AUTOKEY:\n- Cho P = C = K = Z26.\n- Khóa k = k1, k2, ... ban đầu được mở rộng bằng chính các ký tự của bản rõ (Autokey).\n- Công thức mã hóa: ci = (pi + ki) mod 26.\n\n=== Page 32 ===\nPHÂN TÍCH CHUYÊN SÂU TRANG 32:\n\n=== Page 33 ===\nPHÂN TÍCH CHUYÊN SÂU TRANG 33:\n\n=== Page 34 ===\nPHÂN TÍCH CHUYÊN SÂU TRANG 34:\n\n=== Page 35 ===\nPHÂN TÍCH CHUYÊN SÂU TRANG 35:\n\n=== Page 36 ===\n11. HỆ MÃ HOÁ PLAYFAIR:\n- Sử dụng ma trận ký tự 5x5 để mã hóa từng cặp ký tự (digram).\n- Thay thế các cặp ký tự dựa trên quy tắc cùng hàng, cùng cột hoặc tạo thành hình chữ nhật trên ma trận.",
+  "passages": [
+    {
+      "passage_id": "DOC_REDTEAM_36P::P000",
+      "document_id": "DOC_REDTEAM_36P",
+      "text": "1. GIỚI THIỆU HỆ MÃ KHÓA ĐỐI XỨNG:\n- Xuất hiện đầu tiên trong ngành mã hóa.\n- Các hệ mã này phần có từ trước năm 1970.\n- Hệ mã khóa bí mật hoặc hệ mã khóa cổ điển.\n- Các phương pháp này là cơ sở để phát triển các thuật toán mã hóa đối xứng hiện nay.",
+      "start_char": 15,
+      "end_char": 264,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "1. GIỚI THIỆU HỆ MÃ KHÓA ĐỐI XỨNG:",
+      "metadata": {
+        "section_id": "SEC002",
+        "paragraph_id": "PARA001",
+        "document_version": 1,
+        "page_number": 1,
+        "category": "Cryptography",
+        "token_reduction": {
+          "raw_tokens": 2033,
+          "cleaned_tokens": 1085,
+          "tokens_saved": 948,
+          "reduction_pct": 46.63,
+          "removed_lines_count": 52
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_REDTEAM_36P::P001",
+      "document_id": "DOC_REDTEAM_36P",
+      "text": "- Các phương pháp này là cơ sở để phát triển các thuật toán mã hóa đối xứng hiện nay.\n- Có 2 phương pháp phổ biến:\n* Mã hóa thay thế.\n* Mã hóa hoán vị.",
+      "start_char": 179,
+      "end_char": 330,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "1. GIỚI THIỆU HỆ MÃ KHÓA ĐỐI XỨNG:",
+      "metadata": {
+        "section_id": "SEC002",
+        "paragraph_id": "PARA001",
+        "document_version": 1,
+        "page_number": 1,
+        "category": "Cryptography",
+        "token_reduction": {
+          "raw_tokens": 2033,
+          "cleaned_tokens": 1085,
+          "tokens_saved": 948,
+          "reduction_pct": 46.63,
+          "removed_lines_count": 52
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_REDTEAM_36P::P002",
+      "document_id": "DOC_REDTEAM_36P",
+      "text": "2. HỆ MÃ DỊCH VÒNG:\n- Định nghĩa: Không gian bản rõ P, bản mã C và khóa K đều thuộc Z26.\n- Hàm mã hóa: e_k(x) = (x + k) mod 26.\n- Hàm giải mã: d_k(y) = (y - k) mod 26.",
+      "start_char": 347,
+      "end_char": 514,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "2. HỆ MÃ DỊCH VÒNG:",
+      "metadata": {
+        "section_id": "SEC004",
+        "paragraph_id": "PARA002",
+        "document_version": 1,
+        "page_number": 2,
+        "category": "Cryptography",
+        "token_reduction": {
+          "raw_tokens": 2033,
+          "cleaned_tokens": 1085,
+          "tokens_saved": 948,
+          "reduction_pct": 46.63,
+          "removed_lines_count": 52
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_REDTEAM_36P::P003",
+      "document_id": "DOC_REDTEAM_36P",
+      "text": "CHUYÊN ĐỀ MẬT MÃ TRANG 3:",
+      "start_char": 531,
+      "end_char": 556,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "2. HỆ MÃ DỊCH VÒNG:",
+      "metadata": {
+        "section_id": "SEC005",
+        "paragraph_id": "PARA003",
+        "document_version": 1,
+        "page_number": 3,
+        "category": "Cryptography",
+        "token_reduction": {
+          "raw_tokens": 2033,
+          "cleaned_tokens": 1085,
+          "tokens_saved": 948,
+          "reduction_pct": 46.63,
+          "removed_lines_count": 52
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_REDTEAM_36P::P004",
+      "document_id": "DOC_REDTEAM_36P",
+      "text": "CHUYÊN ĐỀ MẬT MÃ TRANG 4:",
+      "start_char": 573,
+      "end_char": 598,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "2. HỆ MÃ DỊCH VÒNG:",
+      "metadata": {
+        "section_id": "SEC006",
+        "paragraph_id": "PARA004",
+        "document_version": 1,
+        "page_number": 4,
+        "category": "Cryptography",
+        "token_reduction": {
+          "raw_tokens": 2033,
+          "cleaned_tokens": 1085,
+          "tokens_saved": 948,
+          "reduction_pct": 46.63,
+          "removed_lines_count": 52
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_REDTEAM_36P::P005",
+      "document_id": "DOC_REDTEAM_36P",
+      "text": "CHUYÊN ĐỀ MẬT MÃ TRANG 5:",
+      "start_char": 615,
+      "end_char": 640,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "2. HỆ MÃ DỊCH VÒNG:",
+      "metadata": {
+        "section_id": "SEC007",
+        "paragraph_id": "PARA005",
+        "document_version": 1,
+        "page_number": 5,
+        "category": "Cryptography",
+        "token_reduction": {
+          "raw_tokens": 2033,
+          "cleaned_tokens": 1085,
+          "tokens_saved": 948,
+          "reduction_pct": 46.63,
+          "removed_lines_count": 52
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_REDTEAM_36P::P006",
+      "document_id": "DOC_REDTEAM_36P",
+      "text": "CHUYÊN ĐỀ MẬT MÃ TRANG 6:",
+      "start_char": 657,
+      "end_char": 682,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "2. HỆ MÃ DỊCH VÒNG:",
+      "metadata": {
+        "section_id": "SEC008",
+        "paragraph_id": "PARA006",
+        "document_version": 1,
+        "page_number": 6,
+        "category": "Cryptography",
+        "token_reduction": {
+          "raw_tokens": 2033,
+          "cleaned_tokens": 1085,
+          "tokens_saved": 948,
+          "reduction_pct": 46.63,
+          "removed_lines_count": 52
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_REDTEAM_36P::P007",
+      "document_id": "DOC_REDTEAM_36P",
+      "text": "CHUYÊN ĐỀ MẬT MÃ TRANG 7:",
+      "start_char": 699,
+      "end_char": 724,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "2. HỆ MÃ DỊCH VÒNG:",
+      "metadata": {
+        "section_id": "SEC009",
+        "paragraph_id": "PARA007",
+        "document_version": 1,
+        "page_number": 7,
+        "category": "Cryptography",
+        "token_reduction": {
+          "raw_tokens": 2033,
+          "cleaned_tokens": 1085,
+          "tokens_saved": 948,
+          "reduction_pct": 46.63,
+          "removed_lines_count": 52
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_REDTEAM_36P::P008",
+      "document_id": "DOC_REDTEAM_36P",
+      "text": "CHUYÊN ĐỀ MẬT MÃ TRANG 8:",
+      "start_char": 741,
+      "end_char": 766,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "2. HỆ MÃ DỊCH VÒNG:",
+      "metadata": {
+        "section_id": "SEC010",
+        "paragraph_id": "PARA008",
+        "document_version": 1,
+        "page_number": 8,
+        "category": "Cryptography",
+        "token_reduction": {
+          "raw_tokens": 2033,
+          "cleaned_tokens": 1085,
+          "tokens_saved": 948,
+          "reduction_pct": 46.63,
+          "removed_lines_count": 52
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_REDTEAM_36P::P009",
+      "document_id": "DOC_REDTEAM_36P",
+      "text": "CHUYÊN ĐỀ MẬT MÃ TRANG 9:",
+      "start_char": 783,
+      "end_char": 808,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "2. HỆ MÃ DỊCH VÒNG:",
+      "metadata": {
+        "section_id": "SEC011",
+        "paragraph_id": "PARA009",
+        "document_version": 1,
+        "page_number": 9,
+        "category": "Cryptography",
+        "token_reduction": {
+          "raw_tokens": 2033,
+          "cleaned_tokens": 1085,
+          "tokens_saved": 948,
+          "reduction_pct": 46.63,
+          "removed_lines_count": 52
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_REDTEAM_36P::P010",
+      "document_id": "DOC_REDTEAM_36P",
+      "text": "3. PHÁ MÃ:\nAn ninh hệ mã khóa:\n- An ninh vô điều kiện: Không thể phá mã dù có thời gian và tài nguyên vô hạn.\n- An ninh tính toán: Chi phí để phá vỡ vượt quá giá trị của thông tin mã hóa, hoặc thời gian phá mã vượt quá thời gian hữu dụng của thông tin.",
+      "start_char": 826,
+      "end_char": 1078,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "3. PHÁ MÃ:",
+      "metadata": {
+        "section_id": "SEC013",
+        "paragraph_id": "PARA010",
+        "document_version": 1,
+        "page_number": 10,
+        "category": "Cryptography",
+        "token_reduction": {
+          "raw_tokens": 2033,
+          "cleaned_tokens": 1085,
+          "tokens_saved": 948,
+          "reduction_pct": 46.63,
+          "removed_lines_count": 52
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_REDTEAM_36P::P011",
+      "document_id": "DOC_REDTEAM_36P",
+      "text": "- An ninh tính toán: Chi phí để phá vỡ vượt quá giá trị của thông tin mã hóa, hoặc thời gian phá mã vượt quá thời gian hữu dụng của thông tin.\n- Các phương pháp thám mã phổ biến gồm tấn công vét cạn và phân tích thống kê tần suất xuất hiện.",
+      "start_char": 936,
+      "end_char": 1176,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "3. PHÁ MÃ:",
+      "metadata": {
+        "section_id": "SEC013",
+        "paragraph_id": "PARA010",
+        "document_version": 1,
+        "page_number": 10,
+        "category": "Cryptography",
+        "token_reduction": {
+          "raw_tokens": 2033,
+          "cleaned_tokens": 1085,
+          "tokens_saved": 948,
+          "reduction_pct": 46.63,
+          "removed_lines_count": 52
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_REDTEAM_36P::P012",
+      "document_id": "DOC_REDTEAM_36P",
+      "text": "4. HỆ MÃ ĐƠN BẢNG:\n- Thay thế mỗi ký tự bằng một hoán vị cố định của bảng chữ cái.\n- Không gian khóa: 26! xấp xỉ 4 x 10^26.",
+      "start_char": 1194,
+      "end_char": 1317,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "4. HỆ MÃ ĐƠN BẢNG:",
+      "metadata": {
+        "section_id": "SEC015",
+        "paragraph_id": "PARA011",
+        "document_version": 1,
+        "page_number": 11,
+        "category": "Cryptography",
+        "token_reduction": {
+          "raw_tokens": 2033,
+          "cleaned_tokens": 1085,
+          "tokens_saved": 948,
+          "reduction_pct": 46.63,
+          "removed_lines_count": 52
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_REDTEAM_36P::P013",
+      "document_id": "DOC_REDTEAM_36P",
+      "text": "5. HỆ MÃ AFFINE:\n- Công thức: e(x) = (a * x + b) mod 26 với gcd(a, 26) = 1.\n- Giải mã: d(y) = a^(-1) * (y - b) mod 26.",
+      "start_char": 1335,
+      "end_char": 1453,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "5. HỆ MÃ AFFINE:",
+      "metadata": {
+        "section_id": "SEC017",
+        "paragraph_id": "PARA012",
+        "document_version": 1,
+        "page_number": 15,
+        "category": "Cryptography",
+        "token_reduction": {
+          "raw_tokens": 2033,
+          "cleaned_tokens": 1085,
+          "tokens_saved": 948,
+          "reduction_pct": 46.63,
+          "removed_lines_count": 52
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_REDTEAM_36P::P014",
+      "document_id": "DOC_REDTEAM_36P",
+      "text": "6. HỆ MÃ VIGENERE:\n- Sử dụng từ khóa lặp lại k = (k1, k2, ..., km).\n- Phá mã bằng phương pháp Kasiski và chỉ số trùng phùng Friedman.",
+      "start_char": 1471,
+      "end_char": 1604,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "6. HỆ MÃ VIGENERE:",
+      "metadata": {
+        "section_id": "SEC019",
+        "paragraph_id": "PARA013",
+        "document_version": 1,
+        "page_number": 20,
+        "category": "Cryptography",
+        "token_reduction": {
+          "raw_tokens": 2033,
+          "cleaned_tokens": 1085,
+          "tokens_saved": 948,
+          "reduction_pct": 46.63,
+          "removed_lines_count": 52
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_REDTEAM_36P::P015",
+      "document_id": "DOC_REDTEAM_36P",
+      "text": "7. HỆ MÃ HILL:\n- Sử dụng đại số tuyến tính và ma trận khóa m x m khả nghịch trên Z26.\n- C = P * K mod 26.",
+      "start_char": 1622,
+      "end_char": 1727,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "7. HỆ MÃ HILL:",
+      "metadata": {
+        "section_id": "SEC021",
+        "paragraph_id": "PARA014",
+        "document_version": 1,
+        "page_number": 25,
+        "category": "Cryptography",
+        "token_reduction": {
+          "raw_tokens": 2033,
+          "cleaned_tokens": 1085,
+          "tokens_saved": 948,
+          "reduction_pct": 46.63,
+          "removed_lines_count": 52
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_REDTEAM_36P::P016",
+      "document_id": "DOC_REDTEAM_36P",
+      "text": "MỤC MỞ RỘNG TRANG 12:",
+      "start_char": 1745,
+      "end_char": 1766,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "7. HỆ MÃ HILL:",
+      "metadata": {
+        "section_id": "SEC022",
+        "paragraph_id": "PARA015",
+        "document_version": 1,
+        "page_number": 12,
+        "category": "Cryptography",
+        "token_reduction": {
+          "raw_tokens": 2033,
+          "cleaned_tokens": 1085,
+          "tokens_saved": 948,
+          "reduction_pct": 46.63,
+          "removed_lines_count": 52
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_REDTEAM_36P::P017",
+      "document_id": "DOC_REDTEAM_36P",
+      "text": "MỤC MỞ RỘNG TRANG 13:",
+      "start_char": 1784,
+      "end_char": 1805,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "7. HỆ MÃ HILL:",
+      "metadata": {
+        "section_id": "SEC023",
+        "paragraph_id": "PARA016",
+        "document_version": 1,
+        "page_number": 13,
+        "category": "Cryptography",
+        "token_reduction": {
+          "raw_tokens": 2033,
+          "cleaned_tokens": 1085,
+          "tokens_saved": 948,
+          "reduction_pct": 46.63,
+          "removed_lines_count": 52
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_REDTEAM_36P::P018",
+      "document_id": "DOC_REDTEAM_36P",
+      "text": "MỤC MỞ RỘNG TRANG 14:",
+      "start_char": 1823,
+      "end_char": 1844,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "7. HỆ MÃ HILL:",
+      "metadata": {
+        "section_id": "SEC024",
+        "paragraph_id": "PARA017",
+        "document_version": 1,
+        "page_number": 14,
+        "category": "Cryptography",
+        "token_reduction": {
+          "raw_tokens": 2033,
+          "cleaned_tokens": 1085,
+          "tokens_saved": 948,
+          "reduction_pct": 46.63,
+          "removed_lines_count": 52
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_REDTEAM_36P::P019",
+      "document_id": "DOC_REDTEAM_36P",
+      "text": "MỤC MỞ RỘNG TRANG 16:",
+      "start_char": 1862,
+      "end_char": 1883,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "7. HỆ MÃ HILL:",
+      "metadata": {
+        "section_id": "SEC025",
+        "paragraph_id": "PARA018",
+        "document_version": 1,
+        "page_number": 16,
+        "category": "Cryptography",
+        "token_reduction": {
+          "raw_tokens": 2033,
+          "cleaned_tokens": 1085,
+          "tokens_saved": 948,
+          "reduction_pct": 46.63,
+          "removed_lines_count": 52
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_REDTEAM_36P::P020",
+      "document_id": "DOC_REDTEAM_36P",
+      "text": "MỤC MỞ RỘNG TRANG 17:",
+      "start_char": 1901,
+      "end_char": 1922,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "7. HỆ MÃ HILL:",
+      "metadata": {
+        "section_id": "SEC026",
+        "paragraph_id": "PARA019",
+        "document_version": 1,
+        "page_number": 17,
+        "category": "Cryptography",
+        "token_reduction": {
+          "raw_tokens": 2033,
+          "cleaned_tokens": 1085,
+          "tokens_saved": 948,
+          "reduction_pct": 46.63,
+          "removed_lines_count": 52
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_REDTEAM_36P::P021",
+      "document_id": "DOC_REDTEAM_36P",
+      "text": "MỤC MỞ RỘNG TRANG 18:",
+      "start_char": 1940,
+      "end_char": 1961,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "7. HỆ MÃ HILL:",
+      "metadata": {
+        "section_id": "SEC027",
+        "paragraph_id": "PARA020",
+        "document_version": 1,
+        "page_number": 18,
+        "category": "Cryptography",
+        "token_reduction": {
+          "raw_tokens": 2033,
+          "cleaned_tokens": 1085,
+          "tokens_saved": 948,
+          "reduction_pct": 46.63,
+          "removed_lines_count": 52
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_REDTEAM_36P::P022",
+      "document_id": "DOC_REDTEAM_36P",
+      "text": "MỤC MỞ RỘNG TRANG 19:",
+      "start_char": 1979,
+      "end_char": 2000,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "7. HỆ MÃ HILL:",
+      "metadata": {
+        "section_id": "SEC028",
+        "paragraph_id": "PARA021",
+        "document_version": 1,
+        "page_number": 19,
+        "category": "Cryptography",
+        "token_reduction": {
+          "raw_tokens": 2033,
+          "cleaned_tokens": 1085,
+          "tokens_saved": 948,
+          "reduction_pct": 46.63,
+          "removed_lines_count": 52
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_REDTEAM_36P::P023",
+      "document_id": "DOC_REDTEAM_36P",
+      "text": "MỤC MỞ RỘNG TRANG 21:",
+      "start_char": 2018,
+      "end_char": 2039,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "7. HỆ MÃ HILL:",
+      "metadata": {
+        "section_id": "SEC029",
+        "paragraph_id": "PARA022",
+        "document_version": 1,
+        "page_number": 21,
+        "category": "Cryptography",
+        "token_reduction": {
+          "raw_tokens": 2033,
+          "cleaned_tokens": 1085,
+          "tokens_saved": 948,
+          "reduction_pct": 46.63,
+          "removed_lines_count": 52
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_REDTEAM_36P::P024",
+      "document_id": "DOC_REDTEAM_36P",
+      "text": "MỤC MỞ RỘNG TRANG 22:",
+      "start_char": 2057,
+      "end_char": 2078,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "7. HỆ MÃ HILL:",
+      "metadata": {
+        "section_id": "SEC030",
+        "paragraph_id": "PARA023",
+        "document_version": 1,
+        "page_number": 22,
+        "category": "Cryptography",
+        "token_reduction": {
+          "raw_tokens": 2033,
+          "cleaned_tokens": 1085,
+          "tokens_saved": 948,
+          "reduction_pct": 46.63,
+          "removed_lines_count": 52
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_REDTEAM_36P::P025",
+      "document_id": "DOC_REDTEAM_36P",
+      "text": "MỤC MỞ RỘNG TRANG 23:",
+      "start_char": 2096,
+      "end_char": 2117,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "7. HỆ MÃ HILL:",
+      "metadata": {
+        "section_id": "SEC031",
+        "paragraph_id": "PARA024",
+        "document_version": 1,
+        "page_number": 23,
+        "category": "Cryptography",
+        "token_reduction": {
+          "raw_tokens": 2033,
+          "cleaned_tokens": 1085,
+          "tokens_saved": 948,
+          "reduction_pct": 46.63,
+          "removed_lines_count": 52
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_REDTEAM_36P::P026",
+      "document_id": "DOC_REDTEAM_36P",
+      "text": "MỤC MỞ RỘNG TRANG 24:",
+      "start_char": 2135,
+      "end_char": 2156,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "7. HỆ MÃ HILL:",
+      "metadata": {
+        "section_id": "SEC032",
+        "paragraph_id": "PARA025",
+        "document_version": 1,
+        "page_number": 24,
+        "category": "Cryptography",
+        "token_reduction": {
+          "raw_tokens": 2033,
+          "cleaned_tokens": 1085,
+          "tokens_saved": 948,
+          "reduction_pct": 46.63,
+          "removed_lines_count": 52
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_REDTEAM_36P::P027",
+      "document_id": "DOC_REDTEAM_36P",
+      "text": "MỤC MỞ RỘNG TRANG 26:",
+      "start_char": 2174,
+      "end_char": 2195,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "7. HỆ MÃ HILL:",
+      "metadata": {
+        "section_id": "SEC033",
+        "paragraph_id": "PARA026",
+        "document_version": 1,
+        "page_number": 26,
+        "category": "Cryptography",
+        "token_reduction": {
+          "raw_tokens": 2033,
+          "cleaned_tokens": 1085,
+          "tokens_saved": 948,
+          "reduction_pct": 46.63,
+          "removed_lines_count": 52
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_REDTEAM_36P::P028",
+      "document_id": "DOC_REDTEAM_36P",
+      "text": "MỤC MỞ RỘNG TRANG 27:",
+      "start_char": 2213,
+      "end_char": 2234,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "7. HỆ MÃ HILL:",
+      "metadata": {
+        "section_id": "SEC034",
+        "paragraph_id": "PARA027",
+        "document_version": 1,
+        "page_number": 27,
+        "category": "Cryptography",
+        "token_reduction": {
+          "raw_tokens": 2033,
+          "cleaned_tokens": 1085,
+          "tokens_saved": 948,
+          "reduction_pct": 46.63,
+          "removed_lines_count": 52
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_REDTEAM_36P::P029",
+      "document_id": "DOC_REDTEAM_36P",
+      "text": "MỤC MỞ RỘNG TRANG 28:",
+      "start_char": 2252,
+      "end_char": 2273,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "7. HỆ MÃ HILL:",
+      "metadata": {
+        "section_id": "SEC035",
+        "paragraph_id": "PARA028",
+        "document_version": 1,
+        "page_number": 28,
+        "category": "Cryptography",
+        "token_reduction": {
+          "raw_tokens": 2033,
+          "cleaned_tokens": 1085,
+          "tokens_saved": 948,
+          "reduction_pct": 46.63,
+          "removed_lines_count": 52
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_REDTEAM_36P::P030",
+      "document_id": "DOC_REDTEAM_36P",
+      "text": "MỤC MỞ RỘNG TRANG 29:",
+      "start_char": 2291,
+      "end_char": 2312,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "7. HỆ MÃ HILL:",
+      "metadata": {
+        "section_id": "SEC036",
+        "paragraph_id": "PARA029",
+        "document_version": 1,
+        "page_number": 29,
+        "category": "Cryptography",
+        "token_reduction": {
+          "raw_tokens": 2033,
+          "cleaned_tokens": 1085,
+          "tokens_saved": 948,
+          "reduction_pct": 46.63,
+          "removed_lines_count": 52
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_REDTEAM_36P::P031",
+      "document_id": "DOC_REDTEAM_36P",
+      "text": "8. HỆ MÃ HOÁ ĐỘN MỘT LẦN:\n- Hệ mã hóa hoàn hảo (Vernam Cipher / One-Time Pad).\n- Độ dài khóa bằng đúng độ dài thông điệp cần mã hóa và chỉ dùng duy nhất một lần.",
+      "start_char": 2330,
+      "end_char": 2491,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "8. HỆ MÃ HOÁ ĐỘN MỘT LẦN:",
+      "metadata": {
+        "section_id": "SEC038",
+        "paragraph_id": "PARA030",
+        "document_version": 1,
+        "page_number": 30,
+        "category": "Cryptography",
+        "token_reduction": {
+          "raw_tokens": 2033,
+          "cleaned_tokens": 1085,
+          "tokens_saved": 948,
+          "reduction_pct": 46.63,
+          "removed_lines_count": 52
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_REDTEAM_36P::P032",
+      "document_id": "DOC_REDTEAM_36P",
+      "text": "9. HỆ MÃ HOÁ DÒNG:\n- Sinh ra một chuỗi khóa z = z1, z2, z3...\n- Ta có: zi = fi (K, x1, ..., xi-1).\n- Bản rõ được mã hóa từng bit hoặc từng byte bằng phép XOR với dòng khóa z.\n- Ưu điểm: Tốc độ xử lý nhanh và độ trễ thấp trong truyền thông thời gian thực.",
+      "start_char": 2493,
+      "end_char": 2747,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "9. HỆ MÃ HOÁ DÒNG:",
+      "metadata": {
+        "section_id": "SEC039",
+        "paragraph_id": "PARA030",
+        "document_version": 1,
+        "page_number": 30,
+        "category": "Cryptography",
+        "token_reduction": {
+          "raw_tokens": 2033,
+          "cleaned_tokens": 1085,
+          "tokens_saved": 948,
+          "reduction_pct": 46.63,
+          "removed_lines_count": 52
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_REDTEAM_36P::P033",
+      "document_id": "DOC_REDTEAM_36P",
+      "text": "10. HỆ MÃ HOÁ AUTOKEY:\n- Cho P = C = K = Z26.\n- Khóa k = k1, k2, ... ban đầu được mở rộng bằng chính các ký tự của bản rõ (Autokey).\n- Công thức mã hóa: ci = (pi + ki) mod 26.",
+      "start_char": 2765,
+      "end_char": 2940,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "10. HỆ MÃ HOÁ AUTOKEY:",
+      "metadata": {
+        "section_id": "SEC041",
+        "paragraph_id": "PARA032",
+        "document_version": 1,
+        "page_number": 31,
+        "category": "Cryptography",
+        "token_reduction": {
+          "raw_tokens": 2033,
+          "cleaned_tokens": 1085,
+          "tokens_saved": 948,
+          "reduction_pct": 46.63,
+          "removed_lines_count": 52
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_REDTEAM_36P::P034",
+      "document_id": "DOC_REDTEAM_36P",
+      "text": "PHÂN TÍCH CHUYÊN SÂU TRANG 32:",
+      "start_char": 2958,
+      "end_char": 2988,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "10. HỆ MÃ HOÁ AUTOKEY:",
+      "metadata": {
+        "section_id": "SEC042",
+        "paragraph_id": "PARA033",
+        "document_version": 1,
+        "page_number": 32,
+        "category": "Cryptography",
+        "token_reduction": {
+          "raw_tokens": 2033,
+          "cleaned_tokens": 1085,
+          "tokens_saved": 948,
+          "reduction_pct": 46.63,
+          "removed_lines_count": 52
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_REDTEAM_36P::P035",
+      "document_id": "DOC_REDTEAM_36P",
+      "text": "PHÂN TÍCH CHUYÊN SÂU TRANG 33:",
+      "start_char": 3006,
+      "end_char": 3036,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "10. HỆ MÃ HOÁ AUTOKEY:",
+      "metadata": {
+        "section_id": "SEC043",
+        "paragraph_id": "PARA034",
+        "document_version": 1,
+        "page_number": 33,
+        "category": "Cryptography",
+        "token_reduction": {
+          "raw_tokens": 2033,
+          "cleaned_tokens": 1085,
+          "tokens_saved": 948,
+          "reduction_pct": 46.63,
+          "removed_lines_count": 52
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_REDTEAM_36P::P036",
+      "document_id": "DOC_REDTEAM_36P",
+      "text": "PHÂN TÍCH CHUYÊN SÂU TRANG 34:",
+      "start_char": 3054,
+      "end_char": 3084,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "10. HỆ MÃ HOÁ AUTOKEY:",
+      "metadata": {
+        "section_id": "SEC044",
+        "paragraph_id": "PARA035",
+        "document_version": 1,
+        "page_number": 34,
+        "category": "Cryptography",
+        "token_reduction": {
+          "raw_tokens": 2033,
+          "cleaned_tokens": 1085,
+          "tokens_saved": 948,
+          "reduction_pct": 46.63,
+          "removed_lines_count": 52
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_REDTEAM_36P::P037",
+      "document_id": "DOC_REDTEAM_36P",
+      "text": "PHÂN TÍCH CHUYÊN SÂU TRANG 35:",
+      "start_char": 3102,
+      "end_char": 3132,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "10. HỆ MÃ HOÁ AUTOKEY:",
+      "metadata": {
+        "section_id": "SEC045",
+        "paragraph_id": "PARA036",
+        "document_version": 1,
+        "page_number": 35,
+        "category": "Cryptography",
+        "token_reduction": {
+          "raw_tokens": 2033,
+          "cleaned_tokens": 1085,
+          "tokens_saved": 948,
+          "reduction_pct": 46.63,
+          "removed_lines_count": 52
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_REDTEAM_36P::P038",
+      "document_id": "DOC_REDTEAM_36P",
+      "text": "11. HỆ MÃ HOÁ PLAYFAIR:\n- Sử dụng ma trận ký tự 5x5 để mã hóa từng cặp ký tự (digram).\n- Thay thế các cặp ký tự dựa trên quy tắc cùng hàng, cùng cột hoặc tạo thành hình chữ nhật trên ma trận.",
+      "start_char": 3150,
+      "end_char": 3341,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "11. HỆ MÃ HOÁ PLAYFAIR:",
+      "metadata": {
+        "section_id": "SEC047",
+        "paragraph_id": "PARA037",
+        "document_version": 1,
+        "page_number": 36,
+        "category": "Cryptography",
+        "token_reduction": {
+          "raw_tokens": 2033,
+          "cleaned_tokens": 1085,
+          "tokens_saved": 948,
+          "reduction_pct": 46.63,
+          "removed_lines_count": 52
+        },
+        "chunker_version": "v5.0"
+      }
+    }
+  ],
+  "structural_metadata": {},
+  "content_hash": "bfe2463c2599cdb6",
+  "created_at": 1795702579.4502378,
+  "metadata": {
+    "category": "Cryptography",
+    "token_reduction": {
+      "raw_tokens": 2033,
+      "cleaned_tokens": 1085,
+      "tokens_saved": 948,
+      "reduction_pct": 46.63,
+      "removed_lines_count": 52
+    },
+    "chunker_version": "v5.0"
+  }
+}

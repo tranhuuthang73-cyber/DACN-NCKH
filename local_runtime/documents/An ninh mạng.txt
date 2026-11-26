@@ -1,0 +1,179 @@
+# An ninh mạng
+
+An ninh mạng (cybersecurity), an ninh máy tính (computer security), bảo mật công nghệ thông tin (IT security) là việc bảo vệ hệ thống mạng máy tính khỏi các hành vi trộm cắp hoặc làm tổn hại đến phần cứng, phần mềm và các dữ liệu, cũng như các nguyên nhân dẫn đến sự gián đoạn, chuyển lệch hướng của các dịch vụ hiện đang được được cung cấp.
+An ninh mạng là thực tiễn của việc bảo vệ các hệ thống điện tử, mạng lưới, máy tính, thiết bị di động, chương trình và dữ liệu khỏi những cuộc tấn công kỹ thuật số độc hại có chủ đích. Tội phạm mạng có thể triển khai một loạt các cuộc tấn công chống lại các nạn nhân hoặc doanh nghiệp đơn lẻ; có thể kể đến như truy cập, làm thay đổi hoặc xóa bỏ dữ liệu nhạy cảm; tống tiền; can thiệp vào các quy trình kinh doanh.
+An ninh mạng máy tính bao gồm việc kiểm soát truy cập vật lý đến phần cứng, cũng như bảo vệ chống lại tác hại có thể xảy ra qua truy cập mạng máy tính, cơ sở dữ liệu (SQL injection) và việc lợi dụng lỗ hổng phần mềm (code injection). Do sai lầm của những người điều hành, dù cố ý hoặc do bất cẩn, an ninh công nghệ thông tin có thể bị lừa đảo phi kỹ thuật để vượt qua các thủ tục an toàn thông qua các phương pháp khác nhau.
+An ninh mạng hoạt động thông qua một cơ sở hạ tầng chặt chẽ, được chia thành ba phần chính: bảo mật công nghệ thông tin, an ninh mạng và an ninh máy tính.
+
+Bảo mật công nghệ thông tin (với cách gọi khác là bảo mật thông tin điện tử): Bảo vệ dữ liệu ở nơi chúng được lưu trữ và cả khi các dữ liệu này di chuyển trên các mạng lưới thông tin. Trong khi an ninh mạng chỉ bảo vệ dữ liệu số, bảo mật công nghệ thông tin nắm trong tay trọng trách bảo vệ cả dữ liệu kỹ thuật số lẫn dữ liệu vật lý khỏi những kẻ xâm nhập trái phép.
+An ninh mạng: Là một tập hợp con của bảo mật công nghệ thông tin. An ninh mạng thực hiện nhiệm vụ đảm bảo dữ liệu kỹ thuật số trên các mạng lưới, máy tính và thiết bị cá nhân nằm ngoài sự truy cập, tấn công và phá hủy bất hợp pháp.
+An ninh máy tính: Là một tập hợp con của an ninh mạng. Loại bảo mật này sử dụng phần cứng và phần mềm để bảo vệ bất kỳ dữ liệu nào được gửi từ máy tính cá nhân hoặc các thiết bị khác đến hệ thống mạng lưới thông tin. An ninh máy tính thực hiện chức năng bảo vệ cơ sở hạ tầng công nghệ thông tin và chống lại các dữ liệu bị chặn, bị thay đổi hoặc đánh cắp bởi tội phạm mạng.
+Lĩnh vực này dần trở nên quan trọng do sự phụ thuộc ngày càng nhiều vào các hệ thống máy tính và Internet tại các quốc gia, cũng như sự phụ thuộc vào hệ thống mạng không dây như Bluetooth, Wi-Fi, cùng với sự phát triển của các thiết bị "thông minh", bao gồm điện thoại thông minh, TV và các thiết bị khác kết nối vào hệ thống Internet of Things.
+Nhân sự làm việc trong mảng an ninh mạng có thể được chia thành 3 dạng sau:
+
+Hacker mũ trắng (White-hat hacker) – cũng còn gọi là "ethical hacker" (hacker có nguyên tắc/đạo đức) hay penetration tester (người xâm nhập thử nghiệm vào hệ thống). Hacker mũ trắng là những chuyên gia công nghệ làm nhiệm vụ xâm nhập thử nghiệm vào hệ thống công nghệ thông tin để tìm ra lỗ hổng, từ đó yêu cầu người chủ hệ thống phải vá lỗi hệ thống để phòng ngừa các xâm nhập khác sau này với ý đồ xấu (thường là của các hacker mũ đen).
+Hacker mũ đen (Black-hat hacker): là các chuyên gia công nghệ xâm nhập vào hệ thống với mục đích xấu như đánh cắp thông tin, phá hủy hệ thống, làm lây nhiễm các phần mềm độc hại cũng như các hành vi phá hoại mạng máy tính vi phạm pháp luật khác.
+Hacker mũ xám (Grey-hat hacker): là các chuyên gia công nghệ có thể vừa làm công nghệ của cả hacker mũ trắng và mũ đen.
+
+## Lược sử hình thành và phát triển
+
+### 1971 – Virus máy tính đầu tiên trên thế giới
+Chúng ta thường sẽ cho rằng máy tính phải được phát minh trước khi khái niệm virus máy tính có thể tồn tại, nhưng theo một nghĩa nào đó, điều này chưa hẳn là chính xác. Nhà toán học John von Neumann (1903-1957) là người đầu tiên khái niệm hóa ý tưởng "virus máy tính" bằng bài báo của mình phát hành năm 1949, trong đó, ông đã phát triển nền tảng lý thuyết về một thực thể tự nhân bản tự động, làm việc trong máy tính.
+Mãi đến năm 1971, thế giới mới lần đầu tiên được nhìn thấy virus máy tính ở thế giới thực. Trong thời đại ARPANET (khởi nguyên của Internet), các máy tính DEC PDP-10 hoạt động trên hệ điều hành TENEX bất ngờ hiển thị dòng thông báo với nội dung "Tôi là Creeper. Hãy bắt tôi nếu bạn có thể!". Mặc dù virus Creeper được thiết kế như một thí nghiệm vô hại, chỉ để chứng minh liệu khái niệm này có khả thi hay không, nhưng điều đó đã đặt nền tảng cho những phát minh về virus máy tính khác xuất hiện sau này.
+
+### 1983 - Bằng sáng chế đầu tiên trong lĩnh vực an ninh mạng tại Hoa Kỳ
+Vào thời điểm khi máy tính bắt đầu phát triển, các nhà phát minh và chuyên gia công nghệ trên khắp thế giới trở nên gấp rút với mong muốn ghi dấu vào lịch sử và yêu cầu bằng sáng chế cho các hệ thống máy tính mới. Bằng sáng chế đầu tiên của Hoa Kỳ về an ninh mạng được công bố vào tháng 9 năm 1983, khi viện Công nghệ Massachusetts (MIT) được cấp bằng sáng chế 4.405.829 cho một "hệ thống và phương thức truyền thông mật mã". Bằng sáng chế đã giới thiệu thuật toán RSA (Rivest-Shamir-Adeld), đây là một trong những hệ thống mật mã khóa công khai đầu tiên trên thế giới. Mật mã học là nền tảng của an ninh mạng hiện đại ngày nay.
+
+### 1993 – Hội nghị DEF CON đầu tiên
+DEF CON là một trong những hội nghị kỹ thuật an ninh mạng nổi tiếng nhất thế giới. Diễn ra lần đầu tiên vào tháng 6 năm 1993 bởi Jeff Moss, được tổ chức tại Las Vegas, số lượng tham gia chỉ với 100 người. Ngày nay, hội nghị thường niên này thu hút sự tham gia của hơn 20.000 chuyên gia an ninh mạng, hacker mũ trắng, nhà báo trong lĩnh vực công nghệ, chuyên gia IT từ khắp nơi trên thế giới.
+
+### 1995 – Sự ra đời của Security Sockets Layer (SSL) 2.0
+Đây là một tiêu chuẩn an ninh công nghệ toàn cầu tạo ra liên kết giữa máy chủ web (web server) và trình duyệt. Liên kết này đảm bảo cho việc tất cả các dữ liệu trao đổi giữa máy chủ web và trình duyệt luôn được bảo mật và an toàn, mang tính riêng tư, tách rời. SSL là một chuẩn công nghệ được sử dụng bởi hàng triệu trang web trong việc bảo vệ các giao dịch trực tuyến với khách hàng của họ.
+Sau khi trình duyệt web đầu tiên trên thế giới được phát hành, công ty Netscape bắt đầu tập trung thời gian, công sức để phát triển giao thức SSL. Vào tháng 2 năm 1995, Netscape đã ra mắt SSL 2.0 – HTTPS (viết tắt của Hypertext Transfer Protocol Secure) – mà sau này đã trở thành ngôn ngữ chính để sử dụng Internet một cách an toàn, hiệu quả.
+Giao thức này có thể nói là biện pháp an ninh mạng quan trọng bậc nhất. Ngày nay, khi nhìn thấy "HTTPS" trong một địa chỉ website, điều này chứng tỏ tất cả các thông tin liên lạc đều được mã hóa an toàn, nghĩa là, ngay cả khi có ai đó đã đột nhập vào kết nối, họ sẽ không thể giải mã bất kỳ dữ liệu nào đi qua giữa chủ sở hữu thông tin và website đó.
+
+### 2003 – Sự xuất hiện của "Ẩn danh" (Anonymous)
+"Anonymous" là nhóm hacker nổi tiếng toàn cầu đầu tiên được biết đến. Đây là một tổ chức không có lãnh đạo, thay vào đó, đại diện cho nhiều người dùng cộng đồng trực tuyến (online) và ngoại tuyến (offline). Được biết đến với việc đấu tranh cho tự do ngôn luận và tự do Internet bằng cách xuống đường biểu tình hay thực hiện tấn công từ chối dịch vụ (DDoS) vào website của các chính quyền, tôn giáo, và công ty quốc tế. Đeo lên chiếc mặt nạ Guy Fawkes – tổ chức này thu hút sự chú ý tầm cỡ quốc gia khi tấn công website của nhà thờ giáo phái Khoa luận giáo (Scientology).
+
+### 2010 - Chiến dịch Ánh ban mai (Operation Aurora)
+Vào nửa cuối năm 2009, hãng Google tại Trung Quốc công bố đã dính hàng loạt vụ tấn công mạng mang tên "Chiến dịch ánh ban mai" (Operation Aurora). Google ban đầu cho rằng mục tiêu của kẻ tấn công là cố gắng truy cập vào tài khoản Gmail của các nhà hoạt động nhân quyền Trung Quốc. Tuy nhiên, các nhà phân tích sau đó đã phát hiện ra ý định thực sự đằng sau chiến dịch này là để tìm kiếm, xác định danh tính các nhà hoạt động tình báo Trung Quốc tại Hoa Kỳ - những đối tượng có thể nằm trong danh sách theo dõi của các cơ quan thực thi pháp luật ở xứ sở Cờ Hoa. Chiến dịch này cũng tấn công hơn 50 công ty trong lĩnh vực Internet, tài chính, công nghệ, truyền thông và hóa học. Theo ước tính của hãng Cyber Diligence, chiến dịch này gây thiệt hại cho mỗi công ty nạn nhân tầm khoảng 100 triệu USD.
+
+### Ngày nay – An ninh mạng trở nên quan trọng hơn bao giờ hết
+Không gian mạng ngày nay đã trở thành một chiến trường kỹ thuật số bao gồm các quốc gia và những kẻ tấn công mạng. Để theo kịp xu hướng toàn cầu, ngành công nghiệp an ninh mạng phải không ngừng cải tiến, đổi mới và sử dụng các phương pháp tiếp cận dựa trên "máy học nâng cao" (Advanced Machine Learning) và AI tiên tiến, với mục tiêu phân tích các hành vi mạng và ngăn chặn sự tấn công của bọn tội phạm.
+Ở thời điểm hiện tại, việc thực hiện nghiêm túc các vấn đề về đảm bảo an ninh mạng trở nên quan trọng hơn bao giờ hết đối với các doanh nghiệp và tổ chức. Với việc phát triển công nghệ thông tin ngày càng mạnh mẽ, các tổ chức có đầy đủ tiềm lực cần thiết để hỗ trợ thực thi mọi thứ, từ tối ưu hóa công cụ tìm kiếm (SEO) cho đến quản lý ngân sách chung cũng như nhu cầu chi tiêu riêng lẻ của công ty, doanh nghiệp.
+
+## Mục tiêu của an ninh mạng
+Mục tiêu của an ninh mạng là bảo vệ thông tin khỏi bị đánh cắp, xâm phạm hoặc bị tấn công. Độ bảo mật an ninh mạng có thể được đo lường bằng ít nhất một trong ba mục tiêu sau:
+
+Bảo vệ tính bảo mật của dữ liệu.
+Bảo toàn tính toàn vẹn của dữ liệu.
+Thúc đẩy sự sẵn có của dữ liệu cho người dùng được ủy quyền.
+Những mục tiêu này tạo thành bộ ba "Bảo mật – Toàn vẹn – Sẵn có" (Confidentiality – Integrity – Availability), đây là cơ sở cốt lõi của tất cả các chương trình bảo mật thông tin. Tam giác CIA là một mô hình bảo mật được thiết kế để hướng dẫn thực thi các chính sách bảo mật thông tin trong khuôn khổ nội bộ một tổ chức hoặc một công ty. Mô hình này cũng được gọi là AIC để tránh sự nhầm lẫn với Cơ quan Tình báo Trung ương Hoa Kỳ (CIA - Central Intelligence Agency).
+Tiêu chí của CIA được hầu hết các tổ chức và công ty sử dụng khi họ bắt tay vào cài đặt một ứng dụng mới, tạo lập cơ sở dữ liệu hoặc khi muốn đảm bảo quyền truy cập vào một số dữ liệu nói chung. Để dữ liệu được bảo mật hoàn toàn, tất cả các tiêu chí này phải có hiệu lực, đây là những chính sách bảo mật mà mọi thành phần cấu tạo nên nó đều phải cùng nhau hoạt động, và do đó, có thể sẽ xảy ra sai sót khi bỏ quên một trong những thành phần của CIA.
+Các yếu tố của tam giác CIA được coi là ba yếu tố quan trọng nhất của bảo mật thông tin.
+
+### Tính bảo mật (Confidentiality)
+Bảo mật gần tương đương với quyền riêng tư và việc tránh tiết lộ thông tin trái phép. Liên quan đến việc bảo vệ dữ liệu, bảo mật cung cấp quyền truy cập cho những người được phép và ngăn chặn người khác tiếp xúc với bất kỳ thông tin nào về nội dung của chủ sở hữu. Yếu tố này ngăn chặn thông tin cá nhân tiếp cận sai người trong khi đảm bảo rằng người dùng mục tiêu có thể thu thập được thông tin cần thiết. Mã hóa dữ liệu là một ví dụ điển hình để đảm bảo tính bảo mật.
+Các công cụ chính phục vụ cho tiêu chí "bảo mật":
+
+Mã hóa (Encryption): Mã hóa là một phương pháp chuyển đổi thông tin khiến dữ liệu trở nên không thể đọc được đối với người dùng trái phép bằng cách sử dụng thuật toán. Sử dụng khóa bí mật (khóa mã hóa) để dữ liệu được chuyển đổi, chỉ có thể được đọc bằng cách sử dụng một khóa bí mật khác (khóa giải mã). Công cụ này nhằm bảo vệ những dữ liệu nhạy cảm như số thẻ tín dụng, bằng cách mã hóa và chuyển đổi dữ liệu thành một văn bản mật mã không thể đọc được, dữ liệu này chỉ có thể được đọc một khi đã giải mã nó. Khóa bất đối xứng (asymmetric-key) và khóa đối xứng (symmetric-key) là hai loại mã hóa chính phổ biến nhất.
+Kiểm soát quyền truy cập (Access Control): Đây là công cụ xác định các quy tắc và chính sách để giới hạn quyền truy cập vào hệ thống hoặc các tài nguyên, dữ liệu ảo/vật lý. Kiểm soát quyền truy cập bao gồm quá trình người dùng được cấp quyền truy cập và một số đặc quyền nhất định đối với hệ thống, tài nguyên hoặc thông tin. Trong các hệ thống kiểm soát quyền truy cập, người dùng cần xuất trình thông tin đăng nhập trước khi có thể được cấp phép tiếp cận thông tin, có thể kể đến như danh tính, số sê-ri của máy chủ. Trong các hệ thống vận hành vật lý, các thông tin đăng nhập này có thể tồn tại dưới nhiều dạng, nhưng với các thông tin không thể được chuyển giao sẽ cung cấp tính bảo mật cao nhất.
+Xác thực (Authentication): Xác thực là một quá trình đảm bảo và xác nhận danh tính hoặc vai trò của người dùng. Công cụ này có thể được thực hiện theo một số cách khác nhau, nhưng đa số thường dựa trên sự kết hợp với: một thứ gì đó mà cá nhân sở hữu (như thẻ thông minh hoặc khóa radio để lưu trữ các khóa bí mật), một thứ gì đó mà cá nhân biết (như mật khẩu) hoặc một thứ gì đó dùng để nhận dạng cá nhân (như dấu vân tay). Xác thực đóng vai trò cấp thiết đối với mọi tổ chức, vì công cụ này cho phép họ giữ an toàn cho mạng lưới thông tin của mình bằng cách chỉ cho phép người dùng được xác thực truy cập vào các tài nguyên dưới sự bảo vệ, giám sát của nó. Những tài nguyên này có thể bao gồm các hệ thống máy tính, mạng, cơ sở dữ liệu, website và các ứng dụng hoặc dịch vụ dựa trên mạng lưới khác.
+Cấp quyền (Authorization): Đây là một cơ chế bảo mật được sử dụng để xác định quyền hạn (privilege) một người nào đó đối với các tài nguyên như các chương trình máy tính, tệp tin, dịch vụ, dữ liệu và tính năng ứng dụng. Ủy quyền thường được đi sau xác thực nhằm xác định một user sau khi đã đăng nhập thành công thì được phép làm những gì đối với từng loại dữ liệu. Quản trị viên hệ thống thường là người chỉ định cấp phép hoặc từ chối quyền truy cập đối với cá nhân khi muốn tiếp cận thông tin dữ liệu và đăng nhập vào hệ thống.
+Bảo mật vậy lý (Physical Security): Đây là các biện pháp được thiết kế để ngăn chặn sự truy cập trái phép vào các tài sản công nghệ thông tin như cơ sở vật chất, thiết bị, nhân sự, tài nguyên và các loại tài sản khác nhằm tránh bị hư hại. Công cụ này bảo vệ các tài sản nêu trên khỏi các mối đe dọa vật lý như: trộm cắp, phá hoại, hỏa hoạn và thiên tai.
+
+### Tính toàn vẹn (Integrity)
+Tính toàn vẹn đề cập đến các phương pháp nhằm đảm bảo nguồn dữ liệu là thật, chính xác và được bảo vệ khỏi sự sửa đổi trái phép của người dùng.
+Các công cụ chính phục vụ cho tiêu chí "toàn vẹn":
+
+Sao lưu (Backups): Sao lưu là lưu trữ dữ liệu định kỳ. Đây là một quá trình tạo lập các bản sao của dữ liệu hoặc tệp dữ liệu để sử dụng trong trường hợp khi dữ liệu gốc hoặc tệp dữ liệu bị mất hoặc bị hủy. Sao lưu cũng được sử dụng để tạo các bản sao phục vụ cho các mục đích lưu lại lịch sử dữ liệu, chẳng hạn như các nghiên cứu dài hạn, thống kê hoặc cho các ghi chép, hoặc đơn giản chỉ để đáp ứng các yêu cầu của chính sách lưu trữ dữ liệu.
+Tổng kiểm tra (Checksums): Tổng kiểm tra là một giá trị số được sử dụng để xác minh tính toàn vẹn của tệp hoặc dữ liệu được truyền đi. Nói cách khác, đó là sự tính toán của một hàm phản ánh nội dung của tệp thành một giá trị số. Chúng thường được sử dụng để so sánh hai bộ dữ liệu, nhằm đảm bảo rằng chúng giống hệt nhau. Hàm tổng kiểm tra phụ thuộc vào toàn bộ nội dung của tệp, nó được thiết kế theo cách mà ngay cả một thay đổi nhỏ đối với tệp đầu vào (chẳng hạn như lệch một bit) có thể dẫn đến giá trị đầu ra khác nhau.
+Mã chỉnh dữ liệu (Data Correcting Codes): Đây là một phương pháp để lưu trữ dữ liệu theo cách mà những thay đổi nhỏ nhất cũng có thể dễ dàng được phát hiện và tự động điều chỉnh.
+
+### Tính sẵn có (Availability)
+Mọi hệ thống thông tin đều phục vụ cho mục đích riêng của nó và thông tin phải luôn luôn sẵn sàng khi cần thiết. Hệ thống có tính sẵn sàng cao hướng đến sự sẵn có, khả dụng ở mọi thời điểm, tránh được rủi ro, đảm bảo thông tin có thể được truy cập và sửa đổi kịp thời bởi những người được ủy quyền.
+Các công cụ chính phục vụ cho tiêu chí "sẵn có":
+
+Bảo vệ vật lý (Physical Protections): Có nghĩa là giữ thông tin có sẵn ngay cả trong trường hợp phải đối mặt với thách thức về vật chất. Đảm bảo các thông tin nhạy cảm và công nghệ thông tin quan trọng được lưu trữ trong các khu vực an toàn.
+Tính toán dự phòng (Computational Redundancies): Được áp dụng nhằm bảo vệ máy tính và các thiết bị được lưu trữ, đóng vai trò dự phòng trong trường hợp xảy ra hỏng hóc.
+
+## Tấn công mạng
+Tấn công mạng là tất cả các hình thức xâm nhập trái phép vào một hệ thống máy tính, website, cơ sở dữ liệu, hạ tầng mạng, thiết bị của một cá nhân hoặc tổ chức thông qua mạng Internet với những mục đích bất hợp pháp.
+
+### Nạn nhân của tấn công mạng
+Tấn công mạng không mục tiêu: Ở các cuộc tấn công không mục tiêu, đối tượng mà bọn tội phạm mạng và hacker nhắm đến là càng nhiều thiết bị, dịch vụ hoặc người dùng bị ảnh hưởng càng tốt. Chúng không quan tâm ai là nạn nhân vì luôn có một số lượng lớn máy móc hoặc dịch vụ tồn tại lỗ hổng. Để thực hiện các cuộc tấn công này, chúng sử dụng những loại kỹ thuật mà có thể tận dụng được sự công khai, rộng rãi của Internet.
+Tấn công mạng có mục tiêu: Đối với cuộc tấn công có mục tiêu, một tổ chức sẽ dễ dàng rơi vào tình trạng bị kìm kẹp. Lý giải cho những nguyên do đằng sau cuộc tấn công này, bọn tội phạm, một là có mối quan tâm cụ thể với chủ đích rõ ràng đến tổ chức; hai là được trả tiền đến nhắm đến mục tiêu là thực hiện tấn công vào tổ chức đó. Nền tảng xây dựng chiến lược cho một cuộc tấn công mạng với mục tiêu xác định có thể mất nhiều tháng để tìm ra con đường tốt nhất tác động đến doanh nghiệp (hoặc người dùng). Tấn công có mục tiêu thường gây ra tổn hại nặng nề hơn so với một cuộc tấn công không nhắm mục tiêu, bởi vì nó được thiết kế riêng để tấn công vào các hệ thống, quy trình hoặc nhân sự của doanh nghiệp.
+Nhìn chung, nạn nhân của tấn công mạng có thể là một cá nhân, doanh nghiệp, các tổ chức chính phủ hoặc phi chính phủ, cơ quan nhà nước, thậm chí, đối tượng có thể là cả một quốc gia. Tuy nhiên, đối tượng phổ biến nhất của các cuộc tấn công mạng là các doanh nghiệp.
+
+### Mục đích tấn công mạng
+Bên cạnh những mục đích phổ biến như trục lợi phi pháp, tống tiền doanh nghiệp, hiển thị quảng cáo kiếm tiền, thì còn tồn tại một số mục đích khác phức tạp và nguy hiểm hơn: cạnh tranh không lành mạnh giữa các doanh nghiệp, tấn công an ninh hoặc kinh tế của một quốc gia, tấn công đánh sập một tổ chức tôn giáo, v.v. Ngoài ra, một số hacker tấn công mạng chỉ để mua vui, thử sức, hoặc tò mò muốn khám phá các vấn đề về an ninh mạng.
+
+## Lỗ hổng bảo mật và các loại tấn công phổ biến
+Lỗ hổng bảo mật là một điểm yếu của hệ thống trong quá trình thiết kế, thi công và quản trị. Phần lớn các lỗ hổng bảo mật được đã phát hiện ngày nay đều được ghi lại trong cơ sở dữ liệu Common Vulnerabilities and Exposures (CVE). Một lỗ hổng bị khai thác là một lỗ hổng mà đã bị lợi dụng để thực hiện hoạt động tấn công ít nhất một lần hoặc đã bị khai thác (exploit).
+Để đảm bảo một hệ thống máy tính, điều quan trọng là phải hiểu các cuộc tấn công có thể được thực hiện chống lại nó, và các mối đe dọa thường được xếp vào một trong các mục dưới đây:
+
+### Tấn công bằng phần mềm độc hại (Malware Attack)
+Malware là phần mềm độc hại, được kết hợp giữa hai từ "malicious" và "software". Đây là một trong những hình thức đe dọa mạng phổ biến nhất. Tội phạm mạng và các hacker tạo ra malware với mục đích làm phá vỡ hoặc hư hỏng máy tính của người dùng hợp pháp. Thông thường, hacker sẽ tấn công người dùng thông qua các lỗ hổng bảo mật, dụ dỗ người dùng click vào một đường link đính kèm trong thư rác hoặc tải các tệp tin được ngụy trang hợp-pháp để phần mềm độc hại tự động cài đặt vào máy tính. Malware thường được sử dụng nhằm phục vụ cho mục đích kiếm tiền hoặc tham gia vào các cuộc tấn công mạng có động cơ chính trị.
+Có vô số loại phần mềm độc hại khác nhau, điển hình như:
+
+Virus: Là những đoạn mã chương trình tự sao chép, tức tự nhân bản, đính kèm vào các tệp tin sạch, được thiết kế để xâm nhập, lây lan khắp hệ thống máy tính nhằm thực thi một số tác vụ nào đó với nhiều mức độ phá hủy khác nhau.
+Trojan Horse: Khác với virus, phần mềm này không có chức năng tự sao chép nhưng lại sở hữu sức công phá tương đương. Trojan Horse sẽ được ngụy trang thành các phần mềm hợp pháp, vô hại, tiếp sau đó, bọn tội phạm mạng lừa người dùng cài đặt Trojan Horse vào máy tính của họ, nơi chúng có thể gây thiệt hại đến máy chủ hoặc thu thập các dữ liệu cá nhân.
+Phần mềm gián điệp (Spyware): Đây là loại virus có khả năng thâm nhập trực tiếp vào hệ điều hành mà không để lại "di chứng", bí mật lưu lại những gì người dùng làm, dựa vào đó, tội phạm mạng có thể sử dụng các thông tin này để đem đến bất lợi cho chủ sở hữu chúng.
+Phần mềm tống tiền (Ransomware): Ngăn cản người dùng truy cập vào một file hoặc folder quan trọng, chỉ khôi phục với mức tiền chuộc tương ứng.
+Phần mềm quảng cáo (Adware): Có thể được sử dụng để phát tán, cài đặt các phần mềm độc hại khác.
+Botnets: Mạng lưới các máy tính bị nhiễm phần mềm độc hại được bọn tội phạm mạng sử dụng để thực hiện các tác vụ trực tuyến mà không có sự cho phép của người dùng.
+
+### Tấn công giả mạo (Phishing Attack)
+Phishing là hình thức giả mạo thành một đơn vị/cá nhân uy tín để chiếm lấy lòng tin của người dùng, với mục tiêu nhắm đến việc đánh cắp dữ liệu cá nhân nhạy cảm như thông tin thẻ tín dụng, mật khẩu, tài khoản đăng nhập hoặc cài đặt các phần mềm độc hại vào máy tính nạn nhân. Phishing thường được thực hiện bằng cách sử dụng thư điện tử (email) hoặc tin nhắn.
+
+### Tấn công trung gian (Man-in-the-middle Attack)
+Tấn công trung gian (MitM), hay còn gọi là tấn công nghe lén, xảy ra khi kẻ tấn công mạng xâm nhập vào một giao dịch đang diễn ra giữa 2 đối tượng, một khi đã xen vào thành công, chúng có thể chắt lọc và đánh cắp dữ liệu. Một số biến thể của tấn công trung gian có thể kể đến như đánh cắp mật khẩu, chuyển tiếp các thông tin không xác thực. Thông thường, khi sử dụng Wi-Fi công cộng thiếu bảo mật, kẻ tấn công có thể tự "chen" vào giữa thiết bị của người truy cập và mạng Wi-Fi đó, tất cả dữ liệu cá nhân mà nạn nhân gửi đi sẽ rơi vào tay bọn tội phạm mà không hề hay biết. Trong một số trường hợp, kẻ tấn công còn cài đặt các ứng dụng khác nhằm thu thập thông tin về nạn nhân thông qua phần mềm độc hại (malware).
+
+### Tấn công từ chối dịch vụ (Denial of Service)
+Các cuộc tấn công từ chối dịch vụ (DoS) được thiết kế để làm cho tài nguyên mạng hoặc máy không sẵn sàng để phục vụ cho người dùng dự định của nó. [5] Kẻ tấn công có thể từ chối dịch vụ cho từng nạn nhân, chẳng hạn như cố tình nhập sai mật khẩu đủ lần liên tục để khiến tài khoản nạn nhân bị khóa hoặc chúng có thể làm quá tải khả năng của máy hoặc mạng và chặn tất cả người dùng cùng một lúc. Mặc dù một cuộc tấn công mạng từ một địa chỉ IP duy nhất có thể bị chặn bằng cách thêm quy tắc tường lửa mới, nhiều hình thức tấn công từ chối dịch vụ phân tán (DDoS) là có thể, trong đó cuộc tấn công đến từ một số lượng lớn máy tính - và việc bảo vệ khó khăn hơn nhiều. Các cuộc tấn công như vậy có thể bắt nguồn từ các máy tính zombie của botnet, nhưng một loạt các kỹ thuật khác có thể bao gồm các cuộc tấn công phản xạ và khuếch đại, trong đó các hệ thống vô tội bị lừa gửi dữ liệu đến máy nạn nhân.
+
+### Tấn công cơ sở dữ liệu (SQL Injection Attack)
+Hacker chèn một đoạn code độc hại vào server sử dụng ngôn ngữ truy vấn có cấu trúc (SQL), mục đích là để khiến máy chủ trả về những thông tin quan trọng mà lẽ ra không được tiết lộ. Các cuộc tấn công SQL Injection xuất phát từ lỗ hổng của website, hacker có thể tấn công đơn giản bằng cách chèn một đoạn mã độc vào thanh công cụ "Tìm kiếm" là đã có thể dễ dàng tấn công những website với mức bảo mật yếu.
+
+### Tấn công "cửa hậu" (Backdoor Attack)
+Trong một hệ thống máy tính, Backdoor ("cửa hậu") là một phương pháp bí mật vượt qua thủ tục chứng thực người dùng thông thường hoặc để giữ đường truy nhập từ xa tới một máy tính, trong khi cố gắng không bị phát hiện bởi việc giám sát thông thường. Chúng tồn tại vì một số lý do, bao gồm từ thiết kế ban đầu hoặc từ cấu hình kém. Chúng có thể đã được thêm vào bởi một nhóm có thẩm quyền để cho phép một số truy cập hợp pháp, hoặc bởi những kẻ tấn công vì lý do độc hại; nhưng bất kể động cơ đưa tới sự tồn tại của chúng, chúng tạo ra một lỗ hổng.
+
+### Khai thác lỗ hổng (Zero-day Exploits)
+Lỗ hổng Zero-day (hay còn gọi là 0-day) là thuật ngữ để chỉ những lỗ hổng phần mềm hoặc phần cứng chưa được biết đến và chưa được khắc phục. Các hacker có thể tận dụng lỗ hổng này để tấn công xâm nhập vào hệ thống máy tính của doanh nghiệp, tổ chức nhằm đánh cắp hoặc thay đổi dữ liệu.
+
+## Ảnh hưởng của tấn công mạng trong kinh doanh
+Một cuộc tấn công mạng thành công có thể gây ra thiệt hại lớn cho doanh nghiệp. Nó có thể ảnh hưởng đến lợi nhuận cũng như niềm tin khách hàng và vị thế của doanh nghiệp.
+Tác động của những vi phạm về an ninh mạng có thể được chia thành ba loại: tài chính, danh tiếng và pháp lý.
+
+### Tài chính
+Các cuộc tấn công mạng thường dẫn đến những tổn thất lớn về tài chính, phát sinh từ việc:
+
+Đánh cắp thông tin của công ty.
+Đánh cắp thông tin tài chính (ví dụ: chi tiết ngân hàng hoặc chi tiết thẻ thanh toán)
+Trộm cắp tiền của.
+Gián đoạn giao dịch (ví dụ: không có khả năng thực hiện giao dịch trực tuyến)
+Mất các hợp đồng và hoạt động với đối tác.
+Các doanh nghiệp bị ảnh hưởng bởi vi phạm không gian mạng nói chung, sẽ phải chịu các chi phí liên quan đến việc sửa chữa hệ thống, mạng và những thiết bị liên quan.
+
+### Danh tiếng
+Niềm tin, sự tin tưởng là một trong những yếu tố thiết yếu khi xây dựng mối quan hệ với khách hàng. Các cuộc tấn công mạng có thể làm tổn hại danh tiếng của doanh nghiệp, đánh mất niềm tin của khách hàng dành cho chính doanh nghiệp đó. Sự việc này nếu liên tục tiếp diễn, kéo dài có khả năng dẫn đến:
+
+Mất khách hàng.
+Mất doanh số.
+Giảm lợi nhuận.
+Tác động về thiệt hại danh tiếng thậm chí có thể ảnh hưởng đến chuỗi các nhà cung ứng của doanh nghiệp, hoặc tác động đến các mối quan hệ mà doanh nghiệp có thể có với các đối tác, nhà đầu tư và các bên thứ ba khác.
+
+### Pháp lý
+Các luật lệ về bảo vệ dữ liệu và quyền riêng tư yêu cầu doanh nghiệp quản lý, bảo mật tất cả những dữ liệu cá nhân hiện đang được nắm giữ, dù cho là nhân viên, đối tác hay khách hàng của doanh nghiệp. Nếu dữ liệu vô tình hoặc cố ý bị xâm phạm, điều này chứng tỏ doanh nghiệp đã không triển khai các biện pháp bảo mật thích hợp và có thể phải đối mặt với các khoản phí và những biện pháp trừng phạt tương ứng theo quy định của pháp luật.
+
+## Tác động của tấn công mạng vào các ngành công nghiệp khác nhau
+
+### Lĩnh vực y tế, chăm sóc sức khoẻ
+Ngành công nghiệp chăm sóc sức khỏe vô cùng rộng lớn và phức tạp, với lượng dữ liệu bệnh nhân khổng lồ nhưng thường không được trang bị đầy đủ các biện pháp bảo mật để đảm bảo an toàn thông tin.
+Lĩnh vực chăm sóc sức khỏe ngày nay đã chuyển đổi với việc áp dụng công nghệ mới, như "hồ sơ sức khỏe điện tử" (Electronic Health Record) đã mang lại hiệu quả rất lớn và nâng cao chất lượng chăm sóc bệnh nhân, tuy nhiên, các công nghệ tương tự rất dễ trong việc tiếp cận tấn công của bọn tội phạm mạng.
+Những đảm bảo an ninh, chống vi phạm tấn công dữ liệu y tế khó có làm ngơ vì ở lĩnh vực này, theo thông kê của trung tâm ITRC (Identity Theft Resource Center), tiếp xúc với số an sinh xã hội (social security number) nhiều hơn bất kỳ ngành nào khác trong năm 2016.
+Các hoạt động quản trị tuân thủ bảo mật rất tốn kém để thực thi, và mặc dù được đề xuất, có thể không hoàn toàn thay đổi được nguy cơ cao khả năng hồ sơ bệnh nhân bị đánh cắp hoặc việc chăm sóc bệnh nhân bị gián đoạn bởi các vụ tấn công làm trì trệ, gián đoạn hệ thống gây ra bởi botnets hoặc virus độc hại. Nhưng mọi thứ không đơn giản chỉ xoay quanh dữ liệu và dịch vụ y tế có nguy cơ bị tấn công mạng - mà còn là cuộc sống của con người. Bất kỳ thiết bị y tế nào được kết nối với mạng đều có nguy cơ bị hacker chiếm giữ và khai thác, từ máy chụp MRI cho đến xe lăn điện v.v.
+
+### Lĩnh vực tài chính
+Dữ liệu tài chính là một trong những mục tiêu hấp dẫn nhất đối với hacker, do đó, các tổ chức hoạt động chủ yếu trong lĩnh vực này càng cần phải thận trọng hơn trong việc bảo đảm an ninh mạng.
+Ngành tài chính đã có nguy cơ bị tấn công mạng kể từ khi Internet ra đời. Quyền riêng tư và bảo mật dữ liệu là ưu tiên hàng đầu với các tổ chức, doanh nghiệp hoạt động trong lĩnh vực này. Rủi ro bị tấn công ngày càng gia tăng khi trong vài năm trở lại đây, cùng với sự đổi mới công nghệm, khả năng tấn công mạng của các hacker cũng trở nên khó lường hơn bao giờ hết.
+Với phần lớn nguy cơ bị đe dọa tấn công mạng, các ngân hàng và công ty dịch vụ tài chính là những tổ chức đi đầu về việc xây dựng một hệ thống bảo mật toàn diện, tinh vi nhất.
+
+### Lĩnh vực hoạt động sản xuất
+Các nhà sản xuất ngày nay trở thành mục tiêu của không chỉ các tác nhân độc hại truyền thống như hacker hoặc tội phạm mạng, mà còn bị đe dọa bởi những công ty, quốc gia cạnh tranh tham gia vào hoạt động theo dõi, gián điệp doanh nghiệp. Động cơ đằng sau có thể kể đến như: tiền tài, của cải hoặc ăn miếng trả miếng, giành giật lợi thế cạnh tranh và gây gián đoạn chiến lược.
+Công nghệ thông tin có thể không phải là một năng lực cốt lõi của nhiều doanh nghiệp sản xuất - ngay cả ở những doanh nghiệp lớn. Hầu hết với các công ty sản xuất có quy mô, độ phân tán cơ sở dữ liệu cao và thường thì mạng lưới rất hỗn loạn. Bên cạnh đó, tài nguyên và nguồn lực nhân sự hạn chế cũng là một bất lợi đối với các doanh nghiệp hoạt động trong lĩnh vực sản xuất.
+
+### Lĩnh vực truyền thông và viễn thông
+Trên phạm vi toàn cầu, các công ty giải trí và truyền thông đang ngày càng trở thành món mồi béo bở cho các cuộc tấn công mạng khi bọn tội phạm tìm ra những cách thức mới và sáng tạo để đánh bại các biện pháp kiểm soát an ninh mạng.
+Các công ty viễn thông luôn là một mục tiêu lớn vì họ xây dựng, kiểm soát và vận hành một trong những cơ sở hạ tầng quan trọng, được sử dụng rộng rãi để liên lạc và lưu trữ số lượng lớn dữ liệu riêng tư, nhạy cảm.
+Các cơ quan chính phủ bí mật tấn công cơ sở hạ tầng của những tổ chức hoạt động trong lĩnh vực viễn thông và thiết lập hệ thống theo dõi, giám sát thông qua các ứng dụng. Các kênh truyền nằm trong tầm ngắm của việc giám sát bí mật bao gồm mọi thứ, từ đường dây điện thoại và trò chuyện trực tuyến đến dữ liệu điện thoại di động.
+Dữ liệu khách hàng là một mục tiêu với mức tác động cao phổ biến khác. Các tổ chức viễn thông thường lưu trữ thông tin cá nhân - như tên, địa chỉ và dữ liệu tài chính – về tất cả các khách hàng của họ. Dữ liệu cá nhân nhạy cảm này có thể được sử dụng để tống tiền khách hàng, thực hiện hành vi trộm cắp danh tính, tiền của hoặc tiến hành các cuộc tấn công khác.
+Ngành Truyền thông & Giải trí cũng là một mục tiêu hấp dẫn cho các cuộc tấn công mạng. Tác động của các cuộc tấn công vào lĩnh vực này có thể khiến các chương trình hoặc tập phim bị rò rỉ trước khi một hãng phim, nhà sản xuất chính thức phát hành chúng, làm lộ thông tin cá nhân và tài chính, tệ hơn, có thể khiến doanh nghiệp ngừng hoạt động.
+Cái giá phải trả thường cao ngất ngưỡng, cả về tài chính lẫn nghệ thuật, và có thể rất khó khăn để trở lại khuôn khổ, hoạt động bình thường sau một cuộc tấn công nghiêm trọng.
+
+### Lĩnh vực bảo hiểm
+Các cuộc tấn công mạng trong lĩnh vực bảo hiểm đang gia tăng theo cấp số nhân khi các công ty bảo hiểm chuyển sang hoạt động trên các kênh kỹ thuật số, nhằm nỗ lực tạo lập mối quan hệ khách hàng chặt chẽ hơn, cung cấp sản phẩm mới và mở rộng thị phần khách hàng. Mặc dù khoản đầu tư kỹ thuật số này cung cấp vô số khả năng chiến lược mới, nhưng chúng cũng mang theo các rủi ro không gian mạng và các vectơ tấn công mới cho các tổ chức thiếu kinh nghiệm trong việc xử lý các thách thức của môi trường bán hàng đa kênh (omni channel).
+Các công ty bảo hiểm sở hữu một số lượng lớn thông tin cá nhân về khách hàng của họ, điều này rất hấp dẫn đối với những kẻ trộm danh tính và bọn lừa đảo. Các công ty bảo hiểm cũng sở hữu số lượng đáng kể thẻ tín dụng khách hàng cũng như dữ liệu thanh toán.
+Vì hoạt động kinh doanh bảo hiểm xoay quanh việc xây dựng niềm tin, một sai lầm lớn có thể có tác động nặng nề đến thương hiệu và giá trị thị trường của công ty bảo hiểm.
+
+## Chú thích

@@ -1,0 +1,7 @@
+# Wavelet Memory Paper
+
+## Abstract
+We study orthogonal Haar wavelets for continual knowledge editing.
+
+## Method
+Haar decomposition achieves O(log N) updates.

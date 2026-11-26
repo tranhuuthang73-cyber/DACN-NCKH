@@ -1,0 +1,93 @@
+{
+  "document_id": "DOC_REDTEAM_SLIDE_CRYPTO",
+  "sections": [
+    {
+      "title": "=== Page 1 ===",
+      "start": 0,
+      "end": 15
+    },
+    {
+      "title": "1. GIỚI THIỆU HỆ MÃ KHÓA ĐỐI XỨNG:",
+      "start": 15,
+      "end": 332
+    },
+    {
+      "title": "=== Page 10 ===",
+      "start": 332,
+      "end": 348
+    },
+    {
+      "title": "3. PHÁ MÃ:",
+      "start": 348,
+      "end": 724
+    },
+    {
+      "title": "=== Page 30 ===",
+      "start": 724,
+      "end": 740
+    },
+    {
+      "title": "8. HỆ MÃ HOÁ ĐỘN MỘT LẦN:",
+      "start": 740,
+      "end": 903
+    },
+    {
+      "title": "9. HỆ MÃ HOÁ DÒNG:",
+      "start": 903,
+      "end": 1159
+    },
+    {
+      "title": "=== Page 31 ===",
+      "start": 1159,
+      "end": 1175
+    },
+    {
+      "title": "10. HỆ MÃ HOÁ AUTOKEY:",
+      "start": 1175,
+      "end": 1352
+    },
+    {
+      "title": "=== Page 36 ===",
+      "start": 1352,
+      "end": 1368
+    },
+    {
+      "title": "11. HỆ MÃ HOÁ PLAYFAIR:",
+      "start": 1368,
+      "end": 1559
+    }
+  ],
+  "paragraphs": [
+    {
+      "text": "=== Page 1 ===\n1. GIỚI THIỆU HỆ MÃ KHÓA ĐỐI XỨNG:\n- Xuất hiện đầu tiên trong ngành mã hóa.\n- Các hệ ",
+      "start": 0,
+      "end": 330
+    },
+    {
+      "text": "=== Page 10 ===\n3. PHÁ MÃ:\nAn ninh hệ mã khóa:\n- An ninh vô điều kiện: Không thể phá mã dù có thời g",
+      "start": 332,
+      "end": 722
+    },
+    {
+      "text": "=== Page 30 ===\n8. HỆ MÃ HOÁ ĐỘN MỘT LẦN:\n- Hệ mã hóa hoàn hảo (Vernam Cipher / One-Time Pad).\n- Độ ",
+      "start": 724,
+      "end": 901
+    },
+    {
+      "text": "9. HỆ MÃ HOÁ DÒNG:\n- Sinh ra một chuỗi khóa z = z1, z2, z3...\n- Ta có: zi = fi (K, x1, ..., xi-1).\n-",
+      "start": 903,
+      "end": 1157
+    },
+    {
+      "text": "=== Page 31 ===\n10. HỆ MÃ HOÁ AUTOKEY:\n- Cho P = C = K = Z26.\n- Khóa k = k1, k2, ... ban đầu được mở",
+      "start": 1159,
+      "end": 1350
+    },
+    {
+      "text": "=== Page 36 ===\n11. HỆ MÃ HOÁ PLAYFAIR:\n- Sử dụng ma trận ký tự 5x5 để mã hóa từng cặp ký tự (digram",
+      "start": 1352,
+      "end": 1559
+    }
+  ],
+  "total_tokens": 1131
+}

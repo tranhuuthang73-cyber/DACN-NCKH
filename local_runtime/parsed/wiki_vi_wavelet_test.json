@@ -1,0 +1,28 @@
+{
+  "document_id": "wiki_vi_wavelet_test",
+  "sections": [
+    {
+      "title": "## Tổng quan",
+      "start": 0,
+      "end": 109
+    },
+    {
+      "title": "## Ứng dụng trong bộ nhớ",
+      "start": 109,
+      "end": 283
+    }
+  ],
+  "paragraphs": [
+    {
+      "text": "## Tổng quan\nBiến đổi Wavelet Haar là phép biến đổi trực giao đa phân giải do Alfréd Haar đề xuất nă",
+      "start": 0,
+      "end": 107
+    },
+    {
+      "text": "## Ứng dụng trong bộ nhớ\nWaveCMS sử dụng cây Wavelet nhị phân cân bằng để phân rã tri thức theo độ s",
+      "start": 109,
+      "end": 283
+    }
+  ],
+  "total_tokens": 62
+}

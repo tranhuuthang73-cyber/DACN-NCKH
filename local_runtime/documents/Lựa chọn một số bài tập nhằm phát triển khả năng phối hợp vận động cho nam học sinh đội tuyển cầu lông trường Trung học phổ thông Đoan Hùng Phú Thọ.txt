@@ -1,0 +1,12 @@
+# Lựa chọn một số bài tập nhằm phát triển khả năng phối hợp vận động cho nam học sinh đội tuyển cầu lông trường Trung học phổ thông Đoan Hùng Phú Thọ
+
+## Abstract
+The usage of the basic research methods is toselect possible exercises with the aim of developingthe ability to coordinate movements for malestudents of the Badminton Team at Doan Hung, PhuTho Highschool. The research's result will be thefundementals for the Badminton teaching andtraining for many highschools in Phu Tho Province.
+
+## Metadata
+OpenAlex ID: W7215530297
+Year: 2021
+Venue: Tạp chí Khoa học thể thao
+Concepts: Medicine, Computer science, Biology, Chemistry, Data collection
+Authors: TS. Phạm Thị Thanh Hương, ThS. Nguyễn Thị Hồng Phượng
+URL: https://openalex.org/W7215530297

@@ -1,0 +1,38 @@
+{
+  "document_id": "QASPER_qasper_test_01",
+  "sections": [
+    {
+      "title": "# Wavelet Memory Paper",
+      "start": 0,
+      "end": 24
+    },
+    {
+      "title": "## Abstract",
+      "start": 24,
+      "end": 104
+    },
+    {
+      "title": "## Method",
+      "start": 104,
+      "end": 159
+    }
+  ],
+  "paragraphs": [
+    {
+      "text": "# Wavelet Memory Paper",
+      "start": 0,
+      "end": 22
+    },
+    {
+      "text": "## Abstract\nWe study orthogonal Haar wavelets for continual knowledge editing.",
+      "start": 24,
+      "end": 102
+    },
+    {
+      "text": "## Method\nHaar decomposition achieves O(log N) updates.",
+      "start": 104,
+      "end": 159
+    }
+  ],
+  "total_tokens": 23
+}

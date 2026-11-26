@@ -1,0 +1,4 @@
+# Haar Transform
+
+## Passage
+Alfréd Haar proposed the Haar wavelet in 1909 as an orthonormal basis.

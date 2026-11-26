@@ -1,0 +1,187 @@
+{
+  "document_id": "ARXIV_1012.6008v1",
+  "version": 1,
+  "title": "A new algorithm for computing the multivariate Faà di Bruno's formula",
+  "raw_text": "# A new algorithm for computing the multivariate Faà di Bruno's formula\n\n## Abstract\nA new algorithm for computing the multivariate Faà di Bruno's formula is provided. We use a symbolic approach based on the classical umbral calculus that turns the computation of the multivariate Faà di Bruno's formula into a suitable multinomial expansion. We propose a MAPLE procedure whose computational times are faster compared with the ones existing in the literature. Some illustrative applications are also provided.\n\n## Metadata\narXiv ID: 1012.6008v1\nCategories: math.CO, math.ST\nAuthors: E. Di Nardo, G. Guarino, D. Senato\nPublished: 2010-12-29T19:20:00Z",
+  "passages": [
+    {
+      "passage_id": "ARXIV_1012.6008v1::P000",
+      "document_id": "ARXIV_1012.6008v1",
+      "text": "# A new algorithm for computing the multivariate Faà di Bruno's formula",
+      "start_char": 0,
+      "end_char": 71,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "A new algorithm for computing the multivariate Faà di Bruno's formula",
+      "metadata": {
+        "section_id": "SEC001",
+        "paragraph_id": "PARA001",
+        "document_version": 1,
+        "category": "ARXIV",
+        "source": "arxiv",
+        "language": "en",
+        "url": "http://arxiv.org/abs/1012.6008v1",
+        "token_reduction": {
+          "raw_tokens": 129,
+          "cleaned_tokens": 129,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "ARXIV_1012.6008v1::P001",
+      "document_id": "ARXIV_1012.6008v1",
+      "text": "## Abstract\nA new algorithm for computing the multivariate Faà di Bruno's formula is provided.",
+      "start_char": 73,
+      "end_char": 167,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "Abstract",
+      "metadata": {
+        "section_id": "SEC002",
+        "paragraph_id": "PARA001",
+        "document_version": 1,
+        "category": "ARXIV",
+        "source": "arxiv",
+        "language": "en",
+        "url": "http://arxiv.org/abs/1012.6008v1",
+        "token_reduction": {
+          "raw_tokens": 129,
+          "cleaned_tokens": 129,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "ARXIV_1012.6008v1::P002",
+      "document_id": "ARXIV_1012.6008v1",
+      "text": "A new algorithm for computing the multivariate Faà di Bruno's formula is provided. We use a symbolic approach based on the classical umbral calculus that turns the computation of the multivariate Faà di Bruno's formula into a suitable multinomial expansion.",
+      "start_char": 85,
+      "end_char": 342,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "Abstract",
+      "metadata": {
+        "section_id": "SEC002",
+        "paragraph_id": "PARA002",
+        "document_version": 1,
+        "category": "ARXIV",
+        "source": "arxiv",
+        "language": "en",
+        "url": "http://arxiv.org/abs/1012.6008v1",
+        "token_reduction": {
+          "raw_tokens": 129,
+          "cleaned_tokens": 129,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "ARXIV_1012.6008v1::P003",
+      "document_id": "ARXIV_1012.6008v1",
+      "text": "We use a symbolic approach based on the classical umbral calculus that turns the computation of the multivariate Faà di Bruno's formula into a suitable multinomial expansion. We propose a MAPLE procedure whose computational times are faster compared with the ones existing in the literature.",
+      "start_char": 168,
+      "end_char": 459,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "Abstract",
+      "metadata": {
+        "section_id": "SEC002",
+        "paragraph_id": "PARA002",
+        "document_version": 1,
+        "category": "ARXIV",
+        "source": "arxiv",
+        "language": "en",
+        "url": "http://arxiv.org/abs/1012.6008v1",
+        "token_reduction": {
+          "raw_tokens": 129,
+          "cleaned_tokens": 129,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "ARXIV_1012.6008v1::P004",
+      "document_id": "ARXIV_1012.6008v1",
+      "text": "We propose a MAPLE procedure whose computational times are faster compared with the ones existing in the literature. Some illustrative applications are also provided.",
+      "start_char": 343,
+      "end_char": 509,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "Abstract",
+      "metadata": {
+        "section_id": "SEC002",
+        "paragraph_id": "PARA002",
+        "document_version": 1,
+        "category": "ARXIV",
+        "source": "arxiv",
+        "language": "en",
+        "url": "http://arxiv.org/abs/1012.6008v1",
+        "token_reduction": {
+          "raw_tokens": 129,
+          "cleaned_tokens": 129,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "ARXIV_1012.6008v1::P005",
+      "document_id": "ARXIV_1012.6008v1",
+      "text": "## Metadata\narXiv ID: 1012.6008v1\nCategories: math.CO, math.ST\nAuthors: E. Di Nardo, G. Guarino, D. Senato\nPublished: 2010-12-29T19:20:00Z",
+      "start_char": 511,
+      "end_char": 649,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "Metadata",
+      "metadata": {
+        "section_id": "SEC003",
+        "paragraph_id": "PARA002",
+        "document_version": 1,
+        "category": "ARXIV",
+        "source": "arxiv",
+        "language": "en",
+        "url": "http://arxiv.org/abs/1012.6008v1",
+        "token_reduction": {
+          "raw_tokens": 129,
+          "cleaned_tokens": 129,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    }
+  ],
+  "structural_metadata": {},
+  "content_hash": "76db0cb51c64d9bc",
+  "created_at": 1795695156.13763,
+  "metadata": {
+    "category": "ARXIV",
+    "source": "arxiv",
+    "language": "en",
+    "url": "http://arxiv.org/abs/1012.6008v1",
+    "token_reduction": {
+      "raw_tokens": 129,
+      "cleaned_tokens": 129,
+      "tokens_saved": 0,
+      "reduction_pct": 0.0,
+      "removed_lines_count": 0
+    },
+    "chunker_version": "v5.0"
+  }
+}

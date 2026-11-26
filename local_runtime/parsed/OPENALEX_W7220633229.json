@@ -1,0 +1,38 @@
+{
+  "document_id": "OPENALEX_W7220633229",
+  "sections": [
+    {
+      "title": "# Sự đặt chỉnh nghiệm cho bài toán tối ưu tập",
+      "start": 0,
+      "end": 47
+    },
+    {
+      "title": "## Abstract",
+      "start": 47,
+      "end": 554
+    },
+    {
+      "title": "## Metadata",
+      "start": 554,
+      "end": 817
+    }
+  ],
+  "paragraphs": [
+    {
+      "text": "# Sự đặt chỉnh nghiệm cho bài toán tối ưu tập",
+      "start": 0,
+      "end": 45
+    },
+    {
+      "text": "## Abstract\nIn this study, we examine the pointwise and global well-posedness of set optimization pr",
+      "start": 47,
+      "end": 552
+    },
+    {
+      "text": "## Metadata\nOpenAlex ID: W7220633229\nYear: 2025\nVenue: Journal of Science and Development Economics\n",
+      "start": 554,
+      "end": 817
+    }
+  ],
+  "total_tokens": 232
+}

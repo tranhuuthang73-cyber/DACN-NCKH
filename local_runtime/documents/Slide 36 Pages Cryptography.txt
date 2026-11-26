@@ -1,0 +1,142 @@
+=== Page 1 ===
+1. GIỚI THIỆU HỆ MÃ KHÓA ĐỐI XỨNG:
+- Xuất hiện đầu tiên trong ngành mã hóa.
+- Các hệ mã này phần có từ trước năm 1970.
+- Hệ mã khóa bí mật hoặc hệ mã khóa cổ điển.
+- Các phương pháp này là cơ sở để phát triển các thuật toán mã hóa đối xứng hiện nay.
+- Có 2 phương pháp phổ biến:
+* Mã hóa thay thế.
+* Mã hóa hoán vị.
+
+=== Page 2 ===
+2. HỆ MÃ DỊCH VÒNG:
+- Định nghĩa: Không gian bản rõ P, bản mã C và khóa K đều thuộc Z26.
+- Hàm mã hóa: e_k(x) = (x + k) mod 26.
+- Hàm giải mã: d_k(y) = (y - k) mod 26.
+
+=== Page 3 ===
+CHUYÊN ĐỀ MẬT MÃ TRANG 3:
+
+=== Page 4 ===
+CHUYÊN ĐỀ MẬT MÃ TRANG 4:
+
+=== Page 5 ===
+CHUYÊN ĐỀ MẬT MÃ TRANG 5:
+
+=== Page 6 ===
+CHUYÊN ĐỀ MẬT MÃ TRANG 6:
+
+=== Page 7 ===
+CHUYÊN ĐỀ MẬT MÃ TRANG 7:
+
+=== Page 8 ===
+CHUYÊN ĐỀ MẬT MÃ TRANG 8:
+
+=== Page 9 ===
+CHUYÊN ĐỀ MẬT MÃ TRANG 9:
+
+=== Page 10 ===
+3. PHÁ MÃ:
+An ninh hệ mã khóa:
+- An ninh vô điều kiện: Không thể phá mã dù có thời gian và tài nguyên vô hạn.
+- An ninh tính toán: Chi phí để phá vỡ vượt quá giá trị của thông tin mã hóa, hoặc thời gian phá mã vượt quá thời gian hữu dụng của thông tin.
+- Các phương pháp thám mã phổ biến gồm tấn công vét cạn và phân tích thống kê tần suất xuất hiện.
+
+=== Page 11 ===
+4. HỆ MÃ ĐƠN BẢNG:
+- Thay thế mỗi ký tự bằng một hoán vị cố định của bảng chữ cái.
+- Không gian khóa: 26! xấp xỉ 4 x 10^26.
+
+=== Page 15 ===
+5. HỆ MÃ AFFINE:
+- Công thức: e(x) = (a * x + b) mod 26 với gcd(a, 26) = 1.
+- Giải mã: d(y) = a^(-1) * (y - b) mod 26.
+
+=== Page 20 ===
+6. HỆ MÃ VIGENERE:
+- Sử dụng từ khóa lặp lại k = (k1, k2, ..., km).
+- Phá mã bằng phương pháp Kasiski và chỉ số trùng phùng Friedman.
+
+=== Page 25 ===
+7. HỆ MÃ HILL:
+- Sử dụng đại số tuyến tính và ma trận khóa m x m khả nghịch trên Z26.
+- C = P * K mod 26.
+
+=== Page 12 ===
+MỤC MỞ RỘNG TRANG 12:
+
+=== Page 13 ===
+MỤC MỞ RỘNG TRANG 13:
+
+=== Page 14 ===
+MỤC MỞ RỘNG TRANG 14:
+
+=== Page 16 ===
+MỤC MỞ RỘNG TRANG 16:
+
+=== Page 17 ===
+MỤC MỞ RỘNG TRANG 17:
+
+=== Page 18 ===
+MỤC MỞ RỘNG TRANG 18:
+
+=== Page 19 ===
+MỤC MỞ RỘNG TRANG 19:
+
+=== Page 21 ===
+MỤC MỞ RỘNG TRANG 21:
+
+=== Page 22 ===
+MỤC MỞ RỘNG TRANG 22:
+
+=== Page 23 ===
+MỤC MỞ RỘNG TRANG 23:
+
+=== Page 24 ===
+MỤC MỞ RỘNG TRANG 24:
+
+=== Page 26 ===
+MỤC MỞ RỘNG TRANG 26:
+
+=== Page 27 ===
+MỤC MỞ RỘNG TRANG 27:
+
+=== Page 28 ===
+MỤC MỞ RỘNG TRANG 28:
+
+=== Page 29 ===
+MỤC MỞ RỘNG TRANG 29:
+
+=== Page 30 ===
+8. HỆ MÃ HOÁ ĐỘN MỘT LẦN:
+- Hệ mã hóa hoàn hảo (Vernam Cipher / One-Time Pad).
+- Độ dài khóa bằng đúng độ dài thông điệp cần mã hóa và chỉ dùng duy nhất một lần.
+
+9. HỆ MÃ HOÁ DÒNG:
+- Sinh ra một chuỗi khóa z = z1, z2, z3...
+- Ta có: zi = fi (K, x1, ..., xi-1).
+- Bản rõ được mã hóa từng bit hoặc từng byte bằng phép XOR với dòng khóa z.
+- Ưu điểm: Tốc độ xử lý nhanh và độ trễ thấp trong truyền thông thời gian thực.
+
+=== Page 31 ===
+10. HỆ MÃ HOÁ AUTOKEY:
+- Cho P = C = K = Z26.
+- Khóa k = k1, k2, ... ban đầu được mở rộng bằng chính các ký tự của bản rõ (Autokey).
+- Công thức mã hóa: ci = (pi + ki) mod 26.
+
+=== Page 32 ===
+PHÂN TÍCH CHUYÊN SÂU TRANG 32:
+
+=== Page 33 ===
+PHÂN TÍCH CHUYÊN SÂU TRANG 33:
+
+=== Page 34 ===
+PHÂN TÍCH CHUYÊN SÂU TRANG 34:
+
+=== Page 35 ===
+PHÂN TÍCH CHUYÊN SÂU TRANG 35:
+
+=== Page 36 ===
+11. HỆ MÃ HOÁ PLAYFAIR:
+- Sử dụng ma trận ký tự 5x5 để mã hóa từng cặp ký tự (digram).
+- Thay thế các cặp ký tự dựa trên quy tắc cùng hàng, cùng cột hoặc tạo thành hình chữ nhật trên ma trận.

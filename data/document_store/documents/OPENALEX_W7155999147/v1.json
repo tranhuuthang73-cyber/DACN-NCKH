@@ -1,0 +1,133 @@
+{
+  "document_id": "OPENALEX_W7155999147",
+  "version": 1,
+  "title": "NÂNG CAO NĂNG LỰC TỰ HỌC HỌC PHẦN TRIẾT HỌC MÁC-LÊNIN CHO SINH VIÊN TRƯỜNG ĐẠI HỌC LÂM NGHIỆP",
+  "raw_text": "# NÂNG CAO NĂNG LỰC TỰ HỌC HỌC PHẦN TRIẾT HỌC MÁC-LÊNIN CHO SINH VIÊN TRƯỜNG ĐẠI HỌC LÂM NGHIỆP\n\n## Abstract\nEnhancing students’ self-study competence is a key objective in innovating teaching methods in higher education. Strengthening self-study helps students develop independent learning habits and skills, thereby directly contributing to improving the quality of university education\n\n## Metadata\nOpenAlex ID: W7155999147\nYear: 2026\nVenue: Journal of Education and Society\nConcepts: Chemistry, Competence (human resources), Quality (philosophy), Computer science, Key (lock)\nAuthors: Khắc Phái Đỗ\nURL: https://doi.org/10.64410/guqy9861",
+  "passages": [
+    {
+      "passage_id": "OPENALEX_W7155999147::P000",
+      "document_id": "OPENALEX_W7155999147",
+      "text": "# NÂNG CAO NĂNG LỰC TỰ HỌC HỌC PHẦN TRIẾT HỌC MÁC-LÊNIN CHO SINH VIÊN TRƯỜNG ĐẠI HỌC LÂM NGHIỆP",
+      "start_char": 0,
+      "end_char": 95,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "NÂNG CAO NĂNG LỰC TỰ HỌC HỌC PHẦN TRIẾT HỌC MÁC-LÊNIN CHO SINH VIÊN TRƯỜNG ĐẠI HỌC LÂM NGHIỆP",
+      "metadata": {
+        "section_id": "SEC001",
+        "paragraph_id": "PARA001",
+        "document_version": 1,
+        "category": "OPENALEX",
+        "source": "openalex",
+        "language": "en",
+        "url": "https://doi.org/10.64410/guqy9861",
+        "token_reduction": {
+          "raw_tokens": 117,
+          "cleaned_tokens": 117,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "OPENALEX_W7155999147::P001",
+      "document_id": "OPENALEX_W7155999147",
+      "text": "## Abstract Enhancing students’ self-study competence is a key objective in innovating teaching methods in higher education.",
+      "start_char": 97,
+      "end_char": 221,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "Abstract",
+      "metadata": {
+        "section_id": "SEC002",
+        "paragraph_id": "PARA001",
+        "document_version": 1,
+        "category": "OPENALEX",
+        "source": "openalex",
+        "language": "en",
+        "url": "https://doi.org/10.64410/guqy9861",
+        "token_reduction": {
+          "raw_tokens": 117,
+          "cleaned_tokens": 117,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "OPENALEX_W7155999147::P002",
+      "document_id": "OPENALEX_W7155999147",
+      "text": "Enhancing students’ self-study competence is a key objective in innovating teaching methods in higher education. Strengthening self-study helps students develop independent learning habits and skills, thereby directly contributing to improving the quality of university education",
+      "start_char": 109,
+      "end_char": 388,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "Abstract",
+      "metadata": {
+        "section_id": "SEC002",
+        "paragraph_id": "PARA002",
+        "document_version": 1,
+        "category": "OPENALEX",
+        "source": "openalex",
+        "language": "en",
+        "url": "https://doi.org/10.64410/guqy9861",
+        "token_reduction": {
+          "raw_tokens": 117,
+          "cleaned_tokens": 117,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "OPENALEX_W7155999147::P003",
+      "document_id": "OPENALEX_W7155999147",
+      "text": "## Metadata OpenAlex ID: W7155999147\nYear: 2026\nVenue: Journal of Education and Society\nConcepts: Chemistry, Competence (human resources), Quality (philosophy), Computer science, Key (lock)\nAuthors: Khắc Phái Đỗ\nURL: https://doi.org/10.64410/guqy9861",
+      "start_char": 390,
+      "end_char": 640,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "Metadata",
+      "metadata": {
+        "section_id": "SEC003",
+        "paragraph_id": "PARA002",
+        "document_version": 1,
+        "category": "OPENALEX",
+        "source": "openalex",
+        "language": "en",
+        "url": "https://doi.org/10.64410/guqy9861",
+        "token_reduction": {
+          "raw_tokens": 117,
+          "cleaned_tokens": 117,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    }
+  ],
+  "structural_metadata": {},
+  "content_hash": "6f05ad04b09b8b43",
+  "created_at": 1794997517.9621012,
+  "metadata": {
+    "category": "OPENALEX",
+    "source": "openalex",
+    "language": "en",
+    "url": "https://doi.org/10.64410/guqy9861",
+    "token_reduction": {
+      "raw_tokens": 117,
+      "cleaned_tokens": 117,
+      "tokens_saved": 0,
+      "reduction_pct": 0.0,
+      "removed_lines_count": 0
+    },
+    "chunker_version": "v5.0"
+  }
+}

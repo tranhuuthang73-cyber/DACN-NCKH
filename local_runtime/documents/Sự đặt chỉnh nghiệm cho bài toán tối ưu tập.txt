@@ -1,0 +1,12 @@
+# Sự đặt chỉnh nghiệm cho bài toán tối ưu tập
+
+## Abstract
+In this study, we examine the pointwise and global well-posedness of set optimization problems using the upper type set ordered relation. We focus on generalized Gerstewitz functions for sets in relation to the reference set ordered relation, and analyze various properties of these functions. By utilizing these functions, we explore the connections between pointwise and global well-posedness concepts in set optimization problems and their corresponding scalarization optimization problems.
+
+## Metadata
+OpenAlex ID: W7220633229
+Year: 2025
+Venue: Journal of Science and Development Economics
+Concepts: Pointwise, Set (abstract data type), Mathematics, Focus (optics), Relation (database)
+Authors: Trần Thị Tuyết Nhung
+URL: https://openalex.org/W7220633229

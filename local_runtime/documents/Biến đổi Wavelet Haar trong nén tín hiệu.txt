@@ -1,0 +1,5 @@
+## Tổng quan
+Biến đổi Wavelet Haar là phép biến đổi trực giao đa phân giải do Alfréd Haar đề xuất năm 1909.
+
+## Ứng dụng trong bộ nhớ
+WaveCMS sử dụng cây Wavelet nhị phân cân bằng để phân rã tri thức theo độ sâu O(log N) và đạt sai số xóa tri thức chính xác mức máy nhỏ hơn 5.55e-17.

@@ -1,0 +1,2272 @@
+{
+  "document_id": "DOC_E2E_PERF_36",
+  "version": 1,
+  "title": "Slide 36 Trang Mật Mã Học",
+  "raw_text": "=== Page 1 ===\n1. GIỚI THIỆU HỆ MÃ KHÓA ĐỐI XỨNG:\n- Hệ mã khóa đối xứng là phương pháp mật mã xuất hiện đầu tiên trong ngành bảo mật.\n- Thuật ngữ thường gọi: Hệ mã khóa bí mật hoặc hệ mã khóa cổ điển.\n- Các hệ mã này phần lớn có lịch sử phát triển từ trước năm 1970.\n- Bên gửi và bên nhận cùng chia sẻ chung một khóa bí mật K duy nhất.\n- Các phương pháp này là cơ sở nền tảng để phát triển các thuật toán mã hóa đối xứng hiện đại ngày nay như DES và AES.\n- Có 2 phương pháp phổ biến trong mã hóa cổ điển:\n* Mã hóa thay thế.\n* Mã hóa hoán vị.\n\n=== Page 2 ===\n1. GIỚI THIỆU HỆ MÃ KHÓA ĐỐI XỨNG (Tiếp theo):\n- Sơ đồ mã hóa đối xứng: Bản rõ P kết hợp với khóa bí mật K qua thuật toán mã hóa E tạo thành bản mã C = E(K, P).\n- Quá trình giải mã: Bản mã C kết hợp với cùng khóa bí mật K qua thuật toán giải mã D tạo lại bản rõ P = D(K, C).\n- Kênh truyền tin an toàn cần đảm bảo tính bí mật và toàn vẹn cho việc phân phối khóa bí mật.\n\n=== Page 3 ===\n1. GIỚI THIỆU HỆ MÃ KHÓA ĐỐI XỨNG - Phân loại chi tiết:\n- Hai họ phương pháp kỹ thuật chính trong mật mã học cổ điển:\n* Phương pháp thay thế (Substitution): Mỗi ký tự trong bản rõ được thay thế bằng một ký tự hoặc nhóm ký tự khác.\n* Phương pháp hoán vị (Transposition/Permutation): Các ký tự bản rõ được giữ nguyên giá trị nhưng tráo đổi vị trí theo quy luật.\n- Các hệ mã hóa cổ điển tiêu biểu: Hệ mã dịch vòng (Caesar), Hệ mã đơn bảng, Hệ mã Affine, Hệ mã Vigenere, Hệ mã Hill, Hệ mã Playfair, Hệ mã Autokey, Hệ mã hóa dòng, Hệ mã hóa độn một lần (Vernam / One-Time Pad).\n\n=== Page 4 ===\n2. HỆ MÃ DỊCH VÒNG:\n- Khái niệm: Còn gọi là mã Caesar, là một trong những hệ mã hóa thay thế đơn giản nhất trong lịch sử.\n- Mỗi chữ cái trong bản rõ được dịch chuyển một khoảng k vị trí cố định trong bảng chữ cái Z26.\n- Giả sử bảng chữ cái tiếng Anh gồm 26 ký tự được đánh số thứ tự từ A=0 đến Z=25.\n\n=== Page 5 ===\n2. HỆ MÃ DỊCH VÒNG - Thuật toán và Công thức:\n- Khóa bí mật k thuộc tập Z26: k thuộc {0, 1, ..., 25}.\n- Công thức mã hóa: c = E(k, p) = (p + k) mod 26.\n- Công thức giải mã: p = D(k, c) = (c - k) mod 26.\n- Ví dụ minh họa: Với khóa k = 3, ký tự 'A' (0) mã hóa thành 'D' (3), 'B' (1) mã hóa thành 'E' (4).\n\n=== Page 6 ===\n2. HỆ MÃ DỊCH VÒNG - Đánh giá an ninh:\n- Không gian khóa của hệ mã dịch vòng rất nhỏ, chỉ có đúng 26 khóa có thể.\n- Rất dễ bị phá mã bằng phương pháp tấn công vét cạn (exhaustive key search) trong thời gian tức thì.\n- Thám mã chỉ cần thử tối đa 25 khóa dịch chuyển khác 0 để khôi phục lại hoàn toàn bản rõ.\n\n=== Page 7 ===\n3. PHÁ MÃ:\n- Khái niệm thám mã: Khoa học nghiên cứu các kỹ thuật nhằm phá vỡ hệ mật hoặc khôi phục thông tin bản rõ mà không biết trước khóa bí mật.\n- An ninh của hệ mã khóa bao gồm hai mức độ đánh giá:\n- An ninh vô điều kiện: Không thể phá mã dù kẻ tấn công có thời gian vô hạn và tài nguyên tính toán vô hạn.\n- An ninh tính toán: Chi phí để phá vỡ hệ mật vượt quá giá trị kinh tế của thông tin cần bảo vệ, hoặc thời gian cần thiết để phá mã vượt quá thời gian hữu dụng của thông tin.\n\n=== Page 8 ===\n3. PHÁ MÃ - Các kiểu tấn công kinh điển:\n- Tấn công chỉ biết bản mã (Ciphertext-only attack): Thám mã chỉ sở hữu một chuỗi các bản mã C.\n- Tấn công biết trước bản rõ (Known-plaintext attack): Thám mã sở hữu các cặp bản rõ và bản mã tương ứng (P, C).\n- Tấn công chọn bản rõ (Chosen-plaintext attack): Thám mã có khả năng chọn các bản rõ tùy ý và thu được bản mã tương ứng.\n- Tấn công chọn bản mã (Chosen-ciphertext attack): Thám mã có quyền chọn bản mã và nhận về bản rõ giải mã tương ứng.\n\n=== Page 9 ===\n3. PHÁ MÃ - Phương pháp thống kê tần suất:\n- Các phương pháp thám mã phổ biến gồm tấn công vét cạn (brute-force) và phân tích thống kê tần suất xuất hiện của ký tự.\n- Trong ngôn ngữ tự nhiên, mỗi chữ cái có tần suất xuất hiện đặc trưng (ví dụ: 'E' trong tiếng Anh có tần suất cao nhất khoảng 12.7%).\n- Các hệ mã thay thế đơn bảng giữ nguyên đặc tính phân bố tần suất của ngôn ngữ, do đó dễ dàng bị phân tích và bẻ khóa.\n\n=== Page 10 ===\n4. HỆ MÃ ĐƠN BẢNG:\n- Khái niệm: Hệ mã thay thế đơn bảng (Monoalphabetic Substitution Cipher).\n- Không giới hạn ở phép dịch cố định, mà mỗi ký tự trong bảng chữ cái được ánh xạ thành một ký tự bất kỳ theo một hoán vị ngẫu nhiên của 26 chữ cái.\n- Không gian khóa K = 26! xấp xỉ 4 * 10^26, là một con số rất lớn để chống lại tấn công vét cạn.\n\n=== Page 11 ===\n4. HỆ MÃ ĐƠN BẢNG - Điểm yếu thám mã:\n- Mặc dù không gian khóa 26! vô cùng lớn, hệ mã này vẫn hoàn toàn không an toàn trước thám mã tần suất.\n- Do mỗi chữ cái luôn được mã hóa thành cùng một ký tự cố định duy nhất, biểu đồ tần suất của bản mã giữ nguyên hình dạng của ngôn ngữ bản rõ.\n- Kẻ thám mã chỉ cần khớp các ký tự xuất hiện nhiều nhất với chữ cái phổ biến để giải mã từng phần thông điệp.\n\n=== Page 12 ===\n4. HỆ MÃ ĐƠN BẢNG - Biện pháp cải tiến:\n- Sử dụng các kỹ thuật mã đa bảng hoặc mã hóa khối để làm phẳng biểu đồ phân phối tần suất ký tự.\n- Kỹ thuật phân tích cặp ký tự (digram) và bộ ba ký tự (trigram) giúp tăng tốc độ bẻ khóa hệ mã đơn bảng.\n\n=== Page 13 ===\n5. HỆ MÃ AFFINE:\n- Khái niệm: Hệ mã Affine là dạng mở rộng của hệ mã dịch vòng, kết hợp phép nhân và phép cộng modulo 26.\n- Cặp khóa bí mật gồm hai số nguyên K = (a, b) trong đó a, b thuộc Z26.\n- Điều kiện hợp lệ bắt buộc: a phải nguyên tố cùng nhau với 26, tức là gcd(a, 26) = 1.\n\n=== Page 14 ===\n5. HỆ MÃ AFFINE - Thuật toán và Công thức:\n- Không gian khóa: Số lượng giá trị a hợp lệ là phi(26) = 12 giá trị (1, 3, 5, 7, 9, 11, 15, 17, 19, 21, 23, 25).\n- Tổng số khóa có thể: |K| = 12 * 26 = 312 khóa.\n- Công thức mã hóa: c = E((a, b), p) = (a * p + b) mod 26.\n- Công thức giải mã: p = D((a, b), c) = a^(-1) * (c - b) mod 26, với a^(-1) là nghịch đảo modulo 26 của a.\n\n=== Page 15 ===\n5. HỆ MÃ AFFINE - Ví dụ minh họa:\n- Chọn khóa K = (7, 3). Ta có gcd(7, 26) = 1 và nghịch đảo 7^(-1) mod 26 = 15 vì (7 * 15) mod 26 = 105 mod 26 = 1.\n- Mã hóa ký tự 'H' (7): c = (7 * 7 + 3) mod 26 = 52 mod 26 = 0 ('A').\n- Giải mã 'A' (0): p = 15 * (0 - 3) mod 26 = 15 * (-3) mod 26 = -45 mod 26 = 7 ('H').\n\n=== Page 16 ===\n6. HỆ MÃ VIGENERE:\n- Khái niệm: Hệ mã hóa thay thế đa bảng (Polyalphabetic Cipher) nổi tiếng nhất trong lịch sử mật mã cổ điển.\n- Được đề xuất bởi Blaise de Vigenere vào thế kỷ 16.\n- Khắc phục triệt để nhược điểm bảo toàn tần suất đơn bảng bằng cách luân phiên sử dụng nhiều khóa dịch chuyển khác nhau.\n\n=== Page 17 ===\n6. HỆ MÃ VIGENERE - Thuật toán và Bảng Vigenere:\n- Khóa bí mật là một từ khóa có độ dài m: K = (k0, k1, ..., km-1) với ki thuộc Z26.\n- Từ khóa được lặp lại tuần hoàn cho đến khi bằng chiều dài bản rõ.\n- Công thức mã hóa: ci = (pi + k_(i mod m)) mod 26.\n- Công thức giải mã: pi = (ci - k_(i mod m)) mod 26.\n\n=== Page 18 ===\n6. HỆ MÃ VIGENERE - Phá mã Vigenere:\n- Phương pháp thử nghiệm Kasiski (1863): Tìm các chuỗi ký tự lặp lại trong bản mã để suy ra độ dài từ khóa m (ước chung của các khoảng cách).\n- Chỉ số trùng phùng Friedman (Index of Coincidence - IC): Đo xác suất hai chữ cái chọn ngẫu nhiên trong bản mã trùng nhau để xác định độ dài m chính xác.\n- Khi đã biết độ dài m, bài toán phân rã thành m bài toán mã Caesar đơn lẻ giải bằng tần suất.\n\n=== Page 19 ===\n7. HỆ MÃ HILL:\n- Khái niệm: Phát minh bởi Lester S. Hill năm 1929, là hệ mã hóa thay thế đa ký tự (Polygraphic Cipher) đầu tiên ứng dụng đại số tuyến tính.\n- Bản rõ được chia thành các khối độ dài m ký tự và biểu diễn dưới dạng vector hàng P = (p1, p2, ..., pm).\n- Khóa bí mật là một ma trận vuông K kích thước m x m với các phần tử thuộc Z26.\n\n=== Page 20 ===\n7. HỆ MÃ HILL - Công thức và Điều kiện khả nghịch:\n- Điều kiện khóa hợp lệ: Ma trận K phải khả nghịch trên vành Z26, tương đương điều kiện gcd(det(K), 26) = 1.\n- Công thức mã hóa: C = P * K mod 26.\n- Công thức giải mã: P = C * K^(-1) mod 26, trong đó K^(-1) = det(K)^(-1) * adj(K) mod 26.\n- Hệ mã Hill có khả năng che giấu hoàn hảo tần suất ký tự đơn lẻ cũng như các cặp ký tự.\n\n=== Page 21 ===\n7. HỆ MÃ HILL - Đánh giá an ninh:\n- Hệ mã Hill hoàn toàn chống lại được phương pháp tấn công chỉ biết bản mã (Ciphertext-only) dựa trên tần suất đơn lẻ.\n- Tuy nhiên, hệ mã Hill hoàn toàn tuyến tính nên rất dễ bị phá mã bởi phương pháp tấn công biết trước bản rõ (Known-plaintext attack) bằng cách giải hệ phương trình ma trận m x m.\n\n=== Page 22 ===\n8. HỆ MÃ HOÁ ĐỘN MỘT LẦN:\n- Khái niệm: Hệ mã hóa hoàn hảo (Vernam Cipher / One-Time Pad - OTP), sáng chế bởi Gilbert Vernam năm 1917.\n- Được Claude Shannon chứng minh toán học năm 1949 là hệ mật duy nhất đạt mức an ninh tuyệt đối vô điều kiện.\n- Quy tắc bắt buộc:\n1. Độ dài chuỗi khóa K bằng đúng độ dài thông điệp bản rõ P.\n2. Khóa được tạo hoàn toàn ngẫu nhiên thực sự (true random).\n3. Mỗi khóa chỉ được sử dụng duy nhất một lần và sau đó hủy bỏ.\n\n=== Page 23 ===\n8. HỆ MÃ HOÁ ĐỘN MỘT LẦN - Cơ chế toán học:\n- Không gian bản rõ, bản mã và khóa: P = C = K = {0, 1}^n.\n- Phép mã hóa: ci = pi XOR ki.\n- Phép giải mã: pi = ci XOR ki.\n- Tính chất hoàn hảo của Shannon: P(P=p | C=c) = P(P=p). Kẻ tấn công khi quan sát bản mã C không nhận thêm bất kỳ thông tin nào về bản rõ P.\n\n=== Page 24 ===\n8. HỆ MÃ HOÁ ĐỘN MỘT LẦN - Thách thức triển khai thực tế:\n- Mặc dù an ninh tuyệt đối về mặt lý thuyết, OTP rất khó áp dụng trên diện rộng.\n- Vấn đề phân phối khóa: Việc truyền một lượng khóa ngẫu nhiên khổng lồ bằng độ dài thông điệp đến bên nhận cũng khó khăn như việc truyền thông điệp bí mật.\n- Nguy cơ thảm họa nếu tái sử dụng khóa (Two-time pad): C1 XOR C2 = P1 XOR P2 làm lộ cấu trúc ngôn ngữ của hai thông điệp.\n\n=== Page 25 ===\n9. HỆ MÃ HOÁ DÒNG:\n- Khái niệm: Hệ mã hóa dòng (Stream Cipher) là một giải pháp thực tế mô phỏng nguyên lý của Hệ mã độn một lần OTP.\n- Thay vì dùng khóa ngẫu nhiên thật dài vô tận, hệ mã dòng sử dụng một bộ sinh số giả ngẫu nhiên (PRNG / Keystream Generator) điều khiển bởi một khóa bí mật ngắn K ban đầu.\n- Sinh ra một chuỗi dòng khóa z = z1, z2, z3...\n\n=== Page 26 ===\n9. HỆ MÃ HOÁ DÒNG - Thuật toán và Phép toán bit:\n- Dòng khóa được sinh tuần tự: zi = fi (K, x1, ..., xi-1).\n- Bản rõ được mã hóa từng bit hoặc từng byte bằng phép XOR với dòng khóa z: ci = pi XOR zi.\n- Giải mã thực hiện hoàn toàn đối xứng bằng cùng phép toán XOR: pi = ci XOR zi.\n- Ưu điểm: Tốc độ xử lý nhanh và độ trễ thấp trong truyền thông thời gian thực, không gây lan truyền lỗi bit.\n\n=== Page 27 ===\n9. HỆ MÃ HOÁ DÒNG - Phân loại hệ mã dòng:\n- Hệ mã dòng đồng bộ (Synchronous Stream Cipher): Dòng khóa z được sinh độc lập với bản rõ và bản mã, chỉ phụ thuộc vào khóa bí mật K và vector khởi tạo IV.\n- Hệ mã dòng tự đồng bộ (Self-synchronizing / Asynchronous Stream Cipher): Dòng khóa zi phụ thuộc vào một số bit bản mã liền trước c_(i-1), c_(i-2)...\n- Các hệ mã dòng thực tế nổi tiếng: RC4, ChaCha20, A5/1 (trong mạng GSM).\n\n=== Page 28 ===\n10. HỆ MÃ HOÁ AUTOKEY:\n- Khái niệm: Hệ mã hóa tự động sinh khóa (Autokey Cipher), đề xuất bởi Giovan Battista Bellaso và hoàn thiện bởi Vigenere.\n- Giải quyết nhược điểm lặp chu kỳ khóa của mã Vigenere mà không cần chia sẻ trước khóa quá dài.\n- Cho P = C = K = Z26.\n\n=== Page 29 ===\n10. HỆ MÃ HOÁ AUTOKEY - Cơ chế mở rộng khóa:\n- Khóa k = k1, k2, ... ban đầu được mở rộng bằng chính các ký tự của bản rõ (Autokey).\n- Cụ thể: K = (k_seed, p1, p2, p3, ..., pn-1).\n- Công thức mã hóa: ci = (pi + ki) mod 26.\n- Công thức giải mã: p1 = (c1 - k1) mod 26; sau khi có p1, sử dụng p1 làm khóa k2 để giải mã c2: p2 = (c2 - p1) mod 26, tiếp tục tuần tự.\n\n=== Page 30 ===\n10. HỆ MÃ HOÁ AUTOKEY - Đánh giá ưu nhược điểm:\n- Ưu điểm: Loại bỏ tính chu kỳ tuần hoàn ngắn của từ khóa trong mã Vigenere thông thường, gây khó khăn cho phương pháp kiểm tra Kasiski.\n- Nhược điểm: Thuộc tính tự sinh khóa khiến lỗi giải mã lan truyền; nếu một ký tự bị truyền sai, toàn bộ các ký tự bản rõ phía sau sẽ bị giải mã sai theo.\n\n=== Page 31 ===\n11. HỆ MÃ HOÁ PLAYFAIR:\n- Khái niệm: Phát minh bởi Charles Wheatstone năm 1854 nhưng mang tên Huân tước Playfair người có công phổ biến rộng rãi.\n- Sử dụng ma trận ký tự 5x5 để mã hóa từng cặp ký tự (digram).\n- Bảng chữ cái 25 ký tự ghép đôi I và J vào cùng một ô để vừa ma trận 5x5.\n\n=== Page 32 ===\n11. HỆ MÃ HOÁ PLAYFAIR - Quy tắc mã hóa ma trận:\n- Thay thế các cặp ký tự dựa trên quy tắc hình học trên ma trận:\n1. Nếu hai ký tự nằm cùng một hàng: Thay bằng các ký tự ngay bên phải (vòng lại đầu hàng nếu ở mép phải).\n2. Nếu hai ký tự nằm cùng một cột: Thay bằng các ký tự ngay bên dưới (vòng lại đầu cột nếu ở mép dưới).\n3. Nếu hai ký tự tạo thành hình chữ nhật: Thay bằng các ký tự ở cùng hàng nhưng nằm trên cột của ký tự kia.\n\n=== Page 33 ===\n11. HỆ MÃ HOÁ PLAYFAIR - Xử lý trường hợp đặc biệt:\n- Nếu hai ký tự trong cặp giống nhau (ví dụ: 'LL'): Chèn một ký tự độn phụ như 'X' vào giữa ('LX', 'L...').\n- Nếu độ dài thông điệp là lẻ: Bổ sung ký tự độn 'X' hoặc 'Z' vào cuối chuỗi trước khi mã hóa.\n- Mã hóa Playfair làm phẳng tần suất các chữ cái đơn lẻ, nhưng vẫn có thể bị thám mã dựa trên tần suất của 625 cặp ký tự (digram).\n\n=== Page 34 ===\n12. HỆ MÃ HOÁ HOÁN VỊ:\n- Khái niệm: Khác với 11 hệ mã thay thế ở trên, hệ mã hóa hoán vị (Transposition / Permutation Cipher) giữ nguyên giá trị các ký tự bản rõ nhưng thay đổi vị trí của chúng.\n- Tần suất các ký tự trong bản mã hoàn toàn giống hệt tần suất trong bản rõ (chữ cái phổ biến như 'E', 'A' vẫn giữ nguyên số lần xuất hiện).\n\n=== Page 35 ===\n12. HỆ MÃ HOÁ HOÁN VỊ - Các kỹ thuật hoán vị phổ biến:\n- Hoán vị đường rào (Rail Fence Cipher): Bản rõ được viết theo đường ziczac qua các đường ray rồi đọc ra theo từng hàng.\n- Hoán vị cột (Columnar Transposition): Bản rõ được điền vào ma trận hình chữ nhật theo từng hàng, sau đó đọc ra theo các cột dựa trên thứ tự hoán vị của từ khóa bí mật.\n- Hoán vị nhiều vòng: Thực hiện liên tiếp 2 hay nhiều lượt hoán vị cột với các khóa khác nhau để làm tăng độ xáo trộn.\n\n=== Page 36 ===\n12. HỆ MÃ HOÁ HOÁN VỊ - So sánh và Ứng dụng:\n- So sánh: Mã thay thế làm biến đổi ký tự (confusion); mã hoán vị làm xáo trộn vị trí ký tự (diffusion).\n- Trong mật mã học hiện đại, nguyên lý thay thế kết hợp hoán vị của Claude Shannon là nền tảng cốt lõi của mạng SPN (Substitution-Permutation Network) và mạng Feistel trong chuẩn mã hóa nâng cao AES và DES.",
+  "passages": [
+    {
+      "passage_id": "DOC_E2E_PERF_36::P000",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "1. GIỚI THIỆU HỆ MÃ KHÓA ĐỐI XỨNG:\n- Hệ mã khóa đối xứng là phương pháp mật mã xuất hiện đầu tiên trong ngành bảo mật.\n- Thuật ngữ thường gọi: Hệ mã khóa bí mật hoặc hệ mã khóa cổ điển.\n- Các hệ mã này phần lớn có lịch sử phát triển từ trước năm 1970.",
+      "start_char": 15,
+      "end_char": 266,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "1. GIỚI THIỆU HỆ MÃ KHÓA ĐỐI XỨNG:",
+      "metadata": {
+        "section_id": "SEC002",
+        "paragraph_id": "PARA001",
+        "document_version": 1,
+        "page_number": 1,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P001",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "- Các hệ mã này phần lớn có lịch sử phát triển từ trước năm 1970.\n- Bên gửi và bên nhận cùng chia sẻ chung một khóa bí mật K duy nhất.\n- Các phương pháp này là cơ sở nền tảng để phát triển các thuật toán mã hóa đối xứng hiện đại ngày nay như DES và AES.",
+      "start_char": 201,
+      "end_char": 454,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "1. GIỚI THIỆU HỆ MÃ KHÓA ĐỐI XỨNG:",
+      "metadata": {
+        "section_id": "SEC002",
+        "paragraph_id": "PARA001",
+        "document_version": 1,
+        "page_number": 1,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P002",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "- Các phương pháp này là cơ sở nền tảng để phát triển các thuật toán mã hóa đối xứng hiện đại ngày nay như DES và AES.\n- Có 2 phương pháp phổ biến trong mã hóa cổ điển:\n* Mã hóa thay thế.\n* Mã hóa hoán vị.",
+      "start_char": 336,
+      "end_char": 541,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "1. GIỚI THIỆU HỆ MÃ KHÓA ĐỐI XỨNG:",
+      "metadata": {
+        "section_id": "SEC002",
+        "paragraph_id": "PARA001",
+        "document_version": 1,
+        "page_number": 1,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P003",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "1. GIỚI THIỆU HỆ MÃ KHÓA ĐỐI XỨNG (Tiếp theo):\n- Sơ đồ mã hóa đối xứng: Bản rõ P kết hợp với khóa bí mật K qua thuật toán mã hóa E tạo thành bản mã C = E(K, P).",
+      "start_char": 558,
+      "end_char": 718,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "1. GIỚI THIỆU HỆ MÃ KHÓA ĐỐI XỨNG (Tiếp theo):",
+      "metadata": {
+        "section_id": "SEC004",
+        "paragraph_id": "PARA002",
+        "document_version": 1,
+        "page_number": 2,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P004",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "- Sơ đồ mã hóa đối xứng: Bản rõ P kết hợp với khóa bí mật K qua thuật toán mã hóa E tạo thành bản mã C = E(K, P).\n- Quá trình giải mã: Bản mã C kết hợp với cùng khóa bí mật K qua thuật toán giải mã D tạo lại bản rõ P = D(K, C).",
+      "start_char": 605,
+      "end_char": 832,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "1. GIỚI THIỆU HỆ MÃ KHÓA ĐỐI XỨNG (Tiếp theo):",
+      "metadata": {
+        "section_id": "SEC004",
+        "paragraph_id": "PARA002",
+        "document_version": 1,
+        "page_number": 2,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P005",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "- Quá trình giải mã: Bản mã C kết hợp với cùng khóa bí mật K qua thuật toán giải mã D tạo lại bản rõ P = D(K, C).\n- Kênh truyền tin an toàn cần đảm bảo tính bí mật và toàn vẹn cho việc phân phối khóa bí mật.",
+      "start_char": 719,
+      "end_char": 926,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "1. GIỚI THIỆU HỆ MÃ KHÓA ĐỐI XỨNG (Tiếp theo):",
+      "metadata": {
+        "section_id": "SEC004",
+        "paragraph_id": "PARA002",
+        "document_version": 1,
+        "page_number": 2,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P006",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "1. GIỚI THIỆU HỆ MÃ KHÓA ĐỐI XỨNG - Phân loại chi tiết:\n- Hai họ phương pháp kỹ thuật chính trong mật mã học cổ điển:\n* Phương pháp thay thế (Substitution): Mỗi ký tự trong bản rõ được thay thế bằng một ký tự hoặc nhóm ký tự khác.",
+      "start_char": 943,
+      "end_char": 1173,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "1. GIỚI THIỆU HỆ MÃ KHÓA ĐỐI XỨNG - Phân loại chi tiết:",
+      "metadata": {
+        "section_id": "SEC006",
+        "paragraph_id": "PARA003",
+        "document_version": 1,
+        "page_number": 3,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P007",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "* Phương pháp thay thế (Substitution): Mỗi ký tự trong bản rõ được thay thế bằng một ký tự hoặc nhóm ký tự khác.\n* Phương pháp hoán vị (Transposition/Permutation): Các ký tự bản rõ được giữ nguyên giá trị nhưng tráo đổi vị trí theo quy luật.",
+      "start_char": 1061,
+      "end_char": 1302,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "1. GIỚI THIỆU HỆ MÃ KHÓA ĐỐI XỨNG - Phân loại chi tiết:",
+      "metadata": {
+        "section_id": "SEC006",
+        "paragraph_id": "PARA003",
+        "document_version": 1,
+        "page_number": 3,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P008",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "* Phương pháp hoán vị (Transposition/Permutation): Các ký tự bản rõ được giữ nguyên giá trị nhưng tráo đổi vị trí theo quy luật.\n- Các hệ mã hóa cổ điển tiêu biểu: Hệ mã dịch vòng (Caesar), Hệ mã đơn bảng, Hệ mã Affine, Hệ mã Vigenere, Hệ mã Hill, Hệ mã Playfair, Hệ mã Autokey, Hệ mã hóa dòng, Hệ mã hóa độn một lần (Vernam / One-Time Pad).",
+      "start_char": 1174,
+      "end_char": 1515,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "1. GIỚI THIỆU HỆ MÃ KHÓA ĐỐI XỨNG - Phân loại chi tiết:",
+      "metadata": {
+        "section_id": "SEC006",
+        "paragraph_id": "PARA003",
+        "document_version": 1,
+        "page_number": 3,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P009",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "2. HỆ MÃ DỊCH VÒNG:\n- Khái niệm: Còn gọi là mã Caesar, là một trong những hệ mã hóa thay thế đơn giản nhất trong lịch sử.\n- Mỗi chữ cái trong bản rõ được dịch chuyển một khoảng k vị trí cố định trong bảng chữ cái Z26.",
+      "start_char": 1532,
+      "end_char": 1749,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "2. HỆ MÃ DỊCH VÒNG:",
+      "metadata": {
+        "section_id": "SEC008",
+        "paragraph_id": "PARA004",
+        "document_version": 1,
+        "page_number": 4,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P010",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "- Mỗi chữ cái trong bản rõ được dịch chuyển một khoảng k vị trí cố định trong bảng chữ cái Z26.\n- Giả sử bảng chữ cái tiếng Anh gồm 26 ký tự được đánh số thứ tự từ A=0 đến Z=25.",
+      "start_char": 1654,
+      "end_char": 1831,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "2. HỆ MÃ DỊCH VÒNG:",
+      "metadata": {
+        "section_id": "SEC008",
+        "paragraph_id": "PARA004",
+        "document_version": 1,
+        "page_number": 4,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P011",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "2. HỆ MÃ DỊCH VÒNG - Thuật toán và Công thức:\n- Khóa bí mật k thuộc tập Z26: k thuộc {0, 1, ..., 25}.\n- Công thức mã hóa: c = E(k, p) = (p + k) mod 26.\n- Công thức giải mã: p = D(k, c) = (c - k) mod 26.",
+      "start_char": 1848,
+      "end_char": 2050,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "2. HỆ MÃ DỊCH VÒNG - Thuật toán và Công thức:",
+      "metadata": {
+        "section_id": "SEC010",
+        "paragraph_id": "PARA005",
+        "document_version": 1,
+        "page_number": 5,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P012",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "- Công thức giải mã: p = D(k, c) = (c - k) mod 26.\n- Ví dụ minh họa: Với khóa k = 3, ký tự 'A' (0) mã hóa thành 'D' (3), 'B' (1) mã hóa thành 'E' (4).",
+      "start_char": 2000,
+      "end_char": 2150,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "2. HỆ MÃ DỊCH VÒNG - Thuật toán và Công thức:",
+      "metadata": {
+        "section_id": "SEC010",
+        "paragraph_id": "PARA005",
+        "document_version": 1,
+        "page_number": 5,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P013",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "2. HỆ MÃ DỊCH VÒNG - Đánh giá an ninh:\n- Không gian khóa của hệ mã dịch vòng rất nhỏ, chỉ có đúng 26 khóa có thể.\n- Rất dễ bị phá mã bằng phương pháp tấn công vét cạn (exhaustive key search) trong thời gian tức thì.",
+      "start_char": 2167,
+      "end_char": 2382,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "2. HỆ MÃ DỊCH VÒNG - Đánh giá an ninh:",
+      "metadata": {
+        "section_id": "SEC012",
+        "paragraph_id": "PARA006",
+        "document_version": 1,
+        "page_number": 6,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P014",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "- Rất dễ bị phá mã bằng phương pháp tấn công vét cạn (exhaustive key search) trong thời gian tức thì.\n- Thám mã chỉ cần thử tối đa 25 khóa dịch chuyển khác 0 để khôi phục lại hoàn toàn bản rõ.",
+      "start_char": 2281,
+      "end_char": 2473,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "2. HỆ MÃ DỊCH VÒNG - Đánh giá an ninh:",
+      "metadata": {
+        "section_id": "SEC012",
+        "paragraph_id": "PARA006",
+        "document_version": 1,
+        "page_number": 6,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P015",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "3. PHÁ MÃ:\n- Khái niệm thám mã: Khoa học nghiên cứu các kỹ thuật nhằm phá vỡ hệ mật hoặc khôi phục thông tin bản rõ mà không biết trước khóa bí mật.\n- An ninh của hệ mã khóa bao gồm hai mức độ đánh giá:",
+      "start_char": 2490,
+      "end_char": 2692,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "3. PHÁ MÃ:",
+      "metadata": {
+        "section_id": "SEC014",
+        "paragraph_id": "PARA007",
+        "document_version": 1,
+        "page_number": 7,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P016",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "- An ninh của hệ mã khóa bao gồm hai mức độ đánh giá:\n- An ninh vô điều kiện: Không thể phá mã dù kẻ tấn công có thời gian vô hạn và tài nguyên tính toán vô hạn.",
+      "start_char": 2639,
+      "end_char": 2800,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "3. PHÁ MÃ:",
+      "metadata": {
+        "section_id": "SEC014",
+        "paragraph_id": "PARA007",
+        "document_version": 1,
+        "page_number": 7,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P017",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "- An ninh vô điều kiện: Không thể phá mã dù kẻ tấn công có thời gian vô hạn và tài nguyên tính toán vô hạn.\n- An ninh tính toán: Chi phí để phá vỡ hệ mật vượt quá giá trị kinh tế của thông tin cần bảo vệ, hoặc thời gian cần thiết để phá mã vượt quá thời gian hữu dụng của thông tin.",
+      "start_char": 2693,
+      "end_char": 2975,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "3. PHÁ MÃ:",
+      "metadata": {
+        "section_id": "SEC014",
+        "paragraph_id": "PARA007",
+        "document_version": 1,
+        "page_number": 7,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P018",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "3. PHÁ MÃ - Các kiểu tấn công kinh điển:\n- Tấn công chỉ biết bản mã (Ciphertext-only attack): Thám mã chỉ sở hữu một chuỗi các bản mã C.\n- Tấn công biết trước bản rõ (Known-plaintext attack): Thám mã sở hữu các cặp bản rõ và bản mã tương ứng (P, C).",
+      "start_char": 2992,
+      "end_char": 3241,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "3. PHÁ MÃ - Các kiểu tấn công kinh điển:",
+      "metadata": {
+        "section_id": "SEC016",
+        "paragraph_id": "PARA008",
+        "document_version": 1,
+        "page_number": 8,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P019",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "- Tấn công biết trước bản rõ (Known-plaintext attack): Thám mã sở hữu các cặp bản rõ và bản mã tương ứng (P, C).\n- Tấn công chọn bản rõ (Chosen-plaintext attack): Thám mã có khả năng chọn các bản rõ tùy ý và thu được bản mã tương ứng.",
+      "start_char": 3129,
+      "end_char": 3363,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "3. PHÁ MÃ - Các kiểu tấn công kinh điển:",
+      "metadata": {
+        "section_id": "SEC016",
+        "paragraph_id": "PARA008",
+        "document_version": 1,
+        "page_number": 8,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P020",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "- Tấn công chọn bản rõ (Chosen-plaintext attack): Thám mã có khả năng chọn các bản rõ tùy ý và thu được bản mã tương ứng.\n- Tấn công chọn bản mã (Chosen-ciphertext attack): Thám mã có quyền chọn bản mã và nhận về bản rõ giải mã tương ứng.",
+      "start_char": 3242,
+      "end_char": 3480,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "3. PHÁ MÃ - Các kiểu tấn công kinh điển:",
+      "metadata": {
+        "section_id": "SEC016",
+        "paragraph_id": "PARA008",
+        "document_version": 1,
+        "page_number": 8,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P021",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "3. PHÁ MÃ - Phương pháp thống kê tần suất:\n- Các phương pháp thám mã phổ biến gồm tấn công vét cạn (brute-force) và phân tích thống kê tần suất xuất hiện của ký tự.",
+      "start_char": 3497,
+      "end_char": 3661,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "3. PHÁ MÃ - Phương pháp thống kê tần suất:",
+      "metadata": {
+        "section_id": "SEC018",
+        "paragraph_id": "PARA009",
+        "document_version": 1,
+        "page_number": 9,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P022",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "- Các phương pháp thám mã phổ biến gồm tấn công vét cạn (brute-force) và phân tích thống kê tần suất xuất hiện của ký tự.\n- Trong ngôn ngữ tự nhiên, mỗi chữ cái có tần suất xuất hiện đặc trưng (ví dụ: 'E' trong tiếng Anh có tần suất cao nhất khoảng 12.7%).",
+      "start_char": 3540,
+      "end_char": 3796,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "3. PHÁ MÃ - Phương pháp thống kê tần suất:",
+      "metadata": {
+        "section_id": "SEC018",
+        "paragraph_id": "PARA009",
+        "document_version": 1,
+        "page_number": 9,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P023",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "- Trong ngôn ngữ tự nhiên, mỗi chữ cái có tần suất xuất hiện đặc trưng (ví dụ: 'E' trong tiếng Anh có tần suất cao nhất khoảng 12.7%).\n- Các hệ mã thay thế đơn bảng giữ nguyên đặc tính phân bố tần suất của ngôn ngữ, do đó dễ dàng bị phân tích và bẻ khóa.",
+      "start_char": 3662,
+      "end_char": 3916,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "3. PHÁ MÃ - Phương pháp thống kê tần suất:",
+      "metadata": {
+        "section_id": "SEC018",
+        "paragraph_id": "PARA009",
+        "document_version": 1,
+        "page_number": 9,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P024",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "4. HỆ MÃ ĐƠN BẢNG:\n- Khái niệm: Hệ mã thay thế đơn bảng (Monoalphabetic Substitution Cipher).\n- Không giới hạn ở phép dịch cố định, mà mỗi ký tự trong bảng chữ cái được ánh xạ thành một ký tự bất kỳ theo một hoán vị ngẫu nhiên của 26 chữ cái.",
+      "start_char": 3934,
+      "end_char": 4176,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "4. HỆ MÃ ĐƠN BẢNG:",
+      "metadata": {
+        "section_id": "SEC020",
+        "paragraph_id": "PARA010",
+        "document_version": 1,
+        "page_number": 10,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P025",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "- Không giới hạn ở phép dịch cố định, mà mỗi ký tự trong bảng chữ cái được ánh xạ thành một ký tự bất kỳ theo một hoán vị ngẫu nhiên của 26 chữ cái.\n- Không gian khóa K = 26! xấp xỉ 4 * 10^26, là một con số rất lớn để chống lại tấn công vét cạn.",
+      "start_char": 4028,
+      "end_char": 4273,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "4. HỆ MÃ ĐƠN BẢNG:",
+      "metadata": {
+        "section_id": "SEC020",
+        "paragraph_id": "PARA010",
+        "document_version": 1,
+        "page_number": 10,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P026",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "4. HỆ MÃ ĐƠN BẢNG - Điểm yếu thám mã:\n- Mặc dù không gian khóa 26! vô cùng lớn, hệ mã này vẫn hoàn toàn không an toàn trước thám mã tần suất.",
+      "start_char": 4291,
+      "end_char": 4432,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "4. HỆ MÃ ĐƠN BẢNG - Điểm yếu thám mã:",
+      "metadata": {
+        "section_id": "SEC022",
+        "paragraph_id": "PARA011",
+        "document_version": 1,
+        "page_number": 11,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P027",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "- Mặc dù không gian khóa 26! vô cùng lớn, hệ mã này vẫn hoàn toàn không an toàn trước thám mã tần suất.\n- Do mỗi chữ cái luôn được mã hóa thành cùng một ký tự cố định duy nhất, biểu đồ tần suất của bản mã giữ nguyên hình dạng của ngôn ngữ bản rõ.",
+      "start_char": 4329,
+      "end_char": 4575,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "4. HỆ MÃ ĐƠN BẢNG - Điểm yếu thám mã:",
+      "metadata": {
+        "section_id": "SEC022",
+        "paragraph_id": "PARA011",
+        "document_version": 1,
+        "page_number": 11,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P028",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "- Do mỗi chữ cái luôn được mã hóa thành cùng một ký tự cố định duy nhất, biểu đồ tần suất của bản mã giữ nguyên hình dạng của ngôn ngữ bản rõ.\n- Kẻ thám mã chỉ cần khớp các ký tự xuất hiện nhiều nhất với chữ cái phổ biến để giải mã từng phần thông điệp.",
+      "start_char": 4433,
+      "end_char": 4686,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "4. HỆ MÃ ĐƠN BẢNG - Điểm yếu thám mã:",
+      "metadata": {
+        "section_id": "SEC022",
+        "paragraph_id": "PARA011",
+        "document_version": 1,
+        "page_number": 11,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P029",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "4. HỆ MÃ ĐƠN BẢNG - Biện pháp cải tiến:\n- Sử dụng các kỹ thuật mã đa bảng hoặc mã hóa khối để làm phẳng biểu đồ phân phối tần suất ký tự.\n- Kỹ thuật phân tích cặp ký tự (digram) và bộ ba ký tự (trigram) giúp tăng tốc độ bẻ khóa hệ mã đơn bảng.",
+      "start_char": 4704,
+      "end_char": 4947,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "4. HỆ MÃ ĐƠN BẢNG - Biện pháp cải tiến:",
+      "metadata": {
+        "section_id": "SEC024",
+        "paragraph_id": "PARA012",
+        "document_version": 1,
+        "page_number": 12,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P030",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "5. HỆ MÃ AFFINE:\n- Khái niệm: Hệ mã Affine là dạng mở rộng của hệ mã dịch vòng, kết hợp phép nhân và phép cộng modulo 26.\n- Cặp khóa bí mật gồm hai số nguyên K = (a, b) trong đó a, b thuộc Z26.",
+      "start_char": 4965,
+      "end_char": 5158,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "5. HỆ MÃ AFFINE:",
+      "metadata": {
+        "section_id": "SEC026",
+        "paragraph_id": "PARA013",
+        "document_version": 1,
+        "page_number": 13,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P031",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "- Cặp khóa bí mật gồm hai số nguyên K = (a, b) trong đó a, b thuộc Z26.\n- Điều kiện hợp lệ bắt buộc: a phải nguyên tố cùng nhau với 26, tức là gcd(a, 26) = 1.",
+      "start_char": 5087,
+      "end_char": 5245,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "5. HỆ MÃ AFFINE:",
+      "metadata": {
+        "section_id": "SEC026",
+        "paragraph_id": "PARA013",
+        "document_version": 1,
+        "page_number": 13,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P032",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "5. HỆ MÃ AFFINE - Thuật toán và Công thức:\n- Không gian khóa: Số lượng giá trị a hợp lệ là phi(26) = 12 giá trị (1, 3, 5, 7, 9, 11, 15, 17, 19, 21, 23, 25).\n- Tổng số khóa có thể: |K| = 12 * 26 = 312 khóa.",
+      "start_char": 5263,
+      "end_char": 5468,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "5. HỆ MÃ AFFINE - Thuật toán và Công thức:",
+      "metadata": {
+        "section_id": "SEC028",
+        "paragraph_id": "PARA014",
+        "document_version": 1,
+        "page_number": 14,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P033",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "- Tổng số khóa có thể: |K| = 12 * 26 = 312 khóa.\n- Công thức mã hóa: c = E((a, b), p) = (a * p + b) mod 26.\n- Công thức giải mã: p = D((a, b), c) = a^(-1) * (c - b) mod 26, với a^(-1) là nghịch đảo modulo 26 của a.",
+      "start_char": 5420,
+      "end_char": 5634,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "5. HỆ MÃ AFFINE - Thuật toán và Công thức:",
+      "metadata": {
+        "section_id": "SEC028",
+        "paragraph_id": "PARA014",
+        "document_version": 1,
+        "page_number": 14,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P034",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "5. HỆ MÃ AFFINE - Ví dụ minh họa:\n- Chọn khóa K = (7, 3). Ta có gcd(7, 26) = 1 và nghịch đảo 7^(-1) mod 26 = 15 vì (7 * 15) mod 26 = 105 mod 26 = 1.\n- Mã hóa ký tự 'H' (7): c = (7 * 7 + 3) mod 26 = 52 mod 26 = 0 ('A').",
+      "start_char": 5652,
+      "end_char": 5870,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "5. HỆ MÃ AFFINE - Ví dụ minh họa:",
+      "metadata": {
+        "section_id": "SEC030",
+        "paragraph_id": "PARA015",
+        "document_version": 1,
+        "page_number": 15,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P035",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "- Mã hóa ký tự 'H' (7): c = (7 * 7 + 3) mod 26 = 52 mod 26 = 0 ('A').\n- Giải mã 'A' (0): p = 15 * (0 - 3) mod 26 = 15 * (-3) mod 26 = -45 mod 26 = 7 ('H').",
+      "start_char": 5801,
+      "end_char": 5956,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "5. HỆ MÃ AFFINE - Ví dụ minh họa:",
+      "metadata": {
+        "section_id": "SEC030",
+        "paragraph_id": "PARA015",
+        "document_version": 1,
+        "page_number": 15,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P036",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "6. HỆ MÃ VIGENERE:\n- Khái niệm: Hệ mã hóa thay thế đa bảng (Polyalphabetic Cipher) nổi tiếng nhất trong lịch sử mật mã cổ điển.\n- Được đề xuất bởi Blaise de Vigenere vào thế kỷ 16.",
+      "start_char": 5974,
+      "end_char": 6154,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "6. HỆ MÃ VIGENERE:",
+      "metadata": {
+        "section_id": "SEC032",
+        "paragraph_id": "PARA016",
+        "document_version": 1,
+        "page_number": 16,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P037",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "- Được đề xuất bởi Blaise de Vigenere vào thế kỷ 16.\n- Khắc phục triệt để nhược điểm bảo toàn tần suất đơn bảng bằng cách luân phiên sử dụng nhiều khóa dịch chuyển khác nhau.",
+      "start_char": 6102,
+      "end_char": 6276,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "6. HỆ MÃ VIGENERE:",
+      "metadata": {
+        "section_id": "SEC032",
+        "paragraph_id": "PARA016",
+        "document_version": 1,
+        "page_number": 16,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P038",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "6. HỆ MÃ VIGENERE - Thuật toán và Bảng Vigenere:\n- Khóa bí mật là một từ khóa có độ dài m: K = (k0, k1, ..., km-1) với ki thuộc Z26.\n- Từ khóa được lặp lại tuần hoàn cho đến khi bằng chiều dài bản rõ.\n- Công thức mã hóa: ci = (pi + k_(i mod m)) mod 26.",
+      "start_char": 6294,
+      "end_char": 6546,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "6. HỆ MÃ VIGENERE - Thuật toán và Bảng Vigenere:",
+      "metadata": {
+        "section_id": "SEC034",
+        "paragraph_id": "PARA017",
+        "document_version": 1,
+        "page_number": 17,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P039",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "- Công thức mã hóa: ci = (pi + k_(i mod m)) mod 26.\n- Công thức giải mã: pi = (ci - k_(i mod m)) mod 26.",
+      "start_char": 6495,
+      "end_char": 6599,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "6. HỆ MÃ VIGENERE - Thuật toán và Bảng Vigenere:",
+      "metadata": {
+        "section_id": "SEC034",
+        "paragraph_id": "PARA017",
+        "document_version": 1,
+        "page_number": 17,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P040",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "6. HỆ MÃ VIGENERE - Phá mã Vigenere:\n- Phương pháp thử nghiệm Kasiski (1863): Tìm các chuỗi ký tự lặp lại trong bản mã để suy ra độ dài từ khóa m (ước chung của các khoảng cách).",
+      "start_char": 6617,
+      "end_char": 6795,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "6. HỆ MÃ VIGENERE - Phá mã Vigenere:",
+      "metadata": {
+        "section_id": "SEC036",
+        "paragraph_id": "PARA018",
+        "document_version": 1,
+        "page_number": 18,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P041",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "- Phương pháp thử nghiệm Kasiski (1863): Tìm các chuỗi ký tự lặp lại trong bản mã để suy ra độ dài từ khóa m (ước chung của các khoảng cách).\n- Chỉ số trùng phùng Friedman (Index of Coincidence - IC): Đo xác suất hai chữ cái chọn ngẫu nhiên trong bản mã trùng nhau để xác định độ dài m chính xác.",
+      "start_char": 6654,
+      "end_char": 6950,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "6. HỆ MÃ VIGENERE - Phá mã Vigenere:",
+      "metadata": {
+        "section_id": "SEC036",
+        "paragraph_id": "PARA018",
+        "document_version": 1,
+        "page_number": 18,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P042",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "- Chỉ số trùng phùng Friedman (Index of Coincidence - IC): Đo xác suất hai chữ cái chọn ngẫu nhiên trong bản mã trùng nhau để xác định độ dài m chính xác.\n- Khi đã biết độ dài m, bài toán phân rã thành m bài toán mã Caesar đơn lẻ giải bằng tần suất.",
+      "start_char": 6796,
+      "end_char": 7045,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "6. HỆ MÃ VIGENERE - Phá mã Vigenere:",
+      "metadata": {
+        "section_id": "SEC036",
+        "paragraph_id": "PARA018",
+        "document_version": 1,
+        "page_number": 18,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P043",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "7. HỆ MÃ HILL:\n- Khái niệm: Phát minh bởi Lester S. Hill năm 1929, là hệ mã hóa thay thế đa ký tự (Polygraphic Cipher) đầu tiên ứng dụng đại số tuyến tính.",
+      "start_char": 7063,
+      "end_char": 7218,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "7. HỆ MÃ HILL:",
+      "metadata": {
+        "section_id": "SEC038",
+        "paragraph_id": "PARA019",
+        "document_version": 1,
+        "page_number": 19,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P044",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "Hill năm 1929, là hệ mã hóa thay thế đa ký tự (Polygraphic Cipher) đầu tiên ứng dụng đại số tuyến tính.\n- Bản rõ được chia thành các khối độ dài m ký tự và biểu diễn dưới dạng vector hàng P = (p1, p2, ..., pm).",
+      "start_char": 7115,
+      "end_char": 7325,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "7. HỆ MÃ HILL:",
+      "metadata": {
+        "section_id": "SEC038",
+        "paragraph_id": "PARA019",
+        "document_version": 1,
+        "page_number": 19,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P045",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "- Bản rõ được chia thành các khối độ dài m ký tự và biểu diễn dưới dạng vector hàng P = (p1, p2, ..., pm).\n- Khóa bí mật là một ma trận vuông K kích thước m x m với các phần tử thuộc Z26.",
+      "start_char": 7219,
+      "end_char": 7406,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "7. HỆ MÃ HILL:",
+      "metadata": {
+        "section_id": "SEC038",
+        "paragraph_id": "PARA019",
+        "document_version": 1,
+        "page_number": 19,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P046",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "7. HỆ MÃ HILL - Công thức và Điều kiện khả nghịch:\n- Điều kiện khóa hợp lệ: Ma trận K phải khả nghịch trên vành Z26, tương đương điều kiện gcd(det(K), 26) = 1.\n- Công thức mã hóa: C = P * K mod 26.",
+      "start_char": 7424,
+      "end_char": 7621,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "7. HỆ MÃ HILL - Công thức và Điều kiện khả nghịch:",
+      "metadata": {
+        "section_id": "SEC040",
+        "paragraph_id": "PARA020",
+        "document_version": 1,
+        "page_number": 20,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P047",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "- Công thức mã hóa: C = P * K mod 26.\n- Công thức giải mã: P = C * K^(-1) mod 26, trong đó K^(-1) = det(K)^(-1) * adj(K) mod 26.\n- Hệ mã Hill có khả năng che giấu hoàn hảo tần suất ký tự đơn lẻ cũng như các cặp ký tự.",
+      "start_char": 7584,
+      "end_char": 7801,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "7. HỆ MÃ HILL - Công thức và Điều kiện khả nghịch:",
+      "metadata": {
+        "section_id": "SEC040",
+        "paragraph_id": "PARA020",
+        "document_version": 1,
+        "page_number": 20,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P048",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "7. HỆ MÃ HILL - Đánh giá an ninh:\n- Hệ mã Hill hoàn toàn chống lại được phương pháp tấn công chỉ biết bản mã (Ciphertext-only) dựa trên tần suất đơn lẻ.",
+      "start_char": 7819,
+      "end_char": 7971,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "7. HỆ MÃ HILL - Đánh giá an ninh:",
+      "metadata": {
+        "section_id": "SEC042",
+        "paragraph_id": "PARA021",
+        "document_version": 1,
+        "page_number": 21,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P049",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "- Hệ mã Hill hoàn toàn chống lại được phương pháp tấn công chỉ biết bản mã (Ciphertext-only) dựa trên tần suất đơn lẻ.\n- Tuy nhiên, hệ mã Hill hoàn toàn tuyến tính nên rất dễ bị phá mã bởi phương pháp tấn công biết trước bản rõ (Known-plaintext attack) bằng cách giải hệ phương trình ma trận m x m.",
+      "start_char": 7853,
+      "end_char": 8151,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "7. HỆ MÃ HILL - Đánh giá an ninh:",
+      "metadata": {
+        "section_id": "SEC042",
+        "paragraph_id": "PARA021",
+        "document_version": 1,
+        "page_number": 21,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P050",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "8. HỆ MÃ HOÁ ĐỘN MỘT LẦN:\n- Khái niệm: Hệ mã hóa hoàn hảo (Vernam Cipher / One-Time Pad - OTP), sáng chế bởi Gilbert Vernam năm 1917.\n- Được Claude Shannon chứng minh toán học năm 1949 là hệ mật duy nhất đạt mức an ninh tuyệt đối vô điều kiện.",
+      "start_char": 8169,
+      "end_char": 8412,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "8. HỆ MÃ HOÁ ĐỘN MỘT LẦN:",
+      "metadata": {
+        "section_id": "SEC044",
+        "paragraph_id": "PARA022",
+        "document_version": 1,
+        "page_number": 22,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P051",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "- Được Claude Shannon chứng minh toán học năm 1949 là hệ mật duy nhất đạt mức an ninh tuyệt đối vô điều kiện.\n- Quy tắc bắt buộc:",
+      "start_char": 8303,
+      "end_char": 8432,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "8. HỆ MÃ HOÁ ĐỘN MỘT LẦN:",
+      "metadata": {
+        "section_id": "SEC044",
+        "paragraph_id": "PARA022",
+        "document_version": 1,
+        "page_number": 22,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P052",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "1. Độ dài chuỗi khóa K bằng đúng độ dài thông điệp bản rõ P.",
+      "start_char": 8433,
+      "end_char": 8493,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "1. Độ dài chuỗi khóa K bằng đúng độ dài thông điệp bản rõ P.",
+      "metadata": {
+        "section_id": "SEC045",
+        "paragraph_id": "PARA022",
+        "document_version": 1,
+        "page_number": 22,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P053",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "2. Khóa được tạo hoàn toàn ngẫu nhiên thực sự (true random).",
+      "start_char": 8494,
+      "end_char": 8554,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "2. Khóa được tạo hoàn toàn ngẫu nhiên thực sự (true random).",
+      "metadata": {
+        "section_id": "SEC046",
+        "paragraph_id": "PARA022",
+        "document_version": 1,
+        "page_number": 22,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P054",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "3. Mỗi khóa chỉ được sử dụng duy nhất một lần và sau đó hủy bỏ.",
+      "start_char": 8555,
+      "end_char": 8618,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "3. Mỗi khóa chỉ được sử dụng duy nhất một lần và sau đó hủy bỏ.",
+      "metadata": {
+        "section_id": "SEC047",
+        "paragraph_id": "PARA022",
+        "document_version": 1,
+        "page_number": 22,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P055",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "8. HỆ MÃ HOÁ ĐỘN MỘT LẦN - Cơ chế toán học:\n- Không gian bản rõ, bản mã và khóa: P = C = K = {0, 1}^n.\n- Phép mã hóa: ci = pi XOR ki.\n- Phép giải mã: pi = ci XOR ki.\n- Tính chất hoàn hảo của Shannon: P(P=p | C=c) = P(P=p).",
+      "start_char": 8636,
+      "end_char": 8858,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "8. HỆ MÃ HOÁ ĐỘN MỘT LẦN - Cơ chế toán học:",
+      "metadata": {
+        "section_id": "SEC049",
+        "paragraph_id": "PARA023",
+        "document_version": 1,
+        "page_number": 23,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P056",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "- Tính chất hoàn hảo của Shannon: P(P=p | C=c) = P(P=p). Kẻ tấn công khi quan sát bản mã C không nhận thêm bất kỳ thông tin nào về bản rõ P.",
+      "start_char": 8802,
+      "end_char": 8942,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "8. HỆ MÃ HOÁ ĐỘN MỘT LẦN - Cơ chế toán học:",
+      "metadata": {
+        "section_id": "SEC049",
+        "paragraph_id": "PARA023",
+        "document_version": 1,
+        "page_number": 23,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P057",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "8. HỆ MÃ HOÁ ĐỘN MỘT LẦN - Thách thức triển khai thực tế:\n- Mặc dù an ninh tuyệt đối về mặt lý thuyết, OTP rất khó áp dụng trên diện rộng.",
+      "start_char": 8960,
+      "end_char": 9098,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "8. HỆ MÃ HOÁ ĐỘN MỘT LẦN - Thách thức triển khai thực tế:",
+      "metadata": {
+        "section_id": "SEC051",
+        "paragraph_id": "PARA024",
+        "document_version": 1,
+        "page_number": 24,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P058",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "- Mặc dù an ninh tuyệt đối về mặt lý thuyết, OTP rất khó áp dụng trên diện rộng.\n- Vấn đề phân phối khóa: Việc truyền một lượng khóa ngẫu nhiên khổng lồ bằng độ dài thông điệp đến bên nhận cũng khó khăn như việc truyền thông điệp bí mật.",
+      "start_char": 9018,
+      "end_char": 9255,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "8. HỆ MÃ HOÁ ĐỘN MỘT LẦN - Thách thức triển khai thực tế:",
+      "metadata": {
+        "section_id": "SEC051",
+        "paragraph_id": "PARA024",
+        "document_version": 1,
+        "page_number": 24,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P059",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "- Vấn đề phân phối khóa: Việc truyền một lượng khóa ngẫu nhiên khổng lồ bằng độ dài thông điệp đến bên nhận cũng khó khăn như việc truyền thông điệp bí mật.\n- Nguy cơ thảm họa nếu tái sử dụng khóa (Two-time pad): C1 XOR C2 = P1 XOR P2 làm lộ cấu trúc ngôn ngữ của hai thông điệp.",
+      "start_char": 9099,
+      "end_char": 9378,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "8. HỆ MÃ HOÁ ĐỘN MỘT LẦN - Thách thức triển khai thực tế:",
+      "metadata": {
+        "section_id": "SEC051",
+        "paragraph_id": "PARA024",
+        "document_version": 1,
+        "page_number": 24,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P060",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "9. HỆ MÃ HOÁ DÒNG:\n- Khái niệm: Hệ mã hóa dòng (Stream Cipher) là một giải pháp thực tế mô phỏng nguyên lý của Hệ mã độn một lần OTP.",
+      "start_char": 9396,
+      "end_char": 9529,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "9. HỆ MÃ HOÁ DÒNG:",
+      "metadata": {
+        "section_id": "SEC053",
+        "paragraph_id": "PARA025",
+        "document_version": 1,
+        "page_number": 25,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P061",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "- Khái niệm: Hệ mã hóa dòng (Stream Cipher) là một giải pháp thực tế mô phỏng nguyên lý của Hệ mã độn một lần OTP.\n- Thay vì dùng khóa ngẫu nhiên thật dài vô tận, hệ mã dòng sử dụng một bộ sinh số giả ngẫu nhiên (PRNG / Keystream Generator) điều khiển bởi một khóa bí mật ngắn K ban đầu.",
+      "start_char": 9415,
+      "end_char": 9702,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "9. HỆ MÃ HOÁ DÒNG:",
+      "metadata": {
+        "section_id": "SEC053",
+        "paragraph_id": "PARA025",
+        "document_version": 1,
+        "page_number": 25,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P062",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "- Thay vì dùng khóa ngẫu nhiên thật dài vô tận, hệ mã dòng sử dụng một bộ sinh số giả ngẫu nhiên (PRNG / Keystream Generator) điều khiển bởi một khóa bí mật ngắn K ban đầu.\n- Sinh ra một chuỗi dòng khóa z = z1, z2, z3...",
+      "start_char": 9530,
+      "end_char": 9750,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "9. HỆ MÃ HOÁ DÒNG:",
+      "metadata": {
+        "section_id": "SEC053",
+        "paragraph_id": "PARA025",
+        "document_version": 1,
+        "page_number": 25,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P063",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "9. HỆ MÃ HOÁ DÒNG - Thuật toán và Phép toán bit:\n- Dòng khóa được sinh tuần tự: zi = fi (K, x1, ..., xi-1).\n- Bản rõ được mã hóa từng bit hoặc từng byte bằng phép XOR với dòng khóa z: ci = pi XOR zi.",
+      "start_char": 9768,
+      "end_char": 9967,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "9. HỆ MÃ HOÁ DÒNG - Thuật toán và Phép toán bit:",
+      "metadata": {
+        "section_id": "SEC055",
+        "paragraph_id": "PARA026",
+        "document_version": 1,
+        "page_number": 26,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P064",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "- Bản rõ được mã hóa từng bit hoặc từng byte bằng phép XOR với dòng khóa z: ci = pi XOR zi.\n- Giải mã thực hiện hoàn toàn đối xứng bằng cùng phép toán XOR: pi = ci XOR zi.",
+      "start_char": 9876,
+      "end_char": 10047,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "9. HỆ MÃ HOÁ DÒNG - Thuật toán và Phép toán bit:",
+      "metadata": {
+        "section_id": "SEC055",
+        "paragraph_id": "PARA026",
+        "document_version": 1,
+        "page_number": 26,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P065",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "- Giải mã thực hiện hoàn toàn đối xứng bằng cùng phép toán XOR: pi = ci XOR zi.\n- Ưu điểm: Tốc độ xử lý nhanh và độ trễ thấp trong truyền thông thời gian thực, không gây lan truyền lỗi bit.",
+      "start_char": 9968,
+      "end_char": 10157,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "9. HỆ MÃ HOÁ DÒNG - Thuật toán và Phép toán bit:",
+      "metadata": {
+        "section_id": "SEC055",
+        "paragraph_id": "PARA026",
+        "document_version": 1,
+        "page_number": 26,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P066",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "9. HỆ MÃ HOÁ DÒNG - Phân loại hệ mã dòng:\n- Hệ mã dòng đồng bộ (Synchronous Stream Cipher): Dòng khóa z được sinh độc lập với bản rõ và bản mã, chỉ phụ thuộc vào khóa bí mật K và vector khởi tạo IV.",
+      "start_char": 10175,
+      "end_char": 10373,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "9. HỆ MÃ HOÁ DÒNG - Phân loại hệ mã dòng:",
+      "metadata": {
+        "section_id": "SEC057",
+        "paragraph_id": "PARA027",
+        "document_version": 1,
+        "page_number": 27,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P067",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "- Hệ mã dòng đồng bộ (Synchronous Stream Cipher): Dòng khóa z được sinh độc lập với bản rõ và bản mã, chỉ phụ thuộc vào khóa bí mật K và vector khởi tạo IV.\n- Hệ mã dòng tự đồng bộ (Self-synchronizing / Asynchronous Stream Cipher): Dòng khóa zi phụ thuộc vào một số bit bản mã liền trước c_(i-1), c_(i-2)...",
+      "start_char": 10217,
+      "end_char": 10524,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "9. HỆ MÃ HOÁ DÒNG - Phân loại hệ mã dòng:",
+      "metadata": {
+        "section_id": "SEC057",
+        "paragraph_id": "PARA027",
+        "document_version": 1,
+        "page_number": 27,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P068",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "- Hệ mã dòng tự đồng bộ (Self-synchronizing / Asynchronous Stream Cipher): Dòng khóa zi phụ thuộc vào một số bit bản mã liền trước c_(i-1), c_(i-2)...\n- Các hệ mã dòng thực tế nổi tiếng: RC4, ChaCha20, A5/1 (trong mạng GSM).",
+      "start_char": 10374,
+      "end_char": 10598,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "9. HỆ MÃ HOÁ DÒNG - Phân loại hệ mã dòng:",
+      "metadata": {
+        "section_id": "SEC057",
+        "paragraph_id": "PARA027",
+        "document_version": 1,
+        "page_number": 27,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P069",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "10. HỆ MÃ HOÁ AUTOKEY:\n- Khái niệm: Hệ mã hóa tự động sinh khóa (Autokey Cipher), đề xuất bởi Giovan Battista Bellaso và hoàn thiện bởi Vigenere.\n- Giải quyết nhược điểm lặp chu kỳ khóa của mã Vigenere mà không cần chia sẻ trước khóa quá dài.",
+      "start_char": 10616,
+      "end_char": 10858,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "10. HỆ MÃ HOÁ AUTOKEY:",
+      "metadata": {
+        "section_id": "SEC059",
+        "paragraph_id": "PARA028",
+        "document_version": 1,
+        "page_number": 28,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P070",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "- Giải quyết nhược điểm lặp chu kỳ khóa của mã Vigenere mà không cần chia sẻ trước khóa quá dài.\n- Cho P = C = K = Z26.",
+      "start_char": 10762,
+      "end_char": 10881,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "10. HỆ MÃ HOÁ AUTOKEY:",
+      "metadata": {
+        "section_id": "SEC059",
+        "paragraph_id": "PARA028",
+        "document_version": 1,
+        "page_number": 28,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P071",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "10. HỆ MÃ HOÁ AUTOKEY - Cơ chế mở rộng khóa:\n- Khóa k = k1, k2, ... ban đầu được mở rộng bằng chính các ký tự của bản rõ (Autokey).\n- Cụ thể: K = (k_seed, p1, p2, p3, ..., pn-1).\n- Công thức mã hóa: ci = (pi + ki) mod 26.",
+      "start_char": 10899,
+      "end_char": 11120,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "10. HỆ MÃ HOÁ AUTOKEY - Cơ chế mở rộng khóa:",
+      "metadata": {
+        "section_id": "SEC061",
+        "paragraph_id": "PARA029",
+        "document_version": 1,
+        "page_number": 29,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P072",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "- Công thức mã hóa: ci = (pi + ki) mod 26.\n- Công thức giải mã: p1 = (c1 - k1) mod 26; sau khi có p1, sử dụng p1 làm khóa k2 để giải mã c2: p2 = (c2 - p1) mod 26, tiếp tục tuần tự.",
+      "start_char": 11078,
+      "end_char": 11258,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "10. HỆ MÃ HOÁ AUTOKEY - Cơ chế mở rộng khóa:",
+      "metadata": {
+        "section_id": "SEC061",
+        "paragraph_id": "PARA029",
+        "document_version": 1,
+        "page_number": 29,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P073",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "10. HỆ MÃ HOÁ AUTOKEY - Đánh giá ưu nhược điểm:\n- Ưu điểm: Loại bỏ tính chu kỳ tuần hoàn ngắn của từ khóa trong mã Vigenere thông thường, gây khó khăn cho phương pháp kiểm tra Kasiski.",
+      "start_char": 11276,
+      "end_char": 11460,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "10. HỆ MÃ HOÁ AUTOKEY - Đánh giá ưu nhược điểm:",
+      "metadata": {
+        "section_id": "SEC063",
+        "paragraph_id": "PARA030",
+        "document_version": 1,
+        "page_number": 30,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P074",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "- Ưu điểm: Loại bỏ tính chu kỳ tuần hoàn ngắn của từ khóa trong mã Vigenere thông thường, gây khó khăn cho phương pháp kiểm tra Kasiski.\n- Nhược điểm: Thuộc tính tự sinh khóa khiến lỗi giải mã lan truyền; nếu một ký tự bị truyền sai, toàn bộ các ký tự bản rõ phía sau sẽ bị giải mã sai theo.",
+      "start_char": 11324,
+      "end_char": 11615,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "10. HỆ MÃ HOÁ AUTOKEY - Đánh giá ưu nhược điểm:",
+      "metadata": {
+        "section_id": "SEC063",
+        "paragraph_id": "PARA030",
+        "document_version": 1,
+        "page_number": 30,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P075",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "11. HỆ MÃ HOÁ PLAYFAIR:\n- Khái niệm: Phát minh bởi Charles Wheatstone năm 1854 nhưng mang tên Huân tước Playfair người có công phổ biến rộng rãi.\n- Sử dụng ma trận ký tự 5x5 để mã hóa từng cặp ký tự (digram).",
+      "start_char": 11633,
+      "end_char": 11841,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "11. HỆ MÃ HOÁ PLAYFAIR:",
+      "metadata": {
+        "section_id": "SEC065",
+        "paragraph_id": "PARA031",
+        "document_version": 1,
+        "page_number": 31,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P076",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "- Sử dụng ma trận ký tự 5x5 để mã hóa từng cặp ký tự (digram).\n- Bảng chữ cái 25 ký tự ghép đôi I và J vào cùng một ô để vừa ma trận 5x5.",
+      "start_char": 11779,
+      "end_char": 11916,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "11. HỆ MÃ HOÁ PLAYFAIR:",
+      "metadata": {
+        "section_id": "SEC065",
+        "paragraph_id": "PARA031",
+        "document_version": 1,
+        "page_number": 31,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P077",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "11. HỆ MÃ HOÁ PLAYFAIR - Quy tắc mã hóa ma trận:\n- Thay thế các cặp ký tự dựa trên quy tắc hình học trên ma trận:",
+      "start_char": 11934,
+      "end_char": 12047,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "11. HỆ MÃ HOÁ PLAYFAIR - Quy tắc mã hóa ma trận:",
+      "metadata": {
+        "section_id": "SEC067",
+        "paragraph_id": "PARA032",
+        "document_version": 1,
+        "page_number": 32,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P078",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "1. Nếu hai ký tự nằm cùng một hàng: Thay bằng các ký tự ngay bên phải (vòng lại đầu hàng nếu ở mép phải).",
+      "start_char": 12048,
+      "end_char": 12153,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "1. Nếu hai ký tự nằm cùng một hàng: Thay bằng các ký tự ngay bên phải (vòng lại đầu hàng nếu ở mép phải).",
+      "metadata": {
+        "section_id": "SEC068",
+        "paragraph_id": "PARA032",
+        "document_version": 1,
+        "page_number": 32,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P079",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "2. Nếu hai ký tự nằm cùng một cột: Thay bằng các ký tự ngay bên dưới (vòng lại đầu cột nếu ở mép dưới).",
+      "start_char": 12154,
+      "end_char": 12257,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "2. Nếu hai ký tự nằm cùng một cột: Thay bằng các ký tự ngay bên dưới (vòng lại đầu cột nếu ở mép dưới).",
+      "metadata": {
+        "section_id": "SEC069",
+        "paragraph_id": "PARA032",
+        "document_version": 1,
+        "page_number": 32,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P080",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "3. Nếu hai ký tự tạo thành hình chữ nhật: Thay bằng các ký tự ở cùng hàng nhưng nằm trên cột của ký tự kia.",
+      "start_char": 12258,
+      "end_char": 12365,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "3. Nếu hai ký tự tạo thành hình chữ nhật: Thay bằng các ký tự ở cùng hàng nhưng nằm trên cột của ký tự kia.",
+      "metadata": {
+        "section_id": "SEC070",
+        "paragraph_id": "PARA032",
+        "document_version": 1,
+        "page_number": 32,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P081",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "11. HỆ MÃ HOÁ PLAYFAIR - Xử lý trường hợp đặc biệt:\n- Nếu hai ký tự trong cặp giống nhau (ví dụ: 'LL'): Chèn một ký tự độn phụ như 'X' vào giữa ('LX', 'L...').\n- Nếu độ dài thông điệp là lẻ: Bổ sung ký tự độn 'X' hoặc 'Z' vào cuối chuỗi trước khi mã hóa.",
+      "start_char": 12383,
+      "end_char": 12637,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "11. HỆ MÃ HOÁ PLAYFAIR - Xử lý trường hợp đặc biệt:",
+      "metadata": {
+        "section_id": "SEC072",
+        "paragraph_id": "PARA033",
+        "document_version": 1,
+        "page_number": 33,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P082",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "- Nếu độ dài thông điệp là lẻ: Bổ sung ký tự độn 'X' hoặc 'Z' vào cuối chuỗi trước khi mã hóa.\n- Mã hóa Playfair làm phẳng tần suất các chữ cái đơn lẻ, nhưng vẫn có thể bị thám mã dựa trên tần suất của 625 cặp ký tự (digram).",
+      "start_char": 12543,
+      "end_char": 12768,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "11. HỆ MÃ HOÁ PLAYFAIR - Xử lý trường hợp đặc biệt:",
+      "metadata": {
+        "section_id": "SEC072",
+        "paragraph_id": "PARA033",
+        "document_version": 1,
+        "page_number": 33,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P083",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "12. HỆ MÃ HOÁ HOÁN VỊ:\n- Khái niệm: Khác với 11 hệ mã thay thế ở trên, hệ mã hóa hoán vị (Transposition / Permutation Cipher) giữ nguyên giá trị các ký tự bản rõ nhưng thay đổi vị trí của chúng.",
+      "start_char": 12786,
+      "end_char": 12980,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "12. HỆ MÃ HOÁ HOÁN VỊ:",
+      "metadata": {
+        "section_id": "SEC074",
+        "paragraph_id": "PARA034",
+        "document_version": 1,
+        "page_number": 34,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P084",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "- Khái niệm: Khác với 11 hệ mã thay thế ở trên, hệ mã hóa hoán vị (Transposition / Permutation Cipher) giữ nguyên giá trị các ký tự bản rõ nhưng thay đổi vị trí của chúng.\n- Tần suất các ký tự trong bản mã hoàn toàn giống hệt tần suất trong bản rõ (chữ cái phổ biến như 'E', 'A' vẫn giữ nguyên số lần xuất hiện).",
+      "start_char": 12809,
+      "end_char": 13121,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "12. HỆ MÃ HOÁ HOÁN VỊ:",
+      "metadata": {
+        "section_id": "SEC074",
+        "paragraph_id": "PARA034",
+        "document_version": 1,
+        "page_number": 34,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P085",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "12. HỆ MÃ HOÁ HOÁN VỊ - Các kỹ thuật hoán vị phổ biến:\n- Hoán vị đường rào (Rail Fence Cipher): Bản rõ được viết theo đường ziczac qua các đường ray rồi đọc ra theo từng hàng.",
+      "start_char": 13139,
+      "end_char": 13314,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "12. HỆ MÃ HOÁ HOÁN VỊ - Các kỹ thuật hoán vị phổ biến:",
+      "metadata": {
+        "section_id": "SEC076",
+        "paragraph_id": "PARA035",
+        "document_version": 1,
+        "page_number": 35,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P086",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "- Hoán vị đường rào (Rail Fence Cipher): Bản rõ được viết theo đường ziczac qua các đường ray rồi đọc ra theo từng hàng.\n- Hoán vị cột (Columnar Transposition): Bản rõ được điền vào ma trận hình chữ nhật theo từng hàng, sau đó đọc ra theo các cột dựa trên thứ tự hoán vị của từ khóa bí mật.",
+      "start_char": 13194,
+      "end_char": 13484,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "12. HỆ MÃ HOÁ HOÁN VỊ - Các kỹ thuật hoán vị phổ biến:",
+      "metadata": {
+        "section_id": "SEC076",
+        "paragraph_id": "PARA035",
+        "document_version": 1,
+        "page_number": 35,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P087",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "- Hoán vị cột (Columnar Transposition): Bản rõ được điền vào ma trận hình chữ nhật theo từng hàng, sau đó đọc ra theo các cột dựa trên thứ tự hoán vị của từ khóa bí mật.\n- Hoán vị nhiều vòng: Thực hiện liên tiếp 2 hay nhiều lượt hoán vị cột với các khóa khác nhau để làm tăng độ xáo trộn.",
+      "start_char": 13315,
+      "end_char": 13603,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "12. HỆ MÃ HOÁ HOÁN VỊ - Các kỹ thuật hoán vị phổ biến:",
+      "metadata": {
+        "section_id": "SEC076",
+        "paragraph_id": "PARA035",
+        "document_version": 1,
+        "page_number": 35,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P088",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "12. HỆ MÃ HOÁ HOÁN VỊ - So sánh và Ứng dụng:\n- So sánh: Mã thay thế làm biến đổi ký tự (confusion); mã hoán vị làm xáo trộn vị trí ký tự (diffusion).",
+      "start_char": 13621,
+      "end_char": 13770,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "12. HỆ MÃ HOÁ HOÁN VỊ - So sánh và Ứng dụng:",
+      "metadata": {
+        "section_id": "SEC078",
+        "paragraph_id": "PARA036",
+        "document_version": 1,
+        "page_number": 36,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_E2E_PERF_36::P089",
+      "document_id": "DOC_E2E_PERF_36",
+      "text": "- So sánh: Mã thay thế làm biến đổi ký tự (confusion); mã hoán vị làm xáo trộn vị trí ký tự (diffusion).\n- Trong mật mã học hiện đại, nguyên lý thay thế kết hợp hoán vị của Claude Shannon là nền tảng cốt lõi của mạng SPN (Substitution-Permutation Network) và mạng Feistel trong chuẩn mã hóa nâng cao AES và DES.",
+      "start_char": 13666,
+      "end_char": 13977,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "12. HỆ MÃ HOÁ HOÁN VỊ - So sánh và Ứng dụng:",
+      "metadata": {
+        "section_id": "SEC078",
+        "paragraph_id": "PARA036",
+        "document_version": 1,
+        "page_number": 36,
+        "category": "PerformanceTest",
+        "token_reduction": {
+          "raw_tokens": 4401,
+          "cleaned_tokens": 4401,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    }
+  ],
+  "structural_metadata": {},
+  "content_hash": "a0f556c758c78fee",
+  "created_at": 1795702556.158005,
+  "metadata": {
+    "category": "PerformanceTest",
+    "token_reduction": {
+      "raw_tokens": 4401,
+      "cleaned_tokens": 4401,
+      "tokens_saved": 0,
+      "reduction_pct": 0.0,
+      "removed_lines_count": 0
+    },
+    "chunker_version": "v5.0"
+  }
+}

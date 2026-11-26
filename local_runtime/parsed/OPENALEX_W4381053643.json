@@ -1,0 +1,38 @@
+{
+  "document_id": "OPENALEX_W4381053643",
+  "sections": [
+    {
+      "title": "# Tính liên thông của tập nghiệm hữu hiệu yếu cho bài toán tối ưu tập không lồi",
+      "start": 0,
+      "end": 81
+    },
+    {
+      "title": "## Abstract",
+      "start": 81,
+      "end": 611
+    },
+    {
+      "title": "## Metadata",
+      "start": 611,
+      "end": 852
+    }
+  ],
+  "paragraphs": [
+    {
+      "text": "# Tính liên thông của tập nghiệm hữu hiệu yếu cho bài toán tối ưu tập không lồi",
+      "start": 0,
+      "end": 79
+    },
+    {
+      "text": "## Abstract\nBài báo này xem xét một bài toán tối ưu tập không lồi và thảo luận các điều kiện liên th",
+      "start": 81,
+      "end": 609
+    },
+    {
+      "text": "## Metadata\nOpenAlex ID: W4381053643\nYear: 2023\nVenue: Can Tho University Journal of Science\nConcept",
+      "start": 611,
+      "end": 852
+    }
+  ],
+  "total_tokens": 586
+}

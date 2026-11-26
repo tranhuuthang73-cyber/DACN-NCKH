@@ -1,0 +1,47 @@
+# Danh sách trạm phát sóng truyền hình analog tại Việt Nam
+
+Dưới đây là danh sách trạm phát sóng kênh truyền hình analog tại các tỉnh thành, vùng lãnh thổ ở Việt Nam, được sắp xếp theo các khu vực trên cả nước, bao gồm các kênh của Đài Truyền hình Việt Nam, các kênh địa phương.
+Hiện nay, truyền hình analog trên toàn lãnh thổ Việt Nam đã dừng phát sóng từ ngày 28 tháng 12 năm 2020 do lộ trình số hóa của chính phủ. Trước đây, truyền hình analog tại quốc gia này đa phần phát sóng trên băng tần VHF (từ kênh 6 đến kênh 12) và băng tần UHF (từ kênh 21 đến kênh 62), chỉ có một số nơi phát sóng dưới 6 VHF (ví dụ như 3 VHF ở Tam Đảo).
+
+## Các kênh của Đài Truyền hình Việt Nam
+Danh sách dưới đây chỉ bao gồm trạm chính phát sóng (đặt tại trung tâm/tỉnh lỵ/núi). Thứ tự của các tỉnh dựa theo từng vùng miền, từ Bắc vào Nam (riêng các kênh khu vực sẽ được sắp xếp tại các tỉnh có trạm phát sóng kênh khu vực).
+
+### VTV1
+
+### VTV2
+
+### VTV3
+
+### VTV4
+
+### VTV5
+
+### VTV6 (cũ, nay là VTV10)
+
+### Kênh khu vực
+Danh sách dưới đây chỉ bao gồm những trạm chính và các trạm phát lại do các kênh khu vực đặt.
+
+## Truyền hình địa phương
+Danh sách đưới đây chỉ bao gồm các đài của địa phương đó phát tại trạm chính. Thứ tự của các tỉnh dựa theo từng vùng miền, từ Bắc vào Nam.
+
+## Truyền hình huyện
+Bản liệt kê dưới đây chỉ bao gồm các kênh truyền hình tại các huyện thuộc tỉnh, thành, được sắp xếp theo từng khu vực từ Bắc vào Nam và thứ tự kênh tần số (từ 2 - 62 UHF).
+
+## Các kênh khác
+
+### VTC
+
+### HTV
+
+### VOV
+
+## Xem thêm
+Truyền hình tại Việt Nam
+Tần số các kênh phát thanh FM tại Việt Nam
+Số hóa truyền hình tại Việt Nam
+
+## Chú thích
+
+### Ghi chú
+
+### Tham khảo

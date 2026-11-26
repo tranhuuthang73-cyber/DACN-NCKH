@@ -1,0 +1,10 @@
+# A new algorithm for computing the multivariate Faà di Bruno's formula
+
+## Abstract
+A new algorithm for computing the multivariate Faà di Bruno's formula is provided. We use a symbolic approach based on the classical umbral calculus that turns the computation of the multivariate Faà di Bruno's formula into a suitable multinomial expansion. We propose a MAPLE procedure whose computational times are faster compared with the ones existing in the literature. Some illustrative applications are also provided.
+
+## Metadata
+arXiv ID: 1012.6008v1
+Categories: math.CO, math.ST
+Authors: E. Di Nardo, G. Guarino, D. Senato
+Published: 2010-12-29T19:20:00Z

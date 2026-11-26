@@ -1,0 +1,12 @@
+# HÌNH TƯỢNG CON NGƯỜI CHẤN THƯƠNG TRONG TIỂU THUYẾT TÔI NGỒI ĐÂY CHỜ CƠN BÃO TỚI CỦA NGUYỄN HẢI NHẬT HUY
+
+## Abstract
+Hình tượng con người chấn thương không chỉ là tín hiệu văn chương của một tác giả hay một thời đại, mà đó là mĩ cảm được kết trầm qua lăng kính đời sống. Vận dụng lí thuyết hiện sinh, phân tâm học và liên văn bản, bài báo đi tìm những biểu hiện và nguyên nhân chấn thương tâm lí qua tiểu thuyết Tôi ngồi đây chờ cơn bão tới của Nguyễn Hải Nhật Huy trên tinh thần đối sánh với những sự kiện và dữ liệu trong các văn bản và thực tiễn để thấy đằng sau những chấn thương tinh thần ấy là mặt trái của sự phát triển đô thị thời đại 4.0. Tái hiện đời sống bằng cách nhận diện nỗi đau, Nguyễn Hải Nhật Huy đã thể hiện một lối tư duy độc đáo, giàu liên tưởng với nghệ thuật biểu đạt cá tính và mới lạ.
+
+## Metadata
+OpenAlex ID: W4206518399
+Year: 2021
+Venue: Tạp chí Khoa học
+Concepts: Stereochemistry, Chemistry, Medicinal chemistry
+Authors: Nguyễn Thuỳ Trang
+URL: https://doi.org/10.54607/hcmue.js.18.4.3028(2021)

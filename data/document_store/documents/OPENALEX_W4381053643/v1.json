@@ -1,0 +1,160 @@
+{
+  "document_id": "OPENALEX_W4381053643",
+  "version": 1,
+  "title": "Tính liên thông của tập nghiệm hữu hiệu yếu cho bài toán tối ưu tập không lồi",
+  "raw_text": "# Tính liên thông của tập nghiệm hữu hiệu yếu cho bài toán tối ưu tập không lồi\n\n## Abstract\nBài báo này xem xét một bài toán tối ưu tập không lồi và thảo luận các điều kiện liên thông cho tập nghiệm hữu hiệu yếu của nó. Đầu tiên, các khái niệm khác nhau về tính liên thông cho ánh xạ có giá trị tập được đề xuất. Thứ hai, các điều kiện đủ cho tính liên thông cho một dạng mở rộng của hàm khoảng cách định hướng của Hiriart-Urruty được trình bày. Cuối cùng, tính liên thông của tập nghiệm hữu hiệu yếu cho bài toán trên được nghiên cứu thông qua dạng mở rộng của hàm khoảng cách định hướng của Hiriart-Urruty.\n\n## Metadata\nOpenAlex ID: W4381053643\nYear: 2023\nVenue: Can Tho University Journal of Science\nConcepts: Chemistry, Stereochemistry\nAuthors: Thái Anh Nguyễn, Thanh Dược Phạm, Thị Ngọc Tuyết Nguyễn\nURL: https://doi.org/10.22144/ctu.jvn.2023.088",
+  "passages": [
+    {
+      "passage_id": "OPENALEX_W4381053643::P000",
+      "document_id": "OPENALEX_W4381053643",
+      "text": "# Tính liên thông của tập nghiệm hữu hiệu yếu cho bài toán tối ưu tập không lồi",
+      "start_char": 0,
+      "end_char": 79,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "Tính liên thông của tập nghiệm hữu hiệu yếu cho bài toán tối ưu tập không lồi",
+      "metadata": {
+        "section_id": "SEC001",
+        "paragraph_id": "PARA001",
+        "document_version": 1,
+        "category": "OPENALEX",
+        "source": "openalex",
+        "language": "en",
+        "url": "https://doi.org/10.22144/ctu.jvn.2023.088",
+        "token_reduction": {
+          "raw_tokens": 211,
+          "cleaned_tokens": 211,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "OPENALEX_W4381053643::P001",
+      "document_id": "OPENALEX_W4381053643",
+      "text": "## Abstract\nBài báo này xem xét một bài toán tối ưu tập không lồi và thảo luận các điều kiện liên thông cho tập nghiệm hữu hiệu yếu của nó. Đầu tiên, các khái niệm khác nhau về tính liên thông cho ánh xạ có giá trị tập được đề xuất.",
+      "start_char": 81,
+      "end_char": 313,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "Abstract",
+      "metadata": {
+        "section_id": "SEC002",
+        "paragraph_id": "PARA001",
+        "document_version": 1,
+        "category": "OPENALEX",
+        "source": "openalex",
+        "language": "en",
+        "url": "https://doi.org/10.22144/ctu.jvn.2023.088",
+        "token_reduction": {
+          "raw_tokens": 211,
+          "cleaned_tokens": 211,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "OPENALEX_W4381053643::P002",
+      "document_id": "OPENALEX_W4381053643",
+      "text": "Đầu tiên, các khái niệm khác nhau về tính liên thông cho ánh xạ có giá trị tập được đề xuất. Thứ hai, các điều kiện đủ cho tính liên thông cho một dạng mở rộng của hàm khoảng cách định hướng của Hiriart-Urruty được trình bày.",
+      "start_char": 221,
+      "end_char": 446,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "Abstract",
+      "metadata": {
+        "section_id": "SEC002",
+        "paragraph_id": "PARA002",
+        "document_version": 1,
+        "category": "OPENALEX",
+        "source": "openalex",
+        "language": "en",
+        "url": "https://doi.org/10.22144/ctu.jvn.2023.088",
+        "token_reduction": {
+          "raw_tokens": 211,
+          "cleaned_tokens": 211,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "OPENALEX_W4381053643::P003",
+      "document_id": "OPENALEX_W4381053643",
+      "text": "Thứ hai, các điều kiện đủ cho tính liên thông cho một dạng mở rộng của hàm khoảng cách định hướng của Hiriart-Urruty được trình bày. Cuối cùng, tính liên thông của tập nghiệm hữu hiệu yếu cho bài toán trên được nghiên cứu thông qua dạng mở rộng của hàm khoảng cách định hướng của Hiriart-Urruty.",
+      "start_char": 314,
+      "end_char": 609,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "Abstract",
+      "metadata": {
+        "section_id": "SEC002",
+        "paragraph_id": "PARA002",
+        "document_version": 1,
+        "category": "OPENALEX",
+        "source": "openalex",
+        "language": "en",
+        "url": "https://doi.org/10.22144/ctu.jvn.2023.088",
+        "token_reduction": {
+          "raw_tokens": 211,
+          "cleaned_tokens": 211,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "OPENALEX_W4381053643::P004",
+      "document_id": "OPENALEX_W4381053643",
+      "text": "## Metadata\nOpenAlex ID: W4381053643\nYear: 2023\nVenue: Can Tho University Journal of Science\nConcepts: Chemistry, Stereochemistry\nAuthors: Thái Anh Nguyễn, Thanh Dược Phạm, Thị Ngọc Tuyết Nguyễn\nURL: https://doi.org/10.22144/ctu.jvn.2023.088",
+      "start_char": 611,
+      "end_char": 852,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "Metadata",
+      "metadata": {
+        "section_id": "SEC003",
+        "paragraph_id": "PARA002",
+        "document_version": 1,
+        "category": "OPENALEX",
+        "source": "openalex",
+        "language": "en",
+        "url": "https://doi.org/10.22144/ctu.jvn.2023.088",
+        "token_reduction": {
+          "raw_tokens": 211,
+          "cleaned_tokens": 211,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    }
+  ],
+  "structural_metadata": {},
+  "content_hash": "0785190a778348f7",
+  "created_at": 1795695564.3495278,
+  "metadata": {
+    "category": "OPENALEX",
+    "source": "openalex",
+    "language": "en",
+    "url": "https://doi.org/10.22144/ctu.jvn.2023.088",
+    "token_reduction": {
+      "raw_tokens": 211,
+      "cleaned_tokens": 211,
+      "tokens_saved": 0,
+      "reduction_pct": 0.0,
+      "removed_lines_count": 0
+    },
+    "chunker_version": "v5.0"
+  }
+}

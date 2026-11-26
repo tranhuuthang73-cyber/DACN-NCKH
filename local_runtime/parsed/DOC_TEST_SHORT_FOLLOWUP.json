@@ -1,0 +1,43 @@
+{
+  "document_id": "DOC_TEST_SHORT_FOLLOWUP",
+  "sections": [
+    {
+      "title": "=== Page 1 ===",
+      "start": 0,
+      "end": 15
+    },
+    {
+      "title": "1. GIAO THỨC HTTP VÀ CƠ CHẾ HOẠT ĐỘNG:",
+      "start": 15,
+      "end": 534
+    }
+  ],
+  "paragraphs": [
+    {
+      "text": "=== Page 1 ===\n1.",
+      "start": 0,
+      "end": 17
+    },
+    {
+      "text": "GIAO THỨC HTTP VÀ CƠ CHẾ HOẠT ĐỘNG:\n- HTTP (Hypertext Transfer Protocol) là giao thức truyền tải siê",
+      "start": 18,
+      "end": 171
+    },
+    {
+      "text": "- Giao thức hoạt động theo cơ chế Request-Response phi trạng thái (stateless), sử dụng các phương th",
+      "start": 172,
+      "end": 311
+    },
+    {
+      "text": "- Ví dụ: Khi trình duyệt gửi yêu cầu GET /index.html, máy chủ phản hồi mã trạng thái 200 OK kèm nội ",
+      "start": 312,
+      "end": 427
+    },
+    {
+      "text": "- Phiên bản HTTPS bổ sung lớp mã hóa TLS/SSL để bảo vệ tính toàn vẹn và bảo mật dữ liệu trên đường t",
+      "start": 428,
+      "end": 534
+    }
+  ],
+  "total_tokens": 337
+}

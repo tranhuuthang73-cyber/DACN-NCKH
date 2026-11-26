@@ -1,0 +1,5 @@
+## Architecture
+WaveCMSEngine decomposes document embeddings with Haar wavelets for O(log N) updates.
+
+## Unlearning
+Exact unlearning subtracts leaf contributions with machine-precision discrepancy.

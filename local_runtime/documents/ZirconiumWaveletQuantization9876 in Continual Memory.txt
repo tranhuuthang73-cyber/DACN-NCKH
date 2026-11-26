@@ -1,0 +1,4 @@
+# ZirconiumWaveletQuantization9876 in Continual Memory
+
+## Abstract
+ZirconiumWaveletQuantization9876 achieves a compression ratio of 42.5x while preserving 99.1% recall in WaveCMS.

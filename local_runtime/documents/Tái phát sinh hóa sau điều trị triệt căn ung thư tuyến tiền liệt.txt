@@ -1,0 +1,12 @@
+# Tái phát sinh hóa sau điều trị triệt căn ung thư tuyến tiền liệt
+
+## Abstract
+Ung thư tuyến tiền liệt (TTL) là bệnh ác tính phổ biến, với 27–53% trường hợp tái phát sinh hóa (BCR) sau điều trị triệt căn. Hiện vẫn còn thiếu đồng thuận về định nghĩa BCR và có sự khác biệt trong khuyến cáo điều trị. Bài tổng quan này nhằm hệ thống hóa bằng chứng khoa học mới nhất để hỗ trợ quản lý BCR tối ưu tại Việt Nam, dựa trên các khuyến cáo của 4 hiệp hội tiết niệu và ung thư uy tín nhất trên thế giới bao gồm AUA, EAU, ASCO và NCCN. Sau phẫu thuật, định nghĩa BCR khác nhau giữa các hiệp hội (ví dụ: NCCN 0,1 ng/mL, AUA/ASCO 0,2 ng/mL, EAU 0,4 ng/mL). Sau xạ trị, định nghĩa thống nhất là PSA tăng 2 ng/mL so với mức thấp nhất (nadir). Các yếu tố nguy cơ độc lập bao gồm PSA, điểm Gleason/nhóm ISUP, giai đoạn ung thư và biên phẫu thuật dương tính. Quản lý BCR cần phân nhóm nguy cơ (thấp/cao) dựa trên PSA-DT và nhóm ISUP. PSMA PET/CT là phương tiện ưu tiên để phát hiện sớm tái phát lâm sàng, ngay cả ở mức PSA rất thấp. Điều trị cứu vớt nền tảng là xạ trị cứu vớt sớm sau phẫu thuật và hormon liệu pháp sau xạ trị. Quản lý BCR hiệu quả đòi hỏi một cách tiếp cận đa chiều. Phân nhóm nguy cơ (PSA-DT, ISUP) là tối quan trọng để định hướng chiến lược theo dõi hoặc điều trị cứu vớt kịp thời. Việc cá nhân hóa và áp dụng linh hoạt các khuyến cáo cập nhật là chìa khóa để cải thiện tiên lượng cho bệnh nhân TTL. Các tài liệu được tổng hợp từ các hướng dẫn quốc tế và đối chiếu với y văn liên quan công bố trong giai đoạn 2018–2025. Từ khóa: ung thư tuyến tiền liệt; tái phát sinh hóa; điều trị triệt căn
+
+## Metadata
+OpenAlex ID: W7125393001
+Year: 2026
+Venue: Y HOC TP HO CHI MINH
+Concepts: Context (archaeology), breakpoint cluster region, Business, Physics, Mathematics
+Authors: Kinh Luân Thái, Như Quang Trần
+URL: https://doi.org/10.32895/hcjm.m.2026.02.03

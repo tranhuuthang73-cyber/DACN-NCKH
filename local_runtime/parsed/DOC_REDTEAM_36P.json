@@ -1,0 +1,428 @@
+{
+  "document_id": "DOC_REDTEAM_36P",
+  "sections": [
+    {
+      "title": "=== Page 1 ===",
+      "start": 0,
+      "end": 15
+    },
+    {
+      "title": "1. GIỚI THIỆU HỆ MÃ KHÓA ĐỐI XỨNG:",
+      "start": 15,
+      "end": 332
+    },
+    {
+      "title": "=== Page 2 ===",
+      "start": 332,
+      "end": 347
+    },
+    {
+      "title": "2. HỆ MÃ DỊCH VÒNG:",
+      "start": 347,
+      "end": 516
+    },
+    {
+      "title": "=== Page 3 ===",
+      "start": 516,
+      "end": 558
+    },
+    {
+      "title": "=== Page 4 ===",
+      "start": 558,
+      "end": 600
+    },
+    {
+      "title": "=== Page 5 ===",
+      "start": 600,
+      "end": 642
+    },
+    {
+      "title": "=== Page 6 ===",
+      "start": 642,
+      "end": 684
+    },
+    {
+      "title": "=== Page 7 ===",
+      "start": 684,
+      "end": 726
+    },
+    {
+      "title": "=== Page 8 ===",
+      "start": 726,
+      "end": 768
+    },
+    {
+      "title": "=== Page 9 ===",
+      "start": 768,
+      "end": 810
+    },
+    {
+      "title": "=== Page 10 ===",
+      "start": 810,
+      "end": 826
+    },
+    {
+      "title": "3. PHÁ MÃ:",
+      "start": 826,
+      "end": 1178
+    },
+    {
+      "title": "=== Page 11 ===",
+      "start": 1178,
+      "end": 1194
+    },
+    {
+      "title": "4. HỆ MÃ ĐƠN BẢNG:",
+      "start": 1194,
+      "end": 1319
+    },
+    {
+      "title": "=== Page 15 ===",
+      "start": 1319,
+      "end": 1335
+    },
+    {
+      "title": "5. HỆ MÃ AFFINE:",
+      "start": 1335,
+      "end": 1455
+    },
+    {
+      "title": "=== Page 20 ===",
+      "start": 1455,
+      "end": 1471
+    },
+    {
+      "title": "6. HỆ MÃ VIGENERE:",
+      "start": 1471,
+      "end": 1606
+    },
+    {
+      "title": "=== Page 25 ===",
+      "start": 1606,
+      "end": 1622
+    },
+    {
+      "title": "7. HỆ MÃ HILL:",
+      "start": 1622,
+      "end": 1729
+    },
+    {
+      "title": "=== Page 12 ===",
+      "start": 1729,
+      "end": 1768
+    },
+    {
+      "title": "=== Page 13 ===",
+      "start": 1768,
+      "end": 1807
+    },
+    {
+      "title": "=== Page 14 ===",
+      "start": 1807,
+      "end": 1846
+    },
+    {
+      "title": "=== Page 16 ===",
+      "start": 1846,
+      "end": 1885
+    },
+    {
+      "title": "=== Page 17 ===",
+      "start": 1885,
+      "end": 1924
+    },
+    {
+      "title": "=== Page 18 ===",
+      "start": 1924,
+      "end": 1963
+    },
+    {
+      "title": "=== Page 19 ===",
+      "start": 1963,
+      "end": 2002
+    },
+    {
+      "title": "=== Page 21 ===",
+      "start": 2002,
+      "end": 2041
+    },
+    {
+      "title": "=== Page 22 ===",
+      "start": 2041,
+      "end": 2080
+    },
+    {
+      "title": "=== Page 23 ===",
+      "start": 2080,
+      "end": 2119
+    },
+    {
+      "title": "=== Page 24 ===",
+      "start": 2119,
+      "end": 2158
+    },
+    {
+      "title": "=== Page 26 ===",
+      "start": 2158,
+      "end": 2197
+    },
+    {
+      "title": "=== Page 27 ===",
+      "start": 2197,
+      "end": 2236
+    },
+    {
+      "title": "=== Page 28 ===",
+      "start": 2236,
+      "end": 2275
+    },
+    {
+      "title": "=== Page 29 ===",
+      "start": 2275,
+      "end": 2314
+    },
+    {
+      "title": "=== Page 30 ===",
+      "start": 2314,
+      "end": 2330
+    },
+    {
+      "title": "8. HỆ MÃ HOÁ ĐỘN MỘT LẦN:",
+      "start": 2330,
+      "end": 2493
+    },
+    {
+      "title": "9. HỆ MÃ HOÁ DÒNG:",
+      "start": 2493,
+      "end": 2749
+    },
+    {
+      "title": "=== Page 31 ===",
+      "start": 2749,
+      "end": 2765
+    },
+    {
+      "title": "10. HỆ MÃ HOÁ AUTOKEY:",
+      "start": 2765,
+      "end": 2942
+    },
+    {
+      "title": "=== Page 32 ===",
+      "start": 2942,
+      "end": 2990
+    },
+    {
+      "title": "=== Page 33 ===",
+      "start": 2990,
+      "end": 3038
+    },
+    {
+      "title": "=== Page 34 ===",
+      "start": 3038,
+      "end": 3086
+    },
+    {
+      "title": "=== Page 35 ===",
+      "start": 3086,
+      "end": 3134
+    },
+    {
+      "title": "=== Page 36 ===",
+      "start": 3134,
+      "end": 3150
+    },
+    {
+      "title": "11. HỆ MÃ HOÁ PLAYFAIR:",
+      "start": 3150,
+      "end": 3341
+    }
+  ],
+  "paragraphs": [
+    {
+      "text": "=== Page 1 ===\n1. GIỚI THIỆU HỆ MÃ KHÓA ĐỐI XỨNG:\n- Xuất hiện đầu tiên trong ngành mã hóa.\n- Các hệ ",
+      "start": 0,
+      "end": 330
+    },
+    {
+      "text": "=== Page 2 ===\n2. HỆ MÃ DỊCH VÒNG:\n- Định nghĩa: Không gian bản rõ P, bản mã C và khóa K đều thuộc Z",
+      "start": 332,
+      "end": 514
+    },
+    {
+      "text": "=== Page 3 ===\nCHUYÊN ĐỀ MẬT MÃ TRANG 3:",
+      "start": 516,
+      "end": 556
+    },
+    {
+      "text": "=== Page 4 ===\nCHUYÊN ĐỀ MẬT MÃ TRANG 4:",
+      "start": 558,
+      "end": 598
+    },
+    {
+      "text": "=== Page 5 ===\nCHUYÊN ĐỀ MẬT MÃ TRANG 5:",
+      "start": 600,
+      "end": 640
+    },
+    {
+      "text": "=== Page 6 ===\nCHUYÊN ĐỀ MẬT MÃ TRANG 6:",
+      "start": 642,
+      "end": 682
+    },
+    {
+      "text": "=== Page 7 ===\nCHUYÊN ĐỀ MẬT MÃ TRANG 7:",
+      "start": 684,
+      "end": 724
+    },
+    {
+      "text": "=== Page 8 ===\nCHUYÊN ĐỀ MẬT MÃ TRANG 8:",
+      "start": 726,
+      "end": 766
+    },
+    {
+      "text": "=== Page 9 ===\nCHUYÊN ĐỀ MẬT MÃ TRANG 9:",
+      "start": 768,
+      "end": 808
+    },
+    {
+      "text": "=== Page 10 ===\n3. PHÁ MÃ:\nAn ninh hệ mã khóa:\n- An ninh vô điều kiện: Không thể phá mã dù có thời g",
+      "start": 810,
+      "end": 1176
+    },
+    {
+      "text": "=== Page 11 ===\n4. HỆ MÃ ĐƠN BẢNG:\n- Thay thế mỗi ký tự bằng một hoán vị cố định của bảng chữ cái.\n-",
+      "start": 1178,
+      "end": 1317
+    },
+    {
+      "text": "=== Page 15 ===\n5. HỆ MÃ AFFINE:\n- Công thức: e(x) = (a * x + b) mod 26 với gcd(a, 26) = 1.\n- Giải m",
+      "start": 1319,
+      "end": 1453
+    },
+    {
+      "text": "=== Page 20 ===\n6. HỆ MÃ VIGENERE:\n- Sử dụng từ khóa lặp lại k = (k1, k2, ..., km).\n- Phá mã bằng ph",
+      "start": 1455,
+      "end": 1604
+    },
+    {
+      "text": "=== Page 25 ===\n7. HỆ MÃ HILL:\n- Sử dụng đại số tuyến tính và ma trận khóa m x m khả nghịch trên Z26",
+      "start": 1606,
+      "end": 1727
+    },
+    {
+      "text": "=== Page 12 ===\nMỤC MỞ RỘNG TRANG 12:",
+      "start": 1729,
+      "end": 1766
+    },
+    {
+      "text": "=== Page 13 ===\nMỤC MỞ RỘNG TRANG 13:",
+      "start": 1768,
+      "end": 1805
+    },
+    {
+      "text": "=== Page 14 ===\nMỤC MỞ RỘNG TRANG 14:",
+      "start": 1807,
+      "end": 1844
+    },
+    {
+      "text": "=== Page 16 ===\nMỤC MỞ RỘNG TRANG 16:",
+      "start": 1846,
+      "end": 1883
+    },
+    {
+      "text": "=== Page 17 ===\nMỤC MỞ RỘNG TRANG 17:",
+      "start": 1885,
+      "end": 1922
+    },
+    {
+      "text": "=== Page 18 ===\nMỤC MỞ RỘNG TRANG 18:",
+      "start": 1924,
+      "end": 1961
+    },
+    {
+      "text": "=== Page 19 ===\nMỤC MỞ RỘNG TRANG 19:",
+      "start": 1963,
+      "end": 2000
+    },
+    {
+      "text": "=== Page 21 ===\nMỤC MỞ RỘNG TRANG 21:",
+      "start": 2002,
+      "end": 2039
+    },
+    {
+      "text": "=== Page 22 ===\nMỤC MỞ RỘNG TRANG 22:",
+      "start": 2041,
+      "end": 2078
+    },
+    {
+      "text": "=== Page 23 ===\nMỤC MỞ RỘNG TRANG 23:",
+      "start": 2080,
+      "end": 2117
+    },
+    {
+      "text": "=== Page 24 ===\nMỤC MỞ RỘNG TRANG 24:",
+      "start": 2119,
+      "end": 2156
+    },
+    {
+      "text": "=== Page 26 ===\nMỤC MỞ RỘNG TRANG 26:",
+      "start": 2158,
+      "end": 2195
+    },
+    {
+      "text": "=== Page 27 ===\nMỤC MỞ RỘNG TRANG 27:",
+      "start": 2197,
+      "end": 2234
+    },
+    {
+      "text": "=== Page 28 ===\nMỤC MỞ RỘNG TRANG 28:",
+      "start": 2236,
+      "end": 2273
+    },
+    {
+      "text": "=== Page 29 ===\nMỤC MỞ RỘNG TRANG 29:",
+      "start": 2275,
+      "end": 2312
+    },
+    {
+      "text": "=== Page 30 ===\n8. HỆ MÃ HOÁ ĐỘN MỘT LẦN:\n- Hệ mã hóa hoàn hảo (Vernam Cipher / One-Time Pad).\n- Độ ",
+      "start": 2314,
+      "end": 2491
+    },
+    {
+      "text": "9. HỆ MÃ HOÁ DÒNG:\n- Sinh ra một chuỗi khóa z = z1, z2, z3...\n- Ta có: zi = fi (K, x1, ..., xi-1).\n-",
+      "start": 2493,
+      "end": 2747
+    },
+    {
+      "text": "=== Page 31 ===\n10. HỆ MÃ HOÁ AUTOKEY:\n- Cho P = C = K = Z26.\n- Khóa k = k1, k2, ... ban đầu được mở",
+      "start": 2749,
+      "end": 2940
+    },
+    {
+      "text": "=== Page 32 ===\nPHÂN TÍCH CHUYÊN SÂU TRANG 32:",
+      "start": 2942,
+      "end": 2988
+    },
+    {
+      "text": "=== Page 33 ===\nPHÂN TÍCH CHUYÊN SÂU TRANG 33:",
+      "start": 2990,
+      "end": 3036
+    },
+    {
+      "text": "=== Page 34 ===\nPHÂN TÍCH CHUYÊN SÂU TRANG 34:",
+      "start": 3038,
+      "end": 3084
+    },
+    {
+      "text": "=== Page 35 ===\nPHÂN TÍCH CHUYÊN SÂU TRANG 35:",
+      "start": 3086,
+      "end": 3132
+    },
+    {
+      "text": "=== Page 36 ===\n11. HỆ MÃ HOÁ PLAYFAIR:\n- Sử dụng ma trận ký tự 5x5 để mã hóa từng cặp ký tự (digram",
+      "start": 3134,
+      "end": 3341
+    }
+  ],
+  "total_tokens": 2381
+}

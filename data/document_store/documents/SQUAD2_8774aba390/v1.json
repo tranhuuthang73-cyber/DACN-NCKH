@@ -1,0 +1,79 @@
+{
+  "document_id": "SQUAD2_8774aba390",
+  "version": 1,
+  "title": "Haar Transform",
+  "raw_text": "# Haar Transform\n\n## Passage\nAlfréd Haar proposed the Haar wavelet in 1909 as an orthonormal basis.",
+  "passages": [
+    {
+      "passage_id": "SQUAD2_8774aba390::P000",
+      "document_id": "SQUAD2_8774aba390",
+      "text": "# Haar Transform",
+      "start_char": 0,
+      "end_char": 16,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "Haar Transform",
+      "metadata": {
+        "section_id": "SEC001",
+        "paragraph_id": "PARA001",
+        "document_version": 1,
+        "category": "SQUAD_V2",
+        "source": "squad_v2",
+        "language": "en",
+        "url": "",
+        "token_reduction": {
+          "raw_tokens": 22,
+          "cleaned_tokens": 22,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "SQUAD2_8774aba390::P001",
+      "document_id": "SQUAD2_8774aba390",
+      "text": "## Passage\nAlfréd Haar proposed the Haar wavelet in 1909 as an orthonormal basis.",
+      "start_char": 18,
+      "end_char": 99,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "Passage",
+      "metadata": {
+        "section_id": "SEC002",
+        "paragraph_id": "PARA001",
+        "document_version": 1,
+        "category": "SQUAD_V2",
+        "source": "squad_v2",
+        "language": "en",
+        "url": "",
+        "token_reduction": {
+          "raw_tokens": 22,
+          "cleaned_tokens": 22,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    }
+  ],
+  "structural_metadata": {},
+  "content_hash": "38eeb2d67b329497",
+  "created_at": 1795702386.6422157,
+  "metadata": {
+    "category": "SQUAD_V2",
+    "source": "squad_v2",
+    "language": "en",
+    "url": "",
+    "token_reduction": {
+      "raw_tokens": 22,
+      "cleaned_tokens": 22,
+      "tokens_saved": 0,
+      "reduction_pct": 0.0,
+      "removed_lines_count": 0
+    },
+    "chunker_version": "v5.0"
+  }
+}

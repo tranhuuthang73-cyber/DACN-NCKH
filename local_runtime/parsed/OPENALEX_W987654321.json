@@ -1,0 +1,28 @@
+{
+  "document_id": "OPENALEX_W987654321",
+  "sections": [
+    {
+      "title": "# ZirconiumWaveletQuantization9876 in Continual Memory",
+      "start": 0,
+      "end": 56
+    },
+    {
+      "title": "## Abstract",
+      "start": 56,
+      "end": 180
+    }
+  ],
+  "paragraphs": [
+    {
+      "text": "# ZirconiumWaveletQuantization9876 in Continual Memory",
+      "start": 0,
+      "end": 54
+    },
+    {
+      "text": "## Abstract\nZirconiumWaveletQuantization9876 achieves a compression ratio of 42.5x while preserving ",
+      "start": 56,
+      "end": 180
+    }
+  ],
+  "total_tokens": 20
+}

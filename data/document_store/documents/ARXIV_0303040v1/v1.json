@@ -1,0 +1,133 @@
+{
+  "document_id": "ARXIV_0303040v1",
+  "version": 1,
+  "title": "Cho and Pak reply to Lamm et al. comment on \"A Convergent Series for the QED Effective Action\"",
+  "raw_text": "# Cho and Pak reply to Lamm et al. comment on \"A Convergent Series for the QED Effective Action\"\n\n## Abstract\nCho and Pak reply to Lamm et al. [hep-th/0007108] comment on \"A Convergent Series for the Effective Action of QED\" [hep-th/0006057].\n\n## Metadata\narXiv ID: 0303040v1\nCategories: hep-th\nAuthors: Y. M. Cho\nPublished: 2003-03-06T07:55:46Z",
+  "passages": [
+    {
+      "passage_id": "ARXIV_0303040v1::P000",
+      "document_id": "ARXIV_0303040v1",
+      "text": "# Cho and Pak reply to Lamm et al. comment on \"A Convergent Series for the QED Effective Action\"",
+      "start_char": 0,
+      "end_char": 96,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "Cho and Pak reply to Lamm et al. comment on \"A Convergent Series for the QED Effective Action\"",
+      "metadata": {
+        "section_id": "SEC001",
+        "paragraph_id": "PARA001",
+        "document_version": 1,
+        "category": "ARXIV",
+        "source": "arxiv",
+        "language": "en",
+        "url": "http://arxiv.org/abs/hep-th/0303040v1",
+        "token_reduction": {
+          "raw_tokens": 74,
+          "cleaned_tokens": 74,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "ARXIV_0303040v1::P001",
+      "document_id": "ARXIV_0303040v1",
+      "text": "## Abstract Cho and Pak reply to Lamm et al. [hep-th/0007108] comment on \"A Convergent Series for the Effective Action of QED\" [hep-th/0006057].",
+      "start_char": 98,
+      "end_char": 242,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "Abstract",
+      "metadata": {
+        "section_id": "SEC002",
+        "paragraph_id": "PARA001",
+        "document_version": 1,
+        "category": "ARXIV",
+        "source": "arxiv",
+        "language": "en",
+        "url": "http://arxiv.org/abs/hep-th/0303040v1",
+        "token_reduction": {
+          "raw_tokens": 74,
+          "cleaned_tokens": 74,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "ARXIV_0303040v1::P002",
+      "document_id": "ARXIV_0303040v1",
+      "text": "## Metadata arXiv ID: 0303040v1\nCategories: hep-th\nAuthors: Y.",
+      "start_char": 244,
+      "end_char": 306,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "Metadata",
+      "metadata": {
+        "section_id": "SEC003",
+        "paragraph_id": "PARA002",
+        "document_version": 1,
+        "category": "ARXIV",
+        "source": "arxiv",
+        "language": "en",
+        "url": "http://arxiv.org/abs/hep-th/0303040v1",
+        "token_reduction": {
+          "raw_tokens": 74,
+          "cleaned_tokens": 74,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "ARXIV_0303040v1::P003",
+      "document_id": "ARXIV_0303040v1",
+      "text": "M. Cho Published: 2003-03-06T07:55:46Z",
+      "start_char": 307,
+      "end_char": 345,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "M. Cho",
+      "metadata": {
+        "section_id": "SEC004",
+        "paragraph_id": "PARA003",
+        "document_version": 1,
+        "category": "ARXIV",
+        "source": "arxiv",
+        "language": "en",
+        "url": "http://arxiv.org/abs/hep-th/0303040v1",
+        "token_reduction": {
+          "raw_tokens": 74,
+          "cleaned_tokens": 74,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    }
+  ],
+  "structural_metadata": {},
+  "content_hash": "a32a538bbde84f89",
+  "created_at": 1794997581.3632994,
+  "metadata": {
+    "category": "ARXIV",
+    "source": "arxiv",
+    "language": "en",
+    "url": "http://arxiv.org/abs/hep-th/0303040v1",
+    "token_reduction": {
+      "raw_tokens": 74,
+      "cleaned_tokens": 74,
+      "tokens_saved": 0,
+      "reduction_pct": 0.0,
+      "removed_lines_count": 0
+    },
+    "chunker_version": "v5.0"
+  }
+}

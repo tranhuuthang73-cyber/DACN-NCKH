@@ -1,0 +1,5 @@
+## 1. Giao thức TCP
+Giao thức TCP đảm bảo truyền dữ liệu tin cậy có kết nối.
+
+## 2. Giao thức UDP
+Giao thức UDP truyền dữ liệu không kết nối với độ trễ thấp.

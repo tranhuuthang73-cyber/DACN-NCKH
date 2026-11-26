@@ -1,0 +1,18 @@
+CHƯƠNG 2: PHẢN ỨNG OXI HÓA - KHỬ
+
+2.1. Định nghĩa chất khử
+Chất khử là chất có khả năng nhường electron cho chất khác trong phản ứng hóa học.
+Nói cách khác, chất khử là chất bị oxi hóa, số oxi hóa của nó tăng lên sau phản ứng.
+Ví dụ: Kim loại kẽm Zn đóng vai trò là chất khử khi tác dụng với axit.
+
+Nội dung giải thích mở rộng thêm về số oxi hóa của kim loại kiềm và kiềm thổ để tách chunk.
+Các kim loại kiềm nhóm IA luôn có số oxi hóa +1 trong hợp chất. Kim loại nhóm IIA có số oxi hóa +2.
+Nhôm có số oxi hóa +3 trong mọi hợp chất bền. Clo có nhiều số oxi hóa từ -1 đến +7.
+
+2.2. Định nghĩa chất oxi hóa
+Chất oxi hóa là chất có khả năng nhận electron từ chất khác trong phản ứng hóa học.
+Nói cách khác, chất oxi hóa là chất bị khử, số oxi hóa của nó giảm xuống sau phản ứng.
+Ví dụ: Ion Cu2+ hoặc axit nitric HNO3 thường đóng vai trò là chất oxi hóa mạnh.
+
+2.3. Quy tắc bảo toàn electron
+Tổng số mol electron do chất khử nhường bằng tổng số mol electron do chất oxi hóa nhận.

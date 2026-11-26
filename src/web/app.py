@@ -2810,7 +2810,9 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
             if thinking_mode != "fast" or legacy_trace is None:
                 reasoning_trace = unified_trace
 
-            if sources_list:
+            # Product rule: practice/exercise generation answers carry NO citations —
+            # citations are only attached when the user asks a document-grounded question.
+            if sources_list and not is_online_symbolic_expansion:
                 answer_text = f"{body}\n\n### Nguồn tham khảo\n" + "\n\n".join(sources_list)
             else:
                 answer_text = body

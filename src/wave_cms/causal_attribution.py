@@ -325,9 +325,24 @@ class CounterfactualLeafAttributor:
             custom_scoring_fn=custom_scoring_fn,
         )
 
-        # 4. Separate active candidate leaves and inactive leaves (alpha <= 1e-9)
-        active_leaves = [node for node in leaves if alpha.get(node.node_id, 0.0) > 1e-9]
-        inactive_leaves = [node for node in leaves if alpha.get(node.node_id, 0.0) <= 1e-9]
+        # 4. Separate candidate leaves for counterfactual evaluation from the rest.
+        #
+        # Cost guard: the exact Leave-One-Leaf-Out loop is O(M * N) — for every ablated
+        # leaf it re-synthesizes Theta over all N leaves. With 19k+ leaves that is
+        # ~4e8 matrix additions and stalls the query path for hours. Leaves whose
+        # routing weight alpha(p) is negligible contribute c(p) = log p(full) - log
+        # p(cf) that is bounded by O(alpha(p)) (the counterfactual renormalisation
+        # only shifts Theta by alpha(p) * Theta_p), so they are reported with rank 0
+        # and causal_score 0.0 — the same value the exact formula yields up to that
+        # first-order term. Only the top `top_m` leaves by alpha are evaluated
+        # exactly, which is what the returned ranking uses anyway.
+        active_leaves = sorted(
+            (node for node in leaves if alpha.get(node.node_id, 0.0) > 1e-9),
+            key=lambda node: alpha.get(node.node_id, 0.0),
+            reverse=True,
+        )[: max(1, int(top_m))]
+        evaluated_ids = {node.node_id for node in active_leaves}
+        inactive_leaves = [node for node in leaves if node.node_id not in evaluated_ids]
 
         attribution_items: List[CausalAttributionItem] = []
 
@@ -426,13 +441,25 @@ class CounterfactualLeafAttributor:
             if resolution_levels and hop_idx < len(resolution_levels):
                 res_level = resolution_levels[hop_idx]
 
-            # Compute attribution for this hop
+            # Compute attribution for this hop.
+            #
+            # The chain only consumes the single best leaf per hop, so a full
+            # O(N * N) exact evaluation over every leaf is wasted work: passing
+            # top_m=len(leaves) made each hop run ~19k counterfactual
+            # synthesizations on a 19k-leaf corpus (multiple minutes per hop).
+            # The best leaf by S(p) = alpha_p * (1 + c(p)) is always among the
+            # top candidates by alpha, because c(p) is bounded by O(alpha_p) —
+            # a first-order factor of 1 + max(-0.5, c(p)) cannot lift a tiny
+            # alpha above a large one for realistic scores. We evaluate the
+            # exact counterfactual only for the top candidates by alpha
+            # (which the ranking below then combines with their causal score).
+            top_candidates_per_hop = 12
             hop_items = self.attribute(
                 query=query,
                 answer=answer,
                 tree_or_leaves=leaves_list,
                 alpha=alpha_hop,
-                top_m=len(leaves_list),
+                top_m=top_candidates_per_hop,
             )
 
             if hop_items:

@@ -1,0 +1,38 @@
+{
+  "document_id": "OPENALEX_W7215530297",
+  "sections": [
+    {
+      "title": "# Lựa chọn một số bài tập nhằm phát triển khả năng phối hợp vận động cho nam học sinh đội tuyển cầu lông trường Trung học phổ thông Đoan Hùng Phú Thọ",
+      "start": 0,
+      "end": 151
+    },
+    {
+      "title": "## Abstract",
+      "start": 151,
+      "end": 496
+    },
+    {
+      "title": "## Metadata",
+      "start": 496,
+      "end": 751
+    }
+  ],
+  "paragraphs": [
+    {
+      "text": "# Lựa chọn một số bài tập nhằm phát triển khả năng phối hợp vận động cho nam học sinh đội tuyển cầu ",
+      "start": 0,
+      "end": 149
+    },
+    {
+      "text": "## Abstract\nThe usage of the basic research methods is toselect possible exercises with the aim of d",
+      "start": 151,
+      "end": 494
+    },
+    {
+      "text": "## Metadata\nOpenAlex ID: W7215530297\nYear: 2021\nVenue: Tạp chí Khoa học thể thao\nConcepts: Medicine,",
+      "start": 496,
+      "end": 751
+    }
+  ],
+  "total_tokens": 320
+}

@@ -1,0 +1,222 @@
+{
+  "document_id": "DOC_REDTEAM_SLIDE_CRYPTO",
+  "version": 1,
+  "title": "Slide 2: Các Hệ Mã Hóa Đối Xứng Cổ Điển",
+  "raw_text": "=== Page 1 ===\n1. GIỚI THIỆU HỆ MÃ KHÓA ĐỐI XỨNG:\n- Xuất hiện đầu tiên trong ngành mã hóa.\n- Các hệ mã này phần có từ trước năm 1970.\n- Hệ mã khóa bí mật hoặc hệ mã khóa cổ điển.\n- Các phương pháp này là cơ sở để phát triển các thuật toán mã hóa đối xứng hiện nay.\n- Có 2 phương pháp phổ biến:\n* Mã hóa thay thế.\n* Mã hóa hoán vị.\n\n=== Page 10 ===\n3. PHÁ MÃ:\nAn ninh hệ mã khóa:\n- An ninh vô điều kiện: Không thể phá mã dù có thời gian và tài nguyên vô hạn.\n- An ninh tính toán: Chi phí để phá vỡ vượt quá giá trị của thông tin mã hóa, hoặc thời gian phá mã vượt quá thời gian hữu dụng của thông tin.\n- Các phương pháp thám mã phổ biến gồm tấn công vét cạn (brute-force) và phân tích thống kê tần suất xuất hiện của ký tự.\n\n=== Page 30 ===\n8. HỆ MÃ HOÁ ĐỘN MỘT LẦN:\n- Hệ mã hóa hoàn hảo (Vernam Cipher / One-Time Pad).\n- Độ dài khóa bằng đúng độ dài thông điệp cần mã hóa và chỉ dùng duy nhất một lần.\n\n9. HỆ MÃ HOÁ DÒNG:\n- Sinh ra một chuỗi khóa z = z1, z2, z3...\n- Ta có: zi = fi (K, x1, ..., xi-1).\n- Bản rõ được mã hóa từng bit hoặc từng byte bằng phép XOR với dòng khóa z.\n- Ưu điểm: Tốc độ xử lý nhanh và độ trễ thấp trong truyền thông thời gian thực.\n\n=== Page 31 ===\n10. HỆ MÃ HOÁ AUTOKEY:\n- Cho P = C = K = Z26.\n- Khóa k = k1, k2, ... ban đầu được mở rộng bằng chính các ký tự của bản rõ (Autokey).\n- Công thức mã hóa: ci = (pi + ki) mod 26.\n\n=== Page 36 ===\n11. HỆ MÃ HOÁ PLAYFAIR:\n- Sử dụng ma trận ký tự 5x5 để mã hóa từng cặp ký tự (digram).\n- Thay thế các cặp ký tự dựa trên quy tắc cùng hàng, cùng cột hoặc tạo thành hình chữ nhật trên ma trận.",
+  "passages": [
+    {
+      "passage_id": "DOC_REDTEAM_SLIDE_CRYPTO::P000",
+      "document_id": "DOC_REDTEAM_SLIDE_CRYPTO",
+      "text": "1. GIỚI THIỆU HỆ MÃ KHÓA ĐỐI XỨNG:\n- Xuất hiện đầu tiên trong ngành mã hóa.\n- Các hệ mã này phần có từ trước năm 1970.\n- Hệ mã khóa bí mật hoặc hệ mã khóa cổ điển.\n- Các phương pháp này là cơ sở để phát triển các thuật toán mã hóa đối xứng hiện nay.",
+      "start_char": 15,
+      "end_char": 264,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "1. GIỚI THIỆU HỆ MÃ KHÓA ĐỐI XỨNG:",
+      "metadata": {
+        "section_id": "SEC002",
+        "paragraph_id": "PARA001",
+        "document_version": 1,
+        "page_number": 1,
+        "category": "Cryptography",
+        "token_reduction": {
+          "raw_tokens": 506,
+          "cleaned_tokens": 506,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_REDTEAM_SLIDE_CRYPTO::P001",
+      "document_id": "DOC_REDTEAM_SLIDE_CRYPTO",
+      "text": "- Các phương pháp này là cơ sở để phát triển các thuật toán mã hóa đối xứng hiện nay.\n- Có 2 phương pháp phổ biến:\n* Mã hóa thay thế.\n* Mã hóa hoán vị.",
+      "start_char": 179,
+      "end_char": 330,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "1. GIỚI THIỆU HỆ MÃ KHÓA ĐỐI XỨNG:",
+      "metadata": {
+        "section_id": "SEC002",
+        "paragraph_id": "PARA001",
+        "document_version": 1,
+        "page_number": 1,
+        "category": "Cryptography",
+        "token_reduction": {
+          "raw_tokens": 506,
+          "cleaned_tokens": 506,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_REDTEAM_SLIDE_CRYPTO::P002",
+      "document_id": "DOC_REDTEAM_SLIDE_CRYPTO",
+      "text": "3. PHÁ MÃ:\nAn ninh hệ mã khóa:\n- An ninh vô điều kiện: Không thể phá mã dù có thời gian và tài nguyên vô hạn.\n- An ninh tính toán: Chi phí để phá vỡ vượt quá giá trị của thông tin mã hóa, hoặc thời gian phá mã vượt quá thời gian hữu dụng của thông tin.",
+      "start_char": 348,
+      "end_char": 600,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "3. PHÁ MÃ:",
+      "metadata": {
+        "section_id": "SEC004",
+        "paragraph_id": "PARA002",
+        "document_version": 1,
+        "page_number": 10,
+        "category": "Cryptography",
+        "token_reduction": {
+          "raw_tokens": 506,
+          "cleaned_tokens": 506,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_REDTEAM_SLIDE_CRYPTO::P003",
+      "document_id": "DOC_REDTEAM_SLIDE_CRYPTO",
+      "text": "- An ninh tính toán: Chi phí để phá vỡ vượt quá giá trị của thông tin mã hóa, hoặc thời gian phá mã vượt quá thời gian hữu dụng của thông tin.\n- Các phương pháp thám mã phổ biến gồm tấn công vét cạn (brute-force) và phân tích thống kê tần suất xuất hiện của ký tự.",
+      "start_char": 458,
+      "end_char": 722,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "3. PHÁ MÃ:",
+      "metadata": {
+        "section_id": "SEC004",
+        "paragraph_id": "PARA002",
+        "document_version": 1,
+        "page_number": 10,
+        "category": "Cryptography",
+        "token_reduction": {
+          "raw_tokens": 506,
+          "cleaned_tokens": 506,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_REDTEAM_SLIDE_CRYPTO::P004",
+      "document_id": "DOC_REDTEAM_SLIDE_CRYPTO",
+      "text": "8. HỆ MÃ HOÁ ĐỘN MỘT LẦN:\n- Hệ mã hóa hoàn hảo (Vernam Cipher / One-Time Pad).\n- Độ dài khóa bằng đúng độ dài thông điệp cần mã hóa và chỉ dùng duy nhất một lần.",
+      "start_char": 740,
+      "end_char": 901,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "8. HỆ MÃ HOÁ ĐỘN MỘT LẦN:",
+      "metadata": {
+        "section_id": "SEC006",
+        "paragraph_id": "PARA003",
+        "document_version": 1,
+        "page_number": 30,
+        "category": "Cryptography",
+        "token_reduction": {
+          "raw_tokens": 506,
+          "cleaned_tokens": 506,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_REDTEAM_SLIDE_CRYPTO::P005",
+      "document_id": "DOC_REDTEAM_SLIDE_CRYPTO",
+      "text": "9. HỆ MÃ HOÁ DÒNG:\n- Sinh ra một chuỗi khóa z = z1, z2, z3...\n- Ta có: zi = fi (K, x1, ..., xi-1).\n- Bản rõ được mã hóa từng bit hoặc từng byte bằng phép XOR với dòng khóa z.\n- Ưu điểm: Tốc độ xử lý nhanh và độ trễ thấp trong truyền thông thời gian thực.",
+      "start_char": 903,
+      "end_char": 1157,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "9. HỆ MÃ HOÁ DÒNG:",
+      "metadata": {
+        "section_id": "SEC007",
+        "paragraph_id": "PARA003",
+        "document_version": 1,
+        "page_number": 30,
+        "category": "Cryptography",
+        "token_reduction": {
+          "raw_tokens": 506,
+          "cleaned_tokens": 506,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_REDTEAM_SLIDE_CRYPTO::P006",
+      "document_id": "DOC_REDTEAM_SLIDE_CRYPTO",
+      "text": "10. HỆ MÃ HOÁ AUTOKEY:\n- Cho P = C = K = Z26.\n- Khóa k = k1, k2, ... ban đầu được mở rộng bằng chính các ký tự của bản rõ (Autokey).\n- Công thức mã hóa: ci = (pi + ki) mod 26.",
+      "start_char": 1175,
+      "end_char": 1350,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "10. HỆ MÃ HOÁ AUTOKEY:",
+      "metadata": {
+        "section_id": "SEC009",
+        "paragraph_id": "PARA005",
+        "document_version": 1,
+        "page_number": 31,
+        "category": "Cryptography",
+        "token_reduction": {
+          "raw_tokens": 506,
+          "cleaned_tokens": 506,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "DOC_REDTEAM_SLIDE_CRYPTO::P007",
+      "document_id": "DOC_REDTEAM_SLIDE_CRYPTO",
+      "text": "11. HỆ MÃ HOÁ PLAYFAIR:\n- Sử dụng ma trận ký tự 5x5 để mã hóa từng cặp ký tự (digram).\n- Thay thế các cặp ký tự dựa trên quy tắc cùng hàng, cùng cột hoặc tạo thành hình chữ nhật trên ma trận.",
+      "start_char": 1368,
+      "end_char": 1559,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "11. HỆ MÃ HOÁ PLAYFAIR:",
+      "metadata": {
+        "section_id": "SEC011",
+        "paragraph_id": "PARA006",
+        "document_version": 1,
+        "page_number": 36,
+        "category": "Cryptography",
+        "token_reduction": {
+          "raw_tokens": 506,
+          "cleaned_tokens": 506,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    }
+  ],
+  "structural_metadata": {},
+  "content_hash": "1056e81dff657569",
+  "created_at": 1795702563.0490544,
+  "metadata": {
+    "category": "Cryptography",
+    "token_reduction": {
+      "raw_tokens": 506,
+      "cleaned_tokens": 506,
+      "tokens_saved": 0,
+      "reduction_pct": 0.0,
+      "removed_lines_count": 0
+    },
+    "chunker_version": "v5.0"
+  }
+}

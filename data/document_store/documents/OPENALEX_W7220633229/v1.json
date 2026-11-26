@@ -1,0 +1,160 @@
+{
+  "document_id": "OPENALEX_W7220633229",
+  "version": 1,
+  "title": "Sự đặt chỉnh nghiệm cho bài toán tối ưu tập",
+  "raw_text": "# Sự đặt chỉnh nghiệm cho bài toán tối ưu tập\n\n## Abstract\nIn this study, we examine the pointwise and global well-posedness of set optimization problems using the upper type set ordered relation. We focus on generalized Gerstewitz functions for sets in relation to the reference set ordered relation, and analyze various properties of these functions. By utilizing these functions, we explore the connections between pointwise and global well-posedness concepts in set optimization problems and their corresponding scalarization optimization problems.\n\n## Metadata\nOpenAlex ID: W7220633229\nYear: 2025\nVenue: Journal of Science and Development Economics\nConcepts: Pointwise, Set (abstract data type), Mathematics, Focus (optics), Relation (database)\nAuthors: Trần Thị Tuyết Nhung\nURL: https://openalex.org/W7220633229",
+  "passages": [
+    {
+      "passage_id": "OPENALEX_W7220633229::P000",
+      "document_id": "OPENALEX_W7220633229",
+      "text": "# Sự đặt chỉnh nghiệm cho bài toán tối ưu tập",
+      "start_char": 0,
+      "end_char": 45,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "Sự đặt chỉnh nghiệm cho bài toán tối ưu tập",
+      "metadata": {
+        "section_id": "SEC001",
+        "paragraph_id": "PARA001",
+        "document_version": 1,
+        "category": "OPENALEX",
+        "source": "openalex",
+        "language": "en",
+        "url": "https://openalex.org/W7220633229",
+        "token_reduction": {
+          "raw_tokens": 152,
+          "cleaned_tokens": 152,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "OPENALEX_W7220633229::P001",
+      "document_id": "OPENALEX_W7220633229",
+      "text": "## Abstract\nIn this study, we examine the pointwise and global well-posedness of set optimization problems using the upper type set ordered relation.",
+      "start_char": 47,
+      "end_char": 196,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "Abstract",
+      "metadata": {
+        "section_id": "SEC002",
+        "paragraph_id": "PARA001",
+        "document_version": 1,
+        "category": "OPENALEX",
+        "source": "openalex",
+        "language": "en",
+        "url": "https://openalex.org/W7220633229",
+        "token_reduction": {
+          "raw_tokens": 152,
+          "cleaned_tokens": 152,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "OPENALEX_W7220633229::P002",
+      "document_id": "OPENALEX_W7220633229",
+      "text": "In this study, we examine the pointwise and global well-posedness of set optimization problems using the upper type set ordered relation. We focus on generalized Gerstewitz functions for sets in relation to the reference set ordered relation, and analyze various properties of these functions.",
+      "start_char": 59,
+      "end_char": 352,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "Abstract",
+      "metadata": {
+        "section_id": "SEC002",
+        "paragraph_id": "PARA002",
+        "document_version": 1,
+        "category": "OPENALEX",
+        "source": "openalex",
+        "language": "en",
+        "url": "https://openalex.org/W7220633229",
+        "token_reduction": {
+          "raw_tokens": 152,
+          "cleaned_tokens": 152,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "OPENALEX_W7220633229::P003",
+      "document_id": "OPENALEX_W7220633229",
+      "text": "We focus on generalized Gerstewitz functions for sets in relation to the reference set ordered relation, and analyze various properties of these functions. By utilizing these functions, we explore the connections between pointwise and global well-posedness concepts in set optimization problems and their corresponding scalarization optimization problems.",
+      "start_char": 197,
+      "end_char": 552,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "Abstract",
+      "metadata": {
+        "section_id": "SEC002",
+        "paragraph_id": "PARA002",
+        "document_version": 1,
+        "category": "OPENALEX",
+        "source": "openalex",
+        "language": "en",
+        "url": "https://openalex.org/W7220633229",
+        "token_reduction": {
+          "raw_tokens": 152,
+          "cleaned_tokens": 152,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "OPENALEX_W7220633229::P004",
+      "document_id": "OPENALEX_W7220633229",
+      "text": "## Metadata\nOpenAlex ID: W7220633229\nYear: 2025\nVenue: Journal of Science and Development Economics\nConcepts: Pointwise, Set (abstract data type), Mathematics, Focus (optics), Relation (database)\nAuthors: Trần Thị Tuyết Nhung\nURL: https://openalex.org/W7220633229",
+      "start_char": 554,
+      "end_char": 817,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "Metadata",
+      "metadata": {
+        "section_id": "SEC003",
+        "paragraph_id": "PARA002",
+        "document_version": 1,
+        "category": "OPENALEX",
+        "source": "openalex",
+        "language": "en",
+        "url": "https://openalex.org/W7220633229",
+        "token_reduction": {
+          "raw_tokens": 152,
+          "cleaned_tokens": 152,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    }
+  ],
+  "structural_metadata": {},
+  "content_hash": "cff5849b5fbe6391",
+  "created_at": 1795695566.9367595,
+  "metadata": {
+    "category": "OPENALEX",
+    "source": "openalex",
+    "language": "en",
+    "url": "https://openalex.org/W7220633229",
+    "token_reduction": {
+      "raw_tokens": 152,
+      "cleaned_tokens": 152,
+      "tokens_saved": 0,
+      "reduction_pct": 0.0,
+      "removed_lines_count": 0
+    },
+    "chunker_version": "v5.0"
+  }
+}

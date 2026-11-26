@@ -1,0 +1,214 @@
+{
+  "document_id": "OPENALEX_W4385547268",
+  "version": 1,
+  "title": "MẠNG LƯỚI CHỢ NÔNG THÔN TỈNH THÁI NGUYÊN TRƯỚC NĂM 1945",
+  "raw_text": "# MẠNG LƯỚI CHỢ NÔNG THÔN TỈNH THÁI NGUYÊN TRƯỚC NĂM 1945\n\n## Abstract\nTrong lịch sử, mạng lưới chợ nông thôn ra đời là kết quả của sự phát triển quan hệ hàng hóa và thủ công nghiệp. Ở vùng đồng bằng, trung du hay miền núi, chợ nông thôn đều có vai trò kinh tế, văn hóa, xã hội quan trọng. Với phương pháp lịch sử và phương pháp logic, kết hợp với một số phương pháp khác, nghiên cứu này nhằm giới thiệu đặc điểm về mạng lưới chợ nông thôn tỉnh Thái Nguyên trước năm 1945, trên cơ sở đó, phản ánh rõ nét bức tranh kinh tế, văn hóa và đời sống nhân dân Thái Nguyên lúc bấy giờ. Kết quả nghiên cứu cho thấy, mạng lưới chợ nông thôn ở Thái Nguyên trước năm 1945 ngoài những điểm tương đồng còn có sự khác biệt so với chợ ở những địa phương khác, thể hiện trên các khía cạnh như cách thức họp chợ, địa điểm và thời gian họp chợ, thành phần thương nghiệp ở chợ,... Việc thiết lập mạng lưới chợ Thái Nguyên đã góp phần phá vỡ nền kinh tế khép kín, tự cấp, tự túc của đồng bào. Sự tồn tại của mạng lưới chợ Thái Nguyên trong lịch sử và trong thời hiện đại có vai trò to lớn về mặt kinh tế, cũng như văn hóa và xã hội của người dân nơi đây.\n\n## Metadata\nOpenAlex ID: W4385547268\nYear: 2023\nVenue: TNU Journal of Science and Technology\nConcepts: Chemistry, Stereochemistry\nAuthors: Đàm Thị Uyên, Nguyễn Thị Tâm\nURL: https://doi.org/10.34238/tnu-jst.7936",
+  "passages": [
+    {
+      "passage_id": "OPENALEX_W4385547268::P000",
+      "document_id": "OPENALEX_W4385547268",
+      "text": "# MẠNG LƯỚI CHỢ NÔNG THÔN TỈNH THÁI NGUYÊN TRƯỚC NĂM 1945",
+      "start_char": 0,
+      "end_char": 57,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "MẠNG LƯỚI CHỢ NÔNG THÔN TỈNH THÁI NGUYÊN TRƯỚC NĂM 1945",
+      "metadata": {
+        "section_id": "SEC001",
+        "paragraph_id": "PARA001",
+        "document_version": 1,
+        "category": "OPENALEX",
+        "source": "openalex",
+        "language": "en",
+        "url": "https://doi.org/10.34238/tnu-jst.7936",
+        "token_reduction": {
+          "raw_tokens": 367,
+          "cleaned_tokens": 367,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "OPENALEX_W4385547268::P001",
+      "document_id": "OPENALEX_W4385547268",
+      "text": "## Abstract Trong lịch sử, mạng lưới chợ nông thôn ra đời là kết quả của sự phát triển quan hệ hàng hóa và thủ công nghiệp. Ở vùng đồng bằng, trung du hay miền núi, chợ nông thôn đều có vai trò kinh tế, văn hóa, xã hội quan trọng.",
+      "start_char": 59,
+      "end_char": 289,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "Abstract",
+      "metadata": {
+        "section_id": "SEC002",
+        "paragraph_id": "PARA001",
+        "document_version": 1,
+        "category": "OPENALEX",
+        "source": "openalex",
+        "language": "en",
+        "url": "https://doi.org/10.34238/tnu-jst.7936",
+        "token_reduction": {
+          "raw_tokens": 367,
+          "cleaned_tokens": 367,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "OPENALEX_W4385547268::P002",
+      "document_id": "OPENALEX_W4385547268",
+      "text": "Trong lịch sử, mạng lưới chợ nông thôn ra đời là kết quả của sự phát triển quan hệ hàng hóa và thủ công nghiệp. Ở vùng đồng bằng, trung du hay miền núi, chợ nông thôn đều có vai trò kinh tế, văn hóa, xã hội quan trọng. Với phương pháp lịch sử và phương pháp logic, kết hợp với một số phương pháp khác, nghiên cứu này nhằm giới thiệu đặc điểm về mạng lưới chợ nông thôn tỉnh Thái Nguyên trước năm 1945, trên cơ sở đó, phản ánh rõ nét bức tranh kinh tế, văn hóa và đời sống nhân dân Thái Nguyên lúc bấy giờ.",
+      "start_char": 71,
+      "end_char": 576,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "Abstract",
+      "metadata": {
+        "section_id": "SEC002",
+        "paragraph_id": "PARA002",
+        "document_version": 1,
+        "category": "OPENALEX",
+        "source": "openalex",
+        "language": "en",
+        "url": "https://doi.org/10.34238/tnu-jst.7936",
+        "token_reduction": {
+          "raw_tokens": 367,
+          "cleaned_tokens": 367,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "OPENALEX_W4385547268::P003",
+      "document_id": "OPENALEX_W4385547268",
+      "text": "Với phương pháp lịch sử và phương pháp logic, kết hợp với một số phương pháp khác, nghiên cứu này nhằm giới thiệu đặc điểm về mạng lưới chợ nông thôn tỉnh Thái Nguyên trước năm 1945, trên cơ sở đó, phản ánh rõ nét bức tranh kinh tế, văn hóa và đời sống nhân dân Thái Nguyên lúc bấy giờ. Kết quả nghiên cứu cho thấy, mạng lưới chợ nông thôn ở Thái Nguyên trước năm 1945 ngoài những điểm tương đồng còn có sự khác biệt so với chợ ở những địa phương khác, thể hiện trên các khía cạnh như cách thức họp chợ, địa điểm và thời gian họp chợ, thành phần thương nghiệp ở chợ,...",
+      "start_char": 290,
+      "end_char": 859,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "Abstract",
+      "metadata": {
+        "section_id": "SEC002",
+        "paragraph_id": "PARA002",
+        "document_version": 1,
+        "category": "OPENALEX",
+        "source": "openalex",
+        "language": "en",
+        "url": "https://doi.org/10.34238/tnu-jst.7936",
+        "token_reduction": {
+          "raw_tokens": 367,
+          "cleaned_tokens": 367,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "OPENALEX_W4385547268::P004",
+      "document_id": "OPENALEX_W4385547268",
+      "text": "Kết quả nghiên cứu cho thấy, mạng lưới chợ nông thôn ở Thái Nguyên trước năm 1945 ngoài những điểm tương đồng còn có sự khác biệt so với chợ ở những địa phương khác, thể hiện trên các khía cạnh như cách thức họp chợ, địa điểm và thời gian họp chợ, thành phần thương nghiệp ở chợ,... Việc thiết lập mạng lưới chợ Thái Nguyên đã góp phần phá vỡ nền kinh tế khép kín, tự cấp, tự túc của đồng bào.",
+      "start_char": 577,
+      "end_char": 970,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "Abstract",
+      "metadata": {
+        "section_id": "SEC002",
+        "paragraph_id": "PARA002",
+        "document_version": 1,
+        "category": "OPENALEX",
+        "source": "openalex",
+        "language": "en",
+        "url": "https://doi.org/10.34238/tnu-jst.7936",
+        "token_reduction": {
+          "raw_tokens": 367,
+          "cleaned_tokens": 367,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "OPENALEX_W4385547268::P005",
+      "document_id": "OPENALEX_W4385547268",
+      "text": "Việc thiết lập mạng lưới chợ Thái Nguyên đã góp phần phá vỡ nền kinh tế khép kín, tự cấp, tự túc của đồng bào. Sự tồn tại của mạng lưới chợ Thái Nguyên trong lịch sử và trong thời hiện đại có vai trò to lớn về mặt kinh tế, cũng như văn hóa và xã hội của người dân nơi đây.",
+      "start_char": 860,
+      "end_char": 1132,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "Abstract",
+      "metadata": {
+        "section_id": "SEC002",
+        "paragraph_id": "PARA002",
+        "document_version": 1,
+        "category": "OPENALEX",
+        "source": "openalex",
+        "language": "en",
+        "url": "https://doi.org/10.34238/tnu-jst.7936",
+        "token_reduction": {
+          "raw_tokens": 367,
+          "cleaned_tokens": 367,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    },
+    {
+      "passage_id": "OPENALEX_W4385547268::P006",
+      "document_id": "OPENALEX_W4385547268",
+      "text": "## Metadata OpenAlex ID: W4385547268\nYear: 2023\nVenue: TNU Journal of Science and Technology\nConcepts: Chemistry, Stereochemistry\nAuthors: Đàm Thị Uyên, Nguyễn Thị Tâm\nURL: https://doi.org/10.34238/tnu-jst.7936",
+      "start_char": 1134,
+      "end_char": 1344,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "Metadata",
+      "metadata": {
+        "section_id": "SEC003",
+        "paragraph_id": "PARA002",
+        "document_version": 1,
+        "category": "OPENALEX",
+        "source": "openalex",
+        "language": "en",
+        "url": "https://doi.org/10.34238/tnu-jst.7936",
+        "token_reduction": {
+          "raw_tokens": 367,
+          "cleaned_tokens": 367,
+          "tokens_saved": 0,
+          "reduction_pct": 0.0,
+          "removed_lines_count": 0
+        },
+        "chunker_version": "v5.0"
+      }
+    }
+  ],
+  "structural_metadata": {},
+  "content_hash": "dd2872af94be06b7",
+  "created_at": 1794997581.1340897,
+  "metadata": {
+    "category": "OPENALEX",
+    "source": "openalex",
+    "language": "en",
+    "url": "https://doi.org/10.34238/tnu-jst.7936",
+    "token_reduction": {
+      "raw_tokens": 367,
+      "cleaned_tokens": 367,
+      "tokens_saved": 0,
+      "reduction_pct": 0.0,
+      "removed_lines_count": 0
+    },
+    "chunker_version": "v5.0"
+  }
+}

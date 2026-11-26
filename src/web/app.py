@@ -1729,8 +1729,12 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
             pass
 
     from src.reasoning.formula_lab import build_online_study_expansion, detect_expansion_intent
+    from src.web.practice_generator import generate_practice_offline, is_practice_generation_query
 
     expansion_intent = detect_expansion_intent(effective_query)
+    if not expansion_intent.get("wants_any") and is_practice_generation_query(effective_query):
+        expansion_intent["wants_any"] = True
+        expansion_intent["practice_exercise"] = True
     online_expansion_res: Optional[Dict[str, Any]] = None
     is_online_symbolic_expansion = False
     if expansion_intent.get("wants_any") and req.allow_online_api and attached_docs:
@@ -1744,11 +1748,22 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
                         primary_doc_title = d_obj_e.title
                     doc_texts_combined.append(d_obj_e.raw_text)
             if doc_texts_combined:
+                combined_txt = "\n\n".join(doc_texts_combined)
                 online_expansion_res = build_online_study_expansion(
                     query=effective_query,
-                    doc_text="\n\n".join(doc_texts_combined),
+                    doc_text=combined_txt,
                     doc_title=primary_doc_title,
                 )
+                if online_expansion_res is None:
+                    # Fallback to local domain template generator (e.g. Biology DNA / generic examples, zero external LLM)
+                    pg_res = generate_practice_offline(query=effective_query, context_text=combined_txt)
+                    if pg_res and pg_res.get("answer"):
+                        online_expansion_res = {
+                            "answer": pg_res["answer"],
+                            "formulas_found": pg_res.get("formulas_found", 0),
+                            "modes_generated": ["practice_template"],
+                            "engine": pg_res.get("engine", "offline_symbolic_template"),
+                        }
         except Exception:
             online_expansion_res = None
 

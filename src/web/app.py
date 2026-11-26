@@ -419,11 +419,11 @@ class UnifiedChatRequest(BaseModel):
     thinking_mode: str = "fast"  # fast, deep, broad, deep_broad
 
 
-VALID_THINKING_MODES = ("fast", "deep", "broad", "deep_broad")
+VALID_THINKING_MODES = ("fast", "deep", "broad", "deep_broad", "auto")
 
 
 def _normalize_thinking_mode(mode: Optional[str]) -> str:
-    """Normalize thinking_mode to one of fast|deep|broad|deep_broad, defaulting to fast."""
+    """Normalize thinking_mode to one of fast|deep|broad|deep_broad|auto, defaulting to fast."""
     m = (mode or "fast").strip().lower()
     return m if m in VALID_THINKING_MODES else "fast"
 
@@ -500,6 +500,431 @@ def _ensure_docs_learned_in_kb(service: Any, doc_ids: Optional[List[str]]) -> An
     return kb
 
 
+def _assimilate_doc_into_ltm(
+    doc_id: str,
+    title: str,
+    raw_text: str,
+    passages: Optional[List[Any]],
+) -> None:
+    """Safely assimilates a document into Persistent Long-Term Memory (Layers 1-3)."""
+    if not doc_id or not raw_text:
+        return
+    try:
+        from src.brain.long_term_memory import get_long_term_memory
+        get_long_term_memory().assimilate_document(
+            doc_id=doc_id,
+            title=title or doc_id,
+            raw_text=raw_text,
+            passages=passages or [],
+        )
+    except Exception:
+        pass
+
+
+def _ensure_docs_in_ltm(service: Any, doc_ids: Optional[List[str]]) -> Any:
+    """Lazily assimilates any attached documents not yet present in LongTermMemoryStore."""
+    from src.brain.long_term_memory import get_long_term_memory
+    ltm = get_long_term_memory()
+    for d_id in (doc_ids or []):
+        if d_id and d_id not in ltm.assimilated_docs:
+            try:
+                doc_obj = service.store.get_document(d_id)
+                if doc_obj and getattr(doc_obj, "raw_text", None):
+                    ltm.assimilate_document(
+                        doc_id=d_id,
+                        title=doc_obj.title or d_id,
+                        raw_text=doc_obj.raw_text,
+                        passages=getattr(doc_obj, "passages", None) or [],
+                    )
+            except Exception:
+                pass
+    return ltm
+
+
+_EXPLICIT_SEC_QUERY_RE = re.compile(
+    r"\b(topic|chủ\s*đề|chu\s*de|bài|bai|mục|muc|chương|chuong|phần|phan|section|chapter|unit|lesson)\s*(\d+(?:\.\d+)*)\b",
+    re.IGNORECASE,
+)
+
+_SEC_CONTINUATION_NORM_RE = re.compile(
+    r"\b(?:doan\s+tiep\s+theo|phan\s+tiep\s+theo|phan\s+con\s+lai|doan\s+con\s+lai|"
+    r"doan\s+sau|phan\s+sau|tiep\s+theo\s+cua|con\s+lai\s+cua|next\s+part|rest\s+of)\b",
+    re.IGNORECASE,
+)
+
+
+def _has_section_continuation_cue(query: str) -> bool:
+    from src.self_study.knowledge_bank import strip_accents as _sa_nav
+    q_norm = _sa_nav((query or "").lower())
+    return bool(_SEC_CONTINUATION_NORM_RE.search(q_norm))
+
+
+def _rescue_explicit_section_passages(
+    service: Any,
+    attached_docs: List[str],
+    query: str,
+) -> Tuple[List[Any], Optional[str]]:
+    """
+    Locates passages in `attached_docs` matching an explicit numbered section anchor
+    (e.g. 'Topic 1', 'Phần 2', 'Mục 1.2') with strict `(?!\\d)` digit boundary so
+    'Topic 1' never matches 'Topic 10'.
+    """
+    m = _EXPLICIT_SEC_QUERY_RE.search(query or "")
+    if not m or not attached_docs:
+        return [], None
+
+    kw_raw = m.group(1).strip()
+    sec_num = m.group(2).strip()
+    target_label = f"{kw_raw.title()} {sec_num}"
+
+    exact_sec_re = re.compile(
+        rf"(?:\b(?:topic|chủ\s*đề|chu\s*de|bài|bai|mục|muc|chương|chuong|phần|phan|section|chapter|unit|lesson)\s*{re.escape(sec_num)}(?!\d)(?:\b|[:.\-–\s])|^\s*#*\s*{re.escape(sec_num)}(?!\d)(?:\.|\s|:))",
+        re.IGNORECASE | re.MULTILINE,
+    )
+
+    from src.hybrid_qa.evidence import Citation
+    rescued: List[Any] = []
+    seen_pids: set = set()
+    matched_heading: Optional[str] = None
+
+    for d_id in attached_docs:
+        try:
+            d_obj = service.store.get_document(d_id)
+        except Exception:
+            continue
+        for p in getattr(d_obj, "passages", None) or []:
+            if p.passage_id in seen_pids:
+                continue
+            sec_t = str(getattr(p, "section_title", "") or "")
+            txt = str(getattr(p, "text", "") or "")
+            first_lines = "\n".join(txt.splitlines()[:3])
+            if exact_sec_re.search(sec_t) or exact_sec_re.search(first_lines) or exact_sec_re.search(txt):
+                seen_pids.add(p.passage_id)
+                if matched_heading is None:
+                    if sec_t and exact_sec_re.search(sec_t):
+                        matched_heading = sec_t
+                    else:
+                        for ln in txt.splitlines():
+                            if exact_sec_re.search(ln):
+                                matched_heading = ln.strip().lstrip("#").strip()
+                                break
+                rescued.append(
+                    Citation(
+                        passage_id=p.passage_id,
+                        document_id=d_id,
+                        text=txt,
+                        score=10.0,
+                        section_title=sec_t or target_label,
+                        metadata=getattr(p, "metadata", None),
+                    )
+                )
+    return rescued[:12], (matched_heading or target_label)
+
+
+def _synthesize_section_navigation_answer(
+    query: str,
+    rescued_citations: List[Dict[str, Any]],
+    section_granularity: str,
+    session_messages: Optional[List[Dict[str, Any]]] = None,
+    fallback_heading: str = "Mục nội dung",
+) -> Optional[str]:
+    """
+    Synthesizes grounded Vietnamese/English section navigation answers for:
+      - Continuation / remainder cues ('đoạn tiếp theo của topic 1', 'phần còn lại của topic 1')
+      - Summary / key_points cues ('giúp tôi tóm gọn topic 1') when KB returned None
+      - Full / explain lookups on multilingual sections when KB returned None
+    """
+    if not rescued_citations:
+        return None
+
+    from src.self_study.knowledge_bank import strip_accents as _sa_sec
+
+    m_sec = _EXPLICIT_SEC_QUERY_RE.search(query or "")
+    sec_num = m_sec.group(2).strip() if m_sec else ""
+    sibling_heading_re = re.compile(
+        r"^\s*#*\s*(?:topic|chủ\s*đề|chu\s*de|bài|bai|mục|muc|chương|chuong|phần|phan|section|chapter|unit|lesson)\s*(\d+(?:\.\d+)*)\b",
+        re.IGNORECASE,
+    )
+
+    heading = rescued_citations[0].get("section_title") or fallback_heading
+    raw_lines: List[str] = []
+    cit_for_line: List[str] = []
+
+    for cit in rescued_citations:
+        c_lbl = cit.get("citation_label") or "[1]"
+        txt = str(cit.get("text") or "").strip()
+        started = False
+        for ln in txt.splitlines():
+            s_ln = ln.strip()
+            if not s_ln or re.match(r"^===\s*(?:Page|Trang|Slide)\s*\d+\s*===$", s_ln, re.IGNORECASE):
+                continue
+            m_sib = sibling_heading_re.match(s_ln)
+            if m_sib:
+                found_num = m_sib.group(1).strip()
+                if sec_num and found_num != sec_num and not found_num.startswith(f"{sec_num}."):
+                    if started:
+                        break
+                    continue
+                started = True
+                clean_h = s_ln.lstrip("#").strip()
+                if len(clean_h) > len(heading) or heading in ("Phần nội dung", fallback_heading):
+                    heading = clean_h
+                # Keep trailing text after colon if heading line also carries content
+                if ":" in clean_h:
+                    after_col = clean_h.split(":", 1)[1].strip()
+                    if len(after_col.split()) >= 8:
+                        raw_lines.append(after_col)
+                        cit_for_line.append(c_lbl)
+                continue
+            started = True
+            raw_lines.append(s_ln)
+            cit_for_line.append(c_lbl)
+
+    if not raw_lines:
+        for cit in rescued_citations:
+            c_lbl = cit.get("citation_label") or "[1]"
+            for s in split_clean_sentences(str(cit.get("text") or "")):
+                if s.strip():
+                    raw_lines.append(s.strip())
+                    cit_for_line.append(c_lbl)
+
+    if not raw_lines:
+        return None
+
+    # Expand paragraphs into clean sentences with preserved citation labels
+    all_sents: List[Tuple[str, str]] = []
+    seen_norm: set = set()
+    for ln, c_lbl in zip(raw_lines, cit_for_line):
+        sub_sents = split_clean_sentences(ln) or [ln]
+        for s in sub_sents:
+            cl = s.strip().lstrip("-*• ").strip()
+            if len(cl) < 4:
+                continue
+            k = _sa_sec(cl.lower())[:60]
+            if k in seen_norm:
+                continue
+            seen_norm.add(k)
+            all_sents.append((cl, c_lbl))
+
+    if not all_sents:
+        return None
+
+    q_norm = _sa_sec((query or "").lower())
+    is_continuation = _has_section_continuation_cue(query)
+    wants_rest = any(k in q_norm for k in ("con lai", "rest of", "lay het", "toan bo"))
+
+    if is_continuation:
+        prev_assistant_texts = [
+            _sa_sec(str(m.get("content") or "").lower())
+            for m in (session_messages or [])
+            if isinstance(m, dict) and m.get("role") == "assistant" and not m.get("refused")
+        ]
+        last_ans_norm = prev_assistant_texts[-1] if prev_assistant_texts else ""
+
+        unseen: List[Tuple[str, str]] = []
+        last_seen_idx = -1
+        if last_ans_norm:
+            for idx_s, (s_txt, s_cit) in enumerate(all_sents):
+                probe = _sa_sec(s_txt.lower())[:36]
+                if len(probe) >= 10 and probe in last_ans_norm:
+                    last_seen_idx = idx_s
+                else:
+                    unseen.append((s_txt, s_cit))
+
+        if last_seen_idx >= 0 and last_seen_idx + 1 < len(all_sents):
+            after_last = all_sents[last_seen_idx + 1 :]
+            chosen = after_last if wants_rest else after_last[:4]
+            lines_out = [f"- {s} {c}" for s, c in chosen]
+            label_hdr = "Phần còn lại" if wants_rest else "Đoạn tiếp theo"
+            return f"### {heading} ({label_hdr})\n\n" + "\n".join(lines_out)
+
+        if last_ans_norm and unseen:
+            chosen = unseen if wants_rest else unseen[:4]
+            lines_out = [f"- {s} {c}" for s, c in chosen]
+            label_hdr = "Phần còn lại" if wants_rest else "Đoạn tiếp theo"
+            return f"### {heading} ({label_hdr})\n\n" + "\n".join(lines_out)
+
+        # If prior turn showed everything verbatim (or there was no prior turn on this section),
+        # return the latter/remaining sentences (if >=2) or complete body so navigation never refuses.
+        chosen = all_sents[1:] if len(all_sents) >= 2 else all_sents
+        if not wants_rest and len(chosen) > 4:
+            chosen = chosen[:4]
+        lines_out = [f"- {s} {c}" for s, c in chosen]
+        label_hdr = "Phần còn lại" if wants_rest else "Nội dung tiếp theo"
+        return f"### {heading} ({label_hdr})\n\n" + "\n".join(lines_out)
+
+    if section_granularity == "key_points":
+        joined_txt = "\n".join(s for s, _ in all_sents)
+        kp_data = DocumentAnalyzer.extract_key_points_and_summary(
+            joined_txt, title=heading, max_points=min(4, max(2, len(all_sents)))
+        )
+        kps = [kp.lstrip("-*• ").strip() for kp in (kp_data.get("key_points") or []) if kp.strip()]
+        if not kps:
+            kps = [s for s, _ in all_sents[:3]]
+        c0 = rescued_citations[0].get("citation_label") or "[1]"
+        return f"Các ý chính của **{heading}**:\n\n" + "\n".join(f"- {kp} {c0}" for kp in kps[:4])
+
+    if section_granularity == "explain":
+        from src.brain.grounded_explainer import get_grounded_explainer
+        exp = get_grounded_explainer().explain_section(
+            query=query,
+            section_title=heading,
+            raw_items=[s for s, _ in all_sents],
+            max_points=4,
+        )
+        if exp:
+            c0 = rescued_citations[0].get("citation_label") or "[1]"
+            return exp if "[1]" in exp else f"{exp} {c0}"
+
+    lines_out = [f"- {s} {c}" for s, c in all_sents]
+    return f"### {heading}\n\n" + "\n".join(lines_out)
+
+
+def _heading_matches_passage_strict(h_low: str, sec_low: str, txt_low: str) -> bool:
+    """Matches a KB section heading against passage section_title/text without 'Topic 1' matching 'Topic 10'."""
+    h_clean = (h_low or "").strip()
+    if not h_clean:
+        return False
+    probe = h_clean[:30].strip()
+    # Enforce digit boundary so 'topic 1' or '9.' cannot match 'topic 10' or '19.'
+    pat_str = re.sub(r"\\(\d)", r"\1", re.escape(probe))
+    pat_str = re.sub(r"(\d+)", r"(?<!\\d)\1(?!\\d)", pat_str)
+    try:
+        pat = re.compile(pat_str, re.IGNORECASE)
+        return bool(pat.search(sec_low) or pat.search(txt_low[:160]))
+    except re.error:
+        return probe in sec_low or probe in txt_low[:160]
+
+
+def _sync_citations_to_kb_doc(
+    service: Any,
+    kb_synth: Optional[Dict[str, Any]],
+    citations_data: List[Dict[str, Any]],
+    evidence_passages_out: List[Dict[str, Any]],
+    query: str = "",
+) -> None:
+    """
+    Ensures `citations_data` and `evidence_passages_out` strictly reference passages
+    from `kb_synth['doc_id']` (and its matched headings when section-scoped) whenever
+    KnowledgeBank provides the authoritative answer.
+    """
+    if not isinstance(kb_synth, dict):
+        return
+    kb_doc_id = str(kb_synth.get("doc_id") or "").strip()
+    if not kb_doc_id:
+        return
+
+    matched_headings = [str(h).lower() for h in (kb_synth.get("matched_headings") or []) if h]
+    same_doc_cits = [c for c in citations_data if c.get("document_id") == kb_doc_id]
+    if matched_headings:
+        same_doc_cits = [
+            c for c in same_doc_cits
+            if any(
+                _heading_matches_passage_strict(
+                    h,
+                    str(c.get("section_title") or "").lower(),
+                    str(c.get("text") or "").lower(),
+                )
+                for h in matched_headings
+            )
+        ]
+
+    if len(same_doc_cits) == len(citations_data) and same_doc_cits and not matched_headings:
+        return
+
+    try:
+        d_obj = service.store.get_document(kb_doc_id)
+    except Exception:
+        d_obj = None
+
+    if d_obj is None:
+        return
+
+    doc_title = getattr(d_obj, "title", kb_doc_id) or kb_doc_id
+    doc_filename = None
+    if getattr(d_obj, "metadata", None) and isinstance(d_obj.metadata, dict):
+        doc_filename = d_obj.metadata.get("filename") or d_obj.metadata.get("original_filename") or d_obj.metadata.get("file_name")
+
+    rebuilt: List[Dict[str, Any]] = list(same_doc_cits)
+    seen_pids = {c.get("passage_id") for c in rebuilt if c.get("passage_id")}
+
+    q_words = [w for w in re.findall(r"\w+", (query or "").lower()) if len(w) >= 3]
+    passages = list(getattr(d_obj, "passages", None) or [])
+
+    def _passage_priority(p: Any) -> Tuple[int, int]:
+        sec_low = str(getattr(p, "section_title", "") or "").lower()
+        txt_low = str(getattr(p, "text", "") or "").lower()
+        h_hit = (
+            1
+            if (matched_headings and any(_heading_matches_passage_strict(h, sec_low, txt_low) for h in matched_headings))
+            else 0
+        )
+        kw_hits = sum(1 for w in q_words if w in txt_low or w in sec_low)
+        return (h_hit, kw_hits)
+
+    ranked_passages = sorted(passages, key=_passage_priority, reverse=True)
+    for p in ranked_passages:
+        if len(rebuilt) >= 6:
+            break
+        if p.passage_id in seen_pids:
+            continue
+        h_hit, kw_hits = _passage_priority(p)
+        if matched_headings and h_hit == 0:
+            continue
+        if rebuilt and h_hit == 0 and kw_hits == 0:
+            continue
+        seen_pids.add(p.passage_id)
+        p_meta = getattr(p, "metadata", None) or {}
+        page_num = getattr(p, "page_number", None) or (p_meta.get("page_number") if isinstance(p_meta, dict) else None)
+        rebuilt.append(
+            {
+                "citation_index": len(rebuilt) + 1,
+                "citation_label": f"[{len(rebuilt) + 1}]",
+                "passage_id": p.passage_id,
+                "document_id": kb_doc_id,
+                "document_title": doc_title,
+                "filename": doc_filename,
+                "page_number": page_num,
+                "section_title": getattr(p, "section_title", "Phần nội dung") or "Phần nội dung",
+                "paragraph_index": getattr(p, "paragraph_index", len(rebuilt) + 1),
+                "metadata": p_meta if isinstance(p_meta, dict) else {},
+                "score": 1.0,
+                "text": p.text,
+                "support_status": "SUPPORTED",
+            }
+        )
+
+    if not rebuilt and passages:
+        p0 = passages[0]
+        p_meta = getattr(p0, "metadata", None) or {}
+        rebuilt.append(
+            {
+                "citation_index": 1,
+                "citation_label": "[1]",
+                "passage_id": p0.passage_id,
+                "document_id": kb_doc_id,
+                "document_title": doc_title,
+                "filename": doc_filename,
+                "page_number": p_meta.get("page_number") if isinstance(p_meta, dict) else None,
+                "section_title": getattr(p0, "section_title", "Phần nội dung") or "Phần nội dung",
+                "paragraph_index": getattr(p0, "paragraph_index", 1),
+                "metadata": p_meta if isinstance(p_meta, dict) else {},
+                "score": 1.0,
+                "text": p0.text,
+                "support_status": "SUPPORTED",
+            }
+        )
+
+    if rebuilt:
+        for i_c, cit_item in enumerate(rebuilt, start=1):
+            cit_item["citation_index"] = i_c
+            cit_item["citation_label"] = f"[{i_c}]"
+        citations_data.clear()
+        citations_data.extend(rebuilt)
+        evidence_passages_out.clear()
+        evidence_passages_out.extend(rebuilt)
+
+
 def _run_unified_reasoning_for_chat(
     service: Any,
     query: str,
@@ -517,6 +942,10 @@ def _run_unified_reasoning_for_chat(
     symbolic solver steps or facet coverage while keeping citations clean.
     """
     mode = _normalize_thinking_mode(thinking_mode)
+    if mode == "auto":
+        from src.brain.pedagogical_synthesizer import resolve_auto_thinking_mode
+        r_val = str((routing_info or {}).get("route") or (routing_info or {}).get("routing") or "")
+        mode, _ = resolve_auto_thinking_mode(query, r_val, "auto")
 
     evidence_docs: List[Dict[str, Any]] = []
     cit_label_by_pid: Dict[str, str] = {}
@@ -805,6 +1234,7 @@ async def upload_document(
         passages=passages,
         category=category or "Uploaded",
     )
+    _assimilate_doc_into_ltm(doc_id=doc_id, title=doc_title, raw_text=raw_text, passages=passages)
 
     # If session_id provided, attach to active conversation
     if session_id:
@@ -904,6 +1334,7 @@ async def create_raw_document(req: RawDocumentRequest):
         passages=passages,
         category=req.category or "General",
     )
+    _assimilate_doc_into_ltm(doc_id=doc_id, title=doc_title, raw_text=cleaned_text, passages=passages)
 
     words = len(cleaned_text.split())
     return {
@@ -961,11 +1392,23 @@ async def delete_document(doc_id: str):
     if not success:
         raise HTTPException(status_code=404, detail=f"Document '{doc_id}' not found.")
     unlearn_audit = service.unlearn_wave_document(doc_id)
+    ltm_unlearn_audit: Dict[str, Any] = {}
+    try:
+        from src.brain.long_term_memory import get_long_term_memory
+        ltm_unlearn_audit = get_long_term_memory().unlearn_document(doc_id)
+    except Exception:
+        pass
+    try:
+        from src.self_study.knowledge_bank import get_knowledge_bank
+        get_knowledge_bank()._documents.pop(doc_id, None)
+    except Exception:
+        pass
     service._initialize_retriever()
     return {
         "success": True,
         "document_id": doc_id,
         "wave_cms_unlearning": unlearn_audit,
+        "long_term_memory_unlearning": ltm_unlearn_audit,
     }
 
 
@@ -1016,6 +1459,7 @@ async def update_document_version(doc_id: str, payload: Optional[Dict[str, Any]]
 
     # Re-initialize retriever
     service._initialize_retriever()
+    _assimilate_doc_into_ltm(doc_id=doc_id, title=doc_record.title, raw_text=new_text, passages=passages)
 
     # Save mock memory snapshot for new version
     try:
@@ -1060,6 +1504,11 @@ async def rollback_document_snapshot(doc_id: str):
     else:
         # If version == 1, remove document to restore previous snapshot state
         service.store.remove_document(doc_id)
+        try:
+            from src.brain.long_term_memory import get_long_term_memory
+            get_long_term_memory().unlearn_document(doc_id)
+        except Exception:
+            pass
         service._initialize_retriever()
         return {
             "success": True,
@@ -1186,6 +1635,27 @@ async def get_memory_manifest_endpoint():
     """Exposes local SA-CMS memory manifest (Step 4)."""
     service = PipelineService.get_instance()
     return service.memory_manager.get_memory_manifest()
+
+
+@app.get("/api/memory/long-term/status")
+async def get_long_term_memory_status(session_id: Optional[str] = None):
+    """Exposes Brain v9 3-Layer Persistent Long-Term Memory status & learner profile."""
+    service = PipelineService.get_instance()
+    from src.brain.long_term_memory import get_long_term_memory
+    ltm = get_long_term_memory()
+    scoped_docs: Optional[List[str]] = None
+    if session_id:
+        sess = service.session_manager.get_session(session_id)
+        if sess and sess.document_ids:
+            scoped_docs = list(sess.document_ids)
+            _ensure_docs_in_ltm(service, scoped_docs)
+    summary = ltm.get_status_summary(allowed_document_ids=scoped_docs)
+    return {
+        "status": "active",
+        "storage_dir": str(ltm.storage_dir),
+        "scoped_to_session": session_id,
+        **summary,
+    }
 
 
 @app.get("/api/memory/{doc_id}")
@@ -1444,6 +1914,7 @@ def _ingest_fetched_online_items(
             passages=passages,
             category=doc_cat,
         )
+        _assimilate_doc_into_ltm(doc_id=doc_id, title=doc_title, raw_text=cleaned_text, passages=passages)
 
         if session_id:
             try:
@@ -1657,6 +2128,20 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
             },
             suggested_questions=[],
         )
+        try:
+            _ltm_clar = _ensure_docs_in_ltm(service, list(session.document_ids or []))
+            _ltm_clar.record_verified_interaction(
+                session_id=session_id,
+                raw_query=raw_query,
+                effective_query="",
+                answer=clarify_msg,
+                citations=[{"document_id": d} for d in (session.document_ids or []) if d],
+                refused=False,
+                is_faithful=True,
+                needed_clarification=True,
+            )
+        except Exception:
+            pass
         try:
             service.session_manager.save()
         except Exception:
@@ -2016,6 +2501,53 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
                     except Exception:
                         pass
 
+                # Brain v9 Layer 1 + Layer 2 Associative Long-Term Memory Boost (strictly isolated to attached_docs)
+                try:
+                    _ltm_ret = _ensure_docs_in_ltm(service, attached_docs)
+                    if retrieval_candidates:
+                        _ltm_boosts = _ltm_ret.recall_associative_boost(
+                            effective_query, retrieval_candidates, attached_docs
+                        )
+                        if _ltm_boosts:
+                            for _rc in retrieval_candidates:
+                                _b_val = _ltm_boosts.get(getattr(_rc, "passage_id", ""), 0.0)
+                                if _b_val > 0.0:
+                                    _rc.score = float(getattr(_rc, "score", 0.0)) + 0.55 * _b_val
+                            retrieval_candidates.sort(key=lambda r: getattr(r, "score", 0.0), reverse=True)
+                    else:
+                        from src.hybrid_qa.retriever import RetrievalResult
+                        _attached_pool = []
+                        for _d_id_ltm in attached_docs:
+                            _d_ltm = service.store.get_document(_d_id_ltm)
+                            for _p_ltm in getattr(_d_ltm, "passages", None) or []:
+                                _attached_pool.append(_p_ltm)
+                        if _attached_pool:
+                            _ltm_boosts = _ltm_ret.recall_associative_boost(
+                                effective_query, _attached_pool, attached_docs
+                            )
+                            # Require strong episodic/concept match (>= 1.35) to rescue empty BM25 hits
+                            _rescued_ltm = [
+                                (_ltm_boosts.get(_p_ltm.passage_id, 0.0), _p_ltm)
+                                for _p_ltm in _attached_pool
+                                if _ltm_boosts.get(_p_ltm.passage_id, 0.0) >= 1.35
+                            ]
+                            _rescued_ltm.sort(key=lambda item: item[0], reverse=True)
+                            for _b_sc, _p_ltm in _rescued_ltm[:top_k_retrieve]:
+                                retrieval_candidates.append(
+                                    RetrievalResult(
+                                        passage_id=_p_ltm.passage_id,
+                                        document_id=_p_ltm.document_id,
+                                        text=_p_ltm.text,
+                                        score=round(float(_b_sc), 4),
+                                        start_char=_p_ltm.start_char,
+                                        end_char=_p_ltm.end_char,
+                                        section_title=_p_ltm.section_title,
+                                        metadata=_p_ltm.metadata,
+                                    )
+                                )
+                except Exception:
+                    pass
+
                 best_score = max((getattr(h, "score", 0.0) for h in retrieval_candidates), default=0.0)
 
                 # If document summary or weak hit on exploratory summary, pull document's passages directly
@@ -2165,14 +2697,16 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
                 if kb_pre and kb_pre.get("answer") and kb_pre.get("blueprint") in ("SECTION_FULL_EXPLANATION", "SECTION_KEY_POINTS", "SECTION_GROUNDED_EXPLANATION"):
                     from src.hybrid_qa.evidence import Citation
                     matched_hs = [h.lower() for h in (kb_pre.get("matched_headings") or [])]
+                    kb_pre_doc = kb_pre.get("doc_id")
                     rescued_ev = []
                     seen_ev_ids = set()
-                    for d_id in attached_docs:
+                    scan_doc_ids = [kb_pre_doc] if (kb_pre_doc and kb_pre_doc in attached_docs) else attached_docs
+                    for d_id in scan_doc_ids:
                         d_obj = service.store.get_document(d_id)
                         for p in getattr(d_obj, "passages", None) or []:
                             sec_low = (getattr(p, "section_title", "") or "").lower()
                             txt_low = (getattr(p, "text", "") or "").lower()
-                            if not matched_hs or any(h in sec_low or h[:25] in txt_low for h in matched_hs):
+                            if not matched_hs or any(_heading_matches_passage_strict(h, sec_low, txt_low) for h in matched_hs):
                                 if p.passage_id not in seen_ev_ids:
                                     seen_ev_ids.add(p.passage_id)
                                     rescued_ev.append(
@@ -2192,9 +2726,55 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
                     else:
                         refused = True
                 else:
-                    refused = True
+                    rescued_sec_ev, _ = _rescue_explicit_section_passages(
+                        service=service,
+                        attached_docs=attached_docs,
+                        query=effective_query,
+                    )
+                    if rescued_sec_ev:
+                        evidence.evidence_passages = rescued_sec_ev
+                        refused = False
+                        effective_route = QuestionRoute.SECTION_LOOKUP
+                    else:
+                        refused = True
             else:
                 refused = True
+
+            # Rescue local grounded conceptual quiz when user asks for practice exercises in Offline mode
+            if (
+                attached_docs
+                and online_expansion_res is None
+                and not req.allow_online_api
+                and is_practice_generation_query(effective_query)
+            ):
+                try:
+                    from src.reasoning.conceptual_quiz_generator import (
+                        extract_quiz_topic_focus,
+                        generate_conceptual_practice,
+                    )
+                    _q_focus = extract_quiz_topic_focus(effective_query)
+                    if refused or _q_focus == "":
+                        _doc_txts_off = []
+                        _doc_title_off = "Tài liệu"
+                        for _i_o, _d_o in enumerate(attached_docs):
+                            _obj_o = service.store.get_document(_d_o)
+                            if _obj_o and getattr(_obj_o, "raw_text", ""):
+                                if _i_o == 0 and getattr(_obj_o, "title", ""):
+                                    _doc_title_off = _obj_o.title
+                                _doc_txts_off.append(_obj_o.raw_text)
+                        if _doc_txts_off:
+                            _quiz_off = generate_conceptual_practice(
+                                query=effective_query,
+                                doc_text="\n\n".join(_doc_txts_off),
+                                doc_title=_doc_title_off,
+                            )
+                            if _quiz_off and _quiz_off.get("answer"):
+                                online_expansion_res = _quiz_off
+                                refused = False
+                                refusal_reason = None
+                                refusal_message = ""
+                except Exception:
+                    pass
 
             if refused:
                 refusal_reason = effective_route.value if not is_grounded else (refusal_decision.reason.value if refusal_decision and refusal_decision.reason else "out_of_domain")
@@ -2259,6 +2839,39 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
                 added_online_doc = True
         if not added_online_doc:
             break
+
+    # Also intercept bare Offline practice queries ("cho tôi bài tập đi") where BM25 matched meta-word "tập"
+    if (
+        not refused
+        and online_expansion_res is None
+        and not req.allow_online_api
+        and attached_docs
+        and is_practice_generation_query(effective_query)
+    ):
+        try:
+            from src.reasoning.conceptual_quiz_generator import (
+                extract_quiz_topic_focus,
+                generate_conceptual_practice,
+            )
+            if extract_quiz_topic_focus(effective_query) == "":
+                _doc_txts_bare = []
+                _doc_title_bare = "Tài liệu"
+                for _i_b, _d_b in enumerate(attached_docs):
+                    _obj_b = service.store.get_document(_d_b)
+                    if _obj_b and getattr(_obj_b, "raw_text", ""):
+                        if _i_b == 0 and getattr(_obj_b, "title", ""):
+                            _doc_title_bare = _obj_b.title
+                        _doc_txts_bare.append(_obj_b.raw_text)
+                if _doc_txts_bare:
+                    _quiz_bare = generate_conceptual_practice(
+                        query=effective_query,
+                        doc_text="\n\n".join(_doc_txts_bare),
+                        doc_title=_doc_title_bare,
+                    )
+                    if _quiz_bare and _quiz_bare.get("answer"):
+                        online_expansion_res = _quiz_bare
+        except Exception:
+            pass
 
     # Step 6: Build citations & evidence structures
     citations_data = []
@@ -2327,9 +2940,18 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
     # Step 7: Answer Generation with Sub-Passage Context Pruning & Clean Grounded Synthesis
     t_gen_start = time.perf_counter()
     compression_stats = {"raw_context_tokens": 0, "compressed_context_tokens": 0, "tokens_saved": 0, "compression_ratio_pct": 0.0}
-    thinking_mode = _normalize_thinking_mode(getattr(req, "thinking_mode", "fast"))
+    requested_thinking_mode = _normalize_thinking_mode(getattr(req, "thinking_mode", "fast"))
+    auto_thinking_promoted = False
+    if requested_thinking_mode == "auto":
+        from src.brain.pedagogical_synthesizer import resolve_auto_thinking_mode
+        thinking_mode, auto_thinking_promoted = resolve_auto_thinking_mode(
+            effective_query, effective_route.value, "auto"
+        )
+    else:
+        thinking_mode = requested_thinking_mode
     reasoning_trace = None
     unified_trace: Optional[Dict[str, Any]] = None
+    _critic_is_faithful = True
 
     if refused:
         answer_text = refusal_message
@@ -2389,6 +3011,12 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
         if online_expansion_res is not None:
             body = online_expansion_res["answer"]
             is_online_symbolic_expansion = True
+            if not req.allow_online_api:
+                body = (
+                    f"{body}\n\n"
+                    "🔒 *Đang ở chế độ **Offline** (câu hỏi ôn tập rút trích trực tiếp từ tài liệu). "
+                    "Bật **Online (Mở rộng & Bài tập)** để hệ thống tự biến đổi công thức và sinh thêm bài tập mở rộng.*"
+                )
         elif wants_suggested_questions and attached_docs:
             try:
                 attached_doc = service.store.get_document(attached_docs[0])
@@ -2502,18 +3130,21 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
                 comp_points.append(f"- **{c['document_title']}**: {lead} {c['citation_label']}")
             body = "Khi đối chiếu giữa các tài liệu, có các điểm phân biệt chính:\n" + "\n".join(comp_points)
         elif effective_route == QuestionRoute.SECTION_LOOKUP:
+            is_sec_continuation = _has_section_continuation_cue(effective_query)
             kb_synth = None
-            try:
-                kb = _ensure_docs_learned_in_kb(service, attached_docs)
-                kb_synth = kb.synthesize_learned_answer(
-                    query=effective_query,
-                    doc_ids=attached_docs,
-                )
-            except Exception:
-                kb_synth = None
+            if not is_sec_continuation:
+                try:
+                    kb = _ensure_docs_learned_in_kb(service, attached_docs)
+                    kb_synth = kb.synthesize_learned_answer(
+                        query=effective_query,
+                        doc_ids=attached_docs,
+                    )
+                except Exception:
+                    kb_synth = None
 
             if (
-                kb_synth
+                not is_sec_continuation
+                and kb_synth
                 and kb_synth.get("answer")
                 and (
                     kb_synth.get("blueprint") in ("SECTION_FULL_EXPLANATION", "SECTION_KEY_POINTS", "SECTION_GROUNDED_EXPLANATION")
@@ -2521,10 +3152,18 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
                 )
             ):
                 body = kb_synth["answer"]
+                _sync_citations_to_kb_doc(
+                    service=service,
+                    kb_synth=kb_synth,
+                    citations_data=citations_data,
+                    evidence_passages_out=evidence_passages_out,
+                    query=effective_query,
+                )
                 matched_headings = [str(h).lower() for h in (kb_synth.get("matched_headings") or [])]
-                if matched_headings and attached_docs:
+                target_kb_docs = [kb_synth["doc_id"]] if kb_synth.get("doc_id") in attached_docs else attached_docs
+                if matched_headings and target_kb_docs:
                     existing_pids = {c.get("passage_id") for c in citations_data}
-                    for _d_id in attached_docs:
+                    for _d_id in target_kb_docs:
                         try:
                             _d_obj = service.store.get_document(_d_id)
                             for _p in getattr(_d_obj, "passages", None) or []:
@@ -2532,7 +3171,7 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
                                     continue
                                 _sec_low = (getattr(_p, "section_title", "") or "").lower()
                                 _txt_low = (getattr(_p, "text", "") or "").lower()
-                                if any(h in _sec_low or h[:25] in _txt_low for h in matched_headings):
+                                if any(_heading_matches_passage_strict(h, _sec_low, _txt_low) for h in matched_headings):
                                     existing_pids.add(_p.passage_id)
                                     idx_next = len(citations_data) + 1
                                     cit_item = {
@@ -2556,16 +3195,17 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
                         if len(citations_data) >= 12:
                             break
             else:
-                _m_req_num = re.search(
-                    r"\b(?:topic|chủ\s*đề|bài|mục|chương|phần|section|chapter|unit|lesson)\s+(\d+(?:\.\d+)*)\b",
-                    effective_query,
-                    re.IGNORECASE,
+                rescued_sec_ev, rescued_sec_heading = _rescue_explicit_section_passages(
+                    service=service,
+                    attached_docs=attached_docs,
+                    query=effective_query,
                 )
+                _m_req_num = _EXPLICIT_SEC_QUERY_RE.search(effective_query)
                 _missing_explicit_sec = False
-                if _m_req_num and attached_docs:
-                    _req_num = _m_req_num.group(1)
+                if _m_req_num and attached_docs and not rescued_sec_ev:
+                    _req_num = _m_req_num.group(2)
                     _sec_pat = re.compile(
-                        rf"(?:\b(?:topic|chủ\s*đề|bài|mục|chương|phần|section|chapter|unit|lesson)\s+{re.escape(_req_num)}\b|^\s*#*\s*{re.escape(_req_num)}(?:\.|\s))",
+                        rf"(?:\b(?:topic|chủ\s*đề|chu\s*de|bài|bai|mục|muc|chương|chuong|phần|phan|section|chapter|unit|lesson)\s*{re.escape(_req_num)}(?!\d)\b|^\s*#*\s*{re.escape(_req_num)}(?!\d)(?:\.|\s|:))",
                         re.IGNORECASE | re.MULTILINE,
                     )
                     _found_in_attached = False
@@ -2590,20 +3230,70 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
                         "Vui lòng kiểm tra lại số hiệu mục/phần trong tài liệu."
                     )
                 else:
-                    smart_sec, _ = DocumentAnalyzer.find_best_grounded_answer(
-                        query=effective_query,
-                        evidence_passages=evidence.evidence_passages,
-                        answer_mode=req.answer_mode,
-                    )
-                    smart_sec_body = smart_sec.split("### Nguồn tham khảo")[0].strip() if "### Nguồn tham khảo" in smart_sec else smart_sec.strip()
-                    if smart_sec_body and not smart_sec_body.startswith("Không tìm thấy đủ thông tin"):
-                        body = smart_sec_body
+                    if rescued_sec_ev:
+                        # Align citations strictly to the rescued explicit section passages
+                        rebuilt_sec_cits: List[Dict[str, Any]] = []
+                        for _idx_s, _rc_s in enumerate(rescued_sec_ev, start=1):
+                            _d_s = getattr(_rc_s, "document_id", "DOC")
+                            _d_title_s = _d_s
+                            _d_fn_s = None
+                            try:
+                                _d_obj_s = service.store.get_document(_d_s)
+                                _d_title_s = _d_obj_s.title
+                                if isinstance(getattr(_d_obj_s, "metadata", None), dict):
+                                    _d_fn_s = _d_obj_s.metadata.get("filename") or _d_obj_s.metadata.get("file_name")
+                            except Exception:
+                                pass
+                            _meta_s = getattr(_rc_s, "metadata", None) or {}
+                            rebuilt_sec_cits.append(
+                                {
+                                    "citation_index": _idx_s,
+                                    "citation_label": f"[{_idx_s}]",
+                                    "passage_id": _rc_s.passage_id,
+                                    "document_id": _d_s,
+                                    "document_title": _d_title_s,
+                                    "filename": _d_fn_s,
+                                    "page_number": _meta_s.get("page_number") if isinstance(_meta_s, dict) else None,
+                                    "section_title": getattr(_rc_s, "section_title", rescued_sec_heading or "Phần nội dung") or "Phần nội dung",
+                                    "paragraph_index": getattr(_rc_s, "paragraph_index", _idx_s),
+                                    "metadata": _meta_s if isinstance(_meta_s, dict) else {},
+                                    "score": 10.0,
+                                    "text": _rc_s.text,
+                                    "support_status": "SUPPORTED",
+                                }
+                            )
+                        citations_data.clear()
+                        citations_data.extend(rebuilt_sec_cits)
+                        evidence_passages_out.clear()
+                        evidence_passages_out.extend(rebuilt_sec_cits)
+
+                    nav_body = None
+                    if rescued_sec_ev and (is_sec_continuation or section_granularity in ("key_points", "explain", "full")):
+                        nav_body = _synthesize_section_navigation_answer(
+                            query=effective_query,
+                            rescued_citations=citations_data,
+                            section_granularity=section_granularity,
+                            session_messages=getattr(session, "messages", None),
+                            fallback_heading=rescued_sec_heading or "Mục nội dung",
+                        )
+
+                    if nav_body:
+                        body = nav_body
                     else:
-                        body_points = [s.strip() for s in sentences[:3] if len(s.strip()) > 10]
-                        if body_points:
-                            body = "\n".join(f"- {p}" for p in body_points) + f" {cit_1}"
+                        smart_sec, _ = DocumentAnalyzer.find_best_grounded_answer(
+                            query=effective_query,
+                            evidence_passages=rescued_sec_ev or evidence.evidence_passages,
+                            answer_mode=req.answer_mode,
+                        )
+                        smart_sec_body = smart_sec.split("### Nguồn tham khảo")[0].strip() if "### Nguồn tham khảo" in smart_sec else smart_sec.strip()
+                        if smart_sec_body and not smart_sec_body.startswith("Không tìm thấy đủ thông tin"):
+                            body = smart_sec_body
                         else:
-                            body = f"{best_passage[:300].strip()} {cit_1}"
+                            body_points = [s.strip() for s in sentences[:3] if len(s.strip()) > 10]
+                            if body_points:
+                                body = "\n".join(f"- {p}" for p in body_points) + f" {cit_1}"
+                            else:
+                                body = f"{best_passage[:300].strip()} {cit_1}"
         else:
             # Check Knowledge Bank first for structured multi-facet answers
             kb_synth = None
@@ -2618,12 +3308,39 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
 
             if kb_synth and kb_synth.get("blueprint") in ("DEFINITION_AND_TYPES", "SECTION_FULL_EXPLANATION", "SECTION_KEY_POINTS") and kb_synth.get("answer"):
                 body = kb_synth["answer"]
+                _sync_citations_to_kb_doc(
+                    service=service,
+                    kb_synth=kb_synth,
+                    citations_data=citations_data,
+                    evidence_passages_out=evidence_passages_out,
+                    query=effective_query,
+                )
             else:
-                smart_answer, _ = DocumentAnalyzer.find_best_grounded_answer(
+                smart_answer, analyzer_cits = DocumentAnalyzer.find_best_grounded_answer(
                     query=effective_query,
                     evidence_passages=evidence.evidence_passages,
                     answer_mode=req.answer_mode,
                 )
+                if (
+                    analyzer_cits
+                    and len(attached_docs) > 1
+                    and effective_route != QuestionRoute.CROSS_DOCUMENT_COMPARISON
+                ):
+                    used_doc_ids = {
+                        str(c.get("document_id") or "")
+                        for c in analyzer_cits
+                        if isinstance(c, dict) and c.get("document_id")
+                    }
+                    if used_doc_ids:
+                        filtered_cits = [c for c in citations_data if c.get("document_id") in used_doc_ids]
+                        if filtered_cits and len(filtered_cits) < len(citations_data):
+                            for _ic, _fc in enumerate(filtered_cits, start=1):
+                                _fc["citation_index"] = _ic
+                                _fc["citation_label"] = f"[{_ic}]"
+                            citations_data.clear()
+                            citations_data.extend(filtered_cits)
+                            evidence_passages_out.clear()
+                            evidence_passages_out.extend(filtered_cits)
                 # Extract body (strip out Sources section if present, handled below)
                 if "### Nguồn tham khảo" in smart_answer:
                     body = smart_answer.split("### Nguồn tham khảo")[0].strip()
@@ -2635,6 +3352,13 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
                 if body.startswith("Không tìm thấy đủ thông tin bằng chứng"):
                     if kb_synth and kb_synth.get("answer"):
                         body = kb_synth["answer"]
+                        _sync_citations_to_kb_doc(
+                            service=service,
+                            kb_synth=kb_synth,
+                            citations_data=citations_data,
+                            evidence_passages_out=evidence_passages_out,
+                            query=effective_query,
+                        )
                     else:
                         refused = True
                         refusal_reason = "insufficient_coverage"
@@ -2785,6 +3509,7 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
                         except Exception:
                             pass
                     _c_report = _critic.verify_answer(body, critic_citations)
+                    _critic_is_faithful = bool(_c_report.is_faithful)
                     if not _c_report.is_faithful:
                         body = _critic.correct_answer(body, _c_report)
                 except Exception:
@@ -2910,6 +3635,28 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
         else ("BM25 Context Window (Standard RAG)" if mode_norm == "context" else "Level 3 (SA-CMS Gated Multi-Level)")
     )
 
+    ltm_diag: Dict[str, Any] = {}
+    try:
+        _ltm_fin = _ensure_docs_in_ltm(service, attached_docs)
+        _recorded_ep = _ltm_fin.record_verified_interaction(
+            session_id=session_id,
+            raw_query=raw_query,
+            effective_query=effective_query,
+            answer=answer_text,
+            citations=citations_data,
+            refused=refused,
+            is_faithful=_critic_is_faithful,
+            needed_clarification=False,
+        )
+        _learner_hint = _ltm_fin.get_learner_hint(effective_query, attached_docs) if not refused else None
+        ltm_diag = {
+            **_ltm_fin.get_status_summary(allowed_document_ids=attached_docs),
+            "episodic_recorded": bool(_recorded_ep),
+            "learner_hint": _learner_hint,
+        }
+    except Exception:
+        pass
+
     diagnostics_data = {
         "mode": mode_norm,
         "method": method_code,
@@ -2924,7 +3671,10 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
         "refusal_reason": refusal_reason,
         "memory_level": memory_level_label,
         "thinking_mode": thinking_mode,
+        "requested_thinking_mode": requested_thinking_mode,
+        "auto_thinking_promoted": auto_thinking_promoted,
         "reasoning_trace": reasoning_trace,
+        "long_term_memory": ltm_diag,
         "discourse_explainer": {
             "engine": "WaveCMS-Discourse-SelfBuilt",
             "granularity": section_granularity,
@@ -3248,7 +3998,12 @@ async def chat_query(req: ChatRequest):
         })
 
     t_gen_start = time.perf_counter()
-    thinking_mode = _normalize_thinking_mode(getattr(req, "thinking_mode", "fast"))
+    requested_thinking_mode = _normalize_thinking_mode(getattr(req, "thinking_mode", "fast"))
+    if requested_thinking_mode == "auto":
+        from src.brain.pedagogical_synthesizer import resolve_auto_thinking_mode
+        thinking_mode, _ = resolve_auto_thinking_mode(query, effective_route.value, "auto")
+    else:
+        thinking_mode = requested_thinking_mode
     unified_trace: Optional[Dict[str, Any]] = None
     if refused:
         citations = []

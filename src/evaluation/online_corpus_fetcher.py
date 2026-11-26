@@ -14,14 +14,16 @@ from __future__ import annotations
 import concurrent.futures
 import hashlib
 import json
+import math
 import os
 import re
 import time
+import unicodedata
 import urllib.parse
 import xml.etree.ElementTree as ET
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Set, Tuple
 
 import requests
 
@@ -503,7 +505,7 @@ def fetch_openalex_papers(
                 "published": str(year),
                 "url": doc_url,
                 "source": "openalex",
-                "language": "en",
+                "language": "vi" if str(item.get("language") or "").strip().lower() == "vi" else "en",
                 "word_count": len(md_text.split()),
             }
         )
@@ -839,24 +841,289 @@ def fetch_hf_dataset_sample(
     return []
 
 
+_CONVERSATIONAL_PREFIX_PATTERNS: Tuple[re.Pattern, ...] = (
+    re.compile(
+        r"^(?:xin\s+hãy|vui\s+lòng|làm\s+ơn|hãy\s+giúp\s+(?:tôi|mình|em)|"
+        r"giúp\s+(?:tôi|mình|em)|cho\s+(?:tôi|mình|em)\s+(?:xin|hỏi))\s+",
+        re.IGNORECASE | re.UNICODE,
+    ),
+    re.compile(
+        r"^(?:hãy\s+tìm(?:\s+kiếm)?|tìm\s+kiếm\s+giúp\s+(?:tôi|mình)|"
+        r"tìm\s+giúp\s+(?:tôi|mình))\s+",
+        re.IGNORECASE | re.UNICODE,
+    ),
+    re.compile(
+        r"^(?:cho\s+(?:tôi|mình|em)\s+tài\s+liệu\s+về\s+phần(?=\s+(?!mềm\b|cứng\b|tử\b|trăm\b))|"
+        r"cho\s+(?:tôi|mình|em)\s+tài\s+liệu\s+về\s+chủ\s+đề|"
+        r"cho\s+(?:tôi|mình|em)\s+tài\s+liệu\s+về|"
+        r"tìm(?:\s+kiếm)?\s+tài\s+liệu\s+về\s+phần(?=\s+(?!mềm\b|cứng\b|tử\b|trăm\b))|"
+        r"tìm(?:\s+kiếm)?\s+tài\s+liệu\s+về\s+chủ\s+đề|"
+        r"tìm(?:\s+kiếm)?\s+tài\s+liệu\s+về|"
+        r"(?:lấy|tải|kiếm)\s+tài\s+liệu\s+về|"
+        r"cho\s+(?:tôi|mình|em)\s+biết(?:\s+thêm)?\s+về|"
+        r"giới\s+thiệu(?:\s+cho\s+(?:tôi|mình))?\s+về|"
+        r"giải\s+thích(?:\s+ngắn\s+gọn)?\s+về|"
+        r"tóm\s+tắt(?:\s+tài\s+liệu)?\s+về|"
+        r"tìm\s+hiểu\s+về|tra\s+cứu\s+về|thông\s+tin\s+về|"
+        r"khái\s+niệm\s+về|định\s+nghĩa\s+về|"
+        r"tài\s+liệu\s+về|hãy\s+tìm|tìm\s+về)\s+",
+        re.IGNORECASE | re.UNICODE,
+    ),
+    re.compile(
+        r"^(?:(?:về\s+)?phần(?:\s+\d+\s*[:.\-]?)?(?=\s+(?!mềm\b|cứng\b|tử\b|trăm\b|thưởng\b|lớn\b|bù\b))|"
+        r"(?:về\s+)?chủ\s+đề(?:\s+về)?)\s+",
+        re.IGNORECASE | re.UNICODE,
+    ),
+)
+
+_CONVERSATIONAL_SUFFIX_RE = re.compile(
+    r"\s+(?:là\s+gì|như\s+thế\s+nào|ra\s+sao|nhé|nha|với\s+ạ|giúp\s+tôi|cho\s+tôi|ạ)\s*[?!.]*$",
+    re.IGNORECASE | re.UNICODE,
+)
+
+# Vietnamese-specific diacritic characters (distinct from rare European loan accents)
+_VI_SPECIFIC_DIACRITIC_RE = re.compile(
+    r"[ăâđêôơưàảãáạằẳẵắặầẩẫấậèẻẽẹềểễếệìỉĩịòỏõọồổỗốộờởỡớợùủũụừửữứựỳỷỹỵ]",
+    re.IGNORECASE,
+)
+
+# Standard unaccented single-syllable Vietnamese phonology (used to distinguish
+# native level-tone Vietnamese syllables like "khoa", "sinh", "nam" from
+# technical ASCII/Latin terms like "WaveCMS", "Playfair", "TCP", "Python").
+_VI_PLAIN_SYLLABLE_RE = re.compile(
+    r"^(?:ngh|ng|nh|ch|gh|gi|kh|ph|qu|th|tr|[bcdghklmnprstvx])?"
+    r"(?:uy|ua|uo|ia|ie|ye|ai|ao|au|ay|eo|eu|iu|oa|oe|oi|oo|ou|ui|uu|[aeiouy])"
+    r"(?:ng|nh|ch|[cmnpt])?$",
+    re.IGNORECASE,
+)
+
+_KNOWN_TECH_ASCII_TERMS: Set[str] = {
+    "api", "cpu", "gpu", "ram", "rom", "rag", "gan", "aes", "des", "sha",
+    "rsa", "ecc", "tcp", "udp", "dns", "lan", "wan", "http", "https",
+    "sql", "xml", "css", "html", "json", "yaml", "dom", "oop", "mvc",
+    "jwt", "orm", "ssh", "ssl", "tls", "git", "rust", "java", "python",
+    "haar", "wavelet", "wavecms", "playfair", "bert", "gpt", "llm", "nlp",
+}
+
+_QUERY_RELEVANCE_STOPWORDS: Set[str] = _STOPWORDS | {
+    "tôi", "mình", "em", "bạn", "xin", "hãy", "cách", "gì", "sao", "ra",
+    "cho", "biết", "tài", "liệu", "phần", "chủ", "đề", "tìm", "kiếm",
+    "does", "do", "did", "is", "are", "was", "were", "how", "what",
+    "which", "when", "where", "who", "why",
+}
+
+
+def clean_online_search_query(raw_query: str) -> str:
+    """
+    Strips Vietnamese conversational request prefixes (e.g. 'cho tôi tài liệu về phần',
+    'tìm tài liệu về', 'cho tôi biết về', 'phần', 'chủ đề', 'giới thiệu về', 'hãy tìm')
+    before dispatching queries to external Wikipedia / OpenAlex / arXiv APIs.
+    """
+    q = unicodedata.normalize("NFC", (raw_query or "").strip())
+    if not q:
+        return ""
+
+    cleaned = re.sub(r"\s+", " ", q).strip(" \t\r\n\"'“”")
+    fallback = cleaned.strip(" ?!.,;:")
+
+    for _ in range(4):
+        prev = cleaned
+        for pat in _CONVERSATIONAL_PREFIX_PATTERNS:
+            m = pat.match(cleaned)
+            if m:
+                rest = cleaned[m.end() :].strip(" ,;:-–—")
+                if len(rest) >= 2:
+                    cleaned = rest
+        if cleaned == prev:
+            break
+
+    # Strip trailing conversational suffixes only if substantive query remains
+    m_suf = _CONVERSATIONAL_SUFFIX_RE.search(cleaned)
+    if m_suf:
+        stem = cleaned[: m_suf.start()].strip(" ?!.,;:")
+        if len(stem) >= 3:
+            cleaned = stem
+
+    cleaned = cleaned.strip(" ?!.,;:")
+    return cleaned if len(cleaned) >= 2 else (fallback or q)
+
+
+def _extract_technical_ascii_terms(query_nfc: str) -> List[str]:
+    """
+    Identifies technical ASCII/Latin identifiers (e.g. WaveCMS, Playfair, TCP,
+    ZirconiumWaveletQuantization9876, BM25) inside a Vietnamese or mixed query.
+    """
+    raw_tokens = re.findall(r"[A-Za-z0-9][A-Za-z0-9_.\-+]*", query_nfc)
+    tech: List[str] = []
+    seen: Set[str] = set()
+
+    for idx, tok in enumerate(raw_tokens):
+        if any(ord(c) > 127 for c in tok):
+            continue
+        low = tok.lower().strip("._-+")
+        if len(low) < 2 or low in _QUERY_RELEVANCE_STOPWORDS or low in seen:
+            continue
+
+        has_digit_or_sym = bool(re.search(r"[\d_+\-.]", tok))
+        # Multi-uppercase or internal camelCase (e.g., TCP, WaveCMS, GraphQL)
+        is_camel_or_acronym = (
+            (len(tok) >= 2 and tok.isupper())
+            or any(c.isupper() for c in tok[1:])
+        )
+        is_known_tech = low in _KNOWN_TECH_ASCII_TERMS
+        # Foreign/technical morphology not matching single Vietnamese syllable structure
+        is_non_vi_word = len(low) >= 3 and not _VI_PLAIN_SYLLABLE_RE.match(low)
+        # Capitalized proper technical noun mid-sentence (excluding TitleCase Vietnamese words like "Nam")
+        is_mid_proper_foreign = idx > 0 and tok[0].isupper() and is_non_vi_word
+
+        if has_digit_or_sym or is_camel_or_acronym or is_known_tech or is_non_vi_word or is_mid_proper_foreign:
+            seen.add(low)
+            tech.append(low)
+
+    return tech
+
+
+def _is_fetched_doc_relevant_to_query(
+    clean_query: str,
+    doc_item: Any,
+    extra_text: Optional[str] = None,
+) -> bool:
+    """
+    Diacritic-aware relevance gate preventing false accent-stripped matches
+    (e.g. rejecting 'điều trị triệt căn ung thư tuyến tiền liệt' for 'triết học').
+    Accepts either `(query, doc_dict)` or `(query, title_str, text_str)`.
+    """
+    if isinstance(doc_item, str):
+        doc_item = {"title": doc_item, "text": extra_text or ""}
+    cleaned_q = clean_online_search_query(clean_query or "") or (clean_query or "").strip()
+    q_nfc = unicodedata.normalize("NFC", cleaned_q.strip())
+    if not q_nfc or not isinstance(doc_item, dict):
+        return False
+
+    title = unicodedata.normalize("NFC", str(doc_item.get("title") or "").strip())
+    body_src = str(
+        doc_item.get("text")
+        or doc_item.get("abstract")
+        or doc_item.get("content")
+        or ""
+    )
+    body_head = unicodedata.normalize("NFC", body_src[:800])
+    combined = f"{title}\n{body_head}".strip()
+    if not combined:
+        return False
+
+    combined_lower = combined.lower()
+    doc_words: Set[str] = set(re.findall(r"[^\W_]+", combined_lower, flags=re.UNICODE))
+    doc_ascii_words: Set[str] = set(re.findall(r"[a-z0-9][a-z0-9_.\-+]*", combined_lower))
+
+    has_accented_query = any(ord(ch) > 127 for ch in q_nfc)
+    doc_lang = str(doc_item.get("language") or "").strip().lower()
+    vi_char_hits = len(_VI_SPECIFIC_DIACRITIC_RE.findall(combined_lower))
+    is_vietnamese_doc = (doc_lang == "vi") or (vi_char_hits >= 2)
+
+    if has_accented_query:
+        tech_ascii_terms = _extract_technical_ascii_terms(q_nfc)
+
+        if not is_vietnamese_doc:
+            # English result returned for a Vietnamese query: ONLY accept if query
+            # contains technical ASCII/Latin terms that appear in the English doc.
+            if not tech_ascii_terms:
+                return False
+            return all(
+                (t in doc_ascii_words or t in combined_lower)
+                for t in tech_ascii_terms
+            )
+
+        # Vietnamese document: require exact diacritic phrase match OR >= 60% of
+        # accented non-stopword tokens with exact Vietnamese diacritics preserved.
+        if tech_ascii_terms and not any(
+            (t in doc_ascii_words or t in combined_lower) for t in tech_ascii_terms
+        ):
+            return False
+
+        q_phrase = re.sub(r"\s+", " ", q_nfc.lower()).strip(" ?!.,;:\"'")
+        if len(q_phrase) >= 3 and re.search(
+            rf"(?<!\w){re.escape(q_phrase)}(?!\w)", combined_lower, flags=re.UNICODE
+        ):
+            return True
+
+        q_tokens = [
+            tok
+            for tok in re.findall(r"[^\W_]+", q_phrase, flags=re.UNICODE)
+            if len(tok) >= 2 and tok not in _QUERY_RELEVANCE_STOPWORDS
+        ]
+        accented_tokens = [tok for tok in q_tokens if any(ord(c) > 127 for c in tok)]
+        if not accented_tokens:
+            return bool(tech_ascii_terms)
+
+        exact_accented_hits = sum(1 for tok in accented_tokens if tok in doc_words)
+        accented_ratio = exact_accented_hits / len(accented_tokens)
+        if accented_ratio < 0.60:
+            return False
+
+        if q_tokens:
+            total_hits = sum(1 for tok in q_tokens if tok in doc_words)
+            if (total_hits / len(q_tokens)) < 0.60:
+                return False
+
+        return True
+
+    # Pure ASCII / English query path (100% compatible with English scientific queries)
+    q_low = re.sub(r"\s+", " ", q_nfc.lower()).strip(" ?!.,;:\"'")
+    if len(q_low) >= 3 and q_low in combined_lower:
+        return True
+
+    en_tokens = [
+        tok
+        for tok in re.findall(r"[a-z0-9][a-z0-9_.\-]*", q_low)
+        if len(tok) >= 2 and tok not in _QUERY_RELEVANCE_STOPWORDS
+    ]
+    if not en_tokens:
+        return True
+
+    def _en_tok_matches(tok: str) -> bool:
+        if tok in doc_ascii_words or tok in doc_words:
+            return True
+        # Handle simple English inflection (e.g. achieve -> achieves/achieved)
+        if len(tok) >= 5 and any(w.startswith(tok) for w in doc_ascii_words):
+            return True
+        if len(tok) >= 6 and tok.endswith("s") and tok[:-1] in doc_ascii_words:
+            return True
+        return False
+
+    # Rare/specific identifier token (>= 12 chars or alphanumeric code) present -> strong match
+    distinctive = [t for t in en_tokens if len(t) >= 12 or any(c.isdigit() for c in t)]
+    if distinctive and any(_en_tok_matches(t) for t in distinctive):
+        return True
+
+    matched_en = sum(1 for t in en_tokens if _en_tok_matches(t))
+    required = 1 if len(en_tokens) <= 2 else max(1, math.ceil(0.40 * len(en_tokens)))
+    return matched_en >= required
+
+
 def search_external_document_apis(
     query: str,
     language: str = "vi",
     max_docs: int = 3,
 ) -> List[Dict[str, Any]]:
     """Search Wikipedia, arXiv, OpenAlex, and EuropePMC in parallel for live chatbot grounding."""
-    q = (query or "").strip()
+    raw_q = (query or "").strip()
+    if not raw_q:
+        return []
+    q = clean_online_search_query(raw_q)
     if not q:
         return []
-    lang = (language or "vi").strip().lower()
-    wiki_lang = lang if lang in {"vi", "en"} else "en"
+
+    has_accented = any(ord(ch) > 127 for ch in q)
+    lang = (language or ("vi" if has_accented else "en")).strip().lower()
+    wiki_lang = "vi" if has_accented else (lang if lang in {"vi", "en"} else "en")
     limit = max(1, min(int(max_docs), 10))
 
     with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
         wiki_fut = executor.submit(fetch_wikipedia_article, q, wiki_lang, 10)
-        arxiv_fut = executor.submit(fetch_arxiv_papers, q, 2, 12)
-        openalex_fut = executor.submit(fetch_openalex_papers, q, 2, 12)
-        epmc_fut = executor.submit(fetch_europepmc_papers, q, 2, 12)
+        arxiv_fut = executor.submit(fetch_arxiv_papers, q, 3, 12)
+        openalex_fut = executor.submit(fetch_openalex_papers, q, 4, 12)
+        epmc_fut = executor.submit(fetch_europepmc_papers, q, 3, 12)
 
         candidates: List[Dict[str, Any]] = []
         try:
@@ -875,6 +1142,8 @@ def search_external_document_apis(
     seen_ids: set = set()
     seen_titles: set = set()
     for doc in candidates:
+        if not _is_fetched_doc_relevant_to_query(q, doc):
+            continue
         did = str(doc.get("document_id") or "").strip()
         title_norm = str(doc.get("title") or "").strip().lower()
         if not did or did in seen_ids or (title_norm and title_norm in seen_titles):

@@ -130,7 +130,7 @@
     theme: "light",
     mode: "hybrid",
     answerMode: "balanced",
-    thinkingMode: "fast",
+    thinkingMode: "auto",
     allowOnlineApi: false,
     showTelemetry: true,
     presentationMode: false,
@@ -317,7 +317,30 @@
 
     const paragraphs = safe.split(/\n{2,}/);
     return paragraphs
-      .map((block) => `<p>${block.replace(/\n/g, "<br />")}</p>`)
+      .map((block) => {
+        const lines = block.trim().split("\n");
+        if (
+          lines.length >= 2 &&
+          lines[0].trim().startsWith("|") &&
+          /^\|[\s:\-|]+\|$/.test(lines[1].trim())
+        ) {
+          const parseRow = (r) =>
+            r
+              .trim()
+              .replace(/^\|/, "")
+              .replace(/\|$/, "")
+              .split(/(?<!\\)\|/)
+              .map((c) => c.trim().replace(/\\\|/g, "|"));
+          const headers = parseRow(lines[0]);
+          const bodyRows = lines.slice(2).filter((l) => l.trim().startsWith("|")).map(parseRow);
+          const thead = `<thead><tr>${headers.map((h) => `<th>${h}</th>`).join("")}</tr></thead>`;
+          const tbody = `<tbody>${bodyRows
+            .map((row) => `<tr>${row.map((cell) => `<td>${cell}</td>`).join("")}</tr>`)
+            .join("")}</tbody>`;
+          return `<div class="grounded-table-wrap"><table class="grounded-compare-table">${thead}${tbody}</table></div>`;
+        }
+        return `<p>${block.replace(/\n/g, "<br />")}</p>`;
+      })
       .join("");
   }
 
@@ -1405,6 +1428,12 @@
     const modeBadge = MODE_SHORT_BADGES[modeKey] || MODE_SHORT_BADGES.hybrid;
     const isRefused = Boolean(msg.refused);
     const reasoningTraceHtml = renderReasoningTraceHtml(msg.reasoning_trace || diag.reasoning_trace);
+    const ltmLearnerHint =
+      !isRefused && diag.long_term_memory && diag.long_term_memory.learner_hint
+        ? `<div class="ltm-learner-hint">${escapeHtml(
+            String(diag.long_term_memory.learner_hint).replace(/^\*+|\*+$/g, "").replace(/\*/g, "")
+          )}</div>`
+        : "";
 
     let answerBodyHtml = "";
     if (isRefused) {
@@ -1543,6 +1572,7 @@
             <span class="msg-mode-pill">${escapeHtml(modeBadge)}</span>
           </div>
           ${reasoningTraceHtml}
+          ${ltmLearnerHint}
           <div class="section-label-header">TRẢ LỜI</div>
           ${answerBodyHtml}
           ${evidenceBlockHtml}

@@ -265,11 +265,11 @@ class SelfStudyKnowledgeBank:
                     tbody = inner
                 return level, inner, tbody, pfx
 
-            if len(clean_line) > 100 or " = " in clean_line:
+            if " = " in clean_line:
                 return None
 
             m_pre = prefixed_heading_re.match(clean_line)
-            if m_pre:
+            if m_pre and len(clean_line) <= 170:
                 kw = m_pre.group(1).strip()
                 num_part = (m_pre.group(2) or "").strip()
                 rest = (m_pre.group(3) or "").strip().rstrip(":").strip()
@@ -282,9 +282,12 @@ class SelfStudyKnowledgeBank:
                     level = 1
                 pfx = f"{kw} {num_part}".strip()
                 full_h = f"{pfx}: {rest}".strip(": ") if rest else pfx
-                # Require either ':' in original line or title capitalization / short title
-                if ":" in clean_line or (rest and len(rest.split()) <= 12) or not rest:
+                # Require delimiter (:/-/. ) or reasonable heading length
+                if any(d in clean_line for d in (":", "-", "–")) or (rest and len(rest.split()) <= 20) or not rest:
                     return level, full_h, (rest or pfx), pfx
+
+            if len(clean_line) > 100:
+                return None
 
             m_dot = dot_sub_heading_re.match(clean_line)
             if m_dot:
@@ -660,6 +663,16 @@ class SelfStudyKnowledgeBank:
                     clean_b = b.strip()
                     if clean_b:
                         bullet_methods.append(f"- {clean_b}")
+            if not bullet_methods:
+                for s in sections:
+                    for b in s.get("bullets", []):
+                        clean_b = b.strip()
+                        if clean_b:
+                            bullet_methods.append(f"- {clean_b}")
+                            if len(bullet_methods) >= 6:
+                                break
+                    if len(bullet_methods) >= 6:
+                        break
 
             # Specific systems across the whole document (skip intro/cryptanalysis headings, keep all ciphers/methods)
             system_names: List[str] = []
@@ -733,6 +746,7 @@ class SelfStudyKnowledgeBank:
                 "blueprint": "DEFINITION_AND_TYPES",
                 "citations": ["[1]"],
                 "grounded": True,
+                "doc_id": doc.get("doc_id"),
             }
 
         from src.web.question_router import QuestionRouter
@@ -767,6 +781,7 @@ class SelfStudyKnowledgeBank:
                         "blueprint": "COMPARISON_AND_SECURITY",
                         "citations": res_comp.get("citations", ["[1]"]),
                         "grounded": True,
+                        "doc_id": doc.get("doc_id"),
                         "metadata": res_comp.get("metadata", {}),
                     }
             except Exception:
@@ -792,6 +807,7 @@ class SelfStudyKnowledgeBank:
                         "blueprint": "MECHANISM_AND_FORMULA",
                         "citations": res_proc.get("citations", ["[1]"]),
                         "grounded": True,
+                        "doc_id": doc.get("doc_id"),
                         "metadata": {"steps_count": len(res_proc.get("steps", []))},
                     }
             except Exception:
@@ -842,6 +858,7 @@ class SelfStudyKnowledgeBank:
                                 "blueprint": "GROUNDED_CONCEPT_EXPLANATION",
                                 "citations": ["[1]"],
                                 "grounded": True,
+                                "doc_id": doc.get("doc_id"),
                             }
             except Exception:
                 pass
@@ -857,10 +874,12 @@ class SelfStudyKnowledgeBank:
 
         explicit_num_requested = False
         m_scoped_num = re.search(
-            r"\b(?:(phần|phan|chương|chuong|chapter|bài|bai|mục|muc|section|topic|chủ\s*đề|chu\s*de|unit|lesson)\s+)?(\d+(?:\.\d+)*)\b",
+            r"\b(phần|phan|chương|chuong|chapter|bài|bai|mục|muc|section|topic|chủ\s*đề|chu\s*de|unit|lesson)\s*(\d+(?:\.\d+)*)\b",
             query,
             re.IGNORECASE,
         )
+        if not m_scoped_num:
+            m_scoped_num = re.match(r"^\s*()(\d+(?:\.\d+)*)(?:\.|\s|$)", query)
         if m_scoped_num and not target_name:
             req_kw = strip_accents((m_scoped_num.group(1) or "").lower()).strip()
             target_num = m_scoped_num.group(2).strip()
@@ -930,7 +949,12 @@ class SelfStudyKnowledgeBank:
 
             raw_items = [ln.lstrip("-*• ").strip() for ln in all_bundle_raw_lines if ln.lstrip("-*• ").strip()]
             if not raw_items and len(bundle) <= 1:
-                return None
+                t_body = (target_sec.get("title") or "").strip()
+                if len(t_body) > 12:
+                    raw_items = [t_body]
+                    all_bundle_raw_lines = [t_body]
+                else:
+                    return None
 
             if granularity == "full":
                 parts: List[str] = [f"### {h_title}"]
@@ -949,6 +973,7 @@ class SelfStudyKnowledgeBank:
                     "blueprint": "SECTION_FULL_EXPLANATION",
                     "citations": ["[1]"],
                     "grounded": True,
+                    "doc_id": doc.get("doc_id"),
                     "matched_headings": matched_headings,
                 }
 
@@ -1014,6 +1039,7 @@ class SelfStudyKnowledgeBank:
                     "blueprint": "SECTION_KEY_POINTS",
                     "citations": ["[1]"],
                     "grounded": True,
+                    "doc_id": doc.get("doc_id"),
                     "matched_headings": matched_headings,
                 }
 
@@ -1032,6 +1058,7 @@ class SelfStudyKnowledgeBank:
                             "blueprint": "SECTION_GROUNDED_EXPLANATION",
                             "citations": ["[1]"],
                             "grounded": True,
+                            "doc_id": doc.get("doc_id"),
                             "matched_headings": matched_headings,
                         }
                 except Exception:
@@ -1122,6 +1149,7 @@ class SelfStudyKnowledgeBank:
                                 "blueprint": "SECTION_GROUNDED_EXPLANATION",
                                 "citations": ["[1]"],
                                 "grounded": True,
+                                "doc_id": doc.get("doc_id"),
                                 "matched_headings": matched_headings,
                             }
                     except Exception:
@@ -1143,6 +1171,7 @@ class SelfStudyKnowledgeBank:
                 "blueprint": "SECTION_FULL_EXPLANATION",
                 "citations": ["[1]"],
                 "grounded": True,
+                "doc_id": doc.get("doc_id"),
                 "matched_headings": matched_headings,
             }
 

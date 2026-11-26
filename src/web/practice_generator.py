@@ -30,9 +30,16 @@ PRACTICE_INTENT_MARKERS = (
     "tao bai tap",
     "them bai tap",
     "cho bai tap",
+    "cho toi bai tap",
+    "cho minh bai tap",
+    "cho em bai tap",
+    "bai tap di",
+    "bai tap nhe",
     "bai tap tuong tu",
     "bai tap van dung",
     "bai tap luyen tap",
+    "bai tap trac nghiem",
+    "cau hoi trac nghiem",
     "bai tap ve",
     "ra de",
     "generate example",
@@ -47,8 +54,8 @@ def is_practice_generation_query(query: str) -> bool:
     q_norm = strip_accents((query or "").lower())
     if any(m in q_norm for m in PRACTICE_INTENT_MARKERS):
         return True
-    has_gen_verb = any(v in q_norm for v in ("sinh", "tao", "them", "cho them", "ra de", "viet them"))
-    has_target = any(t in q_norm for t in ("vi du", "bai tap", "luyen tap", "de toan", "de hoa", "de sinh"))
+    has_gen_verb = any(v in q_norm for v in ("sinh", "tao", "them", "cho them", "cho toi", "cho minh", "cho em", "ra de", "viet them"))
+    has_target = any(t in q_norm for t in ("vi du", "bai tap", "luyen tap", "trac nghiem", "de toan", "de hoa", "de sinh"))
     return has_gen_verb and has_target
 
 

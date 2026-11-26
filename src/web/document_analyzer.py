@@ -1015,12 +1015,17 @@ class DocumentAnalyzer:
                         break
 
                 if len(evidence_items) >= 2:
+                    from src.brain.pedagogical_synthesizer import build_comparison_markdown_table
+
+                    cmp_ents = _extract_compound_concept_parts(query)
+                    cmp_table = build_comparison_markdown_table(query, evidence_items, entity_names=cmp_ents or None)
                     reasoning_txt = _build_grounded_reasoning(query, evidence_items, is_comparison=True, has_sub_queries=has_sub_queries)
                     core_bullets = "\n".join(f"- {s} {lbl}" for s, lbl in evidence_items)
+                    table_prefix = f"**📊 Bảng đối chiếu trực tiếp:**\n\n{cmp_table}\n\n" if cmp_table else ""
                     if reasoning_txt:
-                        body = f"**1. Điểm đối chiếu trực tiếp:**\n{core_bullets}\n\n💡 **Liên hệ & Giải thích từ tài liệu:** {reasoning_txt}"
+                        body = f"{table_prefix}**1. Điểm đối chiếu trực tiếp:**\n{core_bullets}\n\n💡 **Liên hệ & Giải thích từ tài liệu:** {reasoning_txt}"
                     else:
-                        body = f"**1. Điểm đối chiếu trực tiếp:**\n{core_bullets}"
+                        body = f"{table_prefix}**1. Điểm đối chiếu trực tiếp:**\n{core_bullets}"
                 else:
                     body = " ".join(cross_parts)
                 if delta_bullet:
@@ -1177,6 +1182,21 @@ class DocumentAnalyzer:
                     if not body:
                         body = f"{answer_core} {cit_1}"
                         used_lbls = {cit_1}
+                    else:
+                        try:
+                            from src.brain.pedagogical_synthesizer import build_step_flow_markdown
+
+                            step_pairs = [
+                                (it["sentence"], it["citation_label"])
+                                for it in sorted(cand_items, key=lambda d: -float(d.get("rule_score", 0.0)))[:4]
+                            ]
+                            step_md = build_step_flow_markdown(query, step_pairs)
+                            if step_md:
+                                body = f"**🔄 Trình tự thực hiện / Cơ chế theo bước:**\n{step_md}"
+                                for _, s_lbl in step_pairs:
+                                    used_lbls.add(s_lbl)
+                        except Exception:
+                            pass
                     active_citations = [c for c in dedup_citations if c["citation_label"] in used_lbls]
                     if not active_citations:
                         active_citations = dedup_citations[:1]

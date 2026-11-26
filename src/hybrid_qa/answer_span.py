@@ -943,8 +943,11 @@ def generate_followup_questions(
         candidates.append("Kết quả phấn đấu và thành tích đạt được ra sao?")
         candidates.append("Các nhiệm vụ và công việc cụ thể được giao gồm những gì?")
 
-    # 5. Ideology, Study, Guidelines — ONLY when context literally contains them
-    if any(k in ctx_low for k in ["hồ chí minh", "chỉ thị 05", "chỉ thị 07", "đảng viên"]):
+    # 5. Ideology, Study, Guidelines — ONLY when context literally contains them (exclude city name "Thành phố Hồ Chí Minh")
+    ctx_no_hcmc = re.sub(r"\b(?:thành\s+phố|tp\.?)\s+hồ\s+chí\s+minh\b", " ", ctx_low)
+    if any(k in ctx_no_hcmc for k in ["chủ tịch hồ chí minh", "tư tưởng hồ chí minh", "bác hồ", "chỉ thị 05", "chỉ thị 07", "đảng viên"]) or (
+        "hồ chí minh" in ctx_no_hcmc
+    ):
         candidates.append("Phương hướng học tập theo tư tưởng Bác gồm những điểm nào?")
         candidates.append("Kế hoạch thực hiện chuyên đề năm 2026 được đề ra như thế nào?")
         candidates.append("Trách nhiệm của người Đảng viên được tài liệu nêu ra sao?")

@@ -26,6 +26,10 @@ from sympy.parsing.sympy_parser import (
     standard_transformations,
 )
 
+from src.reasoning.conceptual_quiz_generator import (
+    extract_quiz_topic_focus,
+    generate_conceptual_practice,
+)
 from src.reasoning.symbolic_solver import solve_quadratic
 
 
@@ -97,10 +101,12 @@ def detect_expansion_intent(query: str) -> Dict[str, Any]:
         "cho vi du bai tap", "vi du bai tap", "cho vi du moi", "cho vi du tuong tu",
     )
     exercise_cues = (
-        "sinh them bai tap", "tao bai tap", "cho bai tap", "them bai tap",
-        "cho them bai tap", "bai tap tuong tu", "bai tap luyen tap", "bai tap van dung",
-        "bai tap moi", "de bai tap", "luyen tap them", "ra de bai tap",
-        "vi du bai tap", "bai tap ve",
+        "sinh them bai tap", "tao bai tap", "cho bai tap", "cho toi bai tap",
+        "cho minh bai tap", "them bai tap", "cho them bai tap", "bai tap tuong tu",
+        "bai tap luyen tap", "bai tap van dung", "bai tap tu luyen", "bai tap on tap",
+        "bai tap trac nghiem", "cau hoi trac nghiem", "cau hoi on tap", "tao cau hoi",
+        "sinh cau hoi", "cho them cau hoi", "bai tap moi", "de bai tap",
+        "luyen tap them", "ra de bai tap", "vi du bai tap", "bai tap ve",
     )
 
     wants_transform = any(c in q_norm for c in transform_cues)
@@ -282,93 +288,128 @@ def _extract_linear_system(norm_text: str) -> Optional[Dict[str, Any]]:
     return None
 
 
-def _infer_formulas_from_word_examples(raw_text: str, existing_kinds: set) -> List[Dict[str, Any]]:
+def _infer_formulas_from_word_examples(
+    raw_text: str,
+    existing_kinds: set,
+    query: str = "",
+) -> List[Dict[str, Any]]:
     """
     When a document describes numeric worked examples in prose without explicit `=` equations,
-    infers the governing canonical formula so SymPy can still derive inversions, examples & exercises.
+    infers the governing canonical formula ONLY when ALL required domain terms, explicit unit
+    symbols, and a numeric value co-occur within the SAME paragraph (<= 600 chars).
     """
-    if not re.search(r"\d", raw_text or ""):
+    if not raw_text or not re.search(r"\d", raw_text):
         return []
-    low_ascii = _strip_accents((raw_text or "").lower())
+
+    raw_blocks = re.split(r"\n\s*\n+", raw_text)
+    paragraphs: List[str] = []
+    for blk in raw_blocks:
+        b_strip = blk.strip()
+        if not b_strip:
+            continue
+        if len(b_strip) <= 600:
+            paragraphs.append(b_strip)
+        else:
+            for line in b_strip.splitlines():
+                l_strip = line.strip()
+                if 0 < len(l_strip) <= 600:
+                    paragraphs.append(l_strip)
+
     inferred: List[Dict[str, Any]] = []
+    added_raws: set = set()
 
-    # 1. Kinematics: v = s / t
-    if (
-        any(k in low_ascii for k in ("quang duong", "van toc", "km/h", "m/s"))
-        and any(k in low_ascii for k in ("thoi gian", "gio", "giay", "km", "met"))
-    ):
-        v, s, t = sp.symbols("v s t", real=True, nonzero=True)
-        inferred.append(
-            {
-                "kind": "algebraic_eq",
-                "raw": "v = s / t",
-                "lhs": v,
-                "rhs": s / t,
-                "symbols": [s, t, v],
-                "inferred_from_example": True,
-                "domain_label": "Chuyển động đều (Vận tốc - Quãng đường - Thời gian)",
-            }
-        )
+    for para in paragraphs:
+        if len(para) > 600 or not re.search(r"\d", para):
+            continue
+        p_ascii = _strip_accents(para.lower())
 
-    # 2. Solution Molarity: C_M = n / V
-    if (
-        any(k in low_ascii for k in ("nong do mol", "mol/l", "dung dich"))
-        and any(k in low_ascii for k in ("mol", "lit", "ml"))
-    ):
-        cm, n_s, vol = sp.symbols("C_M n V", real=True, nonzero=True)
-        inferred.append(
-            {
-                "kind": "algebraic_eq",
-                "raw": "C_M = n / V",
-                "lhs": cm,
-                "rhs": n_s / vol,
-                "symbols": [cm, vol, n_s],
-                "inferred_from_example": True,
-                "domain_label": "Nồng độ mol dung dịch (Hóa học)",
-            }
-        )
+        # 1. Kinematics: v = s / t
+        if (
+            "v = s / t" not in added_raws
+            and "van toc" in p_ascii
+            and "quang duong" in p_ascii
+            and ("km/h" in p_ascii or re.search(r"(?<![a-z])m/s\b", p_ascii))
+        ):
+            v, s, t = sp.symbols("v s t", real=True, nonzero=True)
+            inferred.append(
+                {
+                    "kind": "algebraic_eq",
+                    "raw": "v = s / t",
+                    "lhs": v,
+                    "rhs": s / t,
+                    "symbols": [s, t, v],
+                    "inferred_from_example": True,
+                    "domain_label": "Chuyển động đều (Vận tốc - Quãng đường - Thời gian)",
+                }
+            )
+            added_raws.add("v = s / t")
 
-    # 3. Molar mass relationship: n = m / M (when not already covered by redox)
-    if (
-        "chemistry_redox" not in existing_kinds
-        and any(k in low_ascii for k in ("khoi luong mol", "g/mol", "so mol"))
-        and any(k in low_ascii for k in ("gam", "mol"))
-    ):
-        n_s, m_s, M_s = sp.symbols("n m M", real=True, nonzero=True)
-        inferred.append(
-            {
-                "kind": "algebraic_eq",
-                "raw": "n = m / M",
-                "lhs": n_s,
-                "rhs": m_s / M_s,
-                "symbols": [M_s, m_s, n_s],
-                "inferred_from_example": True,
-                "domain_label": "Liên hệ Số mol - Khối lượng - Khối lượng mol",
-            }
-        )
+        # 2. Solution Molarity: C_M = n / V (reject medical mmol/L blood glucose)
+        if (
+            "C_M = n / V" not in added_raws
+            and ("nong do mol" in p_ascii or re.search(r"\bc_m\b", p_ascii))
+            and (re.search(r"(?<![a-z])mol/l\b", p_ascii) or "so mol" in p_ascii)
+        ):
+            cm, n_s, vol = sp.symbols("C_M n V", real=True, nonzero=True)
+            inferred.append(
+                {
+                    "kind": "algebraic_eq",
+                    "raw": "C_M = n / V",
+                    "lhs": cm,
+                    "rhs": n_s / vol,
+                    "symbols": [cm, vol, n_s],
+                    "inferred_from_example": True,
+                    "domain_label": "Nồng độ mol dung dịch (Hóa học)",
+                }
+            )
+            added_raws.add("C_M = n / V")
 
-    # 4. Simple interest / growth: A = P * (1 + r * t)
-    if (
-        any(k in low_ascii for k in ("lai suat", "tien goc", "von dau tu"))
-        and ("%" in (raw_text or "") or "nam" in low_ascii or "thang" in low_ascii)
-    ):
-        A_s, P_s, r_s, t_s = sp.symbols("A P r t", real=True, nonzero=True)
-        inferred.append(
-            {
-                "kind": "algebraic_eq",
-                "raw": "A = P * (1 + r * t)",
-                "lhs": A_s,
-                "rhs": P_s * (1 + r_s * t_s),
-                "symbols": [A_s, P_s, r_s, t_s],
-                "inferred_from_example": True,
-                "domain_label": "Lãi suất đơn (Tài chính - Toán ứng dụng)",
-            }
-        )
+        # 3. Molar mass relationship: n = m / M (when not already covered by redox)
+        if (
+            "n = m / M" not in added_raws
+            and "chemistry_redox" not in existing_kinds
+            and "khoi luong mol" in p_ascii
+            and re.search(r"(?<![a-z])g/mol\b", p_ascii)
+        ):
+            n_s, m_s, M_s = sp.symbols("n m M", real=True, nonzero=True)
+            inferred.append(
+                {
+                    "kind": "algebraic_eq",
+                    "raw": "n = m / M",
+                    "lhs": n_s,
+                    "rhs": m_s / M_s,
+                    "symbols": [M_s, m_s, n_s],
+                    "inferred_from_example": True,
+                    "domain_label": "Liên hệ Số mol - Khối lượng - Khối lượng mol",
+                }
+            )
+            added_raws.add("n = m / M")
+
+        # 4. Simple interest / growth: A = P * (1 + r * t)
+        if (
+            "A = P * (1 + r * t)" not in added_raws
+            and "lai suat" in p_ascii
+            and ("tien goc" in p_ascii or "von ban dau" in p_ascii)
+            and "%" in para
+        ):
+            A_s, P_s, r_s, t_s = sp.symbols("A P r t", real=True, nonzero=True)
+            inferred.append(
+                {
+                    "kind": "algebraic_eq",
+                    "raw": "A = P * (1 + r * t)",
+                    "lhs": A_s,
+                    "rhs": P_s * (1 + r_s * t_s),
+                    "symbols": [A_s, P_s, r_s, t_s],
+                    "inferred_from_example": True,
+                    "domain_label": "Lãi suất đơn (Tài chính - Toán ứng dụng)",
+                }
+            )
+            added_raws.add("A = P * (1 + r * t)")
 
     return inferred
 
 
-def extract_document_formulas(raw_text: str) -> List[Dict[str, Any]]:
+def extract_document_formulas(raw_text: str, query: str = "") -> List[Dict[str, Any]]:
     """Extracts structured formula families present in the attached document."""
     text = raw_text or ""
     norm_text = _normalize_latex_math(text)
@@ -456,7 +497,7 @@ def extract_document_formulas(raw_text: str) -> List[Dict[str, Any]]:
 
     # 7. Word-problem / numeric example inference when no explicit algebraic equation covers the domain
     if not any(f.get("kind") in ("algebraic_eq", "calculus_func", "linear_system") for f in found):
-        inferred = _infer_formulas_from_word_examples(text, seen_keys)
+        inferred = _infer_formulas_from_word_examples(text, seen_keys, query=query)
         for inf_item in inferred:
             sig = sp.srepr(sp.simplify(inf_item["lhs"] - inf_item["rhs"]))
             if sig not in seen_keys:
@@ -829,6 +870,65 @@ def generate_practice_exercises(
     return exercises[:count]
 
 
+_FORMULA_TOPIC_TERMS = (
+    "x^2",
+    "bac hai",
+    "dao ham",
+    "tich phan",
+    "nguyen ham",
+    "he phuong trinh",
+    "phuong trinh",
+    "oxi hoa",
+    "chat khu",
+    "electron",
+    "van toc",
+    "dien tro",
+    "dinh luat ohm",
+    "affine",
+    "caesar",
+    "mod",
+    "mol",
+    "lai suat",
+    "=",
+)
+
+_GENERIC_EXPANSION_WORDS_RE = re.compile(
+    r"\b(?:biến\s+đổi|chuyển\s+vế|rút\s+ẩn|rút\s+biến|rút\s+gọn|công\s+thức|biểu\s+thức|"
+    r"tương\s+tự|liên\s+quan|đảo\s+ngược|minh\s+họa)\b",
+    re.IGNORECASE,
+)
+
+
+def _extract_explicit_topic(query: str) -> str:
+    base = _GENERIC_EXPANSION_WORDS_RE.sub(" ", query or "")
+    return extract_quiz_topic_focus(base)
+
+
+def _find_topic_windows(doc_text: str, topic: str) -> List[str]:
+    if not doc_text or not topic:
+        return []
+    paras = [p.strip() for p in re.split(r"\n\s*\n+", doc_text) if p.strip()]
+    t_low = topic.lower()
+    t_ascii = _strip_accents(t_low)
+
+    exact = [p for p in paras if t_low in p.lower()]
+    if exact:
+        return exact[:12]
+
+    toks = [w for w in re.findall(r"[a-z0-9]+", t_ascii) if len(w) >= 2]
+    if not toks:
+        return []
+    matched: List[str] = []
+    for p in paras:
+        p_asc = _strip_accents(p.lower())
+        hits = sum(1 for tk in toks if re.search(rf"\b{re.escape(tk)}\b", p_asc))
+        if (len(toks) <= 2 and hits == len(toks)) or (len(toks) > 2 and hits >= max(2, int(len(toks) * 0.75))):
+            matched.append(p)
+            if len(matched) >= 12:
+                break
+    return matched
+
+
 def build_online_study_expansion(
     query: str,
     doc_text: str,
@@ -836,14 +936,61 @@ def build_online_study_expansion(
 ) -> Optional[Dict[str, Any]]:
     """
     Main entry point for Online mode formula transformation, example synthesis,
-    and practice exercise creation grounded on formulas extracted from `doc_text`.
+    and practice exercise creation grounded on formulas or conceptual prose in `doc_text`.
     """
     intent = detect_expansion_intent(query)
     if not intent["wants_any"]:
         return None
 
-    formulas = extract_document_formulas(doc_text)
+    topic_str = _extract_explicit_topic(query)
+    topic_ascii = _strip_accents(topic_str.lower()) if topic_str else ""
+    is_formula_topic = bool(
+        topic_ascii
+        and (
+            any(ft in topic_ascii for ft in _FORMULA_TOPIC_TERMS)
+            or "=" in topic_str
+        )
+    )
+
+    # If the user asked for a specific non-math/physics/chem/crypto topic, check if formulas exist near it
+    if topic_str and not is_formula_topic:
+        near_windows = _find_topic_windows(doc_text, topic_str)
+        near_formulas = (
+            extract_document_formulas("\n\n".join(near_windows), query=query)
+            if near_windows
+            else []
+        )
+        if not near_formulas:
+            quiz = generate_conceptual_practice(
+                query=query,
+                doc_text=doc_text,
+                doc_title=doc_title,
+            )
+            if quiz:
+                return {
+                    "answer": quiz["answer"],
+                    "formulas_found": 0,
+                    "modes_generated": ["conceptual_quiz"],
+                    "engine": quiz["engine"],
+                }
+            return None
+        formulas = near_formulas
+    else:
+        formulas = extract_document_formulas(doc_text, query=query)
+
     if not formulas:
+        quiz = generate_conceptual_practice(
+            query=query,
+            doc_text=doc_text,
+            doc_title=doc_title,
+        )
+        if quiz:
+            return {
+                "answer": quiz["answer"],
+                "formulas_found": 0,
+                "modes_generated": ["conceptual_quiz"],
+                "engine": quiz["engine"],
+            }
         return None
 
     # Prioritize formula families explicitly referenced by the user's query

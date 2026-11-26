@@ -3041,6 +3041,48 @@ body,
   border: 1px solid var(--border-card, rgba(148, 163, 184, 0.25));
 }
 
+.grounded-table-wrap {
+  margin: 10px 0 14px;
+  overflow-x: auto;
+  border-radius: 10px;
+  border: 1px solid var(--border-card, rgba(148, 163, 184, 0.3));
+}
+
+.grounded-compare-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+  line-height: 1.5;
+}
+
+.grounded-compare-table th,
+.grounded-compare-table td {
+  padding: 9px 12px;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--border-card, rgba(148, 163, 184, 0.22));
+}
+
+.grounded-compare-table th {
+  font-weight: 700;
+  background: var(--bg-subtle, rgba(148, 163, 184, 0.12));
+  color: var(--text-primary);
+}
+
+.grounded-compare-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.ltm-learner-hint {
+  margin: 6px 0 10px;
+  padding: 7px 11px;
+  border-radius: 8px;
+  font-size: 12.5px;
+  color: var(--text-secondary, #cbd5e1);
+  background: var(--bg-subtle, rgba(99, 102, 241, 0.08));
+  border-left: 3px solid var(--accent-primary, #6366f1);
+}
+
 .thinking-trace-title {
   display: inline-flex;
   align-items: center;

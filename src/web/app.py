@@ -1526,11 +1526,7 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
     existing_titles = service.session_manager.get_existing_titles(exclude_session_id=session_id)
     session.add_message(role="user", content=raw_query, existing_titles=existing_titles)
 
-    # Step 2: Conversation Context Memory (Task 12)
-    # E.g. "Nó khác RAG thế nào?" -> resolves "nó" to prior entity
-    effective_query = service.session_manager.resolve_conversation_context(session_id, raw_query)
-
-    # Step 2b: Academic Persona Social & Capability Fast Path (Zero Hallucination, 100% Offline)
+    # Step 2a: Academic Persona Social & Capability Fast Path (Zero Hallucination, 100% Offline)
     social_hit = _maybe_handle_social_persona_query(raw_query)
     if social_hit is not None:
         social_ans, social_intent = social_hit
@@ -1560,7 +1556,7 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
                 "method": "P2",
                 "routing": f"PERSONA_{social_intent.upper()}",
                 "route_explanation": f"Xã giao / Năng lực Trợ lý NCKH ({social_intent})",
-                "effective_query": effective_query,
+                "effective_query": raw_query,
                 "is_follow_up": False,
                 "attached_document_count": len(session.document_ids or []),
                 "evidence_count": 0,
@@ -1581,8 +1577,97 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
             "session_title": session.title,
             "message": assistant_msg,
             "answer": social_ans,
-            "effective_query": effective_query,
+            "effective_query": raw_query,
             "routing": f"PERSONA_{social_intent.upper()}",
+            "refused": False,
+            "citations": [],
+            "evidence": [],
+            "suggested_questions": [],
+            "telemetry": assistant_msg.get("telemetry", {}),
+            "diagnostics": assistant_msg.get("diagnostics", {}),
+        }
+
+    # Step 2b: Conversation Context Memory & Standalone Query Rewriter (Rules 1-7 + NEED_CLARIFICATION)
+    from src.web.session_manager import NEED_CLARIFICATION
+
+    effective_query, rewrite_meta = service.session_manager.resolve_conversation_context_with_meta(
+        session_id,
+        raw_query,
+        allow_clarification=True,
+    )
+    if effective_query == NEED_CLARIFICATION:
+        reason = rewrite_meta.get("reason", "missing_antecedent")
+        if reason == "ambiguous_multi_entity":
+            cands = rewrite_meta.get("candidates") or []
+            cands_str = ", ".join(f"**{c}**" for c in cands)
+            clarify_msg = (
+                f"Ở câu trước có nhiều đối tượng được nhắc đến ({cands_str}). "
+                "Bạn đang muốn hỏi cụ thể về đối tượng nào? Vui lòng nêu rõ để hệ thống tra cứu chính xác trong tài liệu."
+            )
+        elif reason == "index_out_of_range":
+            req_i = rewrite_meta.get("requested_index", "?")
+            avail_p = rewrite_meta.get("available_points", 0)
+            clarify_msg = (
+                f"Câu trả lời trước chỉ có **{avail_p} ý chính**, chưa có mục số **{req_i}**. "
+                "Bạn vui lòng nêu rõ ý hoặc tên khái niệm cần giải thích thêm nhé."
+            )
+        else:
+            clarify_msg = (
+                "Mình chưa xác định được đối tượng cụ thể mà bạn đang nhắc đến (như 'nó', 'cái đó', 'phần trên'...). "
+                "Bạn vui lòng nêu rõ tên khái niệm, công thức hoặc mục cần hỏi trong tài liệu nhé."
+            )
+
+        in_tok = count_text_tokens(raw_query, service.tokenizer)
+        out_tok = count_text_tokens(clarify_msg, service.tokenizer)
+        lat_ms = round((time.perf_counter() - t_start) * 1000, 2)
+        assistant_msg = session.add_message(
+            role="assistant",
+            content=clarify_msg,
+            citations=[],
+            evidence=[],
+            telemetry={
+                "input_tokens": in_tok,
+                "output_tokens": out_tok,
+                "total_tokens": in_tok + out_tok,
+                "tokens_saved": 0,
+                "compression_ratio_pct": 0.0,
+                "total_latency_ms": lat_ms,
+                "retrieval_ms": 0.0,
+                "generation_ms": lat_ms,
+            },
+            routing="CLARIFICATION_NEEDED",
+            refused=False,
+            refusal_reason="NEED_CLARIFICATION",
+            diagnostics={
+                "mode": (req.mode or "hybrid").lower(),
+                "method": "P2",
+                "routing": "CLARIFICATION_NEEDED",
+                "route_explanation": "Cần làm rõ đối tượng tham chiếu trong câu hỏi hội thoại",
+                "effective_query": NEED_CLARIFICATION,
+                "query_rewrite_status": NEED_CLARIFICATION,
+                "rewrite_meta": rewrite_meta,
+                "is_follow_up": True,
+                "attached_document_count": len(session.document_ids or []),
+                "evidence_count": 0,
+                "dynamic_top_k": False,
+                "context_compression": {},
+                "refusal_reason": "NEED_CLARIFICATION",
+                "memory_level": "ConversationRewriter",
+                "suggested_questions": [],
+            },
+            suggested_questions=[],
+        )
+        try:
+            service.session_manager.save()
+        except Exception:
+            pass
+        return {
+            "session_id": session_id,
+            "session_title": session.title,
+            "message": assistant_msg,
+            "answer": clarify_msg,
+            "effective_query": NEED_CLARIFICATION,
+            "routing": "CLARIFICATION_NEEDED",
             "refused": False,
             "citations": [],
             "evidence": [],
@@ -2120,14 +2205,14 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
                     except Exception:
                         target_title = "tài liệu đang chọn"
                     refusal_message = (
-                        f"Không tìm thấy đủ thông tin trong tài liệu để trả lời chắc chắn. "
-                        f"Tài liệu **{target_title}** không có thông tin trả lời cho câu hỏi này (không chứa thông tin và chưa đủ dữ liệu). "
+                        "Xin lỗi, tài liệu hiện tại chưa cung cấp đủ thông tin để trả lời chính xác câu hỏi này. "
+                        f"Không tìm thấy đủ thông tin trong tài liệu để trả lời chắc chắn (Tài liệu **{target_title}** không chứa thông tin và chưa đủ dữ liệu). "
                         "Hệ thống không sử dụng dữ liệu từ tài liệu khác để bảo đảm độ chính xác tuyệt đối."
                     )
                 else:
                     refusal_message = (
-                        "Không tìm thấy đủ thông tin trong tài liệu để trả lời chắc chắn. "
-                        "Tài liệu được cung cấp hiện chưa đủ thông tin cho câu hỏi này."
+                        "Xin lỗi, tài liệu hiện tại chưa cung cấp đủ thông tin để trả lời chính xác câu hỏi này. "
+                        "Không tìm thấy đủ thông tin trong tài liệu để trả lời chắc chắn."
                     )
 
         if online_expansion_res is not None:
@@ -2183,11 +2268,23 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
     for idx, c in enumerate(evidence.evidence_passages, start=1):
         doc_id = getattr(c, "document_id", "DOC")
         doc_title = doc_id
+        doc_filename = None
         try:
             doc_obj = service.store.get_document(doc_id)
             doc_title = doc_obj.title
+            if getattr(doc_obj, "metadata", None) and isinstance(doc_obj.metadata, dict):
+                doc_filename = doc_obj.metadata.get("filename") or doc_obj.metadata.get("original_filename")
         except Exception:
             pass
+
+        c_meta = getattr(c, "metadata", None) or {}
+        page_num = getattr(c, "page_number", None) or (c_meta.get("page_number") if isinstance(c_meta, dict) else None)
+        if page_num is None:
+            m_inline_pg = re.search(r"===\s*(?:Page|Trang|Slide)\s*(\d+)\s*===", getattr(c, "text", "") or "", re.IGNORECASE)
+            if m_inline_pg:
+                page_num = int(m_inline_pg.group(1))
+        if not doc_filename and isinstance(c_meta, dict):
+            doc_filename = c_meta.get("filename") or c_meta.get("original_filename")
 
         sec_title = getattr(c, "section_title", "Phần nội dung") or "Phần nội dung"
         # Extract paragraph index if present
@@ -2199,8 +2296,11 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
             "passage_id": c.passage_id,
             "document_id": doc_id,
             "document_title": doc_title,
+            "filename": doc_filename,
+            "page_number": page_num,
             "section_title": sec_title,
             "paragraph_index": para_idx,
+            "metadata": c_meta if isinstance(c_meta, dict) else {},
             "score": round(float(c.score), 4),
             "text": c.text,
             "support_status": "SUPPORTED" if c.score >= service.evidence_selector.score_threshold else "INSUFFICIENT",
@@ -2550,14 +2650,14 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
                                 except Exception:
                                     pass
                             refusal_message = (
-                                f"Không tìm thấy đủ thông tin trong tài liệu để trả lời chắc chắn. "
-                                f"Tài liệu **{target_title}** không có thông tin trả lời cho câu hỏi này (không chứa thông tin và chưa đủ dữ liệu). "
+                                "Xin lỗi, tài liệu hiện tại chưa cung cấp đủ thông tin để trả lời chính xác câu hỏi này. "
+                                f"Không tìm thấy đủ thông tin trong tài liệu để trả lời chắc chắn (Tài liệu **{target_title}** không chứa thông tin và chưa đủ dữ liệu). "
                                 "Hệ thống không sử dụng dữ liệu từ tài liệu khác để bảo đảm độ chính xác tuyệt đối."
                             )
 
         if refused:
             answer_text = refusal_message or (
-                "Tài liệu không có thông tin hoặc chưa đủ căn cứ. "
+                "Xin lỗi, tài liệu hiện tại chưa cung cấp đủ thông tin để trả lời chính xác câu hỏi này. "
                 "Không tìm thấy đủ thông tin trong tài liệu để trả lời chắc chắn."
             )
             if expansion_intent.get("wants_any") and not req.allow_online_api:
@@ -2620,6 +2720,8 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
                         "evidence_count": len(citations_data),
                     }
 
+            from src.brain.grounded_explainer import format_student_source_tag
+
             seen_source_keys = set()
             sources_list = []
             for c in citations_data:
@@ -2627,7 +2729,7 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
                 if s_key not in seen_source_keys:
                     seen_source_keys.add(s_key)
                     sources_list.append(
-                        f"[{c['citation_index']}] **{c['document_title']}** — {c['section_title']} — Đoạn {c['paragraph_index']}"
+                        f"[{c['citation_index']}] **{c['document_title']}** — {c['section_title']} — Đoạn {c['paragraph_index']} {format_student_source_tag(c)}"
                     )
 
             # Strip any question block the body may already carry so it can be re-attached last.

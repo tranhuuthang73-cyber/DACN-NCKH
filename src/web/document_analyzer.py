@@ -58,6 +58,9 @@ def _fuzzy_token_overlap(q_tokens: Set[str], s_tokens: Set[str]) -> Tuple[int, i
 def _extract_compound_concept_parts(query: str) -> List[str]:
     """Splits compound concept/comparison queries ('A là gì và B là gì', 'phân biệt A với B') into clean subject parts."""
     q = (query or "").strip().rstrip("?!.")
+    # Do not split counting / enumeration questions ("có bao nhiêu phương pháp và hệ mã hóa")
+    if re.search(r"\b(?:bao\s+nhiêu|có\s+mấy|mấy\s+loại|gồm\s+những|những\s+loại\s+nào)\b", q, flags=re.IGNORECASE):
+        return []
     raw_parts = [
         p.strip()
         for p in re.split(r"\s+(?:và|với|so\s+với|cùng\s+với)\s+|,\s*", q, flags=re.IGNORECASE)
@@ -80,9 +83,50 @@ def _extract_compound_concept_parts(query: str) -> List[str]:
             p,
             flags=re.IGNORECASE,
         ).strip()
+        # Skip scope/location prefixes like "Trong chương 2" or "Ở phần 1"
+        if re.match(r"^(?:trong|ở|tại)\s+(?:chương|phần|mục|bài|trang|slide)\s*\d+", p, flags=re.IGNORECASE):
+            continue
         if len(p) >= 2:
             cleaned_parts.append(p)
     return cleaned_parts if len(cleaned_parts) >= 2 else []
+
+
+def _split_passage_preserving_colon_lists(passage_text: str) -> List[str]:
+    """
+    Splits a passage into sentences while folding short child sub-bullets (`* ...`, `+ ...`)
+    immediately following a colon-ending non-heading intro line (e.g. `- Có 2 phương pháp phổ biến:`).
+    """
+    from src.hybrid_qa.answer_span import split_sentences
+
+    raw_sents = split_sentences(passage_text)
+    if len(raw_sents) < 2:
+        return raw_sents
+    merged: List[str] = []
+    i = 0
+    while i < len(raw_sents):
+        cur = raw_sents[i].strip()
+        is_sec_head = bool(
+            re.match(r"^\s*(?:#{1,6}\s+|\d+(?:\.\d+)*\.?\s+[A-ZÀ-Ỹ])", cur)
+            or (len([c for c in cur if c.isalpha()]) >= 4 and all(c.isupper() for c in cur if c.isalpha()))
+        )
+        if cur.endswith(":") and not is_sec_head:
+            sub_items: List[str] = []
+            j = i + 1
+            while j < len(raw_sents) and len(sub_items) < 4:
+                nxt = raw_sents[j].strip()
+                is_sub_bullet = nxt.startswith(("*", "•", "+")) or (not cur.startswith("-") and nxt.startswith("-"))
+                if is_sub_bullet and len(nxt.split()) <= 12:
+                    sub_items.append(nxt.lstrip("*•+- ").rstrip(".; "))
+                    j += 1
+                else:
+                    break
+            if sub_items:
+                merged.append(f"{cur} {'; '.join(sub_items)}.")
+                i = j
+                continue
+        merged.append(raw_sents[i])
+        i += 1
+    return merged
 
 
 def _build_grounded_reasoning(
@@ -453,7 +497,7 @@ class DocumentAnalyzer:
         for passage in evidence_passages:
             passage_text = getattr(passage, "text", "") if hasattr(passage, "text") else str(passage)
             passage_section = getattr(passage, "section_title", "") or ""
-            for sentence in split_sentences(passage_text):
+            for sentence in _split_passage_preserving_colon_lists(passage_text):
                 sentence_pool.append(sentence)
                 sentence_sections.append(passage_section)
 
@@ -514,6 +558,9 @@ class DocumentAnalyzer:
             doc_title = getattr(p, "document_title", doc_id) or doc_id
             sec_title = getattr(p, "section_title", "Phần nội dung") or "Phần nội dung"
             para_idx = getattr(p, "paragraph_index", idx)
+            p_meta = getattr(p, "metadata", None) or {}
+            page_num = getattr(p, "page_number", None) or (p_meta.get("page_number") if isinstance(p_meta, dict) else None)
+            file_name = getattr(p, "filename", None) or (p_meta.get("filename") if isinstance(p_meta, dict) else None)
 
             key = (doc_id, sec_title, para_idx)
             if key not in seen_keys:
@@ -525,8 +572,11 @@ class DocumentAnalyzer:
                     "passage_id": getattr(p, "passage_id", f"PASSAGE_{idx}"),
                     "document_id": doc_id,
                     "document_title": doc_title,
+                    "filename": file_name,
+                    "page_number": page_num,
                     "section_title": sec_title,
                     "paragraph_index": para_idx,
+                    "metadata": p_meta if isinstance(p_meta, dict) else {},
                     "score": round(float(getattr(p, "score", 1.0)), 4),
                     "text": getattr(p, "text", "")[:400],
                 })
@@ -545,7 +595,7 @@ class DocumentAnalyzer:
         for p_idx, passage in enumerate(evidence_passages):
             passage_text = getattr(passage, "text", "") if hasattr(passage, "text") else str(passage)
             p_lbl = passage_to_cit_label[p_idx] if p_idx < len(passage_to_cit_label) else "[1]"
-            for _ in split_sentences(passage_text):
+            for _ in _split_passage_preserving_colon_lists(passage_text):
                 sentence_cit_labels.append(p_lbl)
 
         # Check compound query decomposition so multi-part questions cover all sub-queries without picking duplicates
@@ -882,7 +932,10 @@ class DocumentAnalyzer:
         )
 
         if answer_mode == "concise":
-            body = f"{answer_core} {cit_1}".strip()
+            from src.brain.grounded_explainer import compress_clause
+
+            concise_core = compress_clause(answer_core, preserve_examples=bool(aspect_example)) or answer_core
+            body = f"{concise_core} {cit_1}".strip()
             active_citations = [c for c in dedup_citations if c["citation_label"] == cit_1]
             if not active_citations:
                 active_citations = dedup_citations[:1]
@@ -988,7 +1041,9 @@ class DocumentAnalyzer:
                     evidence_items.append((c_core, cit_1))
                 if len(evidence_items) >= 2:
                     reasoning_txt = _build_grounded_reasoning(query, evidence_items, is_comparison=False, has_sub_queries=True)
-                    core_bullets = "\n".join(f"- {s} {lbl}" for s, lbl in evidence_items)
+                    core_bullets = "\n".join(
+                        f"- **Ý {idx_i}:** {s} {lbl}" for idx_i, (s, lbl) in enumerate(evidence_items, start=1)
+                    )
                     if reasoning_txt:
                         body = f"{core_bullets}\n\n💡 **Liên hệ & Giải thích từ tài liệu:** {reasoning_txt}"
                     else:
@@ -1088,7 +1143,7 @@ class DocumentAnalyzer:
                         p_sec = getattr(p, "section_title", "") or ""
                         p_cit = passage_to_cit_label[p_idx] if p_idx < len(passage_to_cit_label) else f"[{p_idx+1}]"
                         p_id = getattr(p, "passage_id", f"P{p_idx+1}")
-                        p_sents = split_sentences(p_txt)
+                        p_sents = _split_passage_preserving_colon_lists(p_txt)
                         for s_i, s in enumerate(p_sents):
                             s_clean = s.strip()
                             if not s_clean or s_clean in anchor_fmt or _is_heading_sent(s_clean, p_sec):
@@ -1276,9 +1331,11 @@ class DocumentAnalyzer:
 
         dedup_citations = active_citations
 
-        # Sources first, then the mandatory trailing question block.
+        from src.brain.grounded_explainer import format_student_source_tag
+
+        # Sources first (both clickable [1] entries + standardized [Nguồn: file, trang, ID] tags), then trailing questions.
         sources_lines = [
-            f"{c['citation_label']} **{c['document_title']}** — {c['section_title']} — Đoạn {c['paragraph_index']}"
+            f"{c['citation_label']} **{c['document_title']}** — {c['section_title']} — Đoạn {c['paragraph_index']} {format_student_source_tag(c)}"
             for c in dedup_citations[:3]
         ]
 

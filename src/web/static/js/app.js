@@ -295,9 +295,12 @@
     safe = safe.replace(/(^|[\s(])\*([^*\n]+)\*(?=[\s.,;:!?)]|$)/g, "$1<em>$2</em>");
     safe = safe.replace(/`([^`]+)`/g, "<code>$1</code>");
 
-    // Replace [1], [2] or [DOC_ID::P001] with interactive citation pills
+    // Replace [1], [2], [DOC_ID::P001], or [Nguồn: ...] with interactive pills / styled badges
     safe = safe.replace(/\[([^\[\]]+)\]/g, (fullMatch, inner) => {
       const trimmed = inner.trim();
+      if (trimmed.startsWith("Nguồn:")) {
+        return `<span class="source-ref-tag">[${trimmed}]</span>`;
+      }
       if (citeMap.has(trimmed)) {
         const cit = citeMap.get(trimmed);
         const pidAttr = escapeHtml(cit.passage_id);

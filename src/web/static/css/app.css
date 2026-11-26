@@ -3029,6 +3029,18 @@ body,
   color: var(--text-primary);
 }
 
+.source-ref-tag {
+  display: inline-block;
+  margin-left: 4px;
+  padding: 1px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-family: var(--font-mono, monospace);
+  color: var(--text-secondary, #94a3b8);
+  background: var(--bg-subtle, rgba(148, 163, 184, 0.12));
+  border: 1px solid var(--border-card, rgba(148, 163, 184, 0.25));
+}
+
 .thinking-trace-title {
   display: inline-flex;
   align-items: center;

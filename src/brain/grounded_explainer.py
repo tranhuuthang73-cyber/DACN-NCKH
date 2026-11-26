@@ -58,6 +58,67 @@ _TRAILING_EXAMPLE_RE = re.compile(
     re.IGNORECASE,
 )
 
+_ACADEMIC_PARAPHRASE_RULES: Tuple[Tuple[re.Pattern, str], ...] = (
+    (re.compile(r"\bđược\s+sử\s+dụng\s+(?:với\s+mục\s+đích\s+nhằm|nhằm\s+mục\s+đích)\b", re.IGNORECASE), "dùng để"),
+    (re.compile(r"\bđược\s+định\s+nghĩa\s+như\s+là\s+một\b", re.IGNORECASE), "là một"),
+    (re.compile(r"\bđóng\s+vai\s+trò\s+quan\s+trọng\s+trong\s+việc\b", re.IGNORECASE), "giúp"),
+    (re.compile(r"\bđược\s+(?:tiến\s+hành|thực\s+hiện)\s+thông\s+qua\s+việc\b", re.IGNORECASE), "thực hiện bằng cách"),
+    (re.compile(r"\bcó\s+khả\s+năng\s+thực\s+hiện\s+việc\b", re.IGNORECASE), "có thể"),
+    (re.compile(r"\bmột\s+cách\s+có\s+hiệu\s+quả\b", re.IGNORECASE), "hiệu quả"),
+    (re.compile(r"\btrong\s+quá\s+trình\s+thực\s+hiện\b", re.IGNORECASE), "khi thực hiện"),
+)
+
+_SECONDARY_CLAUSE_SPLIT_RE = re.compile(
+    r"(?:;\s+|,\s+(?:qua đó|từ đó|đồng thời|mặt khác|bên cạnh đó)\s+)",
+    re.IGNORECASE,
+)
+
+
+def paraphrase_academic_vietnamese(text: str) -> str:
+    """
+    Rewrites stiff bureaucratic phrasing into natural student-friendly Vietnamese
+    while strictly preserving all technical terms, entities, formulas, and numbers.
+    """
+    out = text
+    for pat, repl in _ACADEMIC_PARAPHRASE_RULES:
+        out = pat.sub(repl, out)
+    return re.sub(r"\s{2,}", " ", out).strip()
+
+
+def format_student_source_tag(cit: Dict[str, Any]) -> str:
+    """
+    Formats a source reference tag per academic specification:
+    [Nguồn: tên_file.pdf, trang 12, ID: DOC::P001] (gracefully omitting missing fields).
+    """
+    meta = cit.get("metadata") if isinstance(cit.get("metadata"), dict) else {}
+    file_disp = (
+        cit.get("filename")
+        or cit.get("file_name")
+        or meta.get("filename")
+        or meta.get("original_filename")
+        or cit.get("document_title")
+        or cit.get("document_id")
+        or "tài liệu"
+    )
+    file_disp = str(file_disp).strip()
+
+    page_val = cit.get("page_number") or meta.get("page_number") or meta.get("page")
+    if page_val is None:
+        sec_str = str(cit.get("section_title") or "")
+        m_pg = re.search(r"\b(?:Page|Trang|Slide)\s+(\d+)\b", sec_str, re.IGNORECASE)
+        if m_pg:
+            page_val = int(m_pg.group(1))
+
+    pid = str(cit.get("passage_id") or "").strip()
+    has_real_pid = bool(pid and not pid.startswith("PASSAGE_"))
+
+    parts = [file_disp]
+    if page_val is not None and str(page_val).strip():
+        parts.append(f"trang {page_val}")
+    if has_real_pid:
+        parts.append(f"ID: {pid}")
+    return f"[Nguồn: {', '.join(parts)}]"
+
 _CAUSAL_SPLIT_PATTERNS: Tuple[Tuple[str, re.Pattern], ...] = (
     (
         "nho_nen",
@@ -164,6 +225,7 @@ def compress_clause(sentence: str, preserve_examples: bool = False) -> str:
         return ""
 
     s = re.sub(r"\s*\(([^()]{2,120})\)", _filter_paren, s)
+    s = paraphrase_academic_vietnamese(s)
     s = re.sub(r"\s{2,}", " ", s).strip(" ,;")
 
     # If overly long sentence has trailing non-numeric example tail and examples weren't requested, trim cleanly
@@ -174,6 +236,26 @@ def compress_clause(sentence: str, preserve_examples: bool = False) -> str:
             tail = m_ex.group(1)
             if len(head.split()) >= 9 and not re.search(r"\d", tail):
                 s = head
+
+    # Rule 1 & 7: Prevent copying long multi-clause verbatim paragraphs (>38 words)
+    if not preserve_examples and len(s.split()) > 38:
+        clause_parts = _SECONDARY_CLAUSE_SPLIT_RE.split(s, maxsplit=1)
+        if len(clause_parts) == 2:
+            head_c, tail_c = clause_parts[0].strip(" ,;"), clause_parts[1]
+            if len(head_c.split()) >= 10 and (not re.search(r"[\d=]", tail_c) or re.search(r"[\d=]", head_c)):
+                s = head_c
+        if len(s.split()) > 48 and "," in s:
+            comma_chunks = s.split(",")
+            acc: List[str] = []
+            for ch in comma_chunks:
+                cand_join = ", ".join(acc + [ch]).strip()
+                if len(cand_join.split()) > 44 and len(" ".join(acc).split()) >= 14:
+                    rem = s[len(" ".join(acc)) :]
+                    if not re.search(r"[\d=]", rem) or re.search(r"[\d=]", " ".join(acc)):
+                        break
+                acc.append(ch)
+            if acc:
+                s = ", ".join(acc).strip(" ,;")
 
     if not s:
         return ""

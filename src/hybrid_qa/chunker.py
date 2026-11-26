@@ -113,12 +113,15 @@ class DocumentChunker:
             section_title = self._find_section_title(text, start_char)
             section_id = self._find_section_id(text, start_char)
             paragraph_id = self._find_paragraph_id(text, start_char)
+            page_num = self._find_page_number(text, start_char)
 
-            metadata = {
+            metadata: Dict[str, Any] = {
                 "section_id": section_id,
                 "paragraph_id": paragraph_id,
                 "document_version": doc.version,
             }
+            if page_num is not None:
+                metadata["page_number"] = page_num
             if doc.metadata:
                 for k, v in doc.metadata.items():
                     if k not in metadata:
@@ -205,6 +208,13 @@ class DocumentChunker:
                 and is_example_step
                 and (current_len + sent_len <= int(self.chunk_size * 2.5))
             )
+            in_colon_sublist = (
+                bool(current_sentences)
+                and clean_sent.startswith(("*", "•", "+"))
+                and sent_len <= 80
+                and any(s[0].rstrip().endswith(":") and not self.is_heading(s[0]) for s in current_sentences[-3:])
+                and (current_len + sent_len <= self.chunk_size + 120)
+            )
 
             # 3. RULE: A heading must never be conjoined with previous section/topic sentences!
             if sent_is_heading and current_sentences:
@@ -220,6 +230,7 @@ class DocumentChunker:
                 current_len + sent_len > self.chunk_size
                 and current_sentences
                 and not keep_example_atomic
+                and not in_colon_sublist
                 and not (len(current_sentences) == 1 and self.is_heading(current_sentences[0][0]))
             ):
                 chunk_text = self._join_chunk_sentences(current_sentences, text)
@@ -420,3 +431,17 @@ class DocumentChunker:
         paras = re.split(r'\n\s*\n+', prefix.strip())
         para_idx = len(paras) if paras and paras[0] else 1
         return f"PARA{para_idx:03d}"
+
+    @staticmethod
+    def _find_page_number(full_text: str, char_pos: int) -> Optional[int]:
+        """Find the active page/slide number (e.g. from '=== Page 12 ===') at or before char_pos."""
+        last_page: Optional[int] = None
+        for m in re.finditer(r"===\s*(?:Page|Trang|Slide)\s*(\d+)\s*===", full_text, re.IGNORECASE):
+            if m.start() <= (char_pos + 4):
+                try:
+                    last_page = int(m.group(1))
+                except ValueError:
+                    pass
+            else:
+                break
+        return last_page

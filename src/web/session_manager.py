@@ -11,7 +11,334 @@ import json
 import time
 import uuid
 from pathlib import Path
-from typing import List, Dict, Any, Optional, Set
+from typing import List, Dict, Any, Optional, Sequence, Set, Tuple
+
+NEED_CLARIFICATION = "NEED_CLARIFICATION"
+
+
+def _extract_prior_constraints(query: str) -> str:
+    """Extracts scope/condition constraints from a prior turn (Rule 3) so they remain attached."""
+    if not query:
+        return ""
+    patterns = [
+        r"\b(?:ở|trong|tại)\s+(?:phần|chương|mục|bài|trang|slide)\s+\d+(?:\.\d+)*\b",
+        r"\b(?:ở|trong|với)\s+điều\s+kiện\s+[^,.;?!]{2,35}",
+        r"\bvới\s+khóa\s+[^,.;?!]{1,25}",
+    ]
+    found: List[str] = []
+    for pat in patterns:
+        for m in re.finditer(pat, query, flags=re.IGNORECASE):
+            val = m.group(0).strip(" ,.;?!")
+            if val and not any(val.lower() in f.lower() for f in found):
+                found.append(val)
+    return ", ".join(found[:2])
+
+
+def _extract_multi_entities_from_turn(query: str) -> List[str]:
+    """Detects whether a prior user query asked about 2+ distinct parallel concepts/entities."""
+    if not query:
+        return []
+    try:
+        from src.web.document_analyzer import _extract_compound_concept_parts
+
+        # Strip scope prepositions ("Trong chương 2, ...") before splitting on commas
+        q_clean = query
+        pc = _extract_prior_constraints(query)
+        if pc:
+            for item in pc.split(","):
+                q_clean = re.sub(re.escape(item.strip()), "", q_clean, flags=re.IGNORECASE)
+        q_clean = q_clean.strip(" ,;:-")
+        parts = _extract_compound_concept_parts(q_clean)
+        if len(parts) >= 2:
+            generic = {
+                "ưu điểm", "nhược điểm", "đặc điểm", "cơ chế", "vai trò",
+                "nguyên lý", "mục tiêu", "phạm vi", "nội dung", "ý nghĩa",
+            }
+            if not any(p.strip().lower() in generic for p in parts):
+                return parts[:5]
+    except Exception:
+        pass
+    return []
+
+
+def _has_document_self_reference(q_lower: str) -> bool:
+    """Returns True when 'này'/'đó' refers to the attached document/section itself, not a missing chat turn."""
+    return bool(
+        re.search(
+            r"\b(?:tài\s+liệu|văn\s+bản|bài\s+báo|bài\s+học|bài\s+giảng|file|giáo\s+trình|slide|chương|mục|phần|topic|chủ\s+đề)\s+(?:này|đó|\d+)\b",
+            q_lower,
+            flags=re.IGNORECASE,
+        )
+    )
+
+
+def rewrite_standalone_query(
+    conversation_history: Sequence[Dict[str, Any]],
+    current_question: str,
+    allow_clarification: bool = True,
+) -> Tuple[str, Dict[str, Any]]:
+    """
+    Self-built conversational query rewriter (Rules 1-7, zero external LLM APIs).
+    Returns (rewritten_query_or_NEED_CLARIFICATION, metadata_dict).
+    """
+    q_raw = re.sub(r"\s+", " ", (current_question or "").strip())
+    if not q_raw:
+        return "", {"status": "empty"}
+
+    # Clean off copy-pasted numbering & category badge: e.g. "2. **[Chủ đề bài học]**: Query"
+    clean_pasted = re.sub(r"^\s*\d+[\.\)]\s*(?:\*\*\[.*?\]\*\*:\s*|\[.*?\]:?\s*)?", "", q_raw).strip()
+    if clean_pasted and clean_pasted != q_raw and len(clean_pasted.split()) >= 2:
+        return clean_pasted, {"status": "normalized_pasted"}
+
+    q_lower = q_raw.lower()
+    history = list(conversation_history or [])
+    # Exclude current_question if it was already appended as the trailing user message
+    if history and history[-1].get("role") == "user" and (history[-1].get("content") or "").strip() == q_raw:
+        prior_msgs = history[:-1]
+    else:
+        prior_msgs = history
+
+    # 1. Check indexed references: "câu 2", "ý 2", "giải thích kỹ hơn ý thứ 2", "cho ví dụ về ý 1", "#2"
+    # Note: "mục" is intentionally excluded so section queries like "cho biết mục 3" stay standalone!
+    idx_match = re.search(
+        r"^(?P<prefix>(?:trả\s+lời|hỏi|cho\s+biết|cho\s+ví\s+dụ(?:\s+về)?|ví\s+dụ(?:\s+về)?|"
+        r"giải\s+thích(?:\s+kỹ(?:\s+hơn)?|\s+chi\s+tiết(?:\s+hơn)?|\s+rõ(?:\s+hơn)?)?(?:\s+về)?|"
+        r"phân\s+tích(?:\s+kỹ(?:\s+hơn)?)?(?:\s+về)?|làm\s+rõ(?:\s+về)?|nêu(?:\s+rõ)?)\s+)?"
+        r"(?P<kind>câu(?:\s*hỏi)?|ý|điểm|luận\s+điểm|bước|question)\s*(?:thứ\s*|số\s*)?(?P<num>\d+)\b(?P<tail>.*)$",
+        q_raw,
+        flags=re.IGNORECASE,
+    )
+    target_idx = -1
+    kind_token = ""
+    custom_prefix = ""
+    custom_tail = ""
+    if idx_match:
+        kind_token = idx_match.group("kind").lower().strip()
+        target_idx = int(idx_match.group("num")) - 1
+        custom_prefix = (idx_match.group("prefix") or "").strip()
+        custom_tail = (idx_match.group("tail") or "").strip(" ?:.,-")
+    else:
+        hash_match = re.match(r"^#?(\d+)\.?$", q_lower)
+        if hash_match:
+            kind_token = "câu"
+            target_idx = int(hash_match.group(1)) - 1
+
+    if target_idx >= 0:
+        prefer_bullets = kind_token in ("ý", "điểm", "luận điểm", "bước")
+        last_assistant = next(
+            (
+                m for m in reversed(prior_msgs)
+                if m.get("role") == "assistant" and m.get("routing") != "CLARIFICATION_NEEDED"
+            ),
+            None,
+        )
+        if last_assistant is None:
+            if allow_clarification:
+                return NEED_CLARIFICATION, {"status": NEED_CLARIFICATION, "reason": "no_prior_assistant_turn"}
+            return q_raw, {"status": "unchanged"}
+
+        c_text = last_assistant.get("content", "")
+        body_only = c_text.split("### Nguồn")[0].split("💡")[0]
+        bullet_lines = re.findall(r"^\s*[-•]\s+(.+)$", body_only, re.MULTILINE)
+        s_qs = list(last_assistant.get("suggested_questions") or [])
+        if not s_qs:
+            numbered_lines = re.findall(r"^\s*(\d+)\.\s*(.+)$", c_text, re.MULTILINE)
+            s_qs = [item[1].strip() for item in numbered_lines]
+
+        def _clean_facet(raw_f: str) -> str:
+            f = re.sub(r"\[[^\]]+\]", "", raw_f)
+            f = f.replace("**", "").strip()
+            f = re.sub(r"^(?:Ý|Điểm|Bước|Luận\s+điểm)\s*\d+\s*[:.\-–]\s*", "", f, flags=re.IGNORECASE).strip()
+            return f.rstrip(".")
+
+        def _format_facet_query(facet: str) -> str:
+            if custom_prefix and any(w in custom_prefix.lower() for w in ("ví dụ", "phân tích")):
+                return f"{custom_prefix} {facet}" + (f" ({custom_tail})" if custom_tail else "")
+            if custom_tail and len(custom_tail.split()) >= 2:
+                return f"{facet} {custom_tail}?"
+            return f"Giải thích chi tiết nội dung: {facet}"
+
+        if prefer_bullets and 0 <= target_idx < len(bullet_lines):
+            return _format_facet_query(_clean_facet(bullet_lines[target_idx])), {"status": "resolved_index"}
+        if not prefer_bullets and 0 <= target_idx < len(s_qs):
+            resolved_q = re.sub(r"^(?:\*\*\[.*?\]\*\*:\s*|\[.*?\]:?\s*)", "", s_qs[target_idx]).strip()
+            return resolved_q, {"status": "resolved_suggested_question"}
+        if 0 <= target_idx < len(s_qs):
+            resolved_q = re.sub(r"^(?:\*\*\[.*?\]\*\*:\s*|\[.*?\]:?\s*)", "", s_qs[target_idx]).strip()
+            return resolved_q, {"status": "resolved_suggested_question"}
+        if 0 <= target_idx < len(bullet_lines):
+            return _format_facet_query(_clean_facet(bullet_lines[target_idx])), {"status": "resolved_index"}
+
+        if allow_clarification:
+            return NEED_CLARIFICATION, {
+                "status": NEED_CLARIFICATION,
+                "reason": "index_out_of_range",
+                "requested_index": target_idx + 1,
+                "available_points": len(bullet_lines),
+                "available_questions": len(s_qs),
+            }
+        return q_raw, {"status": "unchanged"}
+
+    # Reference & pronoun vocabularies
+    singular_pronouns = [
+        "cái đó", "cái này", "điều này", "điều đó", "phần trên", "ở trên",
+        "phần vừa rồi", "vừa nêu", "khái niệm đó", "khái niệm này",
+        "chất đó", "chất này", "phương pháp này", "phương pháp đó",
+        "công nghệ này", "công nghệ đó", "mô hình này", "mô hình đó",
+        "hệ thống này", "hệ thống đó", "thuật toán này", "thuật toán đó",
+        "công thức này", "công thức đó", "giao thức đó", "giao thức này",
+        "thứ này", "thứ đó", "nó",
+        "this method", "that method", "this system", "this model", "that one", "it",
+    ]
+    plural_pronouns = [
+        "cả hai", "hai cái đó", "hai chất đó", "hai phương pháp đó", "chúng",
+        "they", "these", "both of them",
+    ]
+    first_pos_refs = ["cái đầu tiên", "cái đầu", "vế đầu", "chất đầu", "ý đầu tiên", "ý đầu"]
+    second_pos_refs = ["cái thứ hai", "cái sau", "vế sau", "chất sau", "chất thứ hai"]
+    elliptical_starters = ["thế còn", "vậy còn", "thế thì", "còn", "what about", "how about"]
+    vague_followup_only = [
+        "giải thích thêm", "giải thích thêm chi tiết", "nói rõ hơn",
+        "chi tiết hơn", "cho ví dụ cụ thể", "tại sao lại như vậy", "vì sao vậy",
+    ]
+
+    matched_singular = None
+    if not _has_document_self_reference(q_lower):
+        for p in singular_pronouns:
+            if re.search(rf"(?<!\w){re.escape(p)}(?!\w)", q_lower):
+                matched_singular = p
+                break
+
+    matched_plural = None
+    for p in plural_pronouns:
+        if re.search(rf"(?<!\w){re.escape(p)}(?!\w)", q_lower):
+            matched_plural = p
+            break
+
+    matched_first_pos = next((p for p in first_pos_refs if re.search(rf"(?<!\w){re.escape(p)}(?!\w)", q_lower)), None)
+    matched_second_pos = next((p for p in second_pos_refs if re.search(rf"(?<!\w){re.escape(p)}(?!\w)", q_lower)), None)
+    starts_elliptical = any(q_lower.startswith(st + " ") or q_lower == st for st in elliptical_starters)
+    is_vague_short = any(q_lower.strip(" ?.!").startswith(vf) for vf in vague_followup_only) and len(q_raw.split()) <= 8
+
+    needs_prior_context = bool(
+        matched_singular or matched_plural or matched_first_pos or matched_second_pos or starts_elliptical or is_vague_short
+    )
+
+    # Filter substantive prior user turns (exclude pure greetings or prior clarification-failed turns)
+    _greetings = {"hello", "hi", "xin chào", "chào", "chào bạn", "chào ad", "cảm ơn", "thanks", "ok"}
+    substantive_user_turns: List[str] = []
+    for idx_m, m in enumerate(prior_msgs):
+        if m.get("role") != "user":
+            continue
+        u_txt = (m.get("content") or "").strip()
+        if not u_txt or u_txt.lower().strip(" !.?") in _greetings:
+            continue
+        # Skip if the immediate assistant reply to this user turn was CLARIFICATION_NEEDED
+        if idx_m + 1 < len(prior_msgs) and prior_msgs[idx_m + 1].get("routing") == "CLARIFICATION_NEEDED":
+            continue
+        substantive_user_turns.append(u_txt)
+
+    if not substantive_user_turns:
+        if needs_prior_context and allow_clarification:
+            return NEED_CLARIFICATION, {"status": NEED_CLARIFICATION, "reason": "missing_antecedent"}
+        return q_raw, {"status": "standalone"}
+
+    last_user_query = substantive_user_turns[-1]
+    prior_constraints = _extract_prior_constraints(last_user_query)
+
+    # 2. Topic anchor carry-over (e.g. 'topic 49', "'SA-CMS'") when current query has no explicit pronoun to substitute
+    has_explicit_pronoun = bool(matched_singular or matched_plural or matched_first_pos or matched_second_pos)
+    current_anchor = extract_topic_anchor(q_raw)
+    if current_anchor is None and not has_explicit_pronoun and not _has_document_self_reference(q_lower):
+        words = q_raw.split()
+        if len(words) <= 14:
+            generic_cues = ["này", "đó", "thêm", "chi tiết", "ví dụ", "tại sao", "như thế nào"]
+            has_anaphoric_cue = (
+                needs_prior_context
+                or any(re.search(rf"(?<!\w){re.escape(c)}(?!\w)", q_lower) for c in generic_cues)
+            )
+            if has_anaphoric_cue:
+                last_anchor = extract_topic_anchor(last_user_query)
+                if last_anchor:
+                    return f"{q_raw} ({last_anchor})", {"status": "anchor_carry_over", "anchor": last_anchor}
+
+    if not needs_prior_context:
+        return q_raw, {"status": "standalone"}
+
+    # 3. Multi-entity disambiguation & positional resolution (Rule 2, Rule 5, Rule 7)
+    multi_entities = _extract_multi_entities_from_turn(last_user_query)
+    if len(multi_entities) >= 2:
+        if matched_first_pos:
+            rewritten = re.sub(rf"(?<!\w){re.escape(matched_first_pos)}(?!\w)", multi_entities[0], q_raw, count=1, flags=re.IGNORECASE)
+            if prior_constraints and prior_constraints.lower() not in rewritten.lower():
+                rewritten = f"{prior_constraints}, {rewritten}"
+            return rewritten, {"status": "resolved_first_entity", "entity": multi_entities[0]}
+        if matched_second_pos:
+            rewritten = re.sub(rf"(?<!\w){re.escape(matched_second_pos)}(?!\w)", multi_entities[1], q_raw, count=1, flags=re.IGNORECASE)
+            if prior_constraints and prior_constraints.lower() not in rewritten.lower():
+                rewritten = f"{prior_constraints}, {rewritten}"
+            return rewritten, {"status": "resolved_second_entity", "entity": multi_entities[1]}
+        if matched_plural:
+            joined_ents = " và ".join(multi_entities)
+            rewritten = re.sub(rf"(?<!\w){re.escape(matched_plural)}(?!\w)", joined_ents, q_raw, count=1, flags=re.IGNORECASE)
+            if prior_constraints and prior_constraints.lower() not in rewritten.lower():
+                rewritten = f"{prior_constraints}, {rewritten}"
+            return rewritten, {"status": "resolved_plural_entities", "entities": multi_entities}
+        if matched_singular and allow_clarification:
+            # Check if the user already named one of the entities explicitly in q_raw
+            if not any(ent.lower() in q_lower for ent in multi_entities):
+                return NEED_CLARIFICATION, {
+                    "status": NEED_CLARIFICATION,
+                    "reason": "ambiguous_multi_entity",
+                    "candidates": multi_entities,
+                }
+
+    # 4. Extract clean primary subject from last_user_query while preserving prior_constraints separately (Rule 2 & 3)
+    clean_last = last_user_query
+    if prior_constraints:
+        for pc in prior_constraints.split(","):
+            clean_last = re.sub(re.escape(pc.strip()), "", clean_last, flags=re.IGNORECASE)
+    for stop in [
+        "hãy giải thích", "giải thích", "hãy trình bày", "trình bày", "cho tôi biết", "cho biết",
+        "khái niệm về", "định nghĩa về", "nội dung về", "thông tin về",
+        "là gì", "la gi", "như thế nào", "ra sao", "thế nào", "what is", "explain",
+    ]:
+        clean_last = re.sub(rf"(?<!\w){re.escape(stop)}(?!\w)", "", clean_last, flags=re.IGNORECASE)
+    subject = re.sub(r"\s{2,}", " ", clean_last).strip(" ?:.,-!\"'")
+    if not subject:
+        subject = last_user_query.strip(" ?:.,-!\"'")
+
+    target_ref = matched_singular or matched_plural
+    if target_ref:
+        if target_ref in ("phần trên", "ở trên", "phần vừa rồi", "vừa nêu"):
+            replacement = f"nội dung về {subject}" if not q_lower.startswith(target_ref) else subject
+        else:
+            replacement = subject
+        rewritten = re.sub(rf"(?<!\w){re.escape(target_ref)}(?!\w)", replacement, q_raw, count=1, flags=re.IGNORECASE)
+    else:
+        rewritten = f"{subject}: {q_raw}"
+
+    if prior_constraints and prior_constraints.lower() not in rewritten.lower():
+        rewritten = f"{prior_constraints}, {rewritten}"
+
+    rewritten = re.sub(r"\s{2,}", " ", rewritten).strip()
+    return rewritten, {"status": "rewritten", "subject": subject, "constraints": prior_constraints}
+
+
+def rewrite_query_text(
+    conversation_history: Sequence[Dict[str, Any]],
+    current_question: str,
+) -> str:
+    """
+    Exact prompt-spec adapter: returns ONLY the standalone rewritten query string,
+    or 'NEED_CLARIFICATION' when the referent cannot be determined.
+    """
+    out, _ = rewrite_standalone_query(
+        conversation_history=conversation_history,
+        current_question=current_question,
+        allow_clarification=True,
+    )
+    return out
 
 
 def generate_title_from_query(query: str, existing_titles: Optional[Set[str]] = None) -> str:
@@ -393,152 +720,34 @@ class SessionManager:
     def save(self):
         self._save_sessions()
 
+    def resolve_conversation_context_with_meta(
+        self,
+        session_id: str,
+        current_query: str,
+        allow_clarification: bool = True,
+    ) -> Tuple[str, Dict[str, Any]]:
+        """Resolves follow-up queries with structured rewrite metadata and NEED_CLARIFICATION support."""
+        session = self.get_session(session_id)
+        history = session.messages if session and session.messages else []
+        return rewrite_standalone_query(
+            conversation_history=history,
+            current_question=current_query,
+            allow_clarification=allow_clarification,
+        )
+
     def resolve_conversation_context(
-        self, session_id: str, current_query: str
+        self,
+        session_id: str,
+        current_query: str,
+        allow_clarification: bool = False,
     ) -> str:
         """
-        Task 12: Resolves follow-up pronouns, numbered questions ("câu 2"), and elliptical queries using conversation history.
-        E.g.:
-        Q1: 'CMS là gì?' -> AI: '...' (with suggested questions)
-        Q2: 'câu 2' -> resolves to the 2nd suggested question from previous turn.
-        Q3: 'Nó khác RAG thế nào?' -> Context-aware query: 'CMS khác RAG thế nào'
+        Task 12: Resolves follow-up pronouns, numbered questions ("câu 2", "ý 2"), prior constraints,
+        and elliptical queries using conversation history.
         """
-        session = self.get_session(session_id)
-        if not session or not session.messages:
-            return current_query
-
-        import re
-        q_raw = current_query.strip()
-        q_lower = q_raw.lower()
-
-        # Check if user is referencing a suggested question or answer facet by index:
-        # e.g., "câu 2", "câu hỏi 2", "giải thích kỹ hơn ý thứ 2", "phân tích điểm 1", "question 2", "#2"
-        # Note: "mục" is intentionally excluded so section queries like "cho biết mục 3" are not hijacked!
-        idx_match = re.search(
-            r"^(?:trả lời\s+|hỏi\s+|cho biết\s+|giải thích(?:\s+kỹ(?:\s+hơn)?|\s+chi tiết(?:\s+hơn)?|\s+rõ(?:\s+hơn)?)?\s+|phân tích(?:\s+kỹ(?:\s+hơn)?)?\s+|làm rõ\s+)?"
-            r"(câu(?:\s*hỏi)?|ý|điểm|luận điểm|question)\s*(?:thứ\s*|số\s*)?(\d+)\b",
-            q_lower,
+        resolved, _ = self.resolve_conversation_context_with_meta(
+            session_id=session_id,
+            current_query=current_query,
+            allow_clarification=allow_clarification,
         )
-        kind_token = ""
-        if idx_match:
-            kind_token = idx_match.group(1)
-            target_idx = int(idx_match.group(2)) - 1
-        else:
-            hash_match = re.search(r"^#?(\d+)\.?$", q_lower)
-            if hash_match:
-                kind_token = "câu"
-                target_idx = int(hash_match.group(1)) - 1
-            else:
-                target_idx = -1
-
-        if target_idx >= 0:
-            prefer_bullets = kind_token in ("ý", "điểm", "luận điểm")
-            for m in reversed(session.messages):
-                if m.get("role") == "assistant":
-                    c_text = m.get("content", "")
-                    body_only = c_text.split("### Nguồn")[0].split("💡")[0]
-                    bullet_lines = re.findall(r"^\s*[-•]\s+(.+)$", body_only, re.MULTILINE)
-
-                    s_qs = list(m.get("suggested_questions") or [])
-                    if not s_qs:
-                        numbered_lines = re.findall(r"^\s*(\d+)\.\s*(.+)$", c_text, re.MULTILINE)
-                        s_qs = [item[1].strip() for item in numbered_lines]
-
-                    if prefer_bullets and 0 <= target_idx < len(bullet_lines):
-                        facet_text = bullet_lines[target_idx].strip()
-                        facet_text = re.sub(r"\[\d+\]", "", facet_text)
-                        facet_text = facet_text.replace("**", "").strip()
-                        return f"Giải thích chi tiết nội dung: {facet_text}"
-
-                    if 0 <= target_idx < len(s_qs):
-                        resolved_q = s_qs[target_idx]
-                        resolved_q = re.sub(r"^(?:\*\*\[.*?\]\*\*:\s*|\[.*?\]:?\s*)", "", resolved_q).strip()
-                        return resolved_q
-
-                    if 0 <= target_idx < len(bullet_lines):
-                        facet_text = bullet_lines[target_idx].strip()
-                        facet_text = re.sub(r"\[\d+\]", "", facet_text)
-                        facet_text = facet_text.replace("**", "").strip()
-                        return f"Giải thích chi tiết nội dung: {facet_text}"
-                    break
-
-        # Clean off copy-pasted numbering & category badge: e.g. "1. **[Category]**: Query" -> "Query"
-        clean_pasted = re.sub(r"^\s*\d+[\.\)]\s*(?:\*\*\[.*?\]\*\*:\s*|\[.*?\]:?\s*)?", "", q_raw).strip()
-        if clean_pasted and clean_pasted != q_raw and len(clean_pasted.split()) >= 2:
-            current_query = clean_pasted
-            q_lower = current_query.lower()
-
-        # Get prior user query (skip current query if already appended to session)
-        user_msgs = [m for m in session.messages if m.get("role") == "user"]
-        if not user_msgs:
-            return current_query
-
-        if len(user_msgs) >= 2 and user_msgs[-1].get("content", "").strip() == current_query.strip():
-            last_user_query = user_msgs[-2].get("content", "").strip()
-        elif len(user_msgs) >= 1 and user_msgs[-1].get("content", "").strip() != current_query.strip():
-            last_user_query = user_msgs[-1].get("content", "").strip()
-        else:
-            return current_query
-
-        # Anchor carry-over (Root-cause fix for multi-turn topic context loss)
-        current_anchor = extract_topic_anchor(current_query)
-        if current_anchor is None:
-            words = current_query.split()
-            if len(words) <= 14:
-                generic_cues = ["tài liệu", "này", "đó", "thêm", "chi tiết", "ví dụ", "tại sao", "như thế nào"]
-                elliptical_starters = ["còn", "thế còn", "thế thì", "vậy còn", "what about", "how about"]
-                has_anaphoric_cue = (
-                    any(re.search(r"\b" + re.escape(c) + r"\b", q_lower) for c in generic_cues)
-                    or any(q_lower.startswith(st) for st in elliptical_starters)
-                )
-                if has_anaphoric_cue:
-                    last_anchor = extract_topic_anchor(last_user_query)
-                    if last_anchor:
-                        return f"{current_query} ({last_anchor})"
-
-        # Pronouns and contextual indicators in Vietnamese and English
-        pronouns_vi = ["nó", "chúng", "điều này", "phương pháp này", "công nghệ này", "mô hình này", "hệ thống này", "thứ này"]
-        pronouns_en = ["it", "they", "this method", "this system", "this model", "these"]
-
-        q_lower = current_query.lower().strip()
-
-        # Check if query starts with or contains follow-up indicators
-        is_follow_up = False
-        target_pronoun = None
-
-        import re
-        for p in pronouns_vi + pronouns_en:
-            # Word boundary matching
-            pat = r"\b" + re.escape(p) + r"\b"
-            if re.search(pat, q_lower):
-                is_follow_up = True
-                target_pronoun = p
-                break
-
-        # Check if elliptical question (e.g., "Thế còn RAG?", "Còn về ưu điểm thì sao?")
-        elliptical_starters = ["còn", "thế còn", "thế thì", "vậy còn", "what about", "how about"]
-        for starter in elliptical_starters:
-            if q_lower.startswith(starter):
-                is_follow_up = True
-                break
-
-        if not is_follow_up:
-            return current_query
-
-        # Extract primary subject from last user query
-        clean_last = last_user_query
-        for stop in ["ở phần 2,", "ở phần 1,", "ở chương", "trong phần", "là gì", "la gi", "như thế nào", "ra sao", "thế nào", "giải thích", "cho biết", "what is", "explain"]:
-            clean_last = re.sub(re.escape(stop), "", clean_last, flags=re.IGNORECASE)
-        subject = clean_last.strip(" ?:.,-!\"'")
-
-        if not subject:
-            subject = last_user_query.strip(" ?:.,-!\"'")
-
-        if target_pronoun:
-            # Replace pronoun with resolved subject using word boundary
-            pat = r"\b" + re.escape(target_pronoun) + r"\b"
-            resolved = re.sub(pat, subject, current_query, count=1, flags=re.IGNORECASE)
-            return resolved
-        else:
-            # Elliptical combination
-            return f"{subject}: {current_query}"
+        return resolved

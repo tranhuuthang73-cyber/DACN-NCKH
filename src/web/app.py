@@ -2305,6 +2305,48 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
     if not expansion_intent.get("wants_any") and is_practice_generation_query(effective_query):
         expansion_intent["wants_any"] = True
         expansion_intent["practice_exercise"] = True
+
+    # Practice/exercise generation requires real Internet reachability. The client derives
+    # `allow_online_api` from an actual reachability probe (not from a manual switch), so a
+    # False value here means the device is offline. Refuse explicitly instead of silently
+    # degrading, and never call an external API in that case.
+    if expansion_intent.get("wants_any") and is_practice_generation_query(effective_query) and not req.allow_online_api:
+        offline_msg = (
+            "Chức năng tự động tạo câu hỏi bài tập hiện không khả dụng khi Offline. "
+            "Vui lòng kết nối Internet và thử lại."
+        )
+        assistant_msg = session.add_message(
+            role="assistant",
+            content=offline_msg,
+            citations=[],
+            evidence=[],
+            telemetry={"offline_blocked": True},
+            routing="OFFLINE_BLOCKED",
+            refused=True,
+            refusal_reason="PRACTICE_REQUIRES_ONLINE",
+            diagnostics={
+                "routing": "OFFLINE_BLOCKED",
+                "refusal_reason": "PRACTICE_REQUIRES_ONLINE",
+                "allow_online_api": False,
+            },
+        )
+        service.session_manager.save()
+        return {
+            "session_id": session_id,
+            "session_title": session.title,
+            "message": assistant_msg,
+            "answer": offline_msg,
+            "effective_query": effective_query,
+            "routing": "OFFLINE_BLOCKED",
+            "refused": True,
+            "refusal_reason": "PRACTICE_REQUIRES_ONLINE",
+            "citations": [],
+            "evidence": [],
+            "suggested_questions": [],
+            "telemetry": {"offline_blocked": True},
+            "diagnostics": assistant_msg.get("diagnostics", {}),
+        }
+
     online_expansion_res: Optional[Dict[str, Any]] = None
     is_online_symbolic_expansion = False
     if expansion_intent.get("wants_any") and req.allow_online_api and attached_docs:
@@ -2740,42 +2782,6 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
             else:
                 refused = True
 
-            # Rescue local grounded conceptual quiz when user asks for practice exercises in Offline mode
-            if (
-                attached_docs
-                and online_expansion_res is None
-                and not req.allow_online_api
-                and is_practice_generation_query(effective_query)
-            ):
-                try:
-                    from src.reasoning.conceptual_quiz_generator import (
-                        extract_quiz_topic_focus,
-                        generate_conceptual_practice,
-                    )
-                    _q_focus = extract_quiz_topic_focus(effective_query)
-                    if refused or _q_focus == "":
-                        _doc_txts_off = []
-                        _doc_title_off = "Tài liệu"
-                        for _i_o, _d_o in enumerate(attached_docs):
-                            _obj_o = service.store.get_document(_d_o)
-                            if _obj_o and getattr(_obj_o, "raw_text", ""):
-                                if _i_o == 0 and getattr(_obj_o, "title", ""):
-                                    _doc_title_off = _obj_o.title
-                                _doc_txts_off.append(_obj_o.raw_text)
-                        if _doc_txts_off:
-                            _quiz_off = generate_conceptual_practice(
-                                query=effective_query,
-                                doc_text="\n\n".join(_doc_txts_off),
-                                doc_title=_doc_title_off,
-                            )
-                            if _quiz_off and _quiz_off.get("answer"):
-                                online_expansion_res = _quiz_off
-                                refused = False
-                                refusal_reason = None
-                                refusal_message = ""
-                except Exception:
-                    pass
-
             if refused:
                 refusal_reason = effective_route.value if not is_grounded else (refusal_decision.reason.value if refusal_decision and refusal_decision.reason else "out_of_domain")
                 if attached_docs:
@@ -2839,39 +2845,6 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
                 added_online_doc = True
         if not added_online_doc:
             break
-
-    # Also intercept bare Offline practice queries ("cho tôi bài tập đi") where BM25 matched meta-word "tập"
-    if (
-        not refused
-        and online_expansion_res is None
-        and not req.allow_online_api
-        and attached_docs
-        and is_practice_generation_query(effective_query)
-    ):
-        try:
-            from src.reasoning.conceptual_quiz_generator import (
-                extract_quiz_topic_focus,
-                generate_conceptual_practice,
-            )
-            if extract_quiz_topic_focus(effective_query) == "":
-                _doc_txts_bare = []
-                _doc_title_bare = "Tài liệu"
-                for _i_b, _d_b in enumerate(attached_docs):
-                    _obj_b = service.store.get_document(_d_b)
-                    if _obj_b and getattr(_obj_b, "raw_text", ""):
-                        if _i_b == 0 and getattr(_obj_b, "title", ""):
-                            _doc_title_bare = _obj_b.title
-                        _doc_txts_bare.append(_obj_b.raw_text)
-                if _doc_txts_bare:
-                    _quiz_bare = generate_conceptual_practice(
-                        query=effective_query,
-                        doc_text="\n\n".join(_doc_txts_bare),
-                        doc_title=_doc_title_bare,
-                    )
-                    if _quiz_bare and _quiz_bare.get("answer"):
-                        online_expansion_res = _quiz_bare
-        except Exception:
-            pass
 
     # Step 6: Build citations & evidence structures
     citations_data = []
@@ -2957,8 +2930,8 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
         answer_text = refusal_message
         if expansion_intent.get("wants_any") and not req.allow_online_api:
             answer_text += (
-                " Bạn có thể bật **Online (Mở rộng & Bài tập)** để hệ thống tự biến đổi công thức "
-                "và sinh thêm ví dụ, bài tập từ công thức trong tài liệu."
+                " Chức năng mở rộng bài tập cần kết nối Internet; "
+                "vui lòng kiểm tra kết nối và thử lại."
             )
         citations_data = []  # Clear citations when refused
         unified_trace = {
@@ -3015,7 +2988,7 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
                 body = (
                     f"{body}\n\n"
                     "🔒 *Đang ở chế độ **Offline** (câu hỏi ôn tập rút trích trực tiếp từ tài liệu). "
-                    "Bật **Online (Mở rộng & Bài tập)** để hệ thống tự biến đổi công thức và sinh thêm bài tập mở rộng.*"
+                    "Kết nối Internet để hệ thống tự biến đổi công thức và sinh thêm bài tập mở rộng.*"
                 )
         elif wants_suggested_questions and attached_docs:
             try:
@@ -3386,8 +3359,8 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
             )
             if expansion_intent.get("wants_any") and not req.allow_online_api:
                 answer_text += (
-                    " Bạn có thể bật **Online (Mở rộng & Bài tập)** để hệ thống tự biến đổi công thức "
-                    "và sinh thêm ví dụ, bài tập từ công thức trong tài liệu."
+                    " Chức năng mở rộng bài tập cần kết nối Internet; "
+                    "vui lòng kiểm tra kết nối và thử lại."
                 )
             unified_trace = {
                 "mode": thinking_mode,
@@ -3519,7 +3492,7 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
                 body = (
                     f"{body}\n\n"
                     "🔒 *Đang ở chế độ **Offline** (chỉ trả lời từ tài liệu). "
-                    "Bật **Online (Mở rộng & Bài tập)** để hệ thống tự biến đổi công thức, sinh thêm ví dụ và bài tập mới.*"
+                    "Kết nối Internet để hệ thống tự biến đổi công thức, sinh thêm ví dụ và bài tập mới.*"
                 )
 
             legacy_trace = reasoning_trace

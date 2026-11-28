@@ -131,7 +131,10 @@
     mode: "hybrid",
     answerMode: "balanced",
     thinkingMode: "auto",
-    allowOnlineApi: false,
+    // Connection state is derived automatically from real Internet reachability.
+    // Never persisted and never toggled by the user.
+    isOnline: false,
+    connectionChecked: false,
     showTelemetry: true,
     presentationMode: false,
     isSending: false,
@@ -471,8 +474,9 @@
     lblAttachedCount: document.getElementById("lbl-attached-count"),
     btnCycleLength: document.getElementById("btn-cycle-length"),
     lblComposerLength: document.getElementById("lbl-composer-length"),
-    btnToggleOnlineApi: document.getElementById("btn-toggle-online-api"),
-    lblOnlineApi: document.getElementById("lbl-online-api"),
+    badgeConnectionStatus: document.getElementById("badge-connection-status"),
+    lblConnectionStatus: document.getElementById("lbl-connection-status"),
+    offlineBanner: document.getElementById("connection-offline-banner"),
     thinkingModeSelector: document.getElementById("thinking-mode-selector"),
     btnSend: document.getElementById("btn-send"),
     hiddenFileInput: document.getElementById("hidden-file-input"),
@@ -642,14 +646,6 @@
     if (dom.lblComposerLength) {
       dom.lblComposerLength.textContent = LENGTH_LABELS[state.answerMode] || "Cân bằng";
     }
-    if (dom.btnToggleOnlineApi) {
-      const enabled = Boolean(state.allowOnlineApi);
-      dom.btnToggleOnlineApi.classList.toggle("is-active", enabled);
-      dom.btnToggleOnlineApi.setAttribute("aria-pressed", enabled ? "true" : "false");
-      if (dom.lblOnlineApi) {
-        dom.lblOnlineApi.textContent = enabled ? "🌐 Online (Mở rộng & Bài tập)" : "🔒 Offline (Chỉ tài liệu)";
-      }
-    }
     if (dom.thinkingModeSelector) {
       dom.thinkingModeSelector.querySelectorAll("[data-thinking-mode]").forEach((btn) => {
         const isActive = btn.dataset.thinkingMode === state.thinkingMode;
@@ -658,6 +654,7 @@
       });
     }
     dom.app.classList.toggle("hide-telemetry", !state.showTelemetry);
+    syncConnectionUI();
   }
 
   function syncSendButtonState() {
@@ -714,6 +711,171 @@
         dom.lblSystemReady.textContent = "Tài liệu đã sẵn sàng";
       }
     }
+  }
+
+  // ============================================================================
+  // 7b. CONNECTIVITY MONITOR (automatic Online / Offline detection)
+  //
+  // The device is considered Online only when it can actually reach this server's
+  // API, not merely when the browser reports a network interface (Wi-Fi can be
+  // associated while there is no Internet). `navigator.onLine` is used only as a
+  // cheap negative signal: if the browser says there is no network, we skip the
+  // probe entirely. Everything else is decided by a real HTTP request.
+  // ============================================================================
+
+  const CONNECTIVITY = {
+    probeUrl: "/api/health",
+    probeTimeoutMs: 5000,
+    onlineIntervalMs: 45000, // relaxed polling while Online
+    offlineIntervalMs: 7000, // aggressive retry while Offline (fast recovery)
+    failureThreshold: 2, // consecutive failures before flipping to Offline
+  };
+
+  const connectivity = {
+    timerId: null,
+    inFlight: false,
+    consecutiveFailures: 0,
+    listenersBound: false,
+  };
+
+  function syncConnectionUI() {
+    const online = Boolean(state.isOnline);
+    if (dom.lblConnectionStatus) {
+      if (!state.connectionChecked) {
+        dom.lblConnectionStatus.textContent = "Đang kiểm tra kết nối…";
+      } else {
+        dom.lblConnectionStatus.textContent = online
+          ? "🌐 Online (Đã kết nối Internet)"
+          : "🔒 Offline (Không có Internet)";
+      }
+    }
+    if (dom.badgeConnectionStatus) {
+      dom.badgeConnectionStatus.classList.toggle("is-online", online);
+      dom.badgeConnectionStatus.classList.toggle("is-offline", state.connectionChecked && !online);
+    }
+    if (dom.offlineBanner) {
+      dom.offlineBanner.hidden = !(state.connectionChecked && !online);
+    }
+    dom.app.classList.toggle("is-offline-mode", state.connectionChecked && !online);
+  }
+
+  function applyConnectionState(online) {
+    const wasChecked = state.connectionChecked;
+    const previous = state.isOnline;
+
+    state.isOnline = Boolean(online);
+    state.connectionChecked = true;
+    syncConnectionUI();
+
+    if (wasChecked && previous !== state.isOnline) {
+      showToast(
+        state.isOnline
+          ? "Đã kết nối Internet trở lại. Chức năng tạo bài tập đã được khôi phục."
+          : "Mất kết nối Internet. Hệ thống đã chuyển sang chế độ Offline."
+      );
+    }
+    // Rescheduling is the caller's responsibility (probeConnectivity callers always call
+    // scheduleNextProbe afterwards) so exactly one timer can ever be pending.
+  }
+
+  async function probeConnectivity() {
+    if (connectivity.inFlight) return;
+    if (typeof navigator !== "undefined" && navigator.onLine === false) {
+      // Browser already knows there is no network interface: no point in a request.
+      connectivity.consecutiveFailures = 0;
+      applyConnectionState(false);
+      return;
+    }
+
+    connectivity.inFlight = true;
+    const controller = typeof AbortController !== "undefined" ? new AbortController() : null;
+    const timeoutId = controller
+      ? setTimeout(() => controller.abort(), CONNECTIVITY.probeTimeoutMs)
+      : null;
+
+    let reachable = false;
+    try {
+      const res = await fetch(`${CONNECTIVITY.probeUrl}?_=${Date.now()}`, {
+        method: "GET",
+        cache: "no-store",
+        headers: { Accept: "application/json" },
+        signal: controller ? controller.signal : undefined,
+      });
+      reachable = res.ok;
+    } catch (_err) {
+      reachable = false;
+    } finally {
+      if (timeoutId) clearTimeout(timeoutId);
+      connectivity.inFlight = false;
+    }
+
+    if (reachable) {
+      connectivity.consecutiveFailures = 0;
+      applyConnectionState(true);
+      return;
+    }
+
+    // Tolerate a single blip: a flaky link should not flash the UI to Offline.
+    connectivity.consecutiveFailures += 1;
+    if (state.connectionChecked && connectivity.consecutiveFailures < CONNECTIVITY.failureThreshold) {
+      return;
+    }
+    applyConnectionState(false);
+  }
+
+  function scheduleNextProbe() {
+    if (connectivity.timerId) {
+      clearTimeout(connectivity.timerId);
+      connectivity.timerId = null;
+    }
+    // Any pending failure means the link is suspect, so retry at the fast cadence even if
+    // the UI is still shown as Online.
+    const healthy = state.isOnline && connectivity.consecutiveFailures === 0;
+    const delay = healthy
+      ? CONNECTIVITY.onlineIntervalMs
+      : CONNECTIVITY.offlineIntervalMs;
+    connectivity.timerId = setTimeout(async () => {
+      connectivity.timerId = null;
+      await probeConnectivity();
+      scheduleNextProbe();
+    }, delay);
+  }
+
+  function initConnectivityMonitor() {
+    if (connectivity.listenersBound) return;
+    connectivity.listenersBound = true;
+
+    const onBrowserOffline = () => {
+      // Interface lost: verify immediately, but still require a failed probe so a
+      // spurious event cannot disable practice generation by itself.
+      probeConnectivity().then(scheduleNextProbe);
+    };
+    const onBrowserOnline = () => {
+      // Interface returned: confirm real reachability before enabling features.
+      probeConnectivity().then(scheduleNextProbe);
+    };
+    const onVisibility = () => {
+      if (document.visibilityState === "visible") {
+        probeConnectivity().then(scheduleNextProbe);
+      }
+    };
+
+    window.addEventListener("online", onBrowserOnline);
+    window.addEventListener("offline", onBrowserOffline);
+    document.addEventListener("visibilitychange", onVisibility);
+
+    probeConnectivity().then(scheduleNextProbe);
+  }
+
+  function isConnectionOnline() {
+    return state.connectionChecked && state.isOnline;
+  }
+
+  function offlineFeatureMessage() {
+    return (
+      "Chức năng tự động tạo câu hỏi bài tập hiện không khả dụng khi Offline. " +
+      "Vui lòng kết nối Internet và thử lại."
+    );
   }
 
   function renderWelcomeSuggestions() {
@@ -1590,9 +1752,71 @@
     });
   }
 
+  // Mirrors src/web/practice_generator.py::is_practice_generation_query so the client can
+  // block practice generation before any request leaves the browser while Offline.
+  const PRACTICE_INTENT_MARKERS = [
+    "sinh them vi du",
+    "cho them vi du",
+    "them vi du",
+    "vi du tuong tu",
+    "vi du giong",
+    "vi du khac",
+    "cong thuc tuong tu",
+    "cong thuc giong",
+    "bien doi cong thuc",
+    "sinh bai tap",
+    "tao bai tap",
+    "them bai tap",
+    "cho bai tap",
+    "cho toi bai tap",
+    "cho minh bai tap",
+    "cho em bai tap",
+    "bai tap di",
+    "bai tap nhe",
+    "bai tap tuong tu",
+    "bai tap van dung",
+    "bai tap luyen tap",
+    "bai tap trac nghiem",
+    "cau hoi trac nghiem",
+    "bai tap ve",
+    "ra de",
+    "generate example",
+    "similar example",
+    "generate exercise",
+    "practice problem",
+  ];
+
+  function stripDiacritics(text) {
+    return String(text || "")
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/đ/g, "d")
+      .replace(/Đ/g, "D")
+      .toLowerCase();
+  }
+
+  function isPracticeGenerationQuery(query) {
+    const q = stripDiacritics(query);
+    if (!q.trim()) return false;
+    if (PRACTICE_INTENT_MARKERS.some((m) => q.includes(m))) return true;
+    const hasGenVerb = ["sinh", "tao", "them", "cho them", "cho toi", "cho minh", "cho em", "ra de", "viet them"].some(
+      (v) => q.includes(v)
+    );
+    const hasTarget = ["vi du", "bai tap", "luyen tap", "trac nghiem", "de toan", "de hoa", "de sinh"].some((t) =>
+      q.includes(t)
+    );
+    return hasGenVerb && hasTarget;
+  }
+
   async function sendQuestion(rawQuery) {
     const query = (rawQuery || "").trim();
     if (!query || state.isSending) return;
+
+    // Offline: practice/exercise generation is unavailable — block before any request.
+    if (isPracticeGenerationQuery(query) && !isConnectionOnline()) {
+      showToast(offlineFeatureMessage());
+      return;
+    }
 
     state.isSending = true;
     state.lastUserQuery = query;
@@ -1635,21 +1859,41 @@
           : "Đang truy xuất bằng chứng và đối soát bộ nhớ SA-CMS...");
       scrollToBottom();
 
-      const res = await apiFetch(
-        `/api/chat/sessions/${encodeURIComponent(state.activeSessionId)}/messages`,
-        {
-          method: "POST",
-          body: JSON.stringify({
-            query,
-            mode: state.mode,
-            answer_mode: state.answerMode,
-            thinking_mode: state.thinkingMode,
-            allow_online_api: Boolean(state.allowOnlineApi),
-            top_k: 5,
-            language: "vi",
-          }),
+      const isPracticeRequest = isPracticeGenerationQuery(query);
+      // Practice generation is the one long-running online-only flow: if connectivity drops
+      // while it is in flight, abort it instead of waiting for a hung request.
+      const chatController = typeof AbortController !== "undefined" ? new AbortController() : null;
+      const abortOnOffline = () => {
+        if (chatController) chatController.abort();
+      };
+      if (isPracticeRequest) {
+        window.addEventListener("offline", abortOnOffline, { once: true });
+      }
+
+      let res;
+      try {
+        res = await apiFetch(
+          `/api/chat/sessions/${encodeURIComponent(state.activeSessionId)}/messages`,
+          {
+            method: "POST",
+            body: JSON.stringify({
+              query,
+              mode: state.mode,
+              answer_mode: state.answerMode,
+              thinking_mode: state.thinkingMode,
+              // Derived automatically from real reachability; there is no manual switch.
+              allow_online_api: isConnectionOnline(),
+              top_k: 5,
+              language: "vi",
+            }),
+            signal: chatController ? chatController.signal : undefined,
+          }
+        );
+      } finally {
+        if (isPracticeRequest) {
+          window.removeEventListener("offline", abortOnOffline);
         }
-      );
+      }
 
       dom.thinkingIndicator.hidden = true;
 
@@ -1682,7 +1926,30 @@
       await refreshSessions();
     } catch (err) {
       dom.thinkingIndicator.hidden = true;
-      showToast(`Lỗi truy vấn: ${err.message}`);
+      // A network-level failure means the request never reached the server. Surface the
+      // connectivity state instead of a misleading "server error" and never render a
+      // partial/fake answer.
+      const isNetworkFailure =
+        err instanceof TypeError || /Failed to fetch|NetworkError|aborted|network/i.test(String(err && err.message));
+      if (isNetworkFailure) {
+        applyConnectionState(false);
+        // Re-confirm and re-plan the retry cadence. scheduleNextProbe() clears any pending
+        // timer first, so this can never stack duplicate timers.
+        probeConnectivity().then(scheduleNextProbe);
+        showToast(
+          isPracticeGenerationQuery(query)
+            ? offlineFeatureMessage()
+            : "Mất kết nối tới hệ thống. Vui lòng kiểm tra Internet rồi thử lại."
+        );
+        // Drop the optimistic user message so the transcript does not show a question
+        // that was never answered.
+        state.activeMessages = state.activeMessages.filter(
+          (m, idx) => !(idx === state.activeMessages.length - 1 && m.role === "user" && m.content === query)
+        );
+        renderConversationViewport();
+      } else {
+        showToast(`Lỗi truy vấn: ${err.message}`);
+      }
     } finally {
       state.isSending = false;
       syncSendButtonState();
@@ -3056,9 +3323,9 @@
               <span class="bc-runtime-sub">${escapeHtml(String(apiTrain.stage || "N/A"))} (${apiTrainLoss !== null ? `loss ${apiTrainLoss.toFixed(4)}` : "loss N/A"})</span>
             </div>
             <div class="bc-runtime-item">
-              <span class="bc-runtime-label">Chế độ Offline / Online (Tự build)</span>
-              <strong class="bc-runtime-val">${state.allowOnlineApi ? "🌐 Đang BẬT (Biến đổi Công thức & Bài tập + Nguồn mở)" : "🔒 Đang TẮT (100% Air-Gap Chỉ tài liệu)"}</strong>
-              <span class="bc-runtime-sub">Offline khóa chặt tài liệu · Online biến đổi công thức, sinh ví dụ &amp; bài tập</span>
+              <span class="bc-runtime-label">Trạng thái kết nối (tự động)</span>
+              <strong class="bc-runtime-val">${isConnectionOnline() ? "🌐 Online (Đã kết nối Internet)" : "🔒 Offline (Không có Internet)"}</strong>
+              <span class="bc-runtime-sub">Hệ thống tự dò khả năng truy cập Internet · Offline khóa tính năng tạo bài tập</span>
             </div>
           </div>
         </div>
@@ -3488,6 +3755,12 @@
 
   function openFetchOnlineModal() {
     if (!dom.modalFetchOnline) return;
+    if (!isConnectionOnline()) {
+      showToast(
+        "Chức năng nạp tài liệu từ API mạng cần kết nối Internet. Vui lòng kiểm tra kết nối và thử lại."
+      );
+      return;
+    }
     dom.modalFetchOnline.hidden = false;
     if (dom.fetchOnlineQuery) {
       dom.fetchOnlineQuery.value = "";
@@ -3819,18 +4092,6 @@
       syncModeAndLengthUI();
     });
 
-    if (dom.btnToggleOnlineApi) {
-      dom.btnToggleOnlineApi.addEventListener("click", () => {
-        state.allowOnlineApi = !state.allowOnlineApi;
-        syncModeAndLengthUI();
-        showToast(
-          state.allowOnlineApi
-            ? "Đã bật chế độ Online: Tự biến đổi công thức, sinh ví dụ & bài tập mới (SymPy tự build) và hỗ trợ tra cứu mở rộng."
-            : "Đã chuyển về chế độ Offline Air-Gap: Chỉ trả lời chính xác trong tài liệu đính kèm."
-        );
-      });
-    }
-
     if (dom.thinkingModeSelector) {
       dom.thinkingModeSelector.addEventListener("click", (e) => {
         const btn = e.target.closest("[data-thinking-mode]");
@@ -4099,6 +4360,7 @@
     syncModeAndLengthUI();
     bindEvents();
     renderWelcomeSuggestions();
+    initConnectivityMonitor();
 
     await Promise.all([
       refreshSystemStatus(),

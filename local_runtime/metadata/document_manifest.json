@@ -2092,6 +2092,45 @@
       "index_path": "local_runtime/indexes/bm25_index.json",
       "memory_snapshot": "snap_fast_1795702583_3aa393",
       "status": "READY"
+    },
+    "DOC_1795704193338_c93d45": {
+      "document_id": "DOC_1795704193338_c93d45",
+      "filename": "75770b9b-cdbf-4038-90e2-f25e1f4426fe_triethocmaclenin.pdf",
+      "file_hash": "bfbffc98ce11bf3adacff166f1fcf562e4d69119d8a69c24d6c91bbfdffe629b",
+      "file_type": "pdf",
+      "file_size": 788139,
+      "version": 1,
+      "created_at": "2026-11-26T14:47:24Z",
+      "parsed_path": "local_runtime/parsed/DOC_1795704193338_c93d45.json",
+      "index_path": "local_runtime/indexes/bm25_index.json",
+      "memory_snapshot": "snap_fast_1795704447_4d9776",
+      "status": "READY"
+    },
+    "DOC_1795870349804_5d0803": {
+      "document_id": "DOC_1795870349804_5d0803",
+      "filename": "75770b9b-cdbf-4038-90e2-f25e1f4426fe_triethocmaclenin.pdf",
+      "file_hash": "bfbffc98ce11bf3adacff166f1fcf562e4d69119d8a69c24d6c91bbfdffe629b",
+      "file_type": "pdf",
+      "file_size": 788139,
+      "version": 1,
+      "created_at": "2026-11-28T12:57:04Z",
+      "parsed_path": "local_runtime/parsed/DOC_1795870349804_5d0803.json",
+      "index_path": "local_runtime/indexes/bm25_index.json",
+      "memory_snapshot": "snap_fast_1795870627_0847eb",
+      "status": "READY"
+    },
+    "DOC_1795872338139_c03d42": {
+      "document_id": "DOC_1795872338139_c03d42",
+      "filename": "75770b9b-cdbf-4038-90e2-f25e1f4426fe_triethocmaclenin.pdf",
+      "file_hash": "bfbffc98ce11bf3adacff166f1fcf562e4d69119d8a69c24d6c91bbfdffe629b",
+      "file_type": "pdf",
+      "file_size": 788139,
+      "version": 1,
+      "created_at": "2026-11-28T13:28:03Z",
+      "parsed_path": "local_runtime/parsed/DOC_1795872338139_c03d42.json",
+      "index_path": "local_runtime/indexes/bm25_index.json",
+      "memory_snapshot": "snap_fast_1795872484_96e897",
+      "status": "READY"
     }
   }
 }

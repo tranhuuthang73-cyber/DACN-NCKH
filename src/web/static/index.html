@@ -169,6 +169,14 @@
         </div>
       </div>
 
+      <!-- Offline connectivity banner (auto-managed by the network monitor) -->
+      <div class="connection-banner" id="connection-offline-banner" role="alert" aria-live="assertive" hidden>
+        <span class="connection-banner-icon" aria-hidden="true">⚠️</span>
+        <span class="connection-banner-text" id="connection-offline-text">
+          Bạn đang Offline. Vui lòng kiểm tra kết nối Internet để sử dụng đầy đủ các chức năng của hệ thống.
+        </span>
+      </div>
+
       <!-- Top Header Bar -->
       <header class="app-header">
         <div class="header-left">
@@ -406,9 +414,9 @@
                   <span id="lbl-composer-length">Cân bằng</span>
                 </button>
 
-                <button type="button" class="composer-pill-btn composer-online-pill" id="btn-toggle-online-api" aria-pressed="false" title="Mặc định Offline (Chỉ trả lời trong tài liệu). Bật Online để tự biến đổi công thức, sinh ví dụ, bài tập mới và tìm tài liệu mở.">
-                  <span id="lbl-online-api">🔒 Offline (Chỉ tài liệu)</span>
-                </button>
+                <span class="composer-pill-btn composer-connection-badge" id="badge-connection-status" role="status" aria-live="polite" title="Trạng thái kết nối được hệ thống tự động xác định từ khả năng truy cập Internet thực tế">
+                  <span id="lbl-connection-status">Đang kiểm tra kết nối…</span>
+                </span>
 
                 <div class="thinking-mode-segmented" id="thinking-mode-selector" role="group" aria-label="Chế độ tư duy WaveCMS-R²">
                   <button type="button" class="thinking-seg-btn active" data-thinking-mode="auto" aria-pressed="true" title="Tự động bật Suy nghĩ sâu cho câu hỏi phức tạp, trả lời nhanh cho câu đơn giản">✨ Tự động</button>

@@ -226,8 +226,10 @@ def test_offline_strict_vs_online_formula_lab_chemistry_algebra_physics():
             assert offline_msg.status_code == 200
             offline_data = offline_msg.json()
             offline_answer = offline_data.get("answer", "")
-            # Must note offline mode constraint
-            assert "Chế độ Offline" in offline_answer or "Online" in offline_answer
+            # Practice generation is refused while Offline (no Internet).
+            assert offline_data.get("refused") is True
+            assert offline_data.get("refusal_reason") == "PRACTICE_REQUIRES_ONLINE"
+            assert "không khả dụng khi Offline" in offline_answer
 
             # Case B: Online mode - should activate Symbolic Formula Lab
             online_msg = client.post(
@@ -290,20 +292,25 @@ def test_offline_strict_vs_online_formula_lab_chemistry_algebra_physics():
         client.delete(f"/api/documents/{doc_id}")
 
 
-def test_frontend_online_toggle_labels():
-    """Ensure HTML and app.js maintain the correct user-friendly labels and DOM element IDs."""
+def test_frontend_connection_status_badge():
+    """Connection state is displayed read-only; the manual Online/Offline toggle is gone."""
     with open("src/web/static/index.html", "r", encoding="utf-8") as f:
         html = f.read()
 
-    assert 'id="btn-toggle-online-api"' in html
-    assert 'id="lbl-online-api"' in html
-    assert "Offline (Chỉ tài liệu)" in html
+    assert 'id="badge-connection-status"' in html
+    assert 'id="lbl-connection-status"' in html
+    assert 'id="connection-offline-banner"' in html
+    # The manual toggle must not exist anymore.
+    assert 'id="btn-toggle-online-api"' not in html
+    assert 'id="lbl-online-api"' not in html
 
     with open("src/web/static/js/app.js", "r", encoding="utf-8") as f:
         js = f.read()
 
-    assert "🔒 Offline (Chỉ tài liệu)" in js
-    assert "🌐 Online (Mở rộng & Bài tập)" in js
+    assert "probeConnectivity" in js
+    assert "navigator.onLine" in js
+    assert "btn-toggle-online-api" not in js
+    assert "allowOnlineApi" not in js
 
 
 def test_docx_embedded_image_ocr_extraction(monkeypatch):

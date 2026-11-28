@@ -1681,15 +1681,62 @@ code {
   border: 1px solid var(--border-header);
 }
 
-.composer-online-pill {
+/* Read-only connection status badge (Online/Offline is detected automatically). */
+.composer-connection-badge {
   background: var(--bg-subtle);
   border: 1px solid var(--border-header);
+  cursor: default;
+  user-select: none;
 }
 
-.composer-online-pill.is-active {
+.composer-connection-badge:hover {
+  background: var(--bg-subtle);
+  color: var(--text-secondary);
+}
+
+.composer-connection-badge.is-online {
   background: var(--accent-soft, rgba(37, 99, 235, 0.12));
   border-color: var(--accent, #2563eb);
   color: var(--accent, #2563eb);
+}
+
+.composer-connection-badge.is-offline {
+  background: rgba(220, 38, 38, 0.1);
+  border-color: #dc2626;
+  color: #dc2626;
+}
+
+/* Full-width banner shown while the device has no reachable Internet. */
+.connection-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  background: rgba(220, 38, 38, 0.1);
+  border-bottom: 1px solid rgba(220, 38, 38, 0.35);
+  color: #b91c1c;
+  font-size: 12.8px;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.connection-banner[hidden] {
+  display: none !important;
+}
+
+.connection-banner-icon {
+  flex: 0 0 auto;
+  font-size: 15px;
+}
+
+.connection-banner-text {
+  flex: 1 1 auto;
+}
+
+[data-theme="dark"] .connection-banner {
+  background: rgba(248, 113, 113, 0.14);
+  border-bottom-color: rgba(248, 113, 113, 0.4);
+  color: #fca5a5;
 }
 
 .composer-send-btn {
